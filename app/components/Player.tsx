@@ -1,4 +1,10 @@
-export default function Player() {
+import type { Song } from "../../types/show";
+
+type PlayerProps = {
+  song: Song;
+};
+
+export default function Player({ song }: PlayerProps) {
   return (
     <div className="flex flex-1 flex-col rounded-2xl border border-zinc-800 bg-zinc-900/40 p-8">
       <div className="flex items-start justify-between">
@@ -8,11 +14,11 @@ export default function Player() {
           </p>
 
           <h2 className="mt-4 text-5xl font-bold tracking-tight">
-            Ouverture
+            {song.title}
           </h2>
 
           <p className="mt-3 text-lg text-zinc-400">
-            Introduction du spectacle
+            {song.description}
           </p>
         </div>
 
@@ -22,7 +28,7 @@ export default function Player() {
           </p>
 
           <p className="mt-1 text-3xl font-bold tabular-nums">
-            03:20
+            {song.duration}
           </p>
         </div>
       </div>
@@ -34,8 +40,7 @@ export default function Player() {
           </p>
 
           <p className="mt-4 text-lg leading-8 text-zinc-300">
-            Commencer au piano seul. Laisser respirer l’introduction avant de
-            lancer les éléments visuels.
+            {song.stageNotes}
           </p>
         </article>
 
@@ -45,7 +50,7 @@ export default function Player() {
           </p>
 
           <p className="mt-4 text-lg leading-8 text-zinc-300">
-            Déclencher l’ambiance lumineuse et préparer le morceau « Mon amour ».
+            {song.nextAction}
           </p>
         </article>
       </div>
@@ -53,7 +58,7 @@ export default function Player() {
       <div className="mt-auto pt-10">
         <div className="mb-3 flex justify-between text-sm text-zinc-500">
           <span>00:00</span>
-          <span>03:20</span>
+          <span>{song.duration}</span>
         </div>
 
         <div className="h-2 overflow-hidden rounded-full bg-zinc-800">
