@@ -2,9 +2,15 @@ import type { Song } from "../../types/show";
 
 type SongListProps = {
   songs: Song[];
+  currentSongIndex: number;
+  onSelectSong: (index: number) => void;
 };
 
-export default function SongList({ songs }: SongListProps) {
+export default function SongList({
+  songs,
+  currentSongIndex,
+  onSelectSong,
+}: SongListProps) {
   return (
     <aside className="w-80 border-r border-zinc-800 bg-zinc-900/60 p-5">
       <div className="mb-5 flex items-center justify-between">
@@ -19,11 +25,13 @@ export default function SongList({ songs }: SongListProps) {
 
       <div className="space-y-2">
         {songs.map((song, index) => {
-          const actif = index === 0;
+          const actif = index === currentSongIndex;
 
           return (
             <button
               key={song.id}
+              type="button"
+              onClick={() => onSelectSong(index)}
               className={`flex w-full items-center gap-4 rounded-xl border p-4 text-left transition ${
                 actif
                   ? "border-emerald-500 bg-emerald-500/10"

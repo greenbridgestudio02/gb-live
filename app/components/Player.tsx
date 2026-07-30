@@ -7,7 +7,7 @@ type PlayerProps = {
 export default function Player({ song }: PlayerProps) {
   return (
     <div className="flex flex-1 flex-col rounded-2xl border border-zinc-800 bg-zinc-900/40 p-8">
-      <div className="flex items-start justify-between">
+      <div className="flex items-start justify-between gap-8">
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.25em] text-emerald-400">
             Morceau en cours
@@ -33,37 +33,24 @@ export default function Player({ song }: PlayerProps) {
         </div>
       </div>
 
-      <div className="mt-10 grid grid-cols-2 gap-5">
-        <article className="rounded-2xl border border-zinc-800 bg-zinc-950/60 p-6">
-          <p className="text-xs font-semibold uppercase tracking-widest text-zinc-500">
-            Notes de scène
-          </p>
+      <section className="mt-8 flex-1 overflow-y-auto rounded-2xl border border-zinc-800 bg-zinc-950/70 p-8">
+        <p className="text-xs font-semibold uppercase tracking-[0.25em] text-zinc-500">
+          Paroles
+        </p>
 
-          <p className="mt-4 text-lg leading-8 text-zinc-300">
-            {song.stageNotes}
-          </p>
-        </article>
-
-        <article className="rounded-2xl border border-zinc-800 bg-zinc-950/60 p-6">
-          <p className="text-xs font-semibold uppercase tracking-widest text-zinc-500">
-            Prochaine action
-          </p>
-
-          <p className="mt-4 text-lg leading-8 text-zinc-300">
-            {song.nextAction}
-          </p>
-        </article>
-      </div>
-
-      <div className="mt-auto pt-10">
-        <div className="mb-3 flex justify-between text-sm text-zinc-500">
-          <span>00:00</span>
-          <span>{song.duration}</span>
+        <div className="mt-6 whitespace-pre-line text-2xl font-medium leading-relaxed text-zinc-100">
+          {song.lyrics}
         </div>
+      </section>
 
-        <div className="h-2 overflow-hidden rounded-full bg-zinc-800">
-          <div className="h-full w-[18%] rounded-full bg-emerald-500" />
-        </div>
+      <div className="mt-6 rounded-xl border border-zinc-800 bg-zinc-950/50 px-5 py-4">
+        <p className="text-xs font-semibold uppercase tracking-widest text-zinc-500">
+          Note de scène
+        </p>
+
+        <p className="mt-2 text-sm text-zinc-300">
+          {song.stageNotes}
+        </p>
       </div>
     </div>
   );

@@ -5,6 +5,7 @@ export type Song = {
   description: string;
   stageNotes: string;
   nextAction: string;
+  lyrics: string;
 };
 
 export type Show = {
