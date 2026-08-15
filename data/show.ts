@@ -19,22 +19,42 @@ export const show: Show = {
 Aucune parole pour ce morceau.`,
     },
     {
-      id: "mon-amour",
-      title: "Mon amour",
-      duration: "04:15",
-      description: "Premier morceau chanté",
-      stageNotes:
-        "Vérifier le niveau du micro avant l’entrée de la voix.",
-      nextAction:
-        "Préparer la transition vers « Entre deux rives ».",
-      lyrics: `Couplet 1
+  id: "mon-amour",
+  title: "Mon amour",
+  duration: "04:15",
+  description: "Premier morceau chanté",
+  stageNotes:
+    "Vérifier le niveau du micro avant l’entrée de la voix.",
+  nextAction:
+    "Préparer la transition vers « Entre deux rives ».",
+
+  lyrics: `Couplet 1
 
 Paroles provisoires du morceau « Mon amour ».
 
 Refrain
 
 Texte à remplacer par les paroles définitives.`,
+
+  lyricLines: [
+    {
+      time: 0,
+      text: "Couplet 1",
     },
+    {
+      time: 4,
+      text: "Paroles provisoires du morceau « Mon amour ».",
+    },
+    {
+      time: 10,
+      text: "Refrain",
+    },
+    {
+      time: 14,
+      text: "Texte à remplacer par les paroles définitives.",
+    },
+  ],
+},
     {
       id: "entre-deux-rives",
       title: "Entre deux rives",

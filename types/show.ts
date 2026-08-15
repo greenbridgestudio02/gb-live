@@ -1,3 +1,8 @@
+export type LyricLine = {
+  time: number;
+  text: string;
+};
+
 export type Song = {
   id: string;
   title: string;
@@ -5,7 +10,10 @@ export type Song = {
   description: string;
   stageNotes: string;
   nextAction: string;
+
   lyrics: string;
+
+  lyricLines?: LyricLine[];
 };
 
 export type Show = {

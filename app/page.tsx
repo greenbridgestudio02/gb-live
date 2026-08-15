@@ -6,30 +6,42 @@ import SongList from "./components/SongList";
 import { show } from "../data/show";
 import SongSearch from "./components/SongSearch";
 import FavoritesPanel from "./components/FavoritesPanel";
+import LyricsPlayer from "./components/LyricsPlayer";
+import LyricsSyncEditor from "./components/LyricsSyncEditor";
 
 export default function Home() {
   const [setlistPosition, setSetlistPosition] = useState(0);
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
   const [preparedSongIndex, setPreparedSongIndex] = useState<number | null>(null);
+
   const [isPaused, setIsPaused] = useState(false);
   const [isIntermission, setIsIntermission] = useState(false);
   const [intermissionCount, setIntermissionCount] = useState(0);
+
   const [isSetlistOpen, setIsSetlistOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const currentSong = show.songs[currentSongIndex];
-  const preparedSong =
-  preparedSongIndex !== null ? show.songs[preparedSongIndex] : null;
   const [isFavoritesOpen, setIsFavoritesOpen] = useState(false);
-  const [isPreparingIntermissionSong, setIsPreparingIntermissionSong] = useState(false);
-  
+  const [isSyncEditorOpen, setIsSyncEditorOpen] = useState(false);
+
+  const [isPreparingIntermissionSong, setIsPreparingIntermissionSong] =
+    useState(false);
+
+  const [songs, setSongs] = useState(show.songs);
+
   const [favoriteSongIds] = useState([
     "mon-amour",
     "le-pont",
     "final",
-]);
+  ]);
+
+  const currentSong = songs[currentSongIndex];
+
+  const preparedSong =
+    preparedSongIndex !== null ? songs[preparedSongIndex] : null;
 
   function goToPreviousSong() {
   const previousPosition = Math.max(setlistPosition - 1, 0);
+  
 
   setSetlistPosition(previousPosition);
   setCurrentSongIndex(previousPosition);
@@ -38,7 +50,7 @@ export default function Home() {
 function goToNextSong() {
   const nextPosition = Math.min(
     setlistPosition + 1,
-    show.songs.length - 1
+    songs.length - 1
   );
 
   setSetlistPosition(nextPosition);
@@ -64,7 +76,7 @@ function goToNextSong() {
           </p>
 
           <p className="text-lg font-semibold">
-            {currentSongIndex + 1} / {show.songs.length}
+            {currentSongIndex + 1} / {songs.length}
           </p>
         </div>
       </header>
@@ -90,13 +102,11 @@ function goToNextSong() {
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto rounded-2xl border border-zinc-800 bg-zinc-900/40 p-8">
-          <div className="whitespace-pre-line text-3xl font-medium leading-relaxed text-zinc-100">
-            {currentSong.lyrics}
+        <div className="flex-1">
+          <LyricsPlayer song={currentSong} />
           </div>
-        </div>
 
-        <div className="mt-5 grid grid-cols-5 gap-3">
+        <div className="mt-5 grid grid-cols-6 gap-3">
           <button
             type="button"
             onClick={goToPreviousSong}
@@ -109,7 +119,7 @@ function goToNextSong() {
           <button
             type="button"
             onClick={goToNextSong}
-            disabled={setlistPosition === show.songs.length - 1}
+            disabled={setlistPosition === songs.length - 1}
             className="rounded-xl bg-emerald-500 px-4 py-4 font-bold text-zinc-950 disabled:opacity-30"
           >
             Suivant ▶
@@ -139,13 +149,20 @@ function goToNextSong() {
             Favoris
           </button>
 
+          <button
+            type="button"
+            onClick={() => setIsSyncEditorOpen(true)}
+            className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-4 font-semibold"
+>
+              Sync
+            </button>
           
         </div>
       </section>
 
       {isSetlistOpen && (
   <SongList
-    songs={show.songs}
+    songs={songs}
     currentSongIndex={currentSongIndex}
     onSelectSong={(index) => {
       if (isPreparingIntermissionSong) {
@@ -160,7 +177,7 @@ function goToNextSong() {
 )}
 {isSearchOpen && (
   <SongSearch
-    songs={show.songs}
+    songs={songs}
     onSelectSong={(index) => {
       if (isPreparingIntermissionSong) {
         setPreparedSongIndex(index);
@@ -174,7 +191,7 @@ function goToNextSong() {
 
 {isFavoritesOpen && (
   <FavoritesPanel
-    songs={show.songs}
+    songs={songs}
     favoriteSongIds={favoriteSongIds}
     onSelectSong={(index) => {
       if (isPreparingIntermissionSong) {
@@ -275,6 +292,45 @@ function goToNextSong() {
       <p className="mt-6 text-center text-sm text-zinc-500">
         Les demandes du public pourront continuer à être reçues pendant l’entracte.
       </p>
+    </div>
+  </div>
+)}
+
+{isSyncEditorOpen && (
+  <div className="fixed inset-0 z-[70] overflow-y-auto bg-black/90 p-6">
+    <div className="mx-auto max-w-4xl">
+      <div className="mb-4 flex justify-end">
+        <button
+          type="button"
+          onClick={() => setIsSyncEditorOpen(false)}
+          className="rounded-xl border border-zinc-700 bg-zinc-900 px-5 py-3 font-semibold"
+        >
+          Fermer
+        </button>
+      </div>
+
+      <LyricsSyncEditor
+        song={currentSong}
+        onValidate={(times) => {
+          setSongs((currentSongs) =>
+            currentSongs.map((song, index) => {
+              if (index !== currentSongIndex || !song.lyricLines) {
+                 return song;
+            }
+
+            return {
+              ...song,
+              lyricLines: song.lyricLines.map((line, lineIndex) => ({
+                ...line,
+                time: times[lineIndex],
+              })),
+           };
+         })
+      );
+
+     setIsSyncEditorOpen(false);
+  }}
+/>
     </div>
   </div>
 )}
