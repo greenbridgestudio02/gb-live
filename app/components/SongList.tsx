@@ -19,7 +19,7 @@ export default function SongList({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex bg-black/70">
+    <div className="fixed inset-0 z-[60] flex bg-black/70">
       <aside className="flex h-full w-full max-w-md flex-col border-r border-zinc-700 bg-zinc-950 shadow-2xl">
         <div className="flex items-center justify-between border-b border-zinc-800 p-5">
           <div>

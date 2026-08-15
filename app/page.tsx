@@ -10,14 +10,18 @@ import FavoritesPanel from "./components/FavoritesPanel";
 export default function Home() {
   const [setlistPosition, setSetlistPosition] = useState(0);
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
+  const [preparedSongIndex, setPreparedSongIndex] = useState<number | null>(null);
   const [isPaused, setIsPaused] = useState(false);
   const [isIntermission, setIsIntermission] = useState(false);
   const [intermissionCount, setIntermissionCount] = useState(0);
   const [isSetlistOpen, setIsSetlistOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const currentSong = show.songs[currentSongIndex];
+  const preparedSong =
+  preparedSongIndex !== null ? show.songs[preparedSongIndex] : null;
   const [isFavoritesOpen, setIsFavoritesOpen] = useState(false);
-
+  const [isPreparingIntermissionSong, setIsPreparingIntermissionSong] = useState(false);
+  
   const [favoriteSongIds] = useState([
     "mon-amour",
     "le-pont",
@@ -144,7 +148,12 @@ function goToNextSong() {
     songs={show.songs}
     currentSongIndex={currentSongIndex}
     onSelectSong={(index) => {
-      setCurrentSongIndex(index);
+      if (isPreparingIntermissionSong) {
+        setPreparedSongIndex(index);
+        setIsPreparingIntermissionSong(false);
+      } else {
+        setCurrentSongIndex(index);
+      }
     }}
     onClose={() => setIsSetlistOpen(false)}
   />
@@ -153,7 +162,11 @@ function goToNextSong() {
   <SongSearch
     songs={show.songs}
     onSelectSong={(index) => {
-      setCurrentSongIndex(index);
+      if (isPreparingIntermissionSong) {
+        setPreparedSongIndex(index);
+        } else {
+        setCurrentSongIndex(index);
+        }
     }}
     onClose={() => setIsSearchOpen(false)}
   />
@@ -164,7 +177,12 @@ function goToNextSong() {
     songs={show.songs}
     favoriteSongIds={favoriteSongIds}
     onSelectSong={(index) => {
-      setCurrentSongIndex(index);
+      if (isPreparingIntermissionSong) {
+        setPreparedSongIndex(index);
+        setIsPreparingIntermissionSong(false);
+      } else {
+        setCurrentSongIndex(index);
+      }
     }}
     onClose={() => setIsFavoritesOpen(false)}
   />
@@ -194,14 +212,27 @@ function goToNextSong() {
         </p>
 
         <p className="mt-2 text-2xl font-bold">
-          {currentSong.title}
+          {preparedSong ? preparedSong.title : currentSong.title}
+        </p>
+
+        <p className="mt-2 text-sm text-zinc-500">
+          {preparedSong
+            ? "Ce morceau est préparé pour la reprise."
+            : "Aucun autre morceau n’a été préparé."}
         </p>
       </div>
 
       <div className="mt-6 grid grid-cols-2 gap-4">
         <button
           type="button"
-          onClick={() => setIsIntermission(false)}
+          onClick={() => {
+            if (preparedSongIndex !== null) {
+              setCurrentSongIndex(preparedSongIndex);
+              setPreparedSongIndex(null);
+            }
+            setIsPreparingIntermissionSong(false);
+            setIsIntermission(false);
+          }}  
           className="rounded-xl bg-emerald-500 px-6 py-5 text-lg font-bold text-zinc-950"
         >
           ▶ Reprendre le spectacle
@@ -210,7 +241,7 @@ function goToNextSong() {
         <button
           type="button"
           onClick={() => {
-            setIsIntermission(false);
+            setIsPreparingIntermissionSong(true);
             setIsSetlistOpen(true);
           }}
           className="rounded-xl border border-zinc-700 bg-zinc-900 px-6 py-5 text-lg font-semibold"
@@ -221,7 +252,7 @@ function goToNextSong() {
         <button
           type="button"
           onClick={() => {
-            setIsIntermission(false);
+            setIsPreparingIntermissionSong(true);
             setIsSearchOpen(true);
           }}
           className="rounded-xl border border-zinc-700 bg-zinc-900 px-6 py-5 text-lg font-semibold"
@@ -232,7 +263,7 @@ function goToNextSong() {
         <button
           type="button"
           onClick={() => {
-            setIsIntermission(false);
+            setIsPreparingIntermissionSong(true);
             setIsFavoritesOpen(true);
           }}
           className="rounded-xl border border-zinc-700 bg-zinc-900 px-6 py-5 text-lg font-semibold"

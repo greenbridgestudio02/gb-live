@@ -25,7 +25,7 @@ export default function FavoritesPanel({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/80 p-6 pt-20">
+    <div className="fixed inset-0 z-[60] flex items-start justify-center bg-black/80 p-6 pt-20">
       <div className="w-full max-w-2xl overflow-hidden rounded-3xl border border-zinc-700 bg-zinc-950 shadow-2xl">
         <div className="flex items-center justify-between border-b border-zinc-800 p-5">
           <div>
