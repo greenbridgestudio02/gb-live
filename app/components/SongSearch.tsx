@@ -6,18 +6,22 @@ import type { Song } from "../../types/show";
 type SongSearchProps = {
   songs: Song[];
   setlistSongIds: string[];
+  requestedSongIds: string[];
   onPlayNow: (index: number) => void;
   onPlayNext: (songId: string) => void;
   onAddToSetlist: (songId: string) => void;
+  onRequestSong: (songId: string) => void;
   onClose: () => void;
 };
 
 export default function SongSearch({
   songs,
   setlistSongIds,
+  requestedSongIds,
   onPlayNow,
   onPlayNext,
   onAddToSetlist,
+  onRequestSong,
   onClose,
 }: SongSearchProps) {
   const [query, setQuery] = useState("");
@@ -90,6 +94,7 @@ export default function SongSearch({
             <div className="space-y-2">
               {results.map(({ song, index }) => {
                 const isInSetlist = setlistSongIds.includes(song.id);
+                const isRequested = requestedSongIds.includes(song.id);
 
                 return (
                   <div
@@ -123,22 +128,30 @@ export default function SongSearch({
                         </div>
                       </div>
 
-                      {isInSetlist ? (
-                        <span className="rounded-lg border border-emerald-800 bg-emerald-950/40 px-3 py-2 text-xs font-semibold text-emerald-300">
-                          ✓ Dans la setlist
-                        </span>
-                      ) : (
-                        <button
-                          type="button"
-                          onClick={() => onAddToSetlist(song.id)}
-                          className="rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm font-semibold transition hover:border-emerald-500 hover:text-emerald-300"
-                        >
-                          + Ajouter
-                        </button>
-                      )}
+                      <div className="flex flex-wrap justify-end gap-2">
+                        {isRequested && (
+                          <span className="rounded-lg border border-amber-700 bg-amber-950/40 px-3 py-2 text-xs font-semibold text-amber-300">
+                            🙋 Demandé
+                          </span>
+                        )}
+
+                        {isInSetlist ? (
+                          <span className="rounded-lg border border-emerald-800 bg-emerald-950/40 px-3 py-2 text-xs font-semibold text-emerald-300">
+                            ✓ Dans la setlist
+                          </span>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => onAddToSetlist(song.id)}
+                            className="rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm font-semibold transition hover:border-emerald-500 hover:text-emerald-300"
+                          >
+                            + Ajouter
+                          </button>
+                        )}
+                      </div>
                     </div>
 
-                    <div className="mt-3 grid grid-cols-2 gap-2">
+                    <div className="mt-3 grid grid-cols-3 gap-2">
                       <button
                         type="button"
                         onClick={() => playNow(index)}
@@ -153,6 +166,17 @@ export default function SongSearch({
                         className="rounded-lg border border-zinc-700 bg-zinc-950 px-4 py-3 font-semibold transition hover:border-emerald-500 hover:text-emerald-300"
                       >
                         Jouer ensuite
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => onRequestSong(song.id)}
+                        disabled={isRequested}
+                        className="rounded-lg border border-amber-700 bg-amber-950/30 px-4 py-3 font-semibold text-amber-300 transition hover:bg-amber-950/60 disabled:cursor-not-allowed disabled:opacity-40"
+                      >
+                        {isRequested
+                          ? "✓ Demande enregistrée"
+                          : "🙋 Demande du public"}
                       </button>
                     </div>
                   </div>

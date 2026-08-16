@@ -9,6 +9,7 @@ import LyricsPlayer from "./components/LyricsPlayer";
 import LyricsSyncEditor from "./components/LyricsSyncEditor";
 import SongEditor from "./components/SongEditor";
 import NewSongEditor from "./components/NewSongEditor";
+import RequestsPanel from "./components/RequestsPanel";
 
 export default function Home() {
   const [setlistPosition, setSetlistPosition] = useState(0);
@@ -22,6 +23,7 @@ export default function Home() {
 
   const [isSetlistOpen, setIsSetlistOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [requestedSongIds, setRequestedSongIds] = useState<string[]>([]);
   const [isSyncEditorOpen, setIsSyncEditorOpen] = useState(false);
 
   const [isPreparingIntermissionSong, setIsPreparingIntermissionSong] =
@@ -33,6 +35,7 @@ export default function Home() {
 );
   const [setlistLoaded, setSetlistLoaded] = useState(false);
   const [isPreparationOpen, setIsPreparationOpen] = useState(false);
+  const [isRequestsOpen, setIsRequestsOpen] = useState(false);
 
 useEffect(() => {
   const savedSetlist = localStorage.getItem("gb-live-setlist");
@@ -219,7 +222,7 @@ function goToNextSong() {
   )}
 </div>
 
-<div className="mt-2 grid grid-cols-5 gap-3">
+<div className="mt-2 grid grid-cols-6 gap-3">
   <button
     type="button"
     onClick={goToPreviousSong}
@@ -252,6 +255,18 @@ function goToNextSong() {
     className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 font-semibold"
   >
     Bibliothèque
+  </button>
+
+  <button
+    type="button"
+    onClick={() => setIsRequestsOpen(true)}
+    className={`rounded-xl border px-4 py-3 font-semibold ${
+      requestedSongIds.length > 0
+        ? "border-amber-700 bg-amber-950/30 text-amber-300"
+        : "border-zinc-700 bg-zinc-900"
+    }`}
+  >
+    Demandes ({requestedSongIds.length})
   </button>
 
   <button
@@ -336,6 +351,7 @@ onRemoveSong={(indexToRemove) => {
   <SongSearch
     songs={songs}
     setlistSongIds={setlistSongIds}
+    requestedSongIds={requestedSongIds}
     onPlayNow={(index) => {
       if (isPreparingIntermissionSong) {
         setPreparedSongIndex(index);
@@ -393,10 +409,91 @@ onRemoveSong={(indexToRemove) => {
         return [...currentSetlist, songId];
       });
     }}
+    onRequestSong={(songId) => {
+  setRequestedSongIds((currentRequests) => {
+    if (currentRequests.includes(songId)) {
+      return currentRequests;
+    }
+
+    return [...currentRequests, songId];
+  });
+}}
     onClose={() => setIsSearchOpen(false)}
   />
 )}
 
+{isRequestsOpen && (
+  <RequestsPanel
+    songs={songs}
+    requestedSongIds={requestedSongIds}
+    onPlayNow={(songId) => {
+      const libraryIndex = songs.findIndex(
+        (song) => song.id === songId
+      );
+
+      if (libraryIndex === -1) {
+        return;
+      }
+
+      setCurrentSongIndex(libraryIndex);
+
+      const setlistIndex = setlistSongIds.indexOf(songId);
+
+      if (setlistIndex !== -1) {
+        setSetlistPosition(setlistIndex);
+      }
+
+      setRequestedSongIds((currentRequests) =>
+        currentRequests.filter((id) => id !== songId)
+      );
+
+      setIsRequestsOpen(false);
+    }}
+    onPlayNext={(songId) => {
+      setSetlistSongIds((currentSetlist) => {
+        const currentSongId =
+          currentSetlist[setlistPosition];
+
+        const withoutSong = currentSetlist.filter(
+          (id) => id !== songId
+        );
+
+        const currentPosition =
+          withoutSong.indexOf(currentSongId);
+
+        const insertPosition =
+          currentPosition !== -1
+            ? currentPosition + 1
+            : Math.min(
+                setlistPosition + 1,
+                withoutSong.length
+              );
+
+        const newSetlist = [...withoutSong];
+
+        newSetlist.splice(
+          insertPosition,
+          0,
+          songId
+        );
+
+        return newSetlist;
+      });
+
+      setRequestedSongIds((currentRequests) =>
+        currentRequests.filter((id) => id !== songId)
+      );
+
+      setIsRequestsOpen(false);
+    }}
+    onRemoveRequest={(songId) => {
+      setRequestedSongIds((currentRequests) =>
+        currentRequests.filter((id) => id !== songId)
+      );
+    }}
+    onClose={() => setIsRequestsOpen(false)}
+  />
+)}
 
 {isIntermission && (
   <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-6">
