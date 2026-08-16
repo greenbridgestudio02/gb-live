@@ -132,6 +132,16 @@ useEffect(() => {
 }, [requestedSongIds, requestsLoaded]);
 
 const currentSong = songs[currentSongIndex];
+useEffect(() => {
+  if (!currentSong) {
+    return;
+  }
+
+  localStorage.setItem(
+    "g3-live-current-song-id",
+    currentSong.id
+  );
+}, [currentSong]);
 
   const preparedSong =
     preparedSongIndex !== null ? songs[preparedSongIndex] : null;

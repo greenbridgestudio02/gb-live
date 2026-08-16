@@ -13,9 +13,11 @@ export default function LyricsPlayer({ song }: LyricsPlayerProps) {
 
   const startTimeRef = useRef<number | null>(null);
   const pausedElapsedRef = useRef(0);
+  const lastServerUpdateRef = useRef(0);
 
   const isInstrumental = song.kind === "instrumental";
   const lyricLines = song.lyricLines ?? [];
+
   const hasSynchronizedLyrics =
     lyricLines.length > 0 && !song.needsLyricsSync;
 
@@ -53,13 +55,89 @@ export default function LyricsPlayer({ song }: LyricsPlayerProps) {
       ? lyricLines[currentLineIndex + 1]
       : null;
 
+  async function sendLiveState(
+    time: number,
+    playing: boolean
+  ) {
+    try {
+      await fetch("/api/live-state", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        cache: "no-store",
+        body: JSON.stringify({
+          song: {
+            id: song.id,
+            title: song.title,
+            kind: song.kind ?? "vocal",
+            lyrics: song.lyrics,
+            lyricLines: song.lyricLines ?? [],
+            needsLyricsSync:
+              song.needsLyricsSync === true,
+          },
+          elapsedTime: time,
+          isPlaying: playing,
+        }),
+      });
+    } catch (error) {
+      console.error(
+        "Impossible d’envoyer l’état vers l’écran public.",
+        error
+      );
+    }
+  }
+
+  // Changement de morceau : remise à zéro
+  // et envoi immédiat au serveur.
   useEffect(() => {
     setIsPlaying(false);
     setElapsedTime(0);
+
     startTimeRef.current = null;
     pausedElapsedRef.current = 0;
+    lastServerUpdateRef.current = 0;
+
+    localStorage.setItem(
+      "g3-live-public-elapsed-time",
+      "0"
+    );
+
+    void sendLiveState(0, false);
   }, [song.id]);
 
+  // Sauvegarde locale de secours.
+  useEffect(() => {
+    localStorage.setItem(
+      "g3-live-public-elapsed-time",
+      String(elapsedTime)
+    );
+  }, [elapsedTime]);
+
+  // Envoi régulier au serveur pendant la lecture.
+  // Environ 5 mises à jour par seconde.
+  useEffect(() => {
+    if (!isPlaying) {
+      return;
+    }
+
+    const now = performance.now();
+
+    if (
+      now - lastServerUpdateRef.current < 200
+    ) {
+      return;
+    }
+
+    lastServerUpdateRef.current = now;
+
+    void sendLiveState(
+      elapsedTime,
+      true
+    );
+  }, [elapsedTime, isPlaying, song.id]);
+
+  // Chronomètre.
   useEffect(() => {
     if (!isPlaying) {
       return;
@@ -76,10 +154,12 @@ export default function LyricsPlayer({ song }: LyricsPlayerProps) {
         setElapsedTime(elapsed);
       }
 
-      animationFrameId = requestAnimationFrame(update);
+      animationFrameId =
+        requestAnimationFrame(update);
     }
 
-    animationFrameId = requestAnimationFrame(update);
+    animationFrameId =
+      requestAnimationFrame(update);
 
     return () => {
       cancelAnimationFrame(animationFrameId);
@@ -90,19 +170,38 @@ export default function LyricsPlayer({ song }: LyricsPlayerProps) {
     if (isPlaying) {
       pausedElapsedRef.current = elapsedTime;
       startTimeRef.current = null;
+
       setIsPlaying(false);
+
+      void sendLiveState(
+        elapsedTime,
+        false
+      );
+
       return;
     }
 
     startTimeRef.current = performance.now();
+
     setIsPlaying(true);
+
+    void sendLiveState(
+      elapsedTime,
+      true
+    );
   }
 
   function resetLyrics() {
     setIsPlaying(false);
     setElapsedTime(0);
+
     startTimeRef.current = null;
     pausedElapsedRef.current = 0;
+
+    void sendLiveState(
+      0,
+      false
+    );
   }
 
   // MORCEAU INSTRUMENTAL
@@ -112,7 +211,9 @@ export default function LyricsPlayer({ song }: LyricsPlayerProps) {
         <div className="flex min-h-0 flex-1 items-center justify-center rounded-2xl border border-zinc-800 bg-zinc-900/40 p-4">
           <div className="w-full max-w-4xl text-center">
             <div className="flex items-center justify-center gap-4">
-              <span className="text-4xl">🎹</span>
+              <span className="text-4xl">
+                🎹
+              </span>
 
               <div className="text-left">
                 <p className="text-xs font-semibold uppercase tracking-[0.35em] text-emerald-400">
@@ -127,10 +228,16 @@ export default function LyricsPlayer({ song }: LyricsPlayerProps) {
 
             {(song.bpm || song.key) && (
               <div className="mt-4 flex items-center justify-center gap-6 text-lg text-zinc-400">
-                {song.bpm && <span>♩ {song.bpm} BPM</span>}
+                {song.bpm && (
+                  <span>
+                    ♩ {song.bpm} BPM
+                  </span>
+                )}
 
                 {song.key && (
-                  <span>Tonalité : {song.key}</span>
+                  <span>
+                    Tonalité : {song.key}
+                  </span>
                 )}
               </div>
             )}
@@ -158,28 +265,29 @@ export default function LyricsPlayer({ song }: LyricsPlayerProps) {
 
   // MORCEAU CHANTÉ NON SYNCHRONISÉ
   if (!hasSynchronizedLyrics) {
-  return (
-    <div className="flex h-full min-h-0 flex-col">
-      <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/40 p-4">
-        <div className="mb-3 shrink-0 rounded-xl border border-amber-700 bg-amber-950/40 px-4 py-2 text-center">
-          <p className="font-bold text-amber-300">
-            ⚠ Paroles à synchroniser
-          </p>
+    return (
+      <div className="flex h-full min-h-0 flex-col">
+        <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/40 p-4">
+          <div className="mb-3 shrink-0 rounded-xl border border-amber-700 bg-amber-950/40 px-4 py-2 text-center">
+            <p className="font-bold text-amber-300">
+              ⚠ Paroles à synchroniser
+            </p>
 
-          <p className="mt-1 text-sm text-amber-200/70">
-            Préparation → Synchroniser les paroles
-          </p>
-        </div>
+            <p className="mt-1 text-sm text-amber-200/70">
+              Préparation → Synchroniser les paroles
+            </p>
+          </div>
 
-        <div className="min-h-0 flex-1 overflow-y-auto rounded-xl border border-zinc-800 bg-zinc-950/30 p-4">
-          <div className="whitespace-pre-line text-center text-2xl font-medium leading-relaxed text-zinc-300">
-            {song.lyrics || "Aucune parole enregistrée."}
+          <div className="min-h-0 flex-1 overflow-y-auto rounded-xl border border-zinc-800 bg-zinc-950/30 p-4">
+            <div className="whitespace-pre-line text-center text-2xl font-medium leading-relaxed text-zinc-300">
+              {song.lyrics ||
+                "Aucune parole enregistrée."}
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
 
   // MORCEAU CHANTÉ SYNCHRONISÉ
   return (
@@ -222,7 +330,9 @@ export default function LyricsPlayer({ song }: LyricsPlayerProps) {
           onClick={togglePlayback}
           className="min-w-48 rounded-xl bg-emerald-500 px-6 py-3 text-lg font-bold text-zinc-950"
         >
-          {isPlaying ? "⏸ Paroles" : "▶ Paroles"}
+          {isPlaying
+            ? "⏸ Paroles"
+            : "▶ Paroles"}
         </button>
 
         <button
