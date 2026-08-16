@@ -6,7 +6,8 @@ import type { Song } from "../../types/show";
 type SongSearchProps = {
   songs: Song[];
   setlistSongIds: string[];
-  onSelectSong: (index: number) => void;
+  onPlayNow: (index: number) => void;
+  onPlayNext: (songId: string) => void;
   onAddToSetlist: (songId: string) => void;
   onClose: () => void;
 };
@@ -14,7 +15,8 @@ type SongSearchProps = {
 export default function SongSearch({
   songs,
   setlistSongIds,
-  onSelectSong,
+  onPlayNow,
+  onPlayNext,
   onAddToSetlist,
   onClose,
 }: SongSearchProps) {
@@ -34,18 +36,23 @@ export default function SongSearch({
       );
   }, [query, songs]);
 
-  function selectSong(index: number) {
-    onSelectSong(index);
+  function playNow(index: number) {
+    onPlayNow(index);
+    onClose();
+  }
+
+  function playNext(songId: string) {
+    onPlayNext(songId);
     onClose();
   }
 
   return (
     <div className="fixed inset-0 z-[60] flex items-start justify-center bg-black/80 p-6 pt-12">
-      <div className="w-full max-w-3xl overflow-hidden rounded-3xl border border-zinc-700 bg-zinc-950 shadow-2xl">
+      <div className="w-full max-w-4xl overflow-hidden rounded-3xl border border-zinc-700 bg-zinc-950 shadow-2xl">
         <div className="flex items-center justify-between border-b border-zinc-800 p-5">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-400">
-              GreenBridge Live
+              G3 Live
             </p>
 
             <h2 className="mt-1 text-2xl font-bold">
@@ -87,45 +94,67 @@ export default function SongSearch({
                 return (
                   <div
                     key={song.id}
-                    className="flex items-center gap-4 rounded-xl border border-zinc-800 bg-zinc-900 p-4"
+                    className="rounded-xl border border-zinc-800 bg-zinc-900 p-4"
                   >
-                    <button
-                      type="button"
-                      onClick={() => selectSong(index)}
-                      className="flex min-w-0 flex-1 items-center gap-4 text-left"
-                    >
+                    <div className="flex items-center gap-4">
                       <span className="w-8 text-sm font-semibold text-zinc-500">
                         {String(index + 1).padStart(2, "0")}
                       </span>
 
-                      <span className="min-w-0 flex-1">
-                        <span className="block truncate text-lg font-semibold">
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-lg font-semibold">
                           {song.title}
+                        </p>
+
+                        <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-xs text-zinc-500">
+                          <span>{song.duration}</span>
+
+                          {song.kind === "instrumental" && (
+                            <span>🎹 Instrumental</span>
+                          )}
+
+                          {song.bpm && (
+                            <span>♩ {song.bpm} BPM</span>
+                          )}
+
+                          {song.key && (
+                            <span>{song.key}</span>
+                          )}
+                        </div>
+                      </div>
+
+                      {isInSetlist ? (
+                        <span className="rounded-lg border border-emerald-800 bg-emerald-950/40 px-3 py-2 text-xs font-semibold text-emerald-300">
+                          ✓ Dans la setlist
                         </span>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => onAddToSetlist(song.id)}
+                          className="rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm font-semibold transition hover:border-emerald-500 hover:text-emerald-300"
+                        >
+                          + Ajouter
+                        </button>
+                      )}
+                    </div>
 
-                        <span className="mt-1 block text-xs text-zinc-500">
-                          {song.duration}
-                        </span>
-                      </span>
-
-                      <span className="text-sm font-semibold text-emerald-400">
-                        Jouer
-                      </span>
-                    </button>
-
-                    {isInSetlist ? (
-                      <span className="rounded-lg border border-emerald-800 bg-emerald-950/40 px-3 py-2 text-xs font-semibold text-emerald-300">
-                        ✓ Dans la setlist
-                      </span>
-                    ) : (
+                    <div className="mt-3 grid grid-cols-2 gap-2">
                       <button
                         type="button"
-                        onClick={() => onAddToSetlist(song.id)}
-                        className="rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm font-semibold transition hover:border-emerald-500 hover:text-emerald-300"
+                        onClick={() => playNow(index)}
+                        className="rounded-lg bg-emerald-500 px-4 py-3 font-bold text-zinc-950"
                       >
-                        + Ajouter
+                        ▶ Jouer maintenant
                       </button>
-                    )}
+
+                      <button
+                        type="button"
+                        onClick={() => playNext(song.id)}
+                        className="rounded-lg border border-zinc-700 bg-zinc-950 px-4 py-3 font-semibold transition hover:border-emerald-500 hover:text-emerald-300"
+                      >
+                        Jouer ensuite
+                      </button>
+                    </div>
                   </div>
                 );
               })}

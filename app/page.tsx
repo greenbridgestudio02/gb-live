@@ -336,13 +336,53 @@ onRemoveSong={(indexToRemove) => {
   <SongSearch
     songs={songs}
     setlistSongIds={setlistSongIds}
-    onSelectSong={(index) => {
+    onPlayNow={(index) => {
       if (isPreparingIntermissionSong) {
         setPreparedSongIndex(index);
         setIsPreparingIntermissionSong(false);
       } else {
         setCurrentSongIndex(index);
+
+        const selectedSongId = songs[index]?.id;
+        const setlistIndex = selectedSongId
+          ? setlistSongIds.indexOf(selectedSongId)
+          : -1;
+
+        if (setlistIndex !== -1) {
+          setSetlistPosition(setlistIndex);
+        }
       }
+    }}
+    onPlayNext={(songId) => {
+      setSetlistSongIds((currentSetlist) => {
+        const withoutSong = currentSetlist.filter(
+          (id) => id !== songId
+        );
+
+        const currentSongId =
+          currentSetlist[setlistPosition];
+
+        const currentPosition =
+          withoutSong.indexOf(currentSongId);
+
+        const insertPosition =
+          currentPosition !== -1
+            ? currentPosition + 1
+            : Math.min(
+                setlistPosition + 1,
+                withoutSong.length
+              );
+
+        const newSetlist = [...withoutSong];
+
+        newSetlist.splice(
+          insertPosition,
+          0,
+          songId
+        );
+
+        return newSetlist;
+      });
     }}
     onAddToSetlist={(songId) => {
       setSetlistSongIds((currentSetlist) => {
