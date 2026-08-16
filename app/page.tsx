@@ -519,6 +519,18 @@ onRemoveSong={(indexToRemove) => {
         currentRequests.filter((id) => id !== songId)
       );
     }}
+    
+    onMoveRequest={(fromIndex, toIndex) => {
+  setRequestedSongIds((currentRequests) => {
+    const newRequests = [...currentRequests];
+
+    const [movedSongId] = newRequests.splice(fromIndex, 1);
+    newRequests.splice(toIndex, 0, movedSongId);
+
+    return newRequests;
+  });
+}}
+    
     onClose={() => setIsRequestsOpen(false)}
   />
 )}
