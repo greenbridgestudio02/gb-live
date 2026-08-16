@@ -9,6 +9,7 @@ type SongListProps = {
   currentSongId: string;
   onSelectSong: (index: number) => void;
   onMoveSong: (fromIndex: number, toIndex: number) => void;
+  onRemoveSong: (index: number) => void;
   onClose: () => void;
 };
 
@@ -18,6 +19,7 @@ export default function SongList({
   currentSongId,
   onSelectSong,
   onMoveSong,
+  onRemoveSong,
   onClose,
 }: SongListProps) {
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
@@ -169,6 +171,22 @@ export default function SongList({
                     >
                       ▼
                     </button>
+
+                    <button
+                      type="button"
+                      onClick={() => onRemoveSong(index)}
+                      disabled={index === setlistPosition}
+                      className="mt-1 flex h-8 w-9 items-center justify-center rounded-lg border border-red-900 bg-red-950/30 text-sm text-red-400 disabled:cursor-not-allowed disabled:opacity-20"
+                      aria-label="Retirer de la setlist"
+                      title={
+                      index === setlistPosition
+                      ? "Impossible de retirer le morceau servant de repère courant"
+                      : "Retirer de la setlist"
+                }
+                    >
+                    ×
+                  </button>
+                  
                   </div>
                 </div>
               );

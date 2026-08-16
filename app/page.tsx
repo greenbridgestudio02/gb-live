@@ -33,6 +33,33 @@ export default function Home() {
   const [setlistSongIds, setSetlistSongIds] = useState<string[]>(
   show.songs.map((song) => song.id)
 );
+  const [setlistLoaded, setSetlistLoaded] = useState(false);
+
+useEffect(() => {
+  const savedSetlist = localStorage.getItem("gb-live-setlist");
+
+  if (savedSetlist) {
+    try {
+      setSetlistSongIds(JSON.parse(savedSetlist));
+    } catch {
+      console.error("Impossible de charger la setlist sauvegardée.");
+    }
+  }
+
+  setSetlistLoaded(true);
+}, []);
+
+useEffect(() => {
+  if (!setlistLoaded) {
+    return;
+  }
+
+  localStorage.setItem(
+    "gb-live-setlist",
+    JSON.stringify(setlistSongIds)
+  );
+}, [setlistSongIds, setlistLoaded]);
+
   const setlistSongs = setlistSongIds
   .map((songId) => songs.find((song) => song.id === songId))
   .filter(
@@ -282,6 +309,26 @@ function goToNextSong() {
         return newSetlist;
       });
     }}
+onRemoveSong={(indexToRemove) => {
+  setSetlistSongIds((currentSetlist) => {
+    if (indexToRemove === setlistPosition) {
+      return currentSetlist;
+    }
+
+    const newSetlist = currentSetlist.filter(
+      (_, index) => index !== indexToRemove
+    );
+
+    if (indexToRemove < setlistPosition) {
+      setSetlistPosition((position) =>
+        Math.max(position - 1, 0)
+      );
+    }
+
+    return newSetlist;
+  });
+}}
+
     onClose={() => setIsSetlistOpen(false)}
   />
 )}
