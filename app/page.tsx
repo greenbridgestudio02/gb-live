@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import SongList from "./components/SongList";
 import { show } from "../data/show";
@@ -27,14 +27,39 @@ export default function Home() {
     useState(false);
 
   const [songs, setSongs] = useState(show.songs);
+const [songsLoaded, setSongsLoaded] = useState(false);
 
-  const [favoriteSongIds] = useState([
-    "mon-amour",
-    "le-pont",
-    "final",
-  ]);
+useEffect(() => {
+  const savedSongs = localStorage.getItem("gb-live-songs");
 
-  const currentSong = songs[currentSongIndex];
+  if (savedSongs) {
+    try {
+      setSongs(JSON.parse(savedSongs));
+    } catch {
+      console.error(
+        "Impossible de charger les synchronisations sauvegardées."
+      );
+    }
+  }
+
+  setSongsLoaded(true);
+}, []);
+
+useEffect(() => {
+  if (!songsLoaded) {
+    return;
+  }
+
+  localStorage.setItem("gb-live-songs", JSON.stringify(songs));
+}, [songs, songsLoaded]);
+
+const [favoriteSongIds] = useState([
+  "mon-amour",
+  "le-pont",
+  "final",
+]);
+
+const currentSong = songs[currentSongIndex];
 
   const preparedSong =
     preparedSongIndex !== null ? songs[preparedSongIndex] : null;
