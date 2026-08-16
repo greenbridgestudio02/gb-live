@@ -34,6 +34,22 @@ export default function LyricsPlayer({ song }: LyricsPlayerProps) {
     return activeIndex;
   }, [elapsedTime, lyricLines]);
 
+  const previousLine =
+    currentLineIndex > 0
+      ? lyricLines[currentLineIndex - 1]
+      : null;
+
+  const currentLine =
+    currentLineIndex >= 0
+      ? lyricLines[currentLineIndex]
+      : null;
+
+  const nextLine =
+    currentLineIndex >= 0 &&
+    currentLineIndex < lyricLines.length - 1
+      ? lyricLines[currentLineIndex + 1]
+      : null;
+
   useEffect(() => {
     setIsPlaying(false);
     setElapsedTime(0);
@@ -88,31 +104,39 @@ export default function LyricsPlayer({ song }: LyricsPlayerProps) {
 
   return (
     <div className="flex h-full flex-col">
-      <div className="flex-1 overflow-y-auto rounded-2xl border border-zinc-800 bg-zinc-900/40 p-8">
+      <div className="flex min-h-0 flex-1 items-center justify-center rounded-2xl border border-zinc-800 bg-zinc-900/40 p-6">
         {lyricLines.length > 0 ? (
-          <div className="space-y-6">
-            {lyricLines.map((line, index) => {
-              const isCurrent = index === currentLineIndex;
-              const isPast = index < currentLineIndex;
-
-              return (
-                <p
-                  key={`${line.time}-${index}`}
-                  className={`text-3xl font-medium leading-relaxed transition-all duration-300 ${
-                    isCurrent
-                      ? "scale-[1.02] text-emerald-300"
-                      : isPast
-                        ? "text-zinc-600"
-                        : "text-zinc-300"
-                  }`}
-                >
-                  {line.text}
+          <div className="w-full max-w-5xl text-center">
+            <div className="min-h-20">
+              {previousLine && (
+                <p className="text-2xl font-medium leading-relaxed text-zinc-600">
+                  {previousLine.text}
                 </p>
-              );
-            })}
+              )}
+            </div>
+
+            <div className="my-10 flex min-h-40 items-center justify-center">
+              {currentLine && (
+                <p className="text-5xl font-bold leading-tight text-emerald-300 transition-all duration-300">
+                  {currentLine.text}
+                </p>
+              )}
+            </div>
+
+            <div className="min-h-20">
+              {nextLine ? (
+                <p className="text-3xl font-medium leading-relaxed text-zinc-400">
+                  {nextLine.text}
+                </p>
+              ) : (
+                <p className="text-xl font-medium text-zinc-600">
+                  Fin des paroles
+                </p>
+              )}
+            </div>
           </div>
         ) : (
-          <div className="whitespace-pre-line text-3xl font-medium leading-relaxed text-zinc-100">
+          <div className="w-full whitespace-pre-line text-center text-3xl font-medium leading-relaxed text-zinc-100">
             {song.lyrics}
           </div>
         )}

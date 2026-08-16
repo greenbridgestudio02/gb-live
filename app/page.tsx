@@ -34,6 +34,7 @@ export default function Home() {
   show.songs.map((song) => song.id)
 );
   const [setlistLoaded, setSetlistLoaded] = useState(false);
+  const [isPreparationOpen, setIsPreparationOpen] = useState(false);
 
 useEffect(() => {
   const savedSetlist = localStorage.getItem("gb-live-setlist");
@@ -66,6 +67,11 @@ useEffect(() => {
     (song): song is (typeof songs)[number] =>
       song !== undefined
   );
+
+  const nextSetlistSong =
+  setlistPosition < setlistSongs.length - 1
+    ? setlistSongs[setlistPosition + 1]
+    : null;
 
   const [songsLoaded, setSongsLoaded] = useState(false);
   const [isLyricsEditorOpen, setIsLyricsEditorOpen] = useState(false);
@@ -141,17 +147,17 @@ function goToNextSong() {
 }
 
   return (
-    <main className="flex min-h-screen flex-col bg-zinc-950 text-zinc-100">
-      <header className="flex items-center justify-between border-b border-zinc-800 px-6 py-4">
+    <main className="flex h-screen overflow-hidden flex-col bg-zinc-950 text-zinc-100">
+      <header className="flex items-center justify-between border-b border-zinc-800 px-6 py-2">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-400">
-            GreenBridge Live
-          </p>
+  <img
+    src="/g3-live-logo.png"
+    alt="G3 Live"
+    className="h-28 w-auto object-contain object-left"
+  />
 
-          <h1 className="mt-1 text-xl font-semibold">
-            {show.title}
-          </h1>
-        </div>
+
+</div>
 
         <div className="text-right">
           <p className="text-sm text-zinc-500">
@@ -164,7 +170,7 @@ function goToNextSong() {
         </div>
       </header>
 
-      <section className="flex flex-1 flex-col p-6">
+      <section className="flex min-h-0 flex-1 flex-col p-4">
         <div className="mb-4 flex items-center justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-emerald-400">
@@ -193,77 +199,76 @@ function goToNextSong() {
   </div>
 )}
           </div>
+      <div className="mb-4 flex items-center justify-between rounded-2xl border border-zinc-800 bg-zinc-900/60 px-6 py-4">
+  <div>
+    <p className="text-xs font-semibold uppercase tracking-[0.25em] text-zinc-500">
+      Prochain morceau
+    </p>
 
-        <div className="mt-5 grid grid-cols-8 gap-3">
-          <button
-            type="button"
-            onClick={goToPreviousSong}
-            disabled={setlistPosition === 0}
-            className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-4 font-semibold disabled:opacity-30"
-          >
-            ◀ Précédent
-          </button>
+    <p className="mt-1 text-xl font-bold text-zinc-100">
+      {nextSetlistSong ? nextSetlistSong.title : "Fin de la setlist"}
+    </p>
+  </div>
 
-          <button
-            type="button"
-            onClick={goToNextSong}
-            disabled={setlistPosition === setlistSongIds.length - 1}
-            className="rounded-xl bg-emerald-500 px-4 py-4 font-bold text-zinc-950 disabled:opacity-30"
-          >
-            Suivant ▶
-          </button>
+  {nextSetlistSong && (
+    <div className="text-right text-sm text-zinc-500">
+      {nextSetlistSong.duration}
+    </div>
+  )}
+</div>
 
-          <button
-            type="button"
-            onClick={() => setIsSetlistOpen(true)}
-            className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-4 font-semibold"
-          >
-            Setlist
-          </button>
+<div className="mt-5 grid grid-cols-6 gap-3">
+  <button
+    type="button"
+    onClick={goToPreviousSong}
+    disabled={setlistPosition === 0}
+    className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-4 font-semibold disabled:opacity-30"
+  >
+    ◀ Précédent
+  </button>
 
-          <button
-            type="button"
-            onClick={() => setIsSearchOpen(true)}
-            className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-4 font-semibold"
-          >
-            Bibliothèque
-          </button>
+  <button
+    type="button"
+    onClick={goToNextSong}
+    disabled={setlistPosition === setlistSongIds.length - 1}
+    className="rounded-xl bg-emerald-500 px-4 py-4 font-bold text-zinc-950 disabled:opacity-30"
+  >
+    Suivant ▶
+  </button>
 
-          <button
-            type="button"
-            onClick={() => setIsFavoritesOpen(true)}
-            className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-4 font-semibold"
->
-            Favoris
-          </button>
+  <button
+    type="button"
+    onClick={() => setIsSetlistOpen(true)}
+    className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-4 font-semibold"
+  >
+    Setlist
+  </button>
 
-          <button
-            type="button"
-            onClick={() => setIsNewSongEditorOpen(true)}
-            className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-4 font-semibold"
-            >
-            Nouveau morceau
-          </button>
+  <button
+    type="button"
+    onClick={() => setIsSearchOpen(true)}
+    className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-4 font-semibold"
+  >
+    Bibliothèque
+  </button>
 
-          <button
-            type="button"
-            onClick={() => setIsLyricsEditorOpen(true)}
-            className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-4 font-semibold"
-            >
-            Éditer paroles
-          </button>
+  <button
+    type="button"
+    onClick={() => setIsFavoritesOpen(true)}
+    className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-4 font-semibold"
+  >
+    Favoris
+  </button>
 
-          <button
-            type="button"
-            onClick={() => setIsSyncEditorOpen(true)}
-            className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-4 font-semibold"
->
-              Sync
-            </button>
-          
-        </div>
-      </section>
-
+  <button
+    type="button"
+    onClick={() => setIsPreparationOpen(true)}
+    className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-4 font-semibold"
+  >
+    Préparation
+  </button>
+</div>
+</section>
   {isSetlistOpen && (
   <SongList
     songs={setlistSongs}
@@ -461,6 +466,67 @@ onRemoveSong={(indexToRemove) => {
       <p className="mt-6 text-center text-sm text-zinc-500">
         Les demandes du public pourront continuer à être reçues pendant l’entracte.
       </p>
+    </div>
+  </div>
+)}
+
+{isPreparationOpen && (
+  <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/80 p-6">
+    <div className="w-full max-w-xl rounded-3xl border border-zinc-700 bg-zinc-950 p-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-400">
+            G3 Live
+          </p>
+
+          <h2 className="mt-1 text-2xl font-bold">
+            Préparation
+          </h2>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => setIsPreparationOpen(false)}
+          className="flex h-12 w-12 items-center justify-center rounded-xl border border-zinc-700 bg-zinc-900 text-2xl font-bold"
+        >
+          ×
+        </button>
+      </div>
+
+      <div className="mt-6 grid gap-3">
+        <button
+          type="button"
+          onClick={() => {
+            setIsPreparationOpen(false);
+            setIsNewSongEditorOpen(true);
+          }}
+          className="rounded-xl border border-zinc-700 bg-zinc-900 px-6 py-4 text-left text-lg font-semibold"
+        >
+          + Nouveau morceau
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            setIsPreparationOpen(false);
+            setIsLyricsEditorOpen(true);
+          }}
+          className="rounded-xl border border-zinc-700 bg-zinc-900 px-6 py-4 text-left text-lg font-semibold"
+        >
+          Éditer les paroles
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            setIsPreparationOpen(false);
+            setIsSyncEditorOpen(true);
+          }}
+          className="rounded-xl border border-zinc-700 bg-zinc-900 px-6 py-4 text-left text-lg font-semibold"
+        >
+          Synchroniser les paroles
+        </button>
+      </div>
     </div>
   </div>
 )}
