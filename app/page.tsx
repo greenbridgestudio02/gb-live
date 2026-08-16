@@ -9,11 +9,13 @@ import FavoritesPanel from "./components/FavoritesPanel";
 import LyricsPlayer from "./components/LyricsPlayer";
 import LyricsSyncEditor from "./components/LyricsSyncEditor";
 import LyricsEditor from "./components/LyricsEditor";
+import NewSongEditor from "./components/NewSongEditor";
 
 export default function Home() {
   const [setlistPosition, setSetlistPosition] = useState(0);
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
   const [preparedSongIndex, setPreparedSongIndex] = useState<number | null>(null);
+
 
   const [isPaused, setIsPaused] = useState(false);
   const [isIntermission, setIsIntermission] = useState(false);
@@ -28,8 +30,19 @@ export default function Home() {
     useState(false);
 
   const [songs, setSongs] = useState(show.songs);
+  const [setlistSongIds, setSetlistSongIds] = useState<string[]>(
+  show.songs.map((song) => song.id)
+);
+  const setlistSongs = setlistSongIds
+  .map((songId) => songs.find((song) => song.id === songId))
+  .filter(
+    (song): song is (typeof songs)[number] =>
+      song !== undefined
+  );
+
   const [songsLoaded, setSongsLoaded] = useState(false);
   const [isLyricsEditorOpen, setIsLyricsEditorOpen] = useState(false);
+  const [isNewSongEditorOpen, setIsNewSongEditorOpen] = useState(false);
 
 useEffect(() => {
   const savedSongs = localStorage.getItem("gb-live-songs");
@@ -68,20 +81,36 @@ const currentSong = songs[currentSongIndex];
 
   function goToPreviousSong() {
   const previousPosition = Math.max(setlistPosition - 1, 0);
-  
+  const previousSongId = setlistSongIds[previousPosition];
+
+  const previousSongIndex = songs.findIndex(
+    (song) => song.id === previousSongId
+  );
 
   setSetlistPosition(previousPosition);
-  setCurrentSongIndex(previousPosition);
+
+  if (previousSongIndex !== -1) {
+    setCurrentSongIndex(previousSongIndex);
+  }
 }
 
 function goToNextSong() {
   const nextPosition = Math.min(
     setlistPosition + 1,
-    songs.length - 1
+    setlistSongIds.length - 1
+  );
+
+  const nextSongId = setlistSongIds[nextPosition];
+
+  const nextSongIndex = songs.findIndex(
+    (song) => song.id === nextSongId
   );
 
   setSetlistPosition(nextPosition);
-  setCurrentSongIndex(nextPosition);
+
+  if (nextSongIndex !== -1) {
+    setCurrentSongIndex(nextSongIndex);
+  }
 }
 
   return (
@@ -138,7 +167,7 @@ function goToNextSong() {
 )}
           </div>
 
-        <div className="mt-5 grid grid-cols-7 gap-3">
+        <div className="mt-5 grid grid-cols-8 gap-3">
           <button
             type="button"
             onClick={goToPreviousSong}
@@ -151,7 +180,7 @@ function goToNextSong() {
           <button
             type="button"
             onClick={goToNextSong}
-            disabled={setlistPosition === songs.length - 1}
+            disabled={setlistPosition === setlistSongIds.length - 1}
             className="rounded-xl bg-emerald-500 px-4 py-4 font-bold text-zinc-950 disabled:opacity-30"
           >
             Suivant ▶
@@ -170,7 +199,7 @@ function goToNextSong() {
             onClick={() => setIsSearchOpen(true)}
             className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-4 font-semibold"
           >
-            Rechercher
+            Bibliothèque
           </button>
 
           <button
@@ -179,6 +208,14 @@ function goToNextSong() {
             className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-4 font-semibold"
 >
             Favoris
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setIsNewSongEditorOpen(true)}
+            className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-4 font-semibold"
+            >
+            Nouveau morceau
           </button>
 
           <button
@@ -200,10 +237,59 @@ function goToNextSong() {
         </div>
       </section>
 
-      {isSetlistOpen && (
+  {isSetlistOpen && (
   <SongList
+    songs={setlistSongs}
+    setlistPosition={setlistPosition}
+    currentSongId={currentSong.id}
+    onSelectSong={(setlistIndex) => {
+      const selectedSong = setlistSongs[setlistIndex];
+
+      if (!selectedSong) {
+        return;
+      }
+
+      const libraryIndex = songs.findIndex(
+        (song) => song.id === selectedSong.id
+      );
+
+      if (libraryIndex === -1) {
+        return;
+      }
+
+      if (isPreparingIntermissionSong) {
+        setPreparedSongIndex(libraryIndex);
+        setIsPreparingIntermissionSong(false);
+      } else {
+        setCurrentSongIndex(libraryIndex);
+        setSetlistPosition(setlistIndex);
+      }
+    }}
+    onMoveSong={(fromIndex, toIndex) => {
+      setSetlistSongIds((currentSetlist) => {
+        const newSetlist = [...currentSetlist];
+
+        const [movedSongId] = newSetlist.splice(fromIndex, 1);
+        newSetlist.splice(toIndex, 0, movedSongId);
+
+        const referenceSongId = currentSetlist[setlistPosition];
+        const newPosition = newSetlist.indexOf(referenceSongId);
+
+        if (newPosition !== -1) {
+          setSetlistPosition(newPosition);
+        }
+
+        return newSetlist;
+      });
+    }}
+    onClose={() => setIsSetlistOpen(false)}
+  />
+)}
+
+{isSearchOpen && (
+  <SongSearch
     songs={songs}
-    currentSongIndex={currentSongIndex}
+    setlistSongIds={setlistSongIds}
     onSelectSong={(index) => {
       if (isPreparingIntermissionSong) {
         setPreparedSongIndex(index);
@@ -212,18 +298,14 @@ function goToNextSong() {
         setCurrentSongIndex(index);
       }
     }}
-    onClose={() => setIsSetlistOpen(false)}
-  />
-)}
-{isSearchOpen && (
-  <SongSearch
-    songs={songs}
-    onSelectSong={(index) => {
-      if (isPreparingIntermissionSong) {
-        setPreparedSongIndex(index);
-        } else {
-        setCurrentSongIndex(index);
+    onAddToSetlist={(songId) => {
+      setSetlistSongIds((currentSetlist) => {
+        if (currentSetlist.includes(songId)) {
+          return currentSetlist;
         }
+
+        return [...currentSetlist, songId];
+      });
     }}
     onClose={() => setIsSearchOpen(false)}
   />
@@ -314,7 +396,7 @@ function goToNextSong() {
           }}
           className="rounded-xl border border-zinc-700 bg-zinc-900 px-6 py-5 text-lg font-semibold"
         >
-          Rechercher
+          Bibliothèque
         </button>
 
         <button
@@ -334,6 +416,18 @@ function goToNextSong() {
       </p>
     </div>
   </div>
+)}
+
+{isNewSongEditorOpen && (
+  <NewSongEditor
+    onClose={() => setIsNewSongEditorOpen(false)}
+    onSave={(newSong) => {
+      setSongs((currentSongs) => [...currentSongs, newSong]);
+
+      setCurrentSongIndex(songs.length);
+      setIsNewSongEditorOpen(false);
+    }}
+  />
 )}
 
 {isLyricsEditorOpen && (
