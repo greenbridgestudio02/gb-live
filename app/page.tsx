@@ -146,7 +146,7 @@ function goToNextSong() {
   <img
     src="/g3-live-logo.png"
     alt="G3 Live"
-    className="h-28 w-auto object-contain object-left"
+    className="h-20 w-auto object-contain object-left"
   />
 
 
@@ -163,17 +163,31 @@ function goToNextSong() {
         </div>
       </header>
 
-      <section className="flex min-h-0 flex-1 flex-col p-4">
-        <div className="mb-4 flex items-center justify-between">
+      <section className="flex min-h-0 flex-1 flex-col px-4 py-2">
+        <div className="mb-2 flex items-center justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-emerald-400">
-              Morceau en cours
-            </p>
+  <p className="text-xs font-semibold uppercase tracking-[0.25em] text-emerald-400">
+    Morceau en cours
+  </p>
 
-            <h2 className="mt-2 text-4xl font-bold">
-              {currentSong.title}
-            </h2>
-          </div>
+  <div className="mt-2 flex flex-wrap items-end gap-x-5 gap-y-1">
+    <h2 className="text-4xl font-bold">
+      {currentSong.title}
+    </h2>
+
+    {(currentSong.bpm || currentSong.key) && (
+      <div className="flex items-center gap-4 pb-1 text-sm font-semibold text-zinc-500">
+        {currentSong.bpm && (
+          <span>♩ {currentSong.bpm} BPM</span>
+        )}
+
+        {currentSong.key && (
+          <span>Tonalité : {currentSong.key}</span>
+        )}
+      </div>
+    )}
+  </div>
+</div>
 
           <button
             type="button"
@@ -184,15 +198,10 @@ function goToNextSong() {
           </button>
         </div>
 
-        <div className="flex-1">
-          <LyricsPlayer song={currentSong} />
-          {currentSong.needsLyricsSync && (
-  <div className="mb-4 rounded-xl border border-amber-700 bg-amber-950/40 px-5 py-3 text-amber-300">
-    ⚠ Synchronisation des paroles à refaire
-  </div>
-)}
+        <div className="min-h-0 flex-1 overflow-hidden">
+  <LyricsPlayer song={currentSong} />
           </div>
-      <div className="mb-4 flex items-center justify-between rounded-2xl border border-zinc-800 bg-zinc-900/60 px-6 py-4">
+      <div className="mb-2 flex items-center justify-between rounded-2xl border border-zinc-800 bg-zinc-900/60 px-6 py-4">
   <div>
     <p className="text-xs font-semibold uppercase tracking-[0.25em] text-zinc-500">
       Prochain morceau
@@ -210,12 +219,12 @@ function goToNextSong() {
   )}
 </div>
 
-<div className="mt-5 grid grid-cols-5 gap-3">
+<div className="mt-2 grid grid-cols-5 gap-3">
   <button
     type="button"
     onClick={goToPreviousSong}
     disabled={setlistPosition === 0}
-    className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-4 font-semibold disabled:opacity-30"
+    className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 font-semibold disabled:opacity-30"
   >
     ◀ Précédent
   </button>
@@ -224,7 +233,7 @@ function goToNextSong() {
     type="button"
     onClick={goToNextSong}
     disabled={setlistPosition === setlistSongIds.length - 1}
-    className="rounded-xl bg-emerald-500 px-4 py-4 font-bold text-zinc-950 disabled:opacity-30"
+    className="rounded-xl bg-emerald-500 px-4 py-3 font-bold text-zinc-950 disabled:opacity-30"
   >
     Suivant ▶
   </button>
@@ -232,7 +241,7 @@ function goToNextSong() {
   <button
     type="button"
     onClick={() => setIsSetlistOpen(true)}
-    className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-4 font-semibold"
+    className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 font-semibold"
   >
     Setlist
   </button>
@@ -240,7 +249,7 @@ function goToNextSong() {
   <button
     type="button"
     onClick={() => setIsSearchOpen(true)}
-    className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-4 font-semibold"
+    className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 font-semibold"
   >
     Bibliothèque
   </button>
@@ -248,7 +257,7 @@ function goToNextSong() {
   <button
     type="button"
     onClick={() => setIsPreparationOpen(true)}
-    className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-4 font-semibold"
+    className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 font-semibold"
   >
     Préparation
   </button>

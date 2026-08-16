@@ -158,28 +158,28 @@ export default function LyricsPlayer({ song }: LyricsPlayerProps) {
 
   // MORCEAU CHANTÉ NON SYNCHRONISÉ
   if (!hasSynchronizedLyrics) {
-    return (
-      <div className="flex h-full min-h-0 flex-col">
-        <div className="flex min-h-0 flex-1 flex-col rounded-2xl border border-zinc-800 bg-zinc-900/40 p-5">
-          <div className="mb-4 rounded-xl border border-amber-700 bg-amber-950/40 px-5 py-3 text-center">
-            <p className="font-bold text-amber-300">
-              ⚠ Paroles à synchroniser
-            </p>
+  return (
+    <div className="flex h-full min-h-0 flex-col">
+      <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/40 p-4">
+        <div className="mb-3 shrink-0 rounded-xl border border-amber-700 bg-amber-950/40 px-4 py-2 text-center">
+          <p className="font-bold text-amber-300">
+            ⚠ Paroles à synchroniser
+          </p>
 
-            <p className="mt-1 text-sm text-amber-200/70">
-              Préparation → Synchroniser les paroles
-            </p>
-          </div>
+          <p className="mt-1 text-sm text-amber-200/70">
+            Préparation → Synchroniser les paroles
+          </p>
+        </div>
 
-          <div className="flex min-h-0 flex-1 items-center justify-center overflow-y-auto">
-            <div className="whitespace-pre-line text-center text-3xl font-medium leading-relaxed text-zinc-300">
-              {song.lyrics || "Aucune parole enregistrée."}
-            </div>
+        <div className="min-h-0 flex-1 overflow-y-auto rounded-xl border border-zinc-800 bg-zinc-950/30 p-4">
+          <div className="whitespace-pre-line text-center text-2xl font-medium leading-relaxed text-zinc-300">
+            {song.lyrics || "Aucune parole enregistrée."}
           </div>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
+}
 
   // MORCEAU CHANTÉ SYNCHRONISÉ
   return (
