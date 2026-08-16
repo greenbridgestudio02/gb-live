@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import type { Song } from "../../types/show";
+import type { Song, SongKind } from "../../types/show";
 
 type NewSongEditorProps = {
   onSave: (song: Song) => void;
@@ -17,6 +17,7 @@ export default function NewSongEditor({
   const [description, setDescription] = useState("");
   const [stageNotes, setStageNotes] = useState("");
   const [lyricsText, setLyricsText] = useState("");
+  const [kind, setKind] = useState<SongKind>("vocal");
 
   const lines = useMemo(() => {
     return lyricsText
@@ -25,10 +26,16 @@ export default function NewSongEditor({
       .filter(Boolean);
   }, [lyricsText]);
 
+  const isVocal = kind === "vocal";
+
   function createSong() {
     const trimmedTitle = title.trim();
 
-    if (!trimmedTitle || lines.length === 0) {
+    if (!trimmedTitle) {
+      return;
+    }
+
+    if (isVocal && lines.length === 0) {
       return;
     }
 
@@ -44,15 +51,23 @@ export default function NewSongEditor({
       id,
       title: trimmedTitle,
       duration: duration.trim() || "--:--",
-      description: description.trim() || "Morceau",
+      description:
+        description.trim() ||
+        (isVocal ? "Morceau chanté" : "Morceau instrumental"),
       stageNotes: stageNotes.trim(),
       nextAction: "",
-      lyrics: lines.join("\n\n"),
-      lyricLines: lines.map((text) => ({
-        text,
-        time: 0,
-      })),
-      needsLyricsSync: true,
+      kind,
+
+      lyrics: isVocal ? lines.join("\n\n") : "",
+
+      lyricLines: isVocal
+        ? lines.map((text) => ({
+            text,
+            time: 0,
+          }))
+        : [],
+
+      needsLyricsSync: isVocal,
     };
 
     onSave(newSong);
@@ -64,7 +79,7 @@ export default function NewSongEditor({
         <div className="flex items-start justify-between gap-6">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-400">
-              GreenBridge Live
+              G3 Live
             </p>
 
             <h2 className="mt-2 text-3xl font-bold">
@@ -72,7 +87,7 @@ export default function NewSongEditor({
             </h2>
 
             <p className="mt-2 text-zinc-500">
-              Créez le morceau, ajoutez ses paroles puis synchronisez-le.
+              Créez un morceau chanté ou instrumental.
             </p>
           </div>
 
@@ -84,6 +99,50 @@ export default function NewSongEditor({
           >
             ×
           </button>
+        </div>
+
+        <div className="mt-6">
+          <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-zinc-500">
+            Type de morceau
+          </p>
+
+          <div className="grid grid-cols-2 gap-3">
+            <button
+              type="button"
+              onClick={() => setKind("vocal")}
+              className={`rounded-2xl border px-6 py-5 text-left transition ${
+                kind === "vocal"
+                  ? "border-emerald-500 bg-emerald-500/10"
+                  : "border-zinc-700 bg-zinc-900"
+              }`}
+            >
+              <span className="block text-xl font-bold">
+                🎤 Chanté
+              </span>
+
+              <span className="mt-1 block text-sm text-zinc-500">
+                Paroles et synchronisation par phrases
+              </span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setKind("instrumental")}
+              className={`rounded-2xl border px-6 py-5 text-left transition ${
+                kind === "instrumental"
+                  ? "border-emerald-500 bg-emerald-500/10"
+                  : "border-zinc-700 bg-zinc-900"
+              }`}
+            >
+              <span className="block text-xl font-bold">
+                🎹 Instrumental
+              </span>
+
+              <span className="mt-1 block text-sm text-zinc-500">
+                Aucun système de paroles nécessaire
+              </span>
+            </button>
+          </div>
         </div>
 
         <div className="mt-6 grid gap-6 lg:grid-cols-2">
@@ -125,7 +184,11 @@ export default function NewSongEditor({
                 type="text"
                 value={description}
                 onChange={(event) => setDescription(event.target.value)}
-                placeholder="Ex. Ballade, morceau d'ouverture..."
+                placeholder={
+                  isVocal
+                    ? "Ex. Ballade, morceau d'ouverture..."
+                    : "Ex. Instrumental piano, medley..."
+                }
                 className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 outline-none focus:border-emerald-500"
               />
             </div>
@@ -138,34 +201,62 @@ export default function NewSongEditor({
               <textarea
                 value={stageNotes}
                 onChange={(event) => setStageNotes(event.target.value)}
-                placeholder="Notes personnelles..."
+                placeholder={
+                  isVocal
+                    ? "Notes personnelles..."
+                    : "Ex. intro libre, solo, reprise au signe..."
+                }
                 className="min-h-28 w-full rounded-xl border border-zinc-700 bg-zinc-900 p-4 outline-none focus:border-emerald-500"
               />
             </div>
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-semibold text-zinc-400">
-              Paroles *
-            </label>
+            {isVocal ? (
+              <>
+                <label className="mb-2 block text-sm font-semibold text-zinc-400">
+                  Paroles *
+                </label>
 
-            <textarea
-              value={lyricsText}
-              onChange={(event) => setLyricsText(event.target.value)}
-              placeholder="Collez les paroles ici, une phrase par ligne..."
-              className="min-h-[390px] w-full resize-y rounded-2xl border border-zinc-700 bg-zinc-900 p-5 text-lg leading-relaxed outline-none focus:border-emerald-500"
-            />
+                <textarea
+                  value={lyricsText}
+                  onChange={(event) => setLyricsText(event.target.value)}
+                  placeholder="Collez les paroles ici, une phrase par ligne..."
+                  className="min-h-[390px] w-full resize-y rounded-2xl border border-zinc-700 bg-zinc-900 p-5 text-lg leading-relaxed outline-none focus:border-emerald-500"
+                />
 
-            <p className="mt-3 text-sm text-zinc-500">
-              {lines.length} phrase{lines.length > 1 ? "s" : ""} détectée
-              {lines.length > 1 ? "s" : ""}.
-            </p>
+                <p className="mt-3 text-sm text-zinc-500">
+                  {lines.length} phrase{lines.length > 1 ? "s" : ""} détectée
+                  {lines.length > 1 ? "s" : ""}.
+                </p>
+              </>
+            ) : (
+              <div className="flex min-h-[390px] items-center justify-center rounded-2xl border border-zinc-800 bg-zinc-900/40 p-8 text-center">
+                <div>
+                  <p className="text-5xl">
+                    🎹
+                  </p>
+
+                  <h3 className="mt-4 text-2xl font-bold">
+                    Morceau instrumental
+                  </h3>
+
+                  <p className="mt-3 max-w-sm text-zinc-500">
+                    Aucune parole ni synchronisation ne sera créée.
+                    Les notes de scène pourront servir de repères pendant
+                    la prestation.
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
         <div className="mt-6 flex items-center justify-between border-t border-zinc-800 pt-6">
           <p className="text-sm text-zinc-500">
-            Le nouveau morceau sera marqué comme « synchronisation à refaire ».
+            {isVocal
+              ? "Le morceau devra être synchronisé avant son utilisation en live."
+              : "Le morceau sera immédiatement utilisable comme instrumental."}
           </p>
 
           <div className="flex gap-3">
@@ -180,7 +271,7 @@ export default function NewSongEditor({
             <button
               type="button"
               onClick={createSong}
-              disabled={!title.trim() || lines.length === 0}
+              disabled={!title.trim() || (isVocal && lines.length === 0)}
               className="rounded-xl bg-emerald-500 px-6 py-4 font-bold text-zinc-950 disabled:cursor-not-allowed disabled:opacity-30"
             >
               Créer le morceau

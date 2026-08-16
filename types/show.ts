@@ -3,6 +3,8 @@ export type LyricLine = {
   text: string;
 };
 
+export type SongKind = "vocal" | "instrumental";
+
 export type Song = {
   id: string;
   title: string;
@@ -10,6 +12,8 @@ export type Song = {
   description: string;
   stageNotes: string;
   nextAction: string;
+
+  kind?: SongKind;
 
   lyrics: string;
 

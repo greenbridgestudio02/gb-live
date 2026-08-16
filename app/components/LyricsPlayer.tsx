@@ -14,6 +14,7 @@ export default function LyricsPlayer({ song }: LyricsPlayerProps) {
   const startTimeRef = useRef<number | null>(null);
   const pausedElapsedRef = useRef(0);
 
+  const isInstrumental = song.kind === "instrumental";
   const lyricLines = song.lyricLines ?? [];
 
   const currentLineIndex = useMemo(() => {
@@ -100,6 +101,44 @@ export default function LyricsPlayer({ song }: LyricsPlayerProps) {
     setElapsedTime(0);
     startTimeRef.current = null;
     pausedElapsedRef.current = 0;
+  }
+
+  if (isInstrumental) {
+    return (
+      <div className="flex h-full flex-col">
+        <div className="flex min-h-0 flex-1 items-center justify-center rounded-2xl border border-zinc-800 bg-zinc-900/40 p-6">
+          <div className="w-full max-w-4xl text-center">
+            <p className="text-6xl">
+              🎹
+            </p>
+
+            <p className="mt-4 text-sm font-semibold uppercase tracking-[0.35em] text-emerald-400">
+              Instrumental
+            </p>
+
+            <h3 className="mt-3 text-5xl font-bold text-zinc-100">
+              {song.title}
+            </h3>
+
+            <div className="mx-auto mt-8 max-w-3xl rounded-2xl border border-zinc-800 bg-zinc-950/60 p-6">
+              <p className="text-xs font-semibold uppercase tracking-[0.25em] text-zinc-500">
+                Notes de scène
+              </p>
+
+              {song.stageNotes.trim() ? (
+                <p className="mt-4 whitespace-pre-line text-2xl font-medium leading-relaxed text-zinc-300">
+                  {song.stageNotes}
+                </p>
+              ) : (
+                <p className="mt-4 text-lg text-zinc-600">
+                  Aucune note de scène pour ce morceau.
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
