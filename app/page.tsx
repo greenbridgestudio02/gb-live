@@ -8,6 +8,7 @@ import SongSearch from "./components/SongSearch";
 import FavoritesPanel from "./components/FavoritesPanel";
 import LyricsPlayer from "./components/LyricsPlayer";
 import LyricsSyncEditor from "./components/LyricsSyncEditor";
+import LyricsEditor from "./components/LyricsEditor";
 
 export default function Home() {
   const [setlistPosition, setSetlistPosition] = useState(0);
@@ -27,7 +28,8 @@ export default function Home() {
     useState(false);
 
   const [songs, setSongs] = useState(show.songs);
-const [songsLoaded, setSongsLoaded] = useState(false);
+  const [songsLoaded, setSongsLoaded] = useState(false);
+  const [isLyricsEditorOpen, setIsLyricsEditorOpen] = useState(false);
 
 useEffect(() => {
   const savedSongs = localStorage.getItem("gb-live-songs");
@@ -129,9 +131,14 @@ function goToNextSong() {
 
         <div className="flex-1">
           <LyricsPlayer song={currentSong} />
+          {currentSong.needsLyricsSync && (
+  <div className="mb-4 rounded-xl border border-amber-700 bg-amber-950/40 px-5 py-3 text-amber-300">
+    ⚠ Synchronisation des paroles à refaire
+  </div>
+)}
           </div>
 
-        <div className="mt-5 grid grid-cols-6 gap-3">
+        <div className="mt-5 grid grid-cols-7 gap-3">
           <button
             type="button"
             onClick={goToPreviousSong}
@@ -172,6 +179,14 @@ function goToNextSong() {
             className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-4 font-semibold"
 >
             Favoris
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setIsLyricsEditorOpen(true)}
+            className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-4 font-semibold"
+            >
+            Éditer paroles
           </button>
 
           <button
@@ -321,6 +336,34 @@ function goToNextSong() {
   </div>
 )}
 
+{isLyricsEditorOpen && (
+  <LyricsEditor
+    song={currentSong}
+    onClose={() => setIsLyricsEditorOpen(false)}
+    onSave={(lines) => {
+      setSongs((currentSongs) =>
+        currentSongs.map((song, index) => {
+          if (index !== currentSongIndex) {
+            return song;
+          }
+
+          return {
+            ...song,
+            lyrics: lines.join("\n\n"),
+            lyricLines: lines.map((text, lineIndex) => ({
+              text,
+              time: song.lyricLines?.[lineIndex]?.time ?? 0,
+            })),
+            needsLyricsSync: true,
+          };
+        })
+      );
+
+      setIsLyricsEditorOpen(false);
+    }}
+  />
+)}
+
 {isSyncEditorOpen && (
   <div className="fixed inset-0 z-[70] overflow-y-auto bg-black/90 p-6">
     <div className="mx-auto max-w-4xl">
@@ -349,6 +392,7 @@ function goToNextSong() {
                 ...line,
                 time: times[lineIndex],
               })),
+              needsLyricsSync: false,
            };
          })
       );

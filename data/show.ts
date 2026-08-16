@@ -16,6 +16,8 @@ export const show: Show = {
         "Préparer le morceau « Mon amour ».",
       lyrics: `Introduction instrumentale
 
+      needsLyricsSync?: boolean;
+
 Aucune parole pour ce morceau.`,
     },
     {
