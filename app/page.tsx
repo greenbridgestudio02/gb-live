@@ -5,10 +5,9 @@ import { useEffect, useState } from "react";
 import SongList from "./components/SongList";
 import { show } from "../data/show";
 import SongSearch from "./components/SongSearch";
-import FavoritesPanel from "./components/FavoritesPanel";
 import LyricsPlayer from "./components/LyricsPlayer";
 import LyricsSyncEditor from "./components/LyricsSyncEditor";
-import LyricsEditor from "./components/LyricsEditor";
+import SongEditor from "./components/SongEditor";
 import NewSongEditor from "./components/NewSongEditor";
 
 export default function Home() {
@@ -23,7 +22,6 @@ export default function Home() {
 
   const [isSetlistOpen, setIsSetlistOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [isFavoritesOpen, setIsFavoritesOpen] = useState(false);
   const [isSyncEditorOpen, setIsSyncEditorOpen] = useState(false);
 
   const [isPreparingIntermissionSong, setIsPreparingIntermissionSong] =
@@ -74,7 +72,7 @@ useEffect(() => {
     : null;
 
   const [songsLoaded, setSongsLoaded] = useState(false);
-  const [isLyricsEditorOpen, setIsLyricsEditorOpen] = useState(false);
+  const [isSongEditorOpen, setIsSongEditorOpen] = useState(false);
   const [isNewSongEditorOpen, setIsNewSongEditorOpen] = useState(false);
 
 useEffect(() => {
@@ -101,11 +99,6 @@ useEffect(() => {
   localStorage.setItem("gb-live-songs", JSON.stringify(songs));
 }, [songs, songsLoaded]);
 
-const [favoriteSongIds] = useState([
-  "mon-amour",
-  "le-pont",
-  "final",
-]);
 
 const currentSong = songs[currentSongIndex];
 
@@ -217,7 +210,7 @@ function goToNextSong() {
   )}
 </div>
 
-<div className="mt-5 grid grid-cols-6 gap-3">
+<div className="mt-5 grid grid-cols-5 gap-3">
   <button
     type="button"
     onClick={goToPreviousSong}
@@ -250,14 +243,6 @@ function goToNextSong() {
     className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-4 font-semibold"
   >
     Bibliothèque
-  </button>
-
-  <button
-    type="button"
-    onClick={() => setIsFavoritesOpen(true)}
-    className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-4 font-semibold"
-  >
-    Favoris
   </button>
 
   <button
@@ -363,21 +348,6 @@ onRemoveSong={(indexToRemove) => {
   />
 )}
 
-{isFavoritesOpen && (
-  <FavoritesPanel
-    songs={songs}
-    favoriteSongIds={favoriteSongIds}
-    onSelectSong={(index) => {
-      if (isPreparingIntermissionSong) {
-        setPreparedSongIndex(index);
-        setIsPreparingIntermissionSong(false);
-      } else {
-        setCurrentSongIndex(index);
-      }
-    }}
-    onClose={() => setIsFavoritesOpen(false)}
-  />
-)}
 
 {isIntermission && (
   <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-6">
@@ -413,7 +383,7 @@ onRemoveSong={(indexToRemove) => {
         </p>
       </div>
 
-      <div className="mt-6 grid grid-cols-2 gap-4">
+      <div className="mt-6 grid grid-cols-3 gap-4">
         <button
           type="button"
           onClick={() => {
@@ -449,17 +419,6 @@ onRemoveSong={(indexToRemove) => {
           className="rounded-xl border border-zinc-700 bg-zinc-900 px-6 py-5 text-lg font-semibold"
         >
           Bibliothèque
-        </button>
-
-        <button
-          type="button"
-          onClick={() => {
-            setIsPreparingIntermissionSong(true);
-            setIsFavoritesOpen(true);
-          }}
-          className="rounded-xl border border-zinc-700 bg-zinc-900 px-6 py-5 text-lg font-semibold"
-        >
-          Favoris
         </button>
       </div>
 
@@ -509,11 +468,11 @@ onRemoveSong={(indexToRemove) => {
           type="button"
           onClick={() => {
             setIsPreparationOpen(false);
-            setIsLyricsEditorOpen(true);
+            setIsSongEditorOpen(true);
           }}
           className="rounded-xl border border-zinc-700 bg-zinc-900 px-6 py-4 text-left text-lg font-semibold"
         >
-          Éditer les paroles
+          Modifier le morceau
         </button>
 
         <button
@@ -543,34 +502,21 @@ onRemoveSong={(indexToRemove) => {
   />
 )}
 
-{isLyricsEditorOpen && (
-  <LyricsEditor
+{isSongEditorOpen && (
+  <SongEditor
     song={currentSong}
-    onClose={() => setIsLyricsEditorOpen(false)}
-    onSave={(lines) => {
+    onClose={() => setIsSongEditorOpen(false)}
+    onSave={(updatedSong) => {
       setSongs((currentSongs) =>
-        currentSongs.map((song, index) => {
-          if (index !== currentSongIndex) {
-            return song;
-          }
-
-          return {
-            ...song,
-            lyrics: lines.join("\n\n"),
-            lyricLines: lines.map((text, lineIndex) => ({
-              text,
-              time: song.lyricLines?.[lineIndex]?.time ?? 0,
-            })),
-            needsLyricsSync: true,
-          };
-        })
+        currentSongs.map((song, index) =>
+          index === currentSongIndex ? updatedSong : song
+        )
       );
 
-      setIsLyricsEditorOpen(false);
+      setIsSongEditorOpen(false);
     }}
   />
 )}
-
 {isSyncEditorOpen && (
   <div className="fixed inset-0 z-[70] overflow-y-auto bg-black/90 p-6">
     <div className="mx-auto max-w-4xl">

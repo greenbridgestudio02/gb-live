@@ -16,6 +16,8 @@ export default function LyricsPlayer({ song }: LyricsPlayerProps) {
 
   const isInstrumental = song.kind === "instrumental";
   const lyricLines = song.lyricLines ?? [];
+  const hasSynchronizedLyrics =
+    lyricLines.length > 0 && !song.needsLyricsSync;
 
   const currentLineIndex = useMemo(() => {
     if (lyricLines.length === 0) {
@@ -103,34 +105,47 @@ export default function LyricsPlayer({ song }: LyricsPlayerProps) {
     pausedElapsedRef.current = 0;
   }
 
+  // MORCEAU INSTRUMENTAL
   if (isInstrumental) {
     return (
-      <div className="flex h-full flex-col">
-        <div className="flex min-h-0 flex-1 items-center justify-center rounded-2xl border border-zinc-800 bg-zinc-900/40 p-6">
+      <div className="flex h-full min-h-0 flex-col">
+        <div className="flex min-h-0 flex-1 items-center justify-center rounded-2xl border border-zinc-800 bg-zinc-900/40 p-4">
           <div className="w-full max-w-4xl text-center">
-            <p className="text-6xl">
-              🎹
-            </p>
+            <div className="flex items-center justify-center gap-4">
+              <span className="text-4xl">🎹</span>
 
-            <p className="mt-4 text-sm font-semibold uppercase tracking-[0.35em] text-emerald-400">
-              Instrumental
-            </p>
+              <div className="text-left">
+                <p className="text-xs font-semibold uppercase tracking-[0.35em] text-emerald-400">
+                  Instrumental
+                </p>
 
-            <h3 className="mt-3 text-5xl font-bold text-zinc-100">
-              {song.title}
-            </h3>
+                <h3 className="mt-1 text-4xl font-bold text-zinc-100">
+                  {song.title}
+                </h3>
+              </div>
+            </div>
 
-            <div className="mx-auto mt-8 max-w-3xl rounded-2xl border border-zinc-800 bg-zinc-950/60 p-6">
+            {(song.bpm || song.key) && (
+              <div className="mt-4 flex items-center justify-center gap-6 text-lg text-zinc-400">
+                {song.bpm && <span>♩ {song.bpm} BPM</span>}
+
+                {song.key && (
+                  <span>Tonalité : {song.key}</span>
+                )}
+              </div>
+            )}
+
+            <div className="mx-auto mt-4 max-w-3xl rounded-2xl border border-zinc-800 bg-zinc-950/60 p-4">
               <p className="text-xs font-semibold uppercase tracking-[0.25em] text-zinc-500">
                 Notes de scène
               </p>
 
               {song.stageNotes.trim() ? (
-                <p className="mt-4 whitespace-pre-line text-2xl font-medium leading-relaxed text-zinc-300">
+                <p className="mt-3 whitespace-pre-line text-xl font-medium leading-relaxed text-zinc-300">
                   {song.stageNotes}
                 </p>
               ) : (
-                <p className="mt-4 text-lg text-zinc-600">
+                <p className="mt-3 text-base text-zinc-600">
                   Aucune note de scène pour ce morceau.
                 </p>
               )}
@@ -141,52 +156,71 @@ export default function LyricsPlayer({ song }: LyricsPlayerProps) {
     );
   }
 
+  // MORCEAU CHANTÉ NON SYNCHRONISÉ
+  if (!hasSynchronizedLyrics) {
+    return (
+      <div className="flex h-full min-h-0 flex-col">
+        <div className="flex min-h-0 flex-1 flex-col rounded-2xl border border-zinc-800 bg-zinc-900/40 p-5">
+          <div className="mb-4 rounded-xl border border-amber-700 bg-amber-950/40 px-5 py-3 text-center">
+            <p className="font-bold text-amber-300">
+              ⚠ Paroles à synchroniser
+            </p>
+
+            <p className="mt-1 text-sm text-amber-200/70">
+              Préparation → Synchroniser les paroles
+            </p>
+          </div>
+
+          <div className="flex min-h-0 flex-1 items-center justify-center overflow-y-auto">
+            <div className="whitespace-pre-line text-center text-3xl font-medium leading-relaxed text-zinc-300">
+              {song.lyrics || "Aucune parole enregistrée."}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // MORCEAU CHANTÉ SYNCHRONISÉ
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex h-full min-h-0 flex-col">
       <div className="flex min-h-0 flex-1 items-center justify-center rounded-2xl border border-zinc-800 bg-zinc-900/40 p-6">
-        {lyricLines.length > 0 ? (
-          <div className="w-full max-w-5xl text-center">
-            <div className="min-h-20">
-              {previousLine && (
-                <p className="text-2xl font-medium leading-relaxed text-zinc-600">
-                  {previousLine.text}
-                </p>
-              )}
-            </div>
-
-            <div className="my-10 flex min-h-40 items-center justify-center">
-              {currentLine && (
-                <p className="text-5xl font-bold leading-tight text-emerald-300 transition-all duration-300">
-                  {currentLine.text}
-                </p>
-              )}
-            </div>
-
-            <div className="min-h-20">
-              {nextLine ? (
-                <p className="text-3xl font-medium leading-relaxed text-zinc-400">
-                  {nextLine.text}
-                </p>
-              ) : (
-                <p className="text-xl font-medium text-zinc-600">
-                  Fin des paroles
-                </p>
-              )}
-            </div>
+        <div className="w-full max-w-5xl text-center">
+          <div className="min-h-16">
+            {previousLine && (
+              <p className="text-2xl font-medium leading-relaxed text-zinc-600">
+                {previousLine.text}
+              </p>
+            )}
           </div>
-        ) : (
-          <div className="w-full whitespace-pre-line text-center text-3xl font-medium leading-relaxed text-zinc-100">
-            {song.lyrics}
+
+          <div className="my-6 flex min-h-32 items-center justify-center">
+            {currentLine && (
+              <p className="text-5xl font-bold leading-tight text-emerald-300 transition-all duration-300">
+                {currentLine.text}
+              </p>
+            )}
           </div>
-        )}
+
+          <div className="min-h-16">
+            {nextLine ? (
+              <p className="text-3xl font-medium leading-relaxed text-zinc-400">
+                {nextLine.text}
+              </p>
+            ) : (
+              <p className="text-xl font-medium text-zinc-600">
+                Fin des paroles
+              </p>
+            )}
+          </div>
+        </div>
       </div>
 
-      <div className="mt-4 flex items-center justify-center gap-3">
+      <div className="mt-3 flex items-center justify-center gap-3">
         <button
           type="button"
           onClick={togglePlayback}
-          disabled={lyricLines.length === 0}
-          className="min-w-48 rounded-xl bg-emerald-500 px-6 py-4 text-lg font-bold text-zinc-950 disabled:cursor-not-allowed disabled:opacity-30"
+          className="min-w-48 rounded-xl bg-emerald-500 px-6 py-3 text-lg font-bold text-zinc-950"
         >
           {isPlaying ? "⏸ Paroles" : "▶ Paroles"}
         </button>
@@ -195,7 +229,7 @@ export default function LyricsPlayer({ song }: LyricsPlayerProps) {
           type="button"
           onClick={resetLyrics}
           disabled={elapsedTime === 0}
-          className="rounded-xl border border-zinc-700 bg-zinc-900 px-5 py-4 font-semibold disabled:opacity-30"
+          className="rounded-xl border border-zinc-700 bg-zinc-900 px-5 py-3 font-semibold disabled:opacity-30"
         >
           ↺ Remettre au début
         </button>

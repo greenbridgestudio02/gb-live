@@ -15,9 +15,14 @@ export type Song = {
 
   kind?: SongKind;
 
+  bpm?: number;
+  key?: string;
+
   lyrics: string;
 
   lyricLines?: LyricLine[];
+
+  needsLyricsSync?: boolean;
 };
 
 export type Show = {
