@@ -24,6 +24,7 @@ export default function Home() {
   const [isSetlistOpen, setIsSetlistOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [requestedSongIds, setRequestedSongIds] = useState<string[]>([]);
+  const [requestsLoaded, setRequestsLoaded] = useState(false);
   const [isSyncEditorOpen, setIsSyncEditorOpen] = useState(false);
 
   const [isPreparingIntermissionSong, setIsPreparingIntermissionSong] =
@@ -102,6 +103,33 @@ useEffect(() => {
   localStorage.setItem("gb-live-songs", JSON.stringify(songs));
 }, [songs, songsLoaded]);
 
+
+useEffect(() => {
+  const savedRequests = localStorage.getItem("g3-live-requests");
+
+  if (savedRequests) {
+    try {
+      setRequestedSongIds(JSON.parse(savedRequests));
+    } catch {
+      console.error(
+        "Impossible de charger les demandes du public sauvegardées."
+      );
+    }
+  }
+
+  setRequestsLoaded(true);
+}, []);
+
+useEffect(() => {
+  if (!requestsLoaded) {
+    return;
+  }
+
+  localStorage.setItem(
+    "g3-live-requests",
+    JSON.stringify(requestedSongIds)
+  );
+}, [requestedSongIds, requestsLoaded]);
 
 const currentSong = songs[currentSongIndex];
 
