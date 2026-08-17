@@ -67,6 +67,7 @@ export default function LyricsPlayer({ song }: LyricsPlayerProps) {
         },
         cache: "no-store",
         body: JSON.stringify({
+          ...(playing ? { mode: "song" } : {}),
           song: {
             id: song.id,
             title: song.title,

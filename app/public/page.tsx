@@ -29,6 +29,7 @@ type LiveState = {
   elapsedTime: number;
   isPlaying: boolean;
   message: string;
+  messageUpdatedAt: number;
   updatedAt: number;
 };
 
@@ -52,6 +53,10 @@ function BlindTestPanel() {
   const [blindState, setBlindState] = useState<BlindTestState | null>(null);
   const [status, setStatus] = useState("En attente...");
   const [isSending, setIsSending] = useState(false);
+  const [
+  dismissedMessageUpdatedAt,
+  setDismissedMessageUpdatedAt,
+] = useState<number | null>(null);
 
   useEffect(() => {
     const savedName = localStorage.getItem(
@@ -296,6 +301,7 @@ export default function PublicPage() {
     elapsedTime: 0,
     isPlaying: false,
     message: "",
+    messageUpdatedAt: 0,
     updatedAt: 0,
   });
 
@@ -305,6 +311,11 @@ export default function PublicPage() {
 
   const [userReturnedHome, setUserReturnedHome] =
     useState(false);
+
+const [
+  dismissedMessageUpdatedAt,
+  setDismissedMessageUpdatedAt,
+] = useState<number | null>(null);
 
   useEffect(() => {
     let stopped = false;
@@ -448,7 +459,8 @@ export default function PublicPage() {
       </header>
 
       <section className="flex min-h-0 flex-1 items-center justify-center overflow-hidden px-5 py-6">
-        {liveState.mode === "message" && (
+        {liveState.mode === "message" &&
+          dismissedMessageUpdatedAt !== liveState.messageUpdatedAt && (
           <div className="w-full max-w-5xl text-center">
             <p className="text-xs font-semibold uppercase tracking-[0.4em] text-amber-400">
               G3 Live
@@ -462,7 +474,14 @@ export default function PublicPage() {
 
             <button
               type="button"
-              onClick={goHome}
+              onClick={() => {
+  setDismissedMessageUpdatedAt(
+    liveState.messageUpdatedAt
+  );
+
+  setLocalView("home");
+  setUserReturnedHome(false);
+}}
               className="mt-8 rounded-xl border border-zinc-700 bg-zinc-900 px-6 py-3 font-semibold"
             >
               ⌂ Retour à l'accueil
@@ -470,8 +489,11 @@ export default function PublicPage() {
           </div>
         )}
 
-        {liveState.mode !== "message" &&
-          localView === "home" && (
+        {(
+  liveState.mode !== "message" ||
+  dismissedMessageUpdatedAt === liveState.messageUpdatedAt
+) &&
+  localView === "home" && (
             <div className="w-full max-w-xl text-center">
               <img
                 src="/g3-live-logo.png"

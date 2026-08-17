@@ -25,6 +25,7 @@ type LiveState = {
   isPlaying: boolean;
 
   message: string;
+  messageUpdatedAt: number;
 
   updatedAt: number;
 };
@@ -49,6 +50,7 @@ if (!store.__g3LiveState) {
     isPlaying: false,
 
     message: "",
+    messageUpdatedAt: 0,
 
     updatedAt: Date.now(),
   };
@@ -74,7 +76,9 @@ function broadcast(state: LiveState) {
   }
 }
 
-function parseSong(value: unknown): PublicSong | null | undefined {
+function parseSong(
+  value: unknown
+): PublicSong | null | undefined {
   if (value === undefined) {
     return undefined;
   }
@@ -90,7 +94,8 @@ function parseSong(value: unknown): PublicSong | null | undefined {
     return undefined;
   }
 
-  const rawSong = value as Record<string, unknown>;
+  const rawSong =
+    value as Record<string, unknown>;
 
   if (
     typeof rawSong.id !== "string" ||
@@ -102,16 +107,31 @@ function parseSong(value: unknown): PublicSong | null | undefined {
   const lyricLines: PublicLyricLine[] =
     Array.isArray(rawSong.lyricLines)
       ? rawSong.lyricLines
-          .filter((line): line is Record<string, unknown> => {
-            return (
-              typeof line === "object" &&
-              line !== null &&
-              typeof (line as Record<string, unknown>).time ===
-                "number" &&
-              typeof (line as Record<string, unknown>).text ===
-                "string"
-            );
-          })
+          .filter(
+            (
+              line
+            ): line is Record<
+              string,
+              unknown
+            > => {
+              return (
+                typeof line === "object" &&
+                line !== null &&
+                typeof (
+                  line as Record<
+                    string,
+                    unknown
+                  >
+                ).time === "number" &&
+                typeof (
+                  line as Record<
+                    string,
+                    unknown
+                  >
+                ).text === "string"
+              );
+            }
+          )
           .map((line) => ({
             time: line.time as number,
             text: line.text as string,
@@ -139,12 +159,15 @@ function parseSong(value: unknown): PublicSong | null | undefined {
   };
 }
 
-export async function GET(request: Request) {
+export async function GET(
+  request: Request
+) {
   const url = new URL(request.url);
 
-  // On conserve le flux SSE pour pouvoir
-  // l'utiliser à nouveau plus tard si nécessaire.
-  if (url.searchParams.get("stream") === "1") {
+  if (
+    url.searchParams.get("stream") ===
+    "1"
+  ) {
     let currentController:
       | ReadableStreamDefaultController<Uint8Array>
       | null = null;
@@ -153,70 +176,89 @@ export async function GET(request: Request) {
       | ReturnType<typeof setInterval>
       | null = null;
 
-    const stream = new ReadableStream<Uint8Array>({
-      start(controller) {
-        currentController = controller;
+    const stream =
+      new ReadableStream<Uint8Array>({
+        start(controller) {
+          currentController =
+            controller;
 
-        store.__g3LiveClients!.add(controller);
+          store.__g3LiveClients!.add(
+            controller
+          );
 
-        controller.enqueue(
-          encoder.encode(
-            `data: ${JSON.stringify(
-              store.__g3LiveState
-            )}\n\n`
-          )
-        );
+          controller.enqueue(
+            encoder.encode(
+              `data: ${JSON.stringify(
+                store.__g3LiveState
+              )}\n\n`
+            )
+          );
 
-        keepAlive = setInterval(() => {
-          try {
-            controller.enqueue(
-              encoder.encode(": keep-alive\n\n")
-            );
-          } catch {
-            if (keepAlive) {
-              clearInterval(keepAlive);
-            }
+          keepAlive = setInterval(
+            () => {
+              try {
+                controller.enqueue(
+                  encoder.encode(
+                    ": keep-alive\n\n"
+                  )
+                );
+              } catch {
+                if (keepAlive) {
+                  clearInterval(
+                    keepAlive
+                  );
+                }
 
+                store.__g3LiveClients!.delete(
+                  controller
+                );
+              }
+            },
+            15000
+          );
+        },
+
+        cancel() {
+          if (keepAlive) {
+            clearInterval(keepAlive);
+          }
+
+          if (currentController) {
             store.__g3LiveClients!.delete(
-              controller
+              currentController
             );
           }
-        }, 15000);
-      },
-
-      cancel() {
-        if (keepAlive) {
-          clearInterval(keepAlive);
-        }
-
-        if (currentController) {
-          store.__g3LiveClients!.delete(
-            currentController
-          );
-        }
-      },
-    });
+        },
+      });
 
     return new Response(stream, {
       headers: {
-        "Content-Type": "text/event-stream",
-        "Cache-Control": "no-cache, no-transform",
+        "Content-Type":
+          "text/event-stream",
+        "Cache-Control":
+          "no-cache, no-transform",
         Connection: "keep-alive",
       },
     });
   }
 
-  return Response.json(store.__g3LiveState, {
-    headers: {
-      "Cache-Control": "no-store",
-    },
-  });
+  return Response.json(
+    store.__g3LiveState,
+    {
+      headers: {
+        "Cache-Control": "no-store",
+      },
+    }
+  );
 }
 
-export async function POST(request: Request) {
+export async function POST(
+  request: Request
+) {
   const body = await request.json();
 
-  const currentState = store.__g3LiveState!;
+  const currentState =
+    store.__g3LiveState!;
 
   let mode = currentState.mode;
 
@@ -228,7 +270,8 @@ export async function POST(request: Request) {
     mode = body.mode;
   }
 
-  const parsedSong = parseSong(body.song);
+  const parsedSong =
+    parseSong(body.song);
 
   const song =
     parsedSong !== undefined
@@ -236,12 +279,14 @@ export async function POST(request: Request) {
       : currentState.song;
 
   const elapsedTime =
-    typeof body.elapsedTime === "number"
+    typeof body.elapsedTime ===
+    "number"
       ? body.elapsedTime
       : currentState.elapsedTime;
 
   const isPlaying =
-    typeof body.isPlaying === "boolean"
+    typeof body.isPlaying ===
+    "boolean"
       ? body.isPlaying
       : currentState.isPlaying;
 
@@ -249,6 +294,24 @@ export async function POST(request: Request) {
     typeof body.message === "string"
       ? body.message
       : currentState.message;
+
+  /*
+   * Horodatage spécifique aux messages.
+   *
+   * Il change uniquement lorsqu'un nouveau
+   * message public est réellement envoyé.
+   * L'avancement des paroles ne le modifie pas.
+   */
+  let messageUpdatedAt =
+    currentState.messageUpdatedAt;
+
+  if (
+    body.mode === "message" &&
+    typeof body.message === "string"
+  ) {
+    messageUpdatedAt =
+      Date.now();
+  }
 
   const newState: LiveState = {
     mode,
@@ -260,11 +323,13 @@ export async function POST(request: Request) {
     isPlaying,
 
     message,
+    messageUpdatedAt,
 
     updatedAt: Date.now(),
   };
 
-  store.__g3LiveState = newState;
+  store.__g3LiveState =
+    newState;
 
   broadcast(newState);
 

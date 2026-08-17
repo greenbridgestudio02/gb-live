@@ -367,6 +367,36 @@ useEffect(() => {
   const [isNewSongEditorOpen, setIsNewSongEditorOpen] = useState(false);
 
 useEffect(() => {
+  const savedLibrary = localStorage.getItem(
+    "g3-live-library-v2"
+  );
+
+  if (!savedLibrary) {
+    return;
+  }
+
+  try {
+    const snapshot = JSON.parse(savedLibrary);
+
+    if (Array.isArray(snapshot.songs)) {
+      setSongs(snapshot.songs);
+    }
+
+    if (Array.isArray(snapshot.setlistSongIds)) {
+      setSetlistSongIds(snapshot.setlistSongIds);
+    }
+
+    if (Array.isArray(snapshot.requestedSongIds)) {
+      setRequestedSongIds(snapshot.requestedSongIds);
+    }
+  } catch {
+    console.error(
+      "Impossible de charger la bibliothèque locale v2."
+    );
+  }
+}, []);
+
+useEffect(() => {
   const savedSongs = localStorage.getItem("gb-live-songs");
 
   if (savedSongs) {
@@ -604,28 +634,45 @@ async function importLibrary() {
 
     const snapshot = await response.json();
 
-    if (!Array.isArray(snapshot.songs) || snapshot.songs.length === 0) {
+    if (
+      !Array.isArray(snapshot.songs) ||
+      snapshot.songs.length === 0
+    ) {
       alert("Aucune bibliothèque publiée sur le serveur.");
       return;
     }
 
-    setSongs(snapshot.songs);
+    const localSnapshot = {
+      songs: snapshot.songs,
+      setlistSongIds: Array.isArray(snapshot.setlistSongIds)
+        ? snapshot.setlistSongIds
+        : [],
+      requestedSongIds: Array.isArray(snapshot.requestedSongIds)
+        ? snapshot.requestedSongIds
+        : [],
+      savedAt: Date.now(),
+    };
 
-    if (Array.isArray(snapshot.setlistSongIds)) {
-      setSetlistSongIds(snapshot.setlistSongIds);
-    }
+    localStorage.setItem(
+      "g3-live-library-v2",
+      JSON.stringify(localSnapshot)
+    );
 
-    if (Array.isArray(snapshot.requestedSongIds)) {
-      setRequestedSongIds(snapshot.requestedSongIds);
-    }
+    setSongs(localSnapshot.songs);
+    setSetlistSongIds(localSnapshot.setlistSongIds);
+    setRequestedSongIds(localSnapshot.requestedSongIds);
 
-    alert("Bibliothèque récupérée depuis le serveur G3 Live.");
+    setCurrentSongIndex(0);
+    setSetlistPosition(0);
+
+    alert(
+      "Bibliothèque récupérée et sauvegardée durablement sur cet appareil."
+    );
   } catch (error) {
     console.error(error);
+    alert("Impossible de récupérer la bibliothèque.");
   }
-}
-
-if (isHomeMode) {
+}if (isHomeMode) {
   return (
     <main className="flex h-screen flex-col items-center justify-center bg-zinc-950 p-6 text-zinc-100">
       <div className="w-full max-w-3xl text-center">
@@ -792,6 +839,82 @@ if (isHomeMode) {
   />
 )}
 
+{isPreparationOpen && (
+  <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/80 p-6">
+    <div className="w-full max-w-xl rounded-3xl border border-zinc-700 bg-zinc-950 p-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-400">
+            G3 Live
+          </p>
+
+          <h2 className="mt-1 text-2xl font-bold">
+            Préparation
+          </h2>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => setIsPreparationOpen(false)}
+          className="flex h-12 w-12 items-center justify-center rounded-xl border border-zinc-700 bg-zinc-900 text-2xl font-bold"
+        >
+          ×
+        </button>
+      </div>
+
+      <div className="mt-6 grid gap-3">
+        <button
+          type="button"
+          onClick={() => {
+            setIsPreparationOpen(false);
+            setIsNewSongEditorOpen(true);
+          }}
+          className="rounded-xl border border-zinc-700 bg-zinc-900 px-6 py-4 text-left text-lg font-semibold"
+        >
+          + Nouveau morceau
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            setIsPreparationOpen(false);
+            setIsSongEditorOpen(true);
+          }}
+          className="rounded-xl border border-zinc-700 bg-zinc-900 px-6 py-4 text-left text-lg font-semibold"
+        >
+          Modifier le morceau
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            setIsPreparationOpen(false);
+            setIsSyncEditorOpen(true);
+          }}
+          className="rounded-xl border border-zinc-700 bg-zinc-900 px-6 py-4 text-left text-lg font-semibold"
+        >
+          Synchroniser les paroles
+        </button>
+
+        <button
+          type="button"
+          onClick={publishLibrary}
+          className="rounded-xl border border-sky-700 bg-sky-950/30 px-6 py-4 text-left text-lg font-semibold text-sky-300"
+        >
+          ↑ Publier la bibliothèque
+        </button>
+
+        <button
+          type="button"
+          onClick={importLibrary}
+          className="rounded-xl border border-violet-700 bg-violet-950/30 px-6 py-4 text-left text-lg font-semibold text-violet-300"
+        >
+          ↓ Récupérer la bibliothèque
+        </button>
+      </div>
+    </div>
+  </div>
+)}
     </main>
   );
 }
