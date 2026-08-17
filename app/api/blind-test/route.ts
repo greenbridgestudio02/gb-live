@@ -155,7 +155,7 @@ export async function POST(request: Request) {
       ...current,
       winner,
       buzzes: newBuzzes,
-      isOpen: false,
+      isOpen: true,
       updatedAt: Date.now(),
     };
 

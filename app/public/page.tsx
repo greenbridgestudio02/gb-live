@@ -137,14 +137,10 @@ function BlindTestPanel() {
   async function buzz() {
     const cleanName = playerName.trim();
 
-    if (
-      !cleanName ||
-      !playerId ||
-      !blindState?.isOpen ||
-      isSending
-    ) {
-      return;
-    }
+    if (!cleanName || !playerId) {
+  setStatus("Entre d'abord ton prénom ou ton pseudo.");
+  return;
+}
 
     savePlayerName();
 
@@ -170,16 +166,14 @@ function BlindTestPanel() {
       const result = await response.json();
 
       if (result.state) {
-        setBlindState(result.state);
-      }
+  setBlindState(result.state);
+}
 
-      if (!result.ok) {
-        setStatus(
-          result.error === "Buzzer fermé"
-            ? "Trop tard !"
-            : result.error ?? "Buzz refusé"
-        );
-      }
+if (result.ok) {
+  setStatus("Buzz enregistré !");
+} else {
+  setStatus(result.error ?? "Buzz refusé");
+}
     } catch {
       setStatus("Erreur réseau");
     } finally {
@@ -193,6 +187,16 @@ function BlindTestPanel() {
   const hasWinner =
     blindState?.winner !== null &&
     blindState?.winner !== undefined;
+   
+    const hasBuzzed =
+  blindState?.buzzes.some(
+    (buzz) => buzz.playerId === playerId
+  ) ?? false;
+
+const myBuzzPosition =
+  blindState?.buzzes.findIndex(
+    (buzz) => buzz.playerId === playerId
+  ) ?? -1;
 
   return (
     <div className="w-full max-w-xl text-center">
@@ -222,56 +226,65 @@ function BlindTestPanel() {
       </div>
 
       <div className="mt-6">
-        {isWinner ? (
-          <div className="rounded-3xl border border-emerald-600 bg-emerald-950/30 p-8">
-            <p className="text-6xl">
-              🥇
-            </p>
-
-            <p className="mt-4 text-3xl font-black text-emerald-300">
-              Tu as buzzé en premier !
-            </p>
-          </div>
-        ) : hasWinner ? (
-          <div className="rounded-3xl border border-zinc-700 bg-zinc-900 p-8">
-            <p className="text-5xl">
-              ⏱️
-            </p>
-
-            <p className="mt-4 text-2xl font-bold text-zinc-300">
-              {blindState?.winner?.playerName}
-              {" "}a buzzé en premier
-            </p>
-          </div>
-        ) : (
-          <button
-            type="button"
-            onClick={buzz}
-            disabled={
-              !playerName.trim() ||
-              !blindState?.isOpen ||
-              isSending
-            }
-            className={`w-full select-none touch-manipulation rounded-full border-4 px-8 py-16 text-4xl font-black transition active:scale-[0.98] ${
-              blindState?.isOpen
-                ? "border-red-500 bg-red-600 text-white shadow-2xl shadow-red-950/40"
-                : "border-zinc-700 bg-zinc-900 text-zinc-600"
-            } disabled:cursor-not-allowed`}
-          >
-            {blindState?.isOpen
-              ? "🔴 BUZZER !"
-              : "En attente..."}
-          </button>
-        )}
-      </div>
-
-      <p className="mt-5 text-sm text-zinc-500">
-        {hasWinner
-          ? "Manche terminée"
-          : blindState?.isOpen
-            ? "Le buzzer est ouvert"
-            : status}
+  {isWinner ? (
+    <div className="rounded-3xl border border-emerald-600 bg-emerald-950/30 p-8">
+      <p className="text-6xl">
+        🥇
       </p>
+
+      <p className="mt-4 text-3xl font-black text-emerald-300">
+        Tu as buzzé en premier !
+      </p>
+    </div>
+  ) : hasBuzzed ? (
+    <div className="rounded-3xl border border-zinc-700 bg-zinc-900 p-8">
+      <p className="text-5xl">
+        ⏱️
+      </p>
+
+      <p className="mt-4 text-2xl font-bold text-zinc-300">
+        Buzz enregistré
+      </p>
+
+      <p className="mt-3 text-lg text-amber-300">
+        Position : {myBuzzPosition + 1}
+      </p>
+
+      {blindState?.winner && (
+        <p className="mt-3 text-zinc-500">
+          {blindState.winner.playerName} a buzzé en premier
+        </p>
+      )}
+    </div>
+  ) : (
+    <>
+      {blindState?.winner && (
+        <div className="mb-4 rounded-xl border border-amber-800 bg-amber-950/30 px-4 py-3">
+          <p className="text-sm text-amber-300">
+            🥇 {blindState.winner.playerName} a buzzé en premier
+          </p>
+
+          <p className="mt-1 text-xs text-zinc-500">
+            Tu peux encore buzzer pour enregistrer ta position.
+          </p>
+        </div>
+      )}
+
+      <button
+        type="button"
+        onClick={buzz}
+        disabled={!playerName.trim()}
+        className="w-full select-none touch-manipulation rounded-full border-4 border-red-500 bg-red-600 px-8 py-16 text-4xl font-black text-white shadow-2xl shadow-red-950/40 transition active:scale-[0.98] disabled:opacity-40"
+      >
+        🔴 BUZZER !
+      </button>
+    </>
+  )}
+</div>
+
+      <p className="mt-5 text-sm font-semibold text-zinc-400">
+  {status}
+</p>
     </div>
   );
 }
