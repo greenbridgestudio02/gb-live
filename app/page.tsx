@@ -35,6 +35,20 @@ function BlindTestAdminPanel({
 
   const [busy, setBusy] = useState(false);
 
+  const [aboutMe, setAboutMe] = useState({
+  name: "",
+  headline: "",
+  bio: "",
+  instruments: "",
+  website: "",
+  instagram: "",
+  facebook: "",
+});
+
+const [isAboutEditorOpen, setIsAboutEditorOpen] = useState(false);
+
+
+
   useEffect(() => {
     let stopped = false;
 
@@ -76,6 +90,29 @@ function BlindTestAdminPanel({
       window.clearInterval(intervalId);
     };
   }, []);
+
+  useEffect(() => {
+  const savedAbout = localStorage.getItem("g3-live-about");
+
+  if (!savedAbout) {
+    return;
+  }
+
+  try {
+    setAboutMe(JSON.parse(savedAbout));
+  } catch {
+    console.error(
+      "Impossible de charger la fiche À propos de moi."
+    );
+  }
+}, []);
+
+useEffect(() => {
+  localStorage.setItem(
+    "g3-live-about",
+    JSON.stringify(aboutMe)
+  );
+}, [aboutMe]);
 
   async function sendAction(
     action: "open" | "close" | "reset"
@@ -315,6 +352,16 @@ export default function Home() {
 
   const [isPreparingIntermissionSong, setIsPreparingIntermissionSong] =
     useState(false);
+  const [isAboutEditorOpen, setIsAboutEditorOpen] = useState(false);
+  const [aboutMe, setAboutMe] = useState({
+  name: "",
+  headline: "",
+  bio: "",
+  instruments: "",
+  website: "",
+  instagram: "",
+  facebook: "",
+});
 
   const [songs, setSongs] = useState(show.songs);
   const [setlistSongIds, setSetlistSongIds] = useState<string[]>(
@@ -714,6 +761,9 @@ async function importLibrary() {
 >
   ⚙️ Préparation
 </button>
+
+
+
         </div>
       </div>
 
@@ -911,10 +961,181 @@ async function importLibrary() {
         >
           ↓ Récupérer la bibliothèque
         </button>
+
+        <button
+  type="button"
+  onClick={() => {
+    setIsPreparationOpen(false);
+    setIsAboutEditorOpen(true);
+  }}
+  className="rounded-xl border border-zinc-700 bg-zinc-900 px-6 py-4 text-left text-lg font-semibold"
+>
+  👤 Modifier “À propos de moi”
+</button>
+
+
       </div>
     </div>
   </div>
 )}
+
+{isAboutEditorOpen && (
+  <div className="fixed inset-0 z-[90] overflow-y-auto bg-black/90 p-6">
+    <div className="mx-auto w-full max-w-2xl rounded-3xl border border-zinc-700 bg-zinc-950 p-6 text-zinc-100">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-400">
+            G3 Live
+          </p>
+
+          <h2 className="mt-1 text-2xl font-bold">
+            À propos de moi
+          </h2>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => setIsAboutEditorOpen(false)}
+          className="flex h-12 w-12 items-center justify-center rounded-xl border border-zinc-700 bg-zinc-900 text-2xl font-bold"
+        >
+          ×
+        </button>
+      </div>
+
+      <div className="mt-6 grid gap-4">
+        <input
+          type="text"
+          value={aboutMe.name}
+          onChange={(event) =>
+            setAboutMe({
+              ...aboutMe,
+              name: event.target.value,
+            })
+          }
+          placeholder="Nom / nom de scène"
+          className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 outline-none focus:border-emerald-500"
+        />
+
+        <input
+          type="text"
+          value={aboutMe.headline}
+          onChange={(event) =>
+            setAboutMe({
+              ...aboutMe,
+              headline: event.target.value,
+            })
+          }
+          placeholder="Accroche"
+          className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 outline-none focus:border-emerald-500"
+        />
+
+        <textarea
+          value={aboutMe.bio}
+          onChange={(event) =>
+            setAboutMe({
+              ...aboutMe,
+              bio: event.target.value,
+            })
+          }
+          placeholder="Présentation"
+          className="min-h-40 rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 outline-none focus:border-emerald-500"
+        />
+
+        <input
+          type="text"
+          value={aboutMe.instruments}
+          onChange={(event) =>
+            setAboutMe({
+              ...aboutMe,
+              instruments: event.target.value,
+            })
+          }
+          placeholder="Instruments"
+          className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 outline-none focus:border-emerald-500"
+        />
+
+        <input
+          type="text"
+          value={aboutMe.website}
+          onChange={(event) =>
+            setAboutMe({
+              ...aboutMe,
+              website: event.target.value,
+            })
+          }
+          placeholder="Site web"
+          className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 outline-none focus:border-emerald-500"
+        />
+
+        <input
+          type="text"
+          value={aboutMe.instagram}
+          onChange={(event) =>
+            setAboutMe({
+              ...aboutMe,
+              instagram: event.target.value,
+            })
+          }
+          placeholder="Instagram"
+          className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 outline-none focus:border-emerald-500"
+        />
+
+        <input
+          type="text"
+          value={aboutMe.facebook}
+          onChange={(event) =>
+            setAboutMe({
+              ...aboutMe,
+              facebook: event.target.value,
+            })
+          }
+          placeholder="Facebook"
+          className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 outline-none focus:border-emerald-500"
+        />
+      </div>
+
+      <button
+  type="button"
+  onClick={async () => {
+    try {
+      const response = await fetch("/api/about", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(aboutMe),
+      });
+
+      if (!response.ok) {
+        throw new Error("Publication impossible");
+      }
+
+      localStorage.setItem(
+        "g3-live-about",
+        JSON.stringify(aboutMe)
+      );
+
+      setIsAboutEditorOpen(false);
+
+      alert(
+        "La fiche « À propos de moi » est enregistrée et publiée."
+      );
+    } catch (error) {
+      console.error(error);
+
+      alert(
+        "Impossible de publier la fiche « À propos de moi »."
+      );
+    }
+  }}
+  className="mt-6 w-full rounded-xl bg-emerald-500 px-6 py-4 text-lg font-bold text-zinc-950"
+>
+  Enregistrer
+</button>
+    </div>
+  </div>
+)}
+
     </main>
   );
 }
@@ -1534,6 +1755,133 @@ onRemoveSong={(indexToRemove) => {
     </div>
   </div>
 )}
+
+{isAboutEditorOpen && (
+  <div className="fixed inset-0 z-[90] overflow-y-auto bg-black/90 p-6">
+    <div className="mx-auto w-full max-w-2xl rounded-3xl border border-zinc-700 bg-zinc-950 p-6 text-zinc-100">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-400">
+            G3 Live
+          </p>
+
+          <h2 className="mt-1 text-2xl font-bold">
+            À propos de moi
+          </h2>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => setIsAboutEditorOpen(false)}
+          className="flex h-12 w-12 items-center justify-center rounded-xl border border-zinc-700 bg-zinc-900 text-2xl font-bold"
+        >
+          ×
+        </button>
+      </div>
+
+      <div className="mt-6 grid gap-4">
+        <input
+          type="text"
+          value={aboutMe.name}
+          onChange={(event) =>
+            setAboutMe({
+              ...aboutMe,
+              name: event.target.value,
+            })
+          }
+          placeholder="Nom / nom de scène"
+          className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 outline-none focus:border-emerald-500"
+        />
+
+        <input
+          type="text"
+          value={aboutMe.headline}
+          onChange={(event) =>
+            setAboutMe({
+              ...aboutMe,
+              headline: event.target.value,
+            })
+          }
+          placeholder="Accroche"
+          className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 outline-none focus:border-emerald-500"
+        />
+
+        <textarea
+          value={aboutMe.bio}
+          onChange={(event) =>
+            setAboutMe({
+              ...aboutMe,
+              bio: event.target.value,
+            })
+          }
+          placeholder="Présentation"
+          className="min-h-40 rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 outline-none focus:border-emerald-500"
+        />
+
+        <input
+          type="text"
+          value={aboutMe.instruments}
+          onChange={(event) =>
+            setAboutMe({
+              ...aboutMe,
+              instruments: event.target.value,
+            })
+          }
+          placeholder="Instruments"
+          className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 outline-none focus:border-emerald-500"
+        />
+
+        <input
+          type="text"
+          value={aboutMe.website}
+          onChange={(event) =>
+            setAboutMe({
+              ...aboutMe,
+              website: event.target.value,
+            })
+          }
+          placeholder="Site web"
+          className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 outline-none focus:border-emerald-500"
+        />
+
+        <input
+          type="text"
+          value={aboutMe.instagram}
+          onChange={(event) =>
+            setAboutMe({
+              ...aboutMe,
+              instagram: event.target.value,
+            })
+          }
+          placeholder="Instagram"
+          className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 outline-none focus:border-emerald-500"
+        />
+
+        <input
+          type="text"
+          value={aboutMe.facebook}
+          onChange={(event) =>
+            setAboutMe({
+              ...aboutMe,
+              facebook: event.target.value,
+            })
+          }
+          placeholder="Facebook"
+          className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 outline-none focus:border-emerald-500"
+        />
+      </div>
+
+      <button
+        type="button"
+        onClick={() => setIsAboutEditorOpen(false)}
+        className="mt-6 w-full rounded-xl bg-emerald-500 px-6 py-4 text-lg font-bold text-zinc-950"
+      >
+        Enregistrer
+      </button>
+    </div>
+  </div>
+)}
+
 
 {isNewSongEditorOpen && (
   <NewSongEditor

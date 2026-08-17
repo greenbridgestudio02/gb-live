@@ -21,7 +21,8 @@ type PublicMode = "home" | "song" | "message";
 type LocalView =
   | "home"
   | "lyrics"
-  | "blind-test";
+  | "blind-test"
+  | "about";
 
 type LiveState = {
   mode: PublicMode;
@@ -30,6 +31,17 @@ type LiveState = {
   isPlaying: boolean;
   message: string;
   messageUpdatedAt: number;
+  updatedAt: number;
+};
+
+type AboutMe = {
+  name: string;
+  headline: string;
+  bio: string;
+  instruments: string;
+  website: string;
+  instagram: string;
+  facebook: string;
   updatedAt: number;
 };
 
@@ -57,6 +69,17 @@ function BlindTestPanel() {
   dismissedMessageUpdatedAt,
   setDismissedMessageUpdatedAt,
 ] = useState<number | null>(null);
+
+const [aboutMe, setAboutMe] = useState<AboutMe>({
+  name: "",
+  headline: "",
+  bio: "",
+  instruments: "",
+  website: "",
+  instagram: "",
+  facebook: "",
+  updatedAt: 0,
+});
 
   useEffect(() => {
     const savedName = localStorage.getItem(
@@ -309,6 +332,17 @@ export default function PublicPage() {
   const [localView, setLocalView] =
     useState<LocalView>("home");
 
+  const [aboutMe, setAboutMe] = useState<AboutMe>({
+  name: "",
+  headline: "",
+  bio: "",
+  instruments: "",
+  website: "",
+  instagram: "",
+  facebook: "",
+  updatedAt: 0,
+});
+
   const [userReturnedHome, setUserReturnedHome] =
     useState(false);
 
@@ -359,6 +393,42 @@ const [
       window.clearInterval(intervalId);
     };
   }, []);
+
+useEffect(() => {
+  let stopped = false;
+
+  async function refreshAbout() {
+    try {
+      const response = await fetch("/api/about", {
+        cache: "no-store",
+      });
+
+      if (!response.ok) {
+        return;
+      }
+
+      const data: AboutMe = await response.json();
+
+      if (!stopped) {
+        setAboutMe(data);
+      }
+    } catch {
+      // On conserve le dernier état connu.
+    }
+  }
+
+  void refreshAbout();
+
+  const intervalId = window.setInterval(() => {
+    void refreshAbout();
+  }, 2000);
+
+  return () => {
+    stopped = true;
+    window.clearInterval(intervalId);
+  };
+}, []);
+
 
   useEffect(() => {
     if (liveState.mode === "home") {
@@ -427,11 +497,7 @@ const [
   return (
     <main className="flex h-screen flex-col overflow-hidden bg-black text-white">
       <header className="flex shrink-0 items-center justify-between border-b border-zinc-900 px-5 py-3">
-        <img
-          src="/g3-live-logo.png"
-          alt="G3 Live"
-          className="h-16 w-auto object-contain"
-        />
+        
 
         <div className="flex items-center gap-3">
           <p
@@ -532,6 +598,17 @@ const [
   🔔 Blind Test
 </button>
 
+<button
+  type="button"
+  onClick={() =>
+    setLocalView("about")
+  }
+  className="w-full rounded-2xl border border-zinc-700 bg-zinc-900 px-6 py-5 text-xl font-bold text-zinc-100 transition hover:bg-zinc-800 active:scale-[0.99]"
+>
+  👤 À propos de moi
+</button>
+
+
                 <button
                   type="button"
                   disabled
@@ -560,6 +637,82 @@ const [
         {liveState.mode !== "message" &&
   localView === "blind-test" && (
     <BlindTestPanel />
+  )}
+
+        {liveState.mode !== "message" &&
+  localView === "about" && (
+    <div className="w-full max-w-2xl text-center">
+      <p className="text-xs font-semibold uppercase tracking-[0.35em] text-emerald-400">
+        G3 Live
+      </p>
+
+      <h1 className="mt-4 text-5xl font-black">
+        {aboutMe.name || "À propos de moi"}
+      </h1>
+
+      {aboutMe.headline && (
+        <p className="mt-4 text-xl font-semibold text-emerald-300">
+          {aboutMe.headline}
+        </p>
+      )}
+
+      {aboutMe.bio && (
+        <p className="mt-8 whitespace-pre-line text-lg leading-relaxed text-zinc-300">
+          {aboutMe.bio}
+        </p>
+      )}
+
+      {aboutMe.instruments && (
+        <div className="mt-8 rounded-2xl border border-zinc-800 bg-zinc-900/60 p-5">
+          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-zinc-500">
+            Instruments
+          </p>
+
+          <p className="mt-2 text-lg font-semibold text-zinc-200">
+            {aboutMe.instruments}
+          </p>
+        </div>
+      )}
+
+      {(aboutMe.website ||
+        aboutMe.instagram ||
+        aboutMe.facebook) && (
+        <div className="mt-8 grid gap-3">
+          {aboutMe.website && (
+            <a
+              href={aboutMe.website}
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-xl border border-zinc-700 bg-zinc-900 px-5 py-4 font-semibold"
+            >
+              🌐 Site web
+            </a>
+          )}
+
+          {aboutMe.instagram && (
+            <a
+              href={aboutMe.instagram}
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-xl border border-zinc-700 bg-zinc-900 px-5 py-4 font-semibold"
+            >
+              📸 Instagram
+            </a>
+          )}
+
+          {aboutMe.facebook && (
+            <a
+              href={aboutMe.facebook}
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-xl border border-zinc-700 bg-zinc-900 px-5 py-4 font-semibold"
+            >
+              👍 Facebook
+            </a>
+          )}
+        </div>
+      )}
+    </div>
   )}
 
         {liveState.mode !== "message" &&
