@@ -115,7 +115,6 @@ export default function LyricsPlayer({ song }: LyricsPlayerProps) {
   }, [elapsedTime]);
 
   // Envoi régulier au serveur pendant la lecture.
-  // Environ 5 mises à jour par seconde.
   useEffect(() => {
     if (!isPlaying) {
       return;
@@ -123,9 +122,7 @@ export default function LyricsPlayer({ song }: LyricsPlayerProps) {
 
     const now = performance.now();
 
-    if (
-      now - lastServerUpdateRef.current < 200
-    ) {
+    if (now - lastServerUpdateRef.current < 200) {
       return;
     }
 
@@ -167,6 +164,10 @@ export default function LyricsPlayer({ song }: LyricsPlayerProps) {
   }, [isPlaying]);
 
   function togglePlayback() {
+    if (!hasSynchronizedLyrics) {
+      return;
+    }
+
     if (isPlaying) {
       pausedElapsedRef.current = elapsedTime;
       startTimeRef.current = null;
@@ -203,6 +204,53 @@ export default function LyricsPlayer({ song }: LyricsPlayerProps) {
       false
     );
   }
+
+  // BLUETURN
+  // Pédale gauche = ArrowLeft = lecture / pause des paroles.
+  useEffect(() => {
+    function handleExternalControl(event: KeyboardEvent) {
+      if (event.key !== "ArrowLeft") {
+        return;
+      }
+
+      const target = event.target as HTMLElement | null;
+
+      // Ne pas déclencher la pédale pendant une saisie.
+      if (
+        target instanceof HTMLInputElement ||
+        target instanceof HTMLTextAreaElement ||
+        target?.isContentEditable
+      ) {
+        return;
+      }
+
+      // Une seule action par pression.
+      if (event.repeat) {
+        return;
+      }
+
+      event.preventDefault();
+
+      togglePlayback();
+    }
+
+    window.addEventListener(
+      "keydown",
+      handleExternalControl
+    );
+
+    return () => {
+      window.removeEventListener(
+        "keydown",
+        handleExternalControl
+      );
+    };
+  }, [
+    isPlaying,
+    elapsedTime,
+    hasSynchronizedLyrics,
+    song.id,
+  ]);
 
   // MORCEAU INSTRUMENTAL
   if (isInstrumental) {

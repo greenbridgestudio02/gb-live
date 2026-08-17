@@ -1,124 +1,347 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { Song } from "../../types/show";
 
-type LyricsEditorProps = {
+type LyricsSyncEditorProps = {
   song: Song;
-  onSave: (lines: string[]) => void;
-  onClose: () => void;
+  onValidate: (times: number[]) => void;
 };
 
-export default function LyricsEditor({
+export default function LyricsSyncEditor({
   song,
-  onSave,
-  onClose,
-}: LyricsEditorProps) {
-  const [lyricsText, setLyricsText] = useState(song.lyrics);
+  onValidate,
+}: LyricsSyncEditorProps) {
+  const lyricLines = useMemo(
+    () => song.lyricLines ?? [],
+    [song.lyricLines]
+  );
 
-  const lines = useMemo(() => {
-    return lyricsText
-      .split(/\n+/)
-      .map((line) => line.trim())
-      .filter(Boolean);
-  }, [lyricsText]);
+  const [isRunning, setIsRunning] = useState(false);
+  const [elapsedTime, setElapsedTime] = useState(0);
+  const [times, setTimes] = useState<number[]>(
+    lyricLines.map(() => 0)
+  );
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const startTimeRef = useRef<number | null>(null);
+  const animationFrameRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    setIsRunning(false);
+    setElapsedTime(0);
+    setTimes(lyricLines.map(() => 0));
+    setCurrentIndex(0);
+    startTimeRef.current = null;
+  }, [song.id, lyricLines]);
+
+  useEffect(() => {
+    if (!isRunning) {
+      return;
+    }
+
+    function update() {
+      if (startTimeRef.current !== null) {
+        const elapsed =
+          (performance.now() - startTimeRef.current) / 1000;
+
+        setElapsedTime(elapsed);
+      }
+
+      animationFrameRef.current =
+        requestAnimationFrame(update);
+    }
+
+    animationFrameRef.current =
+      requestAnimationFrame(update);
+
+    return () => {
+      if (animationFrameRef.current !== null) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+    };
+  }, [isRunning]);
+
+  function startSync() {
+    setTimes(lyricLines.map(() => 0));
+    setCurrentIndex(0);
+    setElapsedTime(0);
+    startTimeRef.current = performance.now();
+    setIsRunning(true);
+  }
+
+  function markCurrentLine() {
+    if (!isRunning) {
+      return;
+    }
+
+    if (currentIndex >= lyricLines.length) {
+      return;
+    }
+
+    const currentTime =
+      startTimeRef.current !== null
+        ? (performance.now() - startTimeRef.current) / 1000
+        : elapsedTime;
+
+    setTimes((currentTimes) => {
+      const newTimes = [...currentTimes];
+      newTimes[currentIndex] = currentTime;
+      return newTimes;
+    });
+
+    if (currentIndex === lyricLines.length - 1) {
+      setCurrentIndex(lyricLines.length);
+      setIsRunning(false);
+      return;
+    }
+
+    setCurrentIndex((index) => index + 1);
+  }
+
+  function goBackOneLine() {
+    if (currentIndex === 0) {
+      return;
+    }
+
+    const previousIndex = Math.min(
+      currentIndex - 1,
+      lyricLines.length - 1
+    );
+
+    setCurrentIndex(previousIndex);
+
+    setTimes((currentTimes) => {
+      const newTimes = [...currentTimes];
+
+      for (
+        let index = previousIndex;
+        index < newTimes.length;
+        index++
+      ) {
+        newTimes[index] = 0;
+      }
+
+      return newTimes;
+    });
+  }
+
+  function resetSync() {
+    setIsRunning(false);
+    setElapsedTime(0);
+    setTimes(lyricLines.map(() => 0));
+    setCurrentIndex(0);
+    startTimeRef.current = null;
+  }
+
+  function validateSync() {
+    const allLinesMarked =
+      lyricLines.length > 0 &&
+      times.every((time) => time > 0);
+
+    if (!allLinesMarked) {
+      return;
+    }
+
+    onValidate(times);
+  }
+
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.code !== "Space") {
+        return;
+      }
+
+      const target = event.target as HTMLElement | null;
+
+      if (
+        target instanceof HTMLInputElement ||
+        target instanceof HTMLTextAreaElement ||
+        target?.isContentEditable
+      ) {
+        return;
+      }
+
+      if (event.repeat) {
+        return;
+      }
+
+      event.preventDefault();
+
+      markCurrentLine();
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [
+    isRunning,
+    currentIndex,
+    elapsedTime,
+    lyricLines.length,
+  ]);
+
+  const previousLine =
+    currentIndex > 0 &&
+    currentIndex <= lyricLines.length
+      ? lyricLines[currentIndex - 1]
+      : null;
+
+  const currentLine =
+    currentIndex < lyricLines.length
+      ? lyricLines[currentIndex]
+      : null;
+
+  const nextLine =
+    currentIndex >= 0 &&
+    currentIndex < lyricLines.length - 1
+      ? lyricLines[currentIndex + 1]
+      : null;
+
+  const allLinesMarked =
+    lyricLines.length > 0 &&
+    times.every((time) => time > 0);
 
   return (
-    <div className="fixed inset-0 z-[70] overflow-y-auto bg-black/90 p-6">
-      <div className="mx-auto max-w-5xl rounded-3xl border border-zinc-700 bg-zinc-950 p-6 text-zinc-100">
-        <div className="flex items-start justify-between gap-6">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-400">
-              Éditeur de paroles
-            </p>
+    <div className="flex h-[calc(100vh-7rem)] min-h-0 flex-col rounded-3xl border border-zinc-700 bg-zinc-950 p-4 text-zinc-100">
+      <div className="shrink-0 text-center">
+        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-400">
+          G3 Live
+        </p>
 
-            <h2 className="mt-2 text-3xl font-bold">
-              {song.title}
-            </h2>
+        <h2 className="mt-1 text-2xl font-bold">
+          Synchroniser les paroles
+        </h2>
 
-            <p className="mt-2 text-zinc-500">
-              Collez ou modifiez les paroles, puis vérifiez le découpage en phrases.
-            </p>
-          </div>
+        <p className="mt-1 text-sm text-zinc-500">
+          {song.title}
+        </p>
+      </div>
 
-          <button
-            type="button"
-            onClick={onClose}
-            className="flex h-12 w-12 items-center justify-center rounded-xl border border-zinc-700 bg-zinc-900 text-2xl font-bold"
-          >
-            ×
-          </button>
+      {lyricLines.length === 0 ? (
+        <div className="mt-6 flex flex-1 items-center justify-center rounded-2xl border border-amber-800 bg-amber-950/30 p-6 text-center text-amber-300">
+          Aucune phrase à synchroniser.
         </div>
-
-        <div className="mt-6 grid gap-6 lg:grid-cols-2">
-          <div>
-            <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-zinc-500">
-              Paroles
-            </p>
-
-            <textarea
-              value={lyricsText}
-              onChange={(event) => setLyricsText(event.target.value)}
-              className="min-h-[520px] w-full resize-y rounded-2xl border border-zinc-700 bg-zinc-900 p-5 text-lg leading-relaxed outline-none focus:border-emerald-500"
-              placeholder="Collez les paroles ici..."
-            />
-          </div>
-
-          <div>
-            <div className="mb-3 flex items-center justify-between">
-              <p className="text-sm font-semibold uppercase tracking-widest text-zinc-500">
-                Découpage en phrases
+      ) : (
+        <>
+          <div className="mt-4 grid shrink-0 grid-cols-2 gap-3 text-center">
+            <div className="rounded-xl border border-zinc-800 bg-zinc-900 px-4 py-2">
+              <p className="text-[10px] uppercase tracking-widest text-zinc-500">
+                Phrase
               </p>
 
-              <span className="rounded-full bg-zinc-900 px-3 py-1 text-sm text-zinc-400">
-                {lines.length} phrases
-              </span>
+              <p className="mt-1 text-xl font-bold">
+                {Math.min(
+                  currentIndex + 1,
+                  lyricLines.length
+                )}{" "}
+                / {lyricLines.length}
+              </p>
             </div>
 
-            <div className="max-h-[520px] space-y-2 overflow-y-auto rounded-2xl border border-zinc-800 bg-zinc-900/40 p-4">
-              {lines.map((line, index) => (
-                <div
-                  key={`${line}-${index}`}
-                  className="flex gap-4 rounded-xl border border-zinc-800 bg-zinc-950 p-4"
-                >
-                  <span className="w-8 text-sm font-semibold text-zinc-600">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
+            <div className="rounded-xl border border-zinc-800 bg-zinc-900 px-4 py-2">
+              <p className="text-[10px] uppercase tracking-widest text-zinc-500">
+                Temps
+              </p>
 
-                  <p className="flex-1 text-lg">
-                    {line}
-                  </p>
-                </div>
-              ))}
-
-              {lines.length === 0 && (
-                <p className="py-10 text-center text-zinc-600">
-                  Aucune phrase.
-                </p>
-              )}
+              <p className="mt-1 text-xl font-bold tabular-nums">
+                {elapsedTime.toFixed(1)} s
+              </p>
             </div>
           </div>
-        </div>
 
-        <div className="mt-6 flex justify-end gap-3">
+          {!isRunning && currentIndex === 0 ? (
+            <div className="mt-4 flex min-h-0 flex-1 items-center justify-center">
+              <button
+                type="button"
+                onClick={startSync}
+                className="w-full rounded-2xl bg-emerald-500 px-8 py-8 text-2xl font-bold text-zinc-950"
+              >
+                ▶ Démarrer la synchronisation
+              </button>
+            </div>
+          ) : currentIndex < lyricLines.length ? (
+            <button
+              type="button"
+              onClick={markCurrentLine}
+              disabled={!isRunning}
+              className="mt-4 flex min-h-0 flex-1 select-none touch-manipulation flex-col items-center justify-center rounded-3xl border-2 border-emerald-700 bg-emerald-950/30 px-6 py-4 text-center active:scale-[0.995] disabled:opacity-40"
+            >
+              <div className="min-h-10">
+                {previousLine && (
+                  <p className="text-lg text-zinc-600">
+                    {previousLine.text}
+                  </p>
+                )}
+              </div>
+
+              <div className="my-4 flex min-h-24 items-center justify-center">
+                {currentLine && (
+                  <p className="text-4xl font-black leading-tight text-emerald-300">
+                    {currentLine.text}
+                  </p>
+                )}
+              </div>
+
+              <div className="min-h-10">
+                {nextLine && (
+                  <p className="text-xl text-zinc-500">
+                    {nextLine.text}
+                  </p>
+                )}
+              </div>
+
+              <p className="mt-5 text-sm font-semibold uppercase tracking-[0.25em] text-emerald-500">
+                Touchez cette zone pour marquer la phrase
+              </p>
+            </button>
+          ) : (
+            <div className="mt-4 flex min-h-0 flex-1 items-center justify-center rounded-3xl border border-emerald-800 bg-emerald-950/30 p-8 text-center">
+              <div>
+                <p className="text-4xl">✓</p>
+
+                <p className="mt-4 text-2xl font-bold text-emerald-300">
+                  Synchronisation terminée
+                </p>
+
+                <p className="mt-2 text-zinc-500">
+                  Toutes les phrases ont été marquées.
+                </p>
+              </div>
+            </div>
+          )}
+
+          <div className="mt-4 grid shrink-0 grid-cols-2 gap-3">
+            <button
+              type="button"
+              onClick={goBackOneLine}
+              disabled={currentIndex === 0}
+              className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 font-semibold disabled:opacity-30"
+            >
+              ← Revenir
+            </button>
+
+            <button
+              type="button"
+              onClick={resetSync}
+              className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 font-semibold"
+            >
+              ↺ Recommencer
+            </button>
+          </div>
+
           <button
             type="button"
-            onClick={onClose}
-            className="rounded-xl border border-zinc-700 bg-zinc-900 px-6 py-4 font-semibold"
+            onClick={validateSync}
+            disabled={!allLinesMarked}
+            className="mt-3 shrink-0 rounded-xl bg-emerald-500 px-6 py-3 font-bold text-zinc-950 disabled:cursor-not-allowed disabled:opacity-30"
           >
-            Annuler
+            Valider la synchronisation
           </button>
-
-          <button
-            type="button"
-            onClick={() => onSave(lines)}
-            disabled={lines.length === 0}
-            className="rounded-xl bg-emerald-500 px-6 py-4 font-bold text-zinc-950 disabled:opacity-30"
-          >
-            Enregistrer les paroles
-          </button>
-        </div>
-      </div>
+        </>
+      )}
     </div>
   );
 }

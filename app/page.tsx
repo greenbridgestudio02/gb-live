@@ -15,7 +15,9 @@ export default function Home() {
   const [setlistPosition, setSetlistPosition] = useState(0);
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
   const [preparedSongIndex, setPreparedSongIndex] = useState<number | null>(null);
-
+  const [isHomeMode, setIsHomeMode] = useState(true);
+  const [isPublicMessageOpen, setIsPublicMessageOpen] = useState(false);
+  const [publicMessage, setPublicMessage] = useState("");
 
   const [isPaused, setIsPaused] = useState(false);
   const [isIntermission, setIsIntermission] = useState(false);
@@ -180,6 +182,336 @@ function goToNextSong() {
   }
 }
 
+async function sendPublicMode(
+  mode: "home" | "song" | "message",
+  message = ""
+) {
+  try {
+    await fetch("/api/live-state", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      cache: "no-store",
+      body: JSON.stringify({
+        mode,
+        message,
+      }),
+    });
+  } catch (error) {
+    console.error(
+      "Impossible de modifier l'écran public.",
+      error
+    );
+  }
+}
+
+function startShow() {
+  setIsHomeMode(false);
+  void sendPublicMode("song");
+}
+
+function returnHome() {
+  setIsHomeMode(true);
+  setIsPublicMessageOpen(false);
+  void sendPublicMode("home");
+}
+
+useEffect(() => {
+  if (isHomeMode) {
+    void sendPublicMode("home");
+  }
+}, [isHomeMode]);
+
+function showPublicMessage(message: string) {
+  const cleanMessage = message.trim();
+
+  if (!cleanMessage) {
+    return;
+  }
+
+  void sendPublicMode("message", cleanMessage);
+}
+
+function clearPublicMessage() {
+  setPublicMessage("");
+  setIsPublicMessageOpen(false);
+
+  if (isHomeMode) {
+    void sendPublicMode("home");
+  } else {
+    void sendPublicMode("song");
+  }
+}
+
+useEffect(() => {
+  function handleBlueTurnNext(event: KeyboardEvent) {
+    if (event.key !== "ArrowRight") {
+      return;
+    }
+
+    const target = event.target as HTMLElement | null;
+
+    if (
+      target instanceof HTMLInputElement ||
+      target instanceof HTMLTextAreaElement ||
+      target?.isContentEditable
+    ) {
+      return;
+    }
+
+    if (event.repeat) {
+      return;
+    }
+
+    event.preventDefault();
+
+    goToNextSong();
+  }
+
+  window.addEventListener(
+    "keydown",
+    handleBlueTurnNext
+  );
+
+  return () => {
+    window.removeEventListener(
+      "keydown",
+      handleBlueTurnNext
+    );
+  };
+});
+
+async function publishLibrary() {
+  try {
+    const response = await fetch("/api/library-sync", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        songs,
+        setlistSongIds,
+        requestedSongIds,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Publication impossible");
+    }
+
+    alert("Bibliothèque publiée sur le serveur G3 Live.");
+  } catch (error) {
+    console.error(error);
+    alert("Impossible de publier la bibliothèque.");
+  }
+}
+
+async function importLibrary() {
+  try {
+    const response = await fetch("/api/library-sync", {
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      throw new Error("Récupération impossible");
+    }
+
+    const snapshot = await response.json();
+
+    if (!Array.isArray(snapshot.songs) || snapshot.songs.length === 0) {
+      alert("Aucune bibliothèque publiée sur le serveur.");
+      return;
+    }
+
+    setSongs(snapshot.songs);
+
+    if (Array.isArray(snapshot.setlistSongIds)) {
+      setSetlistSongIds(snapshot.setlistSongIds);
+    }
+
+    if (Array.isArray(snapshot.requestedSongIds)) {
+      setRequestedSongIds(snapshot.requestedSongIds);
+    }
+
+    alert("Bibliothèque récupérée depuis le serveur G3 Live.");
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+if (isHomeMode) {
+  return (
+    <main className="flex h-screen flex-col items-center justify-center bg-zinc-950 p-6 text-zinc-100">
+      <div className="w-full max-w-3xl text-center">
+        <img
+          src="/g3-live-logo.png"
+          alt="G3 Live"
+          className="mx-auto h-32 w-auto object-contain"
+        />
+
+        <h1 className="mt-6 text-5xl font-bold">
+          Bienvenue
+        </h1>
+
+        <p className="mt-3 text-lg text-zinc-500">
+          G3 Live est prêt.
+        </p>
+
+        <button
+          type="button"
+          onClick={startShow}
+          className="mt-10 w-full rounded-2xl bg-emerald-500 px-8 py-6 text-2xl font-bold text-zinc-950"
+        >
+          ▶ Démarrer le spectacle
+        </button>
+
+        <div className="mt-6 grid grid-cols-3 gap-3">
+          <button
+            type="button"
+            onClick={() => setIsSearchOpen(true)}
+            className="rounded-xl border border-zinc-700 bg-zinc-900 px-5 py-4 font-semibold"
+          >
+            Bibliothèque
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setIsRequestsOpen(true)}
+            className="rounded-xl border border-zinc-700 bg-zinc-900 px-5 py-4 font-semibold"
+          >
+            Demandes ({requestedSongIds.length})
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setIsPreparationOpen(true)}
+            className="rounded-xl border border-zinc-700 bg-zinc-900 px-5 py-4 font-semibold"
+          >
+            Préparation
+          </button>
+        </div>
+      </div>
+
+      {isSearchOpen && (
+        <SongSearch
+          songs={songs}
+          setlistSongIds={setlistSongIds}
+          requestedSongIds={requestedSongIds}
+          onPlayNow={(index) => {
+            setCurrentSongIndex(index);
+
+            const selectedSongId = songs[index]?.id;
+            const setlistIndex = selectedSongId
+              ? setlistSongIds.indexOf(selectedSongId)
+              : -1;
+
+            if (setlistIndex !== -1) {
+              setSetlistPosition(setlistIndex);
+            }
+
+            setIsHomeMode(false);
+            void sendPublicMode("song");
+          }}
+          onPlayNext={(songId) => {
+            setSetlistSongIds((currentSetlist) => {
+              const withoutSong = currentSetlist.filter(
+                (id) => id !== songId
+              );
+
+              const insertPosition = Math.min(
+                setlistPosition + 1,
+                withoutSong.length
+              );
+
+              const newSetlist = [...withoutSong];
+              newSetlist.splice(insertPosition, 0, songId);
+
+              return newSetlist;
+            });
+          }}
+          onAddToSetlist={(songId) => {
+            setSetlistSongIds((currentSetlist) =>
+              currentSetlist.includes(songId)
+                ? currentSetlist
+                : [...currentSetlist, songId]
+            );
+          }}
+          onRequestSong={(songId) => {
+            setRequestedSongIds((currentRequests) =>
+              currentRequests.includes(songId)
+                ? currentRequests
+                : [...currentRequests, songId]
+            );
+          }}
+          onClose={() => setIsSearchOpen(false)}
+        />
+      )}
+
+      {isRequestsOpen && (
+        <RequestsPanel
+          songs={songs}
+          requestedSongIds={requestedSongIds}
+          onPlayNow={(songId) => {
+            const libraryIndex = songs.findIndex(
+              (song) => song.id === songId
+            );
+
+            if (libraryIndex !== -1) {
+              setCurrentSongIndex(libraryIndex);
+            }
+
+            setRequestedSongIds((currentRequests) =>
+              currentRequests.filter((id) => id !== songId)
+            );
+
+            setIsRequestsOpen(false);
+            setIsHomeMode(false);
+            void sendPublicMode("song");
+          }}
+          onPlayNext={(songId) => {
+            setSetlistSongIds((currentSetlist) => {
+              const withoutSong = currentSetlist.filter(
+                (id) => id !== songId
+              );
+
+              const insertPosition = Math.min(
+                setlistPosition + 1,
+                withoutSong.length
+              );
+
+              const newSetlist = [...withoutSong];
+              newSetlist.splice(insertPosition, 0, songId);
+
+              return newSetlist;
+            });
+
+            setRequestedSongIds((currentRequests) =>
+              currentRequests.filter((id) => id !== songId)
+            );
+
+            setIsRequestsOpen(false);
+          }}
+          onRemoveRequest={(songId) => {
+            setRequestedSongIds((currentRequests) =>
+              currentRequests.filter((id) => id !== songId)
+            );
+          }}
+          onMoveRequest={(fromIndex, toIndex) => {
+            setRequestedSongIds((currentRequests) => {
+              const newRequests = [...currentRequests];
+              const [movedSongId] = newRequests.splice(fromIndex, 1);
+              newRequests.splice(toIndex, 0, movedSongId);
+              return newRequests;
+            });
+          }}
+          onClose={() => setIsRequestsOpen(false)}
+        />
+      )}
+    </main>
+  );
+}
+
   return (
     <main className="flex h-screen overflow-hidden flex-col bg-zinc-950 text-zinc-100">
       <header className="flex items-center justify-between border-b border-zinc-800 px-6 py-2">
@@ -260,7 +592,7 @@ function goToNextSong() {
   )}
 </div>
 
-<div className="mt-2 grid grid-cols-6 gap-3">
+<div className="mt-2 grid grid-cols-8 gap-3">
   <button
     type="button"
     onClick={goToPreviousSong}
@@ -306,6 +638,22 @@ function goToNextSong() {
   >
     Demandes ({requestedSongIds.length})
   </button>
+
+<button
+  type="button"
+  onClick={() => setIsPublicMessageOpen(true)}
+  className="rounded-xl border border-amber-700 bg-amber-950/30 px-4 py-3 font-semibold text-amber-300"
+>
+  Message public
+</button>
+
+<button
+  type="button"
+  onClick={returnHome}
+  className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 font-semibold"
+>
+  Accueil
+</button>
 
   <button
     type="button"
@@ -545,6 +893,83 @@ onRemoveSong={(indexToRemove) => {
   />
 )}
 
+{isPublicMessageOpen && (
+  <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/85 p-6">
+    <div className="w-full max-w-2xl rounded-3xl border border-amber-800 bg-zinc-950 p-6 text-zinc-100">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-amber-400">
+            G3 Live
+          </p>
+
+          <h2 className="mt-1 text-2xl font-bold">
+            Message public
+          </h2>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => setIsPublicMessageOpen(false)}
+          className="flex h-12 w-12 items-center justify-center rounded-xl border border-zinc-700 bg-zinc-900 text-2xl font-bold"
+        >
+          ×
+        </button>
+      </div>
+
+      <textarea
+        value={publicMessage}
+        onChange={(event) => setPublicMessage(event.target.value)}
+        placeholder="Écrivez un message au public…"
+        className="mt-6 min-h-36 w-full rounded-2xl border border-zinc-700 bg-zinc-900 p-5 text-2xl outline-none focus:border-amber-500"
+      />
+
+      <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+        {[
+          "Merci ! 🙏",
+          "Vous êtes les meilleurs ❤️",
+          "Je vous adore 😍",
+          "Bravo 👏",
+          "🔥",
+          "🎶",
+          "❤️",
+          "On revient bientôt 🎹",
+        ].map((message) => (
+          <button
+            key={message}
+            type="button"
+            onClick={() => setPublicMessage(message)}
+            className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 text-sm font-semibold"
+          >
+            {message}
+          </button>
+        ))}
+      </div>
+
+      <div className="mt-6 grid grid-cols-2 gap-3">
+        <button
+          type="button"
+          onClick={() => {
+            showPublicMessage(publicMessage);
+            setIsPublicMessageOpen(false);
+          }}
+          disabled={!publicMessage.trim()}
+          className="rounded-xl bg-amber-400 px-6 py-4 text-lg font-bold text-zinc-950 disabled:opacity-30"
+        >
+          Envoyer
+        </button>
+
+        <button
+          type="button"
+          onClick={clearPublicMessage}
+          className="rounded-xl border border-zinc-700 bg-zinc-900 px-6 py-4 text-lg font-semibold"
+        >
+          Effacer l’écran public
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
 {isIntermission && (
   <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-6">
     <div className="w-full max-w-3xl rounded-3xl border border-amber-800 bg-zinc-950 p-8">
@@ -681,6 +1106,23 @@ onRemoveSong={(indexToRemove) => {
         >
           Synchroniser les paroles
         </button>
+
+<button
+  type="button"
+  onClick={publishLibrary}
+  className="rounded-xl border border-sky-700 bg-sky-950/30 px-6 py-4 text-left text-lg font-semibold text-sky-300"
+>
+  ↑ Publier la bibliothèque
+</button>
+
+<button
+  type="button"
+  onClick={importLibrary}
+  className="rounded-xl border border-violet-700 bg-violet-950/30 px-6 py-4 text-left text-lg font-semibold text-violet-300"
+>
+  ↓ Récupérer la bibliothèque
+</button>
+
       </div>
     </div>
   </div>
