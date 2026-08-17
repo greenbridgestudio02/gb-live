@@ -564,7 +564,7 @@ useEffect(() => {
               <img
                 src="/g3-live-logo.png"
                 alt="G3 Live"
-                className="mx-auto h-28 w-auto object-contain"
+                className="mx-auto mt-4 h-28 w-auto object-contain"
               />
 
               <h1 className="mt-6 text-4xl font-bold">
@@ -641,8 +641,8 @@ useEffect(() => {
 
         {liveState.mode !== "message" &&
   localView === "about" && (
-    <div className="w-full max-w-2xl text-center">
-      <p className="text-xs font-semibold uppercase tracking-[0.35em] text-emerald-400">
+    <div className="h-full w-full max-w-2xl overflow-y-auto overscroll-contain px-2 pb-10 text-center">
+      <p className="pt-2 text-xs font-semibold uppercase tracking-[0.35em] text-emerald-400">
         G3 Live
       </p>
 
