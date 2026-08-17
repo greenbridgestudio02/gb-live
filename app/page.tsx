@@ -11,6 +11,290 @@ import SongEditor from "./components/SongEditor";
 import NewSongEditor from "./components/NewSongEditor";
 import RequestsPanel from "./components/RequestsPanel";
 
+function BlindTestAdminPanel({
+  onClose,
+}: {
+  onClose: () => void;
+}) {
+  type BuzzEntry = {
+    playerId: string;
+    playerName: string;
+    buzzedAt: number;
+  };
+
+  type BlindTestState = {
+    roundId: number;
+    isOpen: boolean;
+    winner: BuzzEntry | null;
+    buzzes: BuzzEntry[];
+    updatedAt: number;
+  };
+
+  const [blindState, setBlindState] =
+    useState<BlindTestState | null>(null);
+
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    let stopped = false;
+
+    async function refreshState() {
+      try {
+        const response = await fetch(
+          "/api/blind-test",
+          {
+            cache: "no-store",
+          }
+        );
+
+        if (!response.ok) {
+          return;
+        }
+
+        const state: BlindTestState =
+          await response.json();
+
+        if (!stopped) {
+          setBlindState(state);
+        }
+      } catch {
+        // On conserve le dernier état connu.
+      }
+    }
+
+    void refreshState();
+
+    const intervalId = window.setInterval(
+      () => {
+        void refreshState();
+      },
+      250
+    );
+
+    return () => {
+      stopped = true;
+      window.clearInterval(intervalId);
+    };
+  }, []);
+
+  async function sendAction(
+    action: "open" | "close" | "reset"
+  ) {
+    if (busy) {
+      return;
+    }
+
+    setBusy(true);
+
+    try {
+      const response = await fetch(
+        "/api/blind-test",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            action,
+          }),
+        }
+      );
+
+      const result = await response.json();
+
+      if (result.state) {
+        setBlindState(result.state);
+      }
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 z-[90] flex items-center justify-center bg-black/90 p-6">
+      <div className="flex h-[90vh] w-full max-w-5xl flex-col overflow-hidden rounded-3xl border border-amber-800 bg-zinc-950 text-zinc-100">
+        <div className="flex shrink-0 items-center justify-between border-b border-zinc-800 p-6">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-amber-400">
+              G3 Live
+            </p>
+
+            <h2 className="mt-1 text-3xl font-black">
+              🔔 Blind Test
+            </h2>
+          </div>
+
+          <button
+            type="button"
+            onClick={onClose}
+            className="flex h-12 w-12 items-center justify-center rounded-xl border border-zinc-700 bg-zinc-900 text-2xl font-bold"
+          >
+            ×
+          </button>
+        </div>
+
+        <div className="grid min-h-0 flex-1 gap-5 overflow-y-auto p-6 lg:grid-cols-[1.3fr_0.7fr]">
+          <div className="flex min-h-0 flex-col rounded-2xl border border-zinc-800 bg-zinc-900/50 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-zinc-500">
+                  Manche
+                </p>
+
+                <p className="mt-1 text-3xl font-bold">
+                  {blindState?.roundId ?? "—"}
+                </p>
+              </div>
+
+              <div className="text-right">
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-zinc-500">
+                  État
+                </p>
+
+                <p
+                  className={`mt-1 text-xl font-bold ${
+                    blindState?.isOpen
+                      ? "text-emerald-300"
+                      : "text-zinc-500"
+                  }`}
+                >
+                  {blindState?.isOpen
+                    ? "BUZZERS OUVERTS"
+                    : "EN ATTENTE"}
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-8 flex min-h-72 flex-1 items-center justify-center rounded-3xl border border-zinc-800 bg-zinc-950/60 p-8 text-center">
+              {blindState?.winner ? (
+                <div>
+                  <p className="text-7xl">
+                    🥇
+                  </p>
+
+                  <p className="mt-5 text-sm font-semibold uppercase tracking-[0.3em] text-amber-400">
+                    Premier buzz
+                  </p>
+
+                  <p className="mt-3 text-5xl font-black text-white">
+                    {blindState.winner.playerName}
+                  </p>
+                </div>
+              ) : blindState?.isOpen ? (
+                <div>
+                  <p className="text-7xl">
+                    🔴
+                  </p>
+
+                  <p className="mt-5 text-3xl font-black text-emerald-300">
+                    Buzzers ouverts
+                  </p>
+
+                  <p className="mt-3 text-zinc-500">
+                    En attente du premier joueur…
+                  </p>
+                </div>
+              ) : (
+                <div>
+                  <p className="text-6xl">
+                    🔔
+                  </p>
+
+                  <p className="mt-5 text-3xl font-bold text-zinc-400">
+                    Manche prête
+                  </p>
+
+                  <p className="mt-3 text-zinc-600">
+                    Ouvre les buzzers quand tu es prêt.
+                  </p>
+                </div>
+              )}
+            </div>
+
+            <div className="mt-5 grid grid-cols-2 gap-3">
+              <button
+                type="button"
+                onClick={() =>
+                  void sendAction("open")
+                }
+                disabled={busy}
+                className="rounded-2xl bg-emerald-500 px-6 py-5 text-xl font-black text-zinc-950 disabled:opacity-40"
+              >
+                🔴 Ouvrir les buzzers
+              </button>
+
+              <button
+                type="button"
+                onClick={() =>
+                  void sendAction("close")
+                }
+                disabled={busy}
+                className="rounded-2xl border border-zinc-700 bg-zinc-900 px-6 py-5 text-xl font-bold disabled:opacity-40"
+              >
+                Fermer
+              </button>
+
+              <button
+                type="button"
+                onClick={() =>
+                  void sendAction("open")
+                }
+                disabled={busy}
+                className="rounded-2xl border border-amber-700 bg-amber-950/30 px-6 py-5 text-lg font-bold text-amber-300 disabled:opacity-40"
+              >
+                ↺ Réouvrir les buzzers
+              </button>
+
+              <button
+                type="button"
+                onClick={() =>
+                  void sendAction("reset")
+                }
+                disabled={busy}
+                className="rounded-2xl border border-zinc-700 bg-zinc-900 px-6 py-5 text-lg font-semibold disabled:opacity-40"
+              >
+                Nouvelle manche
+              </button>
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-zinc-800 bg-zinc-900/50 p-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-zinc-500">
+              Ordre des buzz
+            </p>
+
+            <div className="mt-4 space-y-3">
+              {blindState?.buzzes &&
+              blindState.buzzes.length > 0 ? (
+                blindState.buzzes.map(
+                  (buzz, index) => (
+                    <div
+                      key={`${buzz.playerId}-${buzz.buzzedAt}`}
+                      className="flex items-center gap-3 rounded-xl border border-zinc-800 bg-zinc-950 px-4 py-3"
+                    >
+                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-amber-950/50 font-bold text-amber-300">
+                        {index + 1}
+                      </span>
+
+                      <p className="min-w-0 flex-1 truncate text-lg font-semibold">
+                        {buzz.playerName}
+                      </p>
+                    </div>
+                  )
+                )
+              ) : (
+                <p className="py-10 text-center text-zinc-600">
+                  Aucun buzz pour le moment.
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Home() {
   const [setlistPosition, setSetlistPosition] = useState(0);
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
@@ -39,6 +323,7 @@ export default function Home() {
   const [setlistLoaded, setSetlistLoaded] = useState(false);
   const [isPreparationOpen, setIsPreparationOpen] = useState(false);
   const [isRequestsOpen, setIsRequestsOpen] = useState(false);
+  const [isBlindTestOpen, setIsBlindTestOpen] = useState(false);
 
 useEffect(() => {
   const savedSetlist = localStorage.getItem("gb-live-setlist");
@@ -358,37 +643,29 @@ if (isHomeMode) {
           G3 Live est prêt.
         </p>
 
-        <button
-          type="button"
-          onClick={startShow}
-          className="mt-10 w-full rounded-2xl bg-emerald-500 px-8 py-6 text-2xl font-bold text-zinc-950"
-        >
-          ▶ Démarrer le spectacle
-        </button>
-
-        <div className="mt-6 grid grid-cols-3 gap-3">
+        <div className="mt-10 grid gap-4">
           <button
             type="button"
-            onClick={() => setIsSearchOpen(true)}
-            className="rounded-xl border border-zinc-700 bg-zinc-900 px-5 py-4 font-semibold"
+            onClick={startShow}
+            className="w-full rounded-2xl bg-emerald-500 px-8 py-6 text-2xl font-bold text-zinc-950"
           >
-            Bibliothèque
+            🎤 Spectacle
           </button>
 
           <button
             type="button"
-            onClick={() => setIsRequestsOpen(true)}
-            className="rounded-xl border border-zinc-700 bg-zinc-900 px-5 py-4 font-semibold"
+            onClick={() => setIsBlindTestOpen(true)}
+            className="w-full rounded-2xl border border-amber-700 bg-amber-950/30 px-8 py-6 text-2xl font-bold text-amber-300"
           >
-            Demandes ({requestedSongIds.length})
+            🔔 Blind Test
           </button>
 
           <button
             type="button"
             onClick={() => setIsPreparationOpen(true)}
-            className="rounded-xl border border-zinc-700 bg-zinc-900 px-5 py-4 font-semibold"
+            className="w-full rounded-2xl border border-zinc-700 bg-zinc-900 px-8 py-6 text-2xl font-semibold"
           >
-            Préparation
+            ⚙️ Préparation
           </button>
         </div>
       </div>
@@ -507,7 +784,14 @@ if (isHomeMode) {
           }}
           onClose={() => setIsRequestsOpen(false)}
         />
-      )}
+       )}
+
+      {isBlindTestOpen && (
+  <BlindTestAdminPanel
+    onClose={() => setIsBlindTestOpen(false)}
+  />
+)}
+
     </main>
   );
 }
