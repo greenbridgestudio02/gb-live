@@ -692,28 +692,28 @@ async function importLibrary() {
 
         <div className="mt-10 grid gap-4">
           <button
-            type="button"
-            onClick={startShow}
-            className="w-full rounded-2xl bg-emerald-500 px-8 py-6 text-2xl font-bold text-zinc-950"
-          >
-            🎤 Spectacle
-          </button>
+  type="button"
+  onClick={startShow}
+  className="w-full rounded-2xl border border-emerald-700 bg-emerald-950/30 px-6 py-5 text-xl font-bold text-emerald-300 transition hover:bg-emerald-950/50 active:scale-[0.99]"
+>
+  🎤 Spectacle
+</button>
 
-          <button
-            type="button"
-            onClick={() => setIsBlindTestOpen(true)}
-            className="w-full rounded-2xl border border-amber-700 bg-amber-950/30 px-8 py-6 text-2xl font-bold text-amber-300"
-          >
-            🔔 Blind Test
-          </button>
+<button
+  type="button"
+  onClick={() => setIsBlindTestOpen(true)}
+  className="w-full rounded-2xl border border-amber-700 bg-amber-950/30 px-6 py-5 text-xl font-bold text-amber-300 transition hover:bg-amber-950/50 active:scale-[0.99]"
+>
+  🔔 Blind Test
+</button>
 
-          <button
-            type="button"
-            onClick={() => setIsPreparationOpen(true)}
-            className="w-full rounded-2xl border border-zinc-700 bg-zinc-900 px-8 py-6 text-2xl font-semibold"
-          >
-            ⚙️ Préparation
-          </button>
+<button
+  type="button"
+  onClick={() => setIsPreparationOpen(true)}
+  className="w-full rounded-2xl border border-zinc-700 bg-zinc-900 px-6 py-5 text-xl font-bold text-zinc-100 transition hover:bg-zinc-800 active:scale-[0.99]"
+>
+  ⚙️ Préparation
+</button>
         </div>
       </div>
 
@@ -920,7 +920,7 @@ async function importLibrary() {
 }
 
   return (
-    <main className="flex h-screen overflow-hidden flex-col bg-zinc-950 text-zinc-100">
+    <main className="flex h-[100dvh] overflow-hidden flex-col bg-zinc-950 text-zinc-100">
       <header className="flex items-center justify-between border-b border-zinc-800 px-6 py-2">
         <div>
   <img

@@ -511,26 +511,26 @@ const [
 
               <div className="mt-8 grid gap-3">
                 <button
-                  type="button"
-                  onClick={openLyrics}
-                  disabled={
-                    liveState.mode !== "song" ||
-                    !currentSong
-                  }
-                  className="rounded-2xl bg-emerald-500 px-6 py-5 text-xl font-bold text-zinc-950 disabled:cursor-not-allowed disabled:opacity-30"
-                >
-                  🎤 Paroles Live
-                </button>
+  type="button"
+  onClick={openLyrics}
+  disabled={
+    liveState.mode !== "song" ||
+    !currentSong
+  }
+  className="w-full rounded-2xl border border-emerald-700 bg-emerald-950/30 px-6 py-5 text-xl font-bold text-emerald-300 transition hover:bg-emerald-950/50 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-30"
+>
+  🎤 Paroles Live
+</button>
 
-                <button
-                  type="button"
-                  onClick={() =>
-                    setLocalView("blind-test")
-                  }
-                  className="rounded-2xl border border-amber-700 bg-amber-950/30 px-6 py-5 text-xl font-bold text-amber-300"
-                >
-                  🔔 Blind Test
-                </button>
+<button
+  type="button"
+  onClick={() =>
+    setLocalView("blind-test")
+  }
+  className="w-full rounded-2xl border border-amber-700 bg-amber-950/30 px-6 py-5 text-xl font-bold text-amber-300 transition hover:bg-amber-950/50 active:scale-[0.99]"
+>
+  🔔 Blind Test
+</button>
 
                 <button
                   type="button"
