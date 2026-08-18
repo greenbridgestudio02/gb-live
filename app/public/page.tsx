@@ -660,27 +660,31 @@ useEffect(() => {
 </button>
 
 
-                <button
-                  type="button"
-                  disabled
-                  className="rounded-2xl border border-zinc-800 bg-zinc-900 px-6 py-5 text-xl font-semibold text-zinc-600"
-                >
-                  🎵 Demander un titre
-                  <span className="mt-1 block text-xs">
-                    bientôt
-                  </span>
-                </button>
+                {false && (
+  <>
+    <button
+      type="button"
+      disabled
+      className="rounded-2xl border border-zinc-800 bg-zinc-900 px-6 py-5 text-xl font-semibold text-zinc-600"
+    >
+      🎵 Demander un titre
+      <span className="mt-1 block text-xs">
+        bientôt
+      </span>
+    </button>
 
-                <button
-                  type="button"
-                  disabled
-                  className="rounded-2xl border border-zinc-800 bg-zinc-900 px-6 py-5 text-xl font-semibold text-zinc-600"
-                >
-                  ❤️ Envoyer une réaction
-                  <span className="mt-1 block text-xs">
-                    bientôt
-                  </span>
-                </button>
+    <button
+      type="button"
+      disabled
+      className="rounded-2xl border border-zinc-800 bg-zinc-900 px-6 py-5 text-xl font-semibold text-zinc-600"
+    >
+      ❤️ Envoyer une réaction
+      <span className="mt-1 block text-xs">
+        bientôt
+      </span>
+    </button>
+  </>
+)}
               </div>
             </div>
           )}

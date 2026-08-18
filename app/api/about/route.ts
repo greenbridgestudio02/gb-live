@@ -1,4 +1,13 @@
+import {
+  mkdir,
+  readFile,
+  writeFile,
+} from "node:fs/promises";
+
+import path from "node:path";
+
 export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
 
 type AboutMe = {
   name: string;
@@ -11,39 +20,121 @@ type AboutMe = {
   updatedAt: number;
 };
 
-type G3AboutStore = typeof globalThis & {
-  __g3AboutMe?: AboutMe;
+const dataDirectory = path.join(
+  process.cwd(),
+  "data"
+);
+
+const aboutFile = path.join(
+  dataDirectory,
+  "about.json"
+);
+
+const emptyAbout: AboutMe = {
+  name: "",
+  headline: "",
+  bio: "",
+  instruments: "",
+  website: "",
+  instagram: "",
+  facebook: "",
+  updatedAt: 0,
 };
 
-const store = globalThis as G3AboutStore;
+async function readAbout(): Promise<AboutMe> {
+  try {
+    const content = await readFile(
+      aboutFile,
+      "utf-8"
+    );
 
-if (!store.__g3AboutMe) {
-  store.__g3AboutMe = {
-    name: "",
-    headline: "",
-    bio: "",
-    instruments: "",
-    website: "",
-    instagram: "",
-    facebook: "",
-    updatedAt: Date.now(),
-  };
+    const parsed = JSON.parse(
+      content
+    ) as Partial<AboutMe>;
+
+    return {
+      name:
+        typeof parsed.name === "string"
+          ? parsed.name
+          : "",
+
+      headline:
+        typeof parsed.headline === "string"
+          ? parsed.headline
+          : "",
+
+      bio:
+        typeof parsed.bio === "string"
+          ? parsed.bio
+          : "",
+
+      instruments:
+        typeof parsed.instruments === "string"
+          ? parsed.instruments
+          : "",
+
+      website:
+        typeof parsed.website === "string"
+          ? parsed.website
+          : "",
+
+      instagram:
+        typeof parsed.instagram === "string"
+          ? parsed.instagram
+          : "",
+
+      facebook:
+        typeof parsed.facebook === "string"
+          ? parsed.facebook
+          : "",
+
+      updatedAt:
+        typeof parsed.updatedAt === "number"
+          ? parsed.updatedAt
+          : 0,
+    };
+  } catch {
+    return emptyAbout;
+  }
+}
+
+async function saveAbout(
+  about: AboutMe
+) {
+  await mkdir(dataDirectory, {
+    recursive: true,
+  });
+
+  await writeFile(
+    aboutFile,
+    JSON.stringify(
+      about,
+      null,
+      2
+    ),
+    "utf-8"
+  );
 }
 
 export async function GET() {
-  return Response.json(store.__g3AboutMe, {
+  const about = await readAbout();
+
+  return Response.json(about, {
     headers: {
       "Cache-Control": "no-store",
     },
   });
 }
 
-export async function POST(request: Request) {
+export async function POST(
+  request: Request
+) {
   const body = await request.json();
 
-  const current = store.__g3AboutMe!;
+  const current =
+    await readAbout();
 
-  store.__g3AboutMe = {
+  const about: AboutMe = {
     name:
       typeof body.name === "string"
         ? body.name
@@ -82,8 +173,10 @@ export async function POST(request: Request) {
     updatedAt: Date.now(),
   };
 
+  await saveAbout(about);
+
   return Response.json({
     ok: true,
-    about: store.__g3AboutMe,
+    about,
   });
 }
