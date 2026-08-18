@@ -34,7 +34,7 @@ const store = globalThis as G3BlindTestStore;
 
 if (!store.__g3BlindTestState) {
   store.__g3BlindTestState = {
-    roundId: 1,
+    roundId: 0,
 
     isOpen: false,
 
@@ -410,6 +410,22 @@ export async function POST(request: Request) {
       state: getState(),
     });
   }
+
+if (action === "new-game") {
+  store.__g3BlindTestState = {
+    roundId: 0,
+    isOpen: false,
+    winner: null,
+    buzzes: [],
+    scores: [],
+    updatedAt: Date.now(),
+  };
+
+  return Response.json({
+    ok: true,
+    state: getState(),
+  });
+}
 
   return Response.json(
     {

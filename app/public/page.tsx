@@ -57,13 +57,20 @@ function BlindTestPanel() {
     buzzedAt: number;
   };
 
-  type BlindTestState = {
-    roundId: number;
-    isOpen: boolean;
-    winner: BuzzEntry | null;
-    buzzes: BuzzEntry[];
-    updatedAt: number;
-  };
+  type PlayerScore = {
+  playerId: string;
+  playerName: string;
+  points: number;
+};
+
+type BlindTestState = {
+  roundId: number;
+  isOpen: boolean;
+  winner: BuzzEntry | null;
+  buzzes: BuzzEntry[];
+  scores: PlayerScore[];
+  updatedAt: number;
+};
 
   const [playerName, setPlayerName] = useState("");
   const [playerId, setPlayerId] = useState("");
@@ -231,6 +238,11 @@ const myBuzzPosition =
     (buzz) => buzz.playerId === playerId
   ) ?? -1;
 
+const myScore =
+  blindState?.scores.find(
+    (player) => player.playerId === playerId
+  )?.points ?? 0;
+
   return (
     <div className="w-full max-w-xl text-center">
       <p className="text-xs font-semibold uppercase tracking-[0.35em] text-amber-400">
@@ -257,6 +269,16 @@ const myBuzzPosition =
           className="mt-3 w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-center text-xl font-semibold outline-none focus:border-amber-500"
         />
       </div>
+
+<div className="mt-4 rounded-2xl border border-amber-800 bg-amber-950/20 px-5 py-4">
+  <p className="text-xs font-semibold uppercase tracking-[0.25em] text-zinc-500">
+    Ton score
+  </p>
+
+  <p className="mt-1 text-3xl font-black text-amber-300">
+    {myScore} {myScore > 1 ? "points" : "point"}
+  </p>
+</div>
 
       <div className="mt-6">
   {isWinner ? (
@@ -306,10 +328,19 @@ const myBuzzPosition =
       <button
         type="button"
         onClick={buzz}
-        disabled={!playerName.trim()}
-        className="w-full select-none touch-manipulation rounded-full border-4 border-red-500 bg-red-600 px-8 py-16 text-4xl font-black text-white shadow-2xl shadow-red-950/40 transition active:scale-[0.98] disabled:opacity-40"
+        disabled={
+  !playerName.trim() ||
+  !blindState?.isOpen
+}
+        className={`w-full select-none touch-manipulation rounded-full border-4 px-8 py-16 text-4xl font-black transition active:scale-[0.98] disabled:cursor-not-allowed ${
+  blindState?.isOpen
+    ? "border-red-500 bg-red-600 text-white shadow-2xl shadow-red-950/40"
+    : "border-zinc-700 bg-zinc-900 text-zinc-600"
+}`}
       >
-        🔴 BUZZER !
+        {blindState?.isOpen
+  ? "🔴 BUZZER !"
+  : "Buzzer fermé"}
       </button>
     </>
   )}

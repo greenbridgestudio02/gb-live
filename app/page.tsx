@@ -78,6 +78,7 @@ function BlindTestAdminPanel({
       | "correct"
       | "wrong"
       | "reset-scores"
+      | "new-game"
   ) {
     if (busy) return;
     setBusy(true);
@@ -124,14 +125,22 @@ function BlindTestAdminPanel({
           <div className="flex min-h-0 flex-col rounded-2xl border border-zinc-800 bg-zinc-900/50 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-zinc-500">Manche</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-zinc-500">Question</p>
                 <p className="mt-1 text-3xl font-bold">{blindState?.roundId ?? "—"}</p>
               </div>
               <div className="text-right">
                 <p className="text-xs font-semibold uppercase tracking-[0.25em] text-zinc-500">État</p>
-                <p className={`mt-1 text-xl font-bold ${blindState?.isOpen ? "text-emerald-300" : "text-zinc-500"}`}>
-                  {blindState?.isOpen ? "BUZZERS OUVERTS" : "EN ATTENTE"}
-                </p>
+                <p
+  className={`mt-1 rounded-xl px-4 py-2 text-xl font-black ${
+    blindState?.isOpen
+      ? "bg-emerald-950/50 text-emerald-300"
+      : "bg-red-950/50 text-red-300"
+  }`}
+>
+  {blindState?.isOpen
+    ? "🟢 BUZZERS OUVERTS"
+    : "🔴 BUZZERS FERMÉS"}
+</p>
               </div>
             </div>
 
@@ -180,18 +189,15 @@ function BlindTestAdminPanel({
 
             <div className="mt-5 grid grid-cols-2 gap-3">
               <button type="button" onClick={() => void sendAction("open")} disabled={busy} className="rounded-2xl bg-emerald-500 px-6 py-5 text-xl font-black text-zinc-950 disabled:opacity-40">
-                🔴 Ouvrir les buzzers
+                ▶ Nouvelle question
               </button>
               <button type="button" onClick={() => void sendAction("close")} disabled={busy} className="rounded-2xl border border-zinc-700 bg-zinc-900 px-6 py-5 text-xl font-bold disabled:opacity-40">
-                Fermer
+                Fermer les buzzers  
               </button>
               <button type="button" onClick={() => void sendAction("open")} disabled={busy} className="rounded-2xl border border-amber-700 bg-amber-950/30 px-6 py-5 text-lg font-bold text-amber-300 disabled:opacity-40">
                 ↺ Réouvrir les buzzers
               </button>
-              <button type="button" onClick={() => void sendAction("reset")} disabled={busy} className="rounded-2xl border border-zinc-700 bg-zinc-900 px-6 py-5 text-lg font-semibold disabled:opacity-40">
-                Nouvelle manche
-              </button>
-            </div>
+                          </div>
           </div>
 
           <div className="grid min-h-0 gap-5 xl:grid-rows-2">
@@ -227,6 +233,25 @@ function BlindTestAdminPanel({
                   Remise à zéro
                 </button>
               </div>
+
+                  <button
+  type="button"
+  onClick={() => {
+    const confirmed = window.confirm(
+      "Nouvelle partie ? Tous les scores seront remis à zéro."
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    void sendAction("new-game");
+  }}
+  disabled={busy}
+  className="mt-4 w-full rounded-xl border border-red-800 bg-red-950/30 px-5 py-4 font-semibold text-red-300 disabled:opacity-40"
+>
+  🎮 Nouvelle partie
+</button>
 
               <div className="mt-4 space-y-2">
                 {ranking.length > 0 ? (
