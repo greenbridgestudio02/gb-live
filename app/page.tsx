@@ -22,68 +22,47 @@ function BlindTestAdminPanel({
     buzzedAt: number;
   };
 
+  type PlayerScore = {
+    playerId: string;
+    playerName: string;
+    points: number;
+  };
+
   type BlindTestState = {
     roundId: number;
     isOpen: boolean;
     winner: BuzzEntry | null;
     buzzes: BuzzEntry[];
+    scores: PlayerScore[];
     updatedAt: number;
   };
 
   const [blindState, setBlindState] =
     useState<BlindTestState | null>(null);
-
   const [busy, setBusy] = useState(false);
-
-  const [aboutMe, setAboutMe] = useState({
-  name: "",
-  headline: "",
-  bio: "",
-  instruments: "",
-  website: "",
-  instagram: "",
-  facebook: "",
-});
-
-const [isAboutEditorOpen, setIsAboutEditorOpen] = useState(false);
-
-
 
   useEffect(() => {
     let stopped = false;
 
     async function refreshState() {
       try {
-        const response = await fetch(
-          "/api/blind-test",
-          {
-            cache: "no-store",
-          }
-        );
+        const response = await fetch("/api/blind-test", {
+          cache: "no-store",
+        });
 
-        if (!response.ok) {
-          return;
-        }
+        if (!response.ok) return;
 
-        const state: BlindTestState =
-          await response.json();
-
-        if (!stopped) {
-          setBlindState(state);
-        }
+        const state: BlindTestState = await response.json();
+        if (!stopped) setBlindState(state);
       } catch {
         // On conserve le dernier état connu.
       }
     }
 
     void refreshState();
-
-    const intervalId = window.setInterval(
-      () => {
-        void refreshState();
-      },
-      250
-    );
+    const intervalId = window.setInterval(() => {
+      void refreshState();
+    }, 250);
 
     return () => {
       stopped = true;
@@ -91,74 +70,45 @@ const [isAboutEditorOpen, setIsAboutEditorOpen] = useState(false);
     };
   }, []);
 
-  useEffect(() => {
-  const savedAbout = localStorage.getItem("g3-live-about");
-
-  if (!savedAbout) {
-    return;
-  }
-
-  try {
-    setAboutMe(JSON.parse(savedAbout));
-  } catch {
-    console.error(
-      "Impossible de charger la fiche À propos de moi."
-    );
-  }
-}, []);
-
-useEffect(() => {
-  localStorage.setItem(
-    "g3-live-about",
-    JSON.stringify(aboutMe)
-  );
-}, [aboutMe]);
-
   async function sendAction(
-    action: "open" | "close" | "reset"
+    action:
+      | "open"
+      | "close"
+      | "reset"
+      | "correct"
+      | "wrong"
+      | "reset-scores"
   ) {
-    if (busy) {
-      return;
-    }
-
+    if (busy) return;
     setBusy(true);
 
     try {
-      const response = await fetch(
-        "/api/blind-test",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            action,
-          }),
-        }
-      );
+      const response = await fetch("/api/blind-test", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action }),
+      });
 
       const result = await response.json();
-
-      if (result.state) {
-        setBlindState(result.state);
-      }
+      if (result.state) setBlindState(result.state);
     } finally {
       setBusy(false);
     }
   }
 
+  const ranking = [...(blindState?.scores ?? [])].sort(
+    (a, b) => b.points - a.points || a.playerName.localeCompare(b.playerName)
+  );
+
   return (
     <div className="fixed inset-0 z-[90] flex items-center justify-center bg-black/90 p-6">
-      <div className="flex h-[90vh] w-full max-w-5xl flex-col overflow-hidden rounded-3xl border border-amber-800 bg-zinc-950 text-zinc-100">
+      <div className="flex h-[90vh] w-full max-w-6xl flex-col overflow-hidden rounded-3xl border border-amber-800 bg-zinc-950 text-zinc-100">
         <div className="flex shrink-0 items-center justify-between border-b border-zinc-800 p-6">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.3em] text-amber-400">
               G3 Live
             </p>
-
-            <h2 className="mt-1 text-3xl font-black">
-              🔔 Blind Test
-            </h2>
+            <h2 className="mt-1 text-3xl font-black">🔔 Blind Test</h2>
           </div>
 
           <button
@@ -170,160 +120,127 @@ useEffect(() => {
           </button>
         </div>
 
-        <div className="grid min-h-0 flex-1 gap-5 overflow-y-auto p-6 lg:grid-cols-[1.3fr_0.7fr]">
+        <div className="grid min-h-0 flex-1 gap-5 overflow-y-auto p-6 lg:grid-cols-[1.2fr_0.8fr]">
           <div className="flex min-h-0 flex-col rounded-2xl border border-zinc-800 bg-zinc-900/50 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-zinc-500">
-                  Manche
-                </p>
-
-                <p className="mt-1 text-3xl font-bold">
-                  {blindState?.roundId ?? "—"}
-                </p>
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-zinc-500">Manche</p>
+                <p className="mt-1 text-3xl font-bold">{blindState?.roundId ?? "—"}</p>
               </div>
-
               <div className="text-right">
-                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-zinc-500">
-                  État
-                </p>
-
-                <p
-                  className={`mt-1 text-xl font-bold ${
-                    blindState?.isOpen
-                      ? "text-emerald-300"
-                      : "text-zinc-500"
-                  }`}
-                >
-                  {blindState?.isOpen
-                    ? "BUZZERS OUVERTS"
-                    : "EN ATTENTE"}
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-zinc-500">État</p>
+                <p className={`mt-1 text-xl font-bold ${blindState?.isOpen ? "text-emerald-300" : "text-zinc-500"}`}>
+                  {blindState?.isOpen ? "BUZZERS OUVERTS" : "EN ATTENTE"}
                 </p>
               </div>
             </div>
 
-            <div className="mt-8 flex min-h-72 flex-1 items-center justify-center rounded-3xl border border-zinc-800 bg-zinc-950/60 p-8 text-center">
+            <div className="mt-8 flex min-h-64 flex-1 items-center justify-center rounded-3xl border border-zinc-800 bg-zinc-950/60 p-8 text-center">
               {blindState?.winner ? (
                 <div>
-                  <p className="text-7xl">
-                    🥇
-                  </p>
-
-                  <p className="mt-5 text-sm font-semibold uppercase tracking-[0.3em] text-amber-400">
-                    Premier buzz
-                  </p>
-
-                  <p className="mt-3 text-5xl font-black text-white">
-                    {blindState.winner.playerName}
-                  </p>
+                  <p className="text-7xl">🥇</p>
+                  <p className="mt-5 text-sm font-semibold uppercase tracking-[0.3em] text-amber-400">Premier buzz</p>
+                  <p className="mt-3 text-5xl font-black text-white">{blindState.winner.playerName}</p>
                 </div>
               ) : blindState?.isOpen ? (
                 <div>
-                  <p className="text-7xl">
-                    🔴
-                  </p>
-
-                  <p className="mt-5 text-3xl font-black text-emerald-300">
-                    Buzzers ouverts
-                  </p>
-
-                  <p className="mt-3 text-zinc-500">
-                    En attente du premier joueur…
-                  </p>
+                  <p className="text-7xl">🔴</p>
+                  <p className="mt-5 text-3xl font-black text-emerald-300">Buzzers ouverts</p>
+                  <p className="mt-3 text-zinc-500">En attente du premier joueur…</p>
                 </div>
               ) : (
                 <div>
-                  <p className="text-6xl">
-                    🔔
-                  </p>
-
-                  <p className="mt-5 text-3xl font-bold text-zinc-400">
-                    Manche prête
-                  </p>
-
-                  <p className="mt-3 text-zinc-600">
-                    Ouvre les buzzers quand tu es prêt.
-                  </p>
+                  <p className="text-6xl">🔔</p>
+                  <p className="mt-5 text-3xl font-bold text-zinc-400">Manche prête</p>
+                  <p className="mt-3 text-zinc-600">Ouvre les buzzers quand tu es prêt.</p>
                 </div>
               )}
             </div>
 
+            {blindState?.winner && (
+              <div className="mt-5 grid grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  onClick={() => void sendAction("correct")}
+                  disabled={busy}
+                  className="rounded-2xl bg-emerald-500 px-6 py-5 text-xl font-black text-zinc-950 disabled:opacity-40"
+                >
+                  ✅ Bonne réponse · +1
+                </button>
+                <button
+                  type="button"
+                  onClick={() => void sendAction("wrong")}
+                  disabled={busy}
+                  className="rounded-2xl bg-red-600 px-6 py-5 text-xl font-black text-white disabled:opacity-40"
+                >
+                  ❌ Mauvaise réponse
+                </button>
+              </div>
+            )}
+
             <div className="mt-5 grid grid-cols-2 gap-3">
-              <button
-                type="button"
-                onClick={() =>
-                  void sendAction("open")
-                }
-                disabled={busy}
-                className="rounded-2xl bg-emerald-500 px-6 py-5 text-xl font-black text-zinc-950 disabled:opacity-40"
-              >
+              <button type="button" onClick={() => void sendAction("open")} disabled={busy} className="rounded-2xl bg-emerald-500 px-6 py-5 text-xl font-black text-zinc-950 disabled:opacity-40">
                 🔴 Ouvrir les buzzers
               </button>
-
-              <button
-                type="button"
-                onClick={() =>
-                  void sendAction("close")
-                }
-                disabled={busy}
-                className="rounded-2xl border border-zinc-700 bg-zinc-900 px-6 py-5 text-xl font-bold disabled:opacity-40"
-              >
+              <button type="button" onClick={() => void sendAction("close")} disabled={busy} className="rounded-2xl border border-zinc-700 bg-zinc-900 px-6 py-5 text-xl font-bold disabled:opacity-40">
                 Fermer
               </button>
-
-              <button
-                type="button"
-                onClick={() =>
-                  void sendAction("open")
-                }
-                disabled={busy}
-                className="rounded-2xl border border-amber-700 bg-amber-950/30 px-6 py-5 text-lg font-bold text-amber-300 disabled:opacity-40"
-              >
+              <button type="button" onClick={() => void sendAction("open")} disabled={busy} className="rounded-2xl border border-amber-700 bg-amber-950/30 px-6 py-5 text-lg font-bold text-amber-300 disabled:opacity-40">
                 ↺ Réouvrir les buzzers
               </button>
-
-              <button
-                type="button"
-                onClick={() =>
-                  void sendAction("reset")
-                }
-                disabled={busy}
-                className="rounded-2xl border border-zinc-700 bg-zinc-900 px-6 py-5 text-lg font-semibold disabled:opacity-40"
-              >
+              <button type="button" onClick={() => void sendAction("reset")} disabled={busy} className="rounded-2xl border border-zinc-700 bg-zinc-900 px-6 py-5 text-lg font-semibold disabled:opacity-40">
                 Nouvelle manche
               </button>
             </div>
           </div>
 
-          <div className="rounded-2xl border border-zinc-800 bg-zinc-900/50 p-5">
-            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-zinc-500">
-              Ordre des buzz
-            </p>
-
-            <div className="mt-4 space-y-3">
-              {blindState?.buzzes &&
-              blindState.buzzes.length > 0 ? (
-                blindState.buzzes.map(
-                  (buzz, index) => (
-                    <div
-                      key={`${buzz.playerId}-${buzz.buzzedAt}`}
-                      className="flex items-center gap-3 rounded-xl border border-zinc-800 bg-zinc-950 px-4 py-3"
-                    >
-                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-amber-950/50 font-bold text-amber-300">
-                        {index + 1}
-                      </span>
-
-                      <p className="min-w-0 flex-1 truncate text-lg font-semibold">
-                        {buzz.playerName}
-                      </p>
+          <div className="grid min-h-0 gap-5 xl:grid-rows-2">
+            <div className="min-h-0 overflow-y-auto rounded-2xl border border-zinc-800 bg-zinc-900/50 p-5">
+              <p className="text-xs font-semibold uppercase tracking-[0.25em] text-zinc-500">Ordre des buzz</p>
+              <div className="mt-4 space-y-3">
+                {blindState?.buzzes && blindState.buzzes.length > 0 ? (
+                  blindState.buzzes.map((buzz, index) => (
+                    <div key={`${buzz.playerId}-${buzz.buzzedAt}`} className="flex items-center gap-3 rounded-xl border border-zinc-800 bg-zinc-950 px-4 py-3">
+                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-amber-950/50 font-bold text-amber-300">{index + 1}</span>
+                      <p className="min-w-0 flex-1 truncate text-lg font-semibold">{buzz.playerName}</p>
                     </div>
-                  )
-                )
-              ) : (
-                <p className="py-10 text-center text-zinc-600">
-                  Aucun buzz pour le moment.
-                </p>
-              )}
+                  ))
+                ) : (
+                  <p className="py-8 text-center text-zinc-600">Aucun buzz pour le moment.</p>
+                )}
+              </div>
+            </div>
+
+            <div className="min-h-0 overflow-y-auto rounded-2xl border border-amber-900/60 bg-zinc-900/50 p-5">
+              <div className="flex items-center justify-between gap-3">
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-amber-400">Classement</p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (window.confirm("Remettre tous les scores à zéro ?")) {
+                      void sendAction("reset-scores");
+                    }
+                  }}
+                  disabled={busy || ranking.length === 0}
+                  className="rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-xs font-semibold text-zinc-400 disabled:opacity-30"
+                >
+                  Remise à zéro
+                </button>
+              </div>
+
+              <div className="mt-4 space-y-2">
+                {ranking.length > 0 ? (
+                  ranking.map((player, index) => (
+                    <div key={player.playerId} className="flex items-center gap-3 rounded-xl border border-zinc-800 bg-zinc-950 px-4 py-3">
+                      <span className="w-8 text-center text-lg font-black text-amber-300">{index + 1}</span>
+                      <p className="min-w-0 flex-1 truncate font-semibold">{player.playerName}</p>
+                      <p className="text-xl font-black text-white">{player.points} <span className="text-xs font-semibold text-zinc-500">pt{player.points > 1 ? "s" : ""}</span></p>
+                    </div>
+                  ))
+                ) : (
+                  <p className="py-8 text-center text-zinc-600">Le classement apparaîtra dès le premier buzz.</p>
+                )}
+              </div>
             </div>
           </div>
         </div>
