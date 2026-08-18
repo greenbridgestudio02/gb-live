@@ -14,7 +14,12 @@ type PublicSong = {
   needsLyricsSync?: boolean;
 };
 
-type PublicMode = "home" | "song" | "message";
+type PublicMode =
+  | "home"
+  | "song"
+  | "message"
+  | "pause"
+  | "end";
 
 type LiveState = {
   mode: PublicMode;
@@ -265,7 +270,9 @@ export async function POST(
   if (
     body.mode === "home" ||
     body.mode === "song" ||
-    body.mode === "message"
+    body.mode === "message" ||
+    body.mode === "pause" ||
+    body.mode === "end"
   ) {
     mode = body.mode;
   }
@@ -295,13 +302,6 @@ export async function POST(
       ? body.message
       : currentState.message;
 
-  /*
-   * Horodatage spécifique aux messages.
-   *
-   * Il change uniquement lorsqu'un nouveau
-   * message public est réellement envoyé.
-   * L'avancement des paroles ne le modifie pas.
-   */
   let messageUpdatedAt =
     currentState.messageUpdatedAt;
 

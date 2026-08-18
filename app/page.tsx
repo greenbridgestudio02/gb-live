@@ -335,14 +335,11 @@ useEffect(() => {
 export default function Home() {
   const [setlistPosition, setSetlistPosition] = useState(0);
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
-  const [preparedSongIndex, setPreparedSongIndex] = useState<number | null>(null);
   const [isHomeMode, setIsHomeMode] = useState(true);
   const [isPublicMessageOpen, setIsPublicMessageOpen] = useState(false);
   const [publicMessage, setPublicMessage] = useState("");
 
   const [isPaused, setIsPaused] = useState(false);
-  const [isIntermission, setIsIntermission] = useState(false);
-  const [intermissionCount, setIntermissionCount] = useState(0);
 
   const [isSetlistOpen, setIsSetlistOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -350,8 +347,6 @@ export default function Home() {
   const [requestsLoaded, setRequestsLoaded] = useState(false);
   const [isSyncEditorOpen, setIsSyncEditorOpen] = useState(false);
 
-  const [isPreparingIntermissionSong, setIsPreparingIntermissionSong] =
-    useState(false);
   const [isAboutEditorOpen, setIsAboutEditorOpen] = useState(false);
   const [aboutMe, setAboutMe] = useState({
   name: "",
@@ -507,9 +502,6 @@ useEffect(() => {
   );
 }, [currentSong]);
 
-  const preparedSong =
-    preparedSongIndex !== null ? songs[preparedSongIndex] : null;
-
   function goToPreviousSong() {
   const previousPosition = Math.max(setlistPosition - 1, 0);
   const previousSongId = setlistSongIds[previousPosition];
@@ -545,7 +537,12 @@ function goToNextSong() {
 }
 
 async function sendPublicMode(
-  mode: "home" | "song" | "message",
+  mode:
+    | "home"
+    | "song"
+    | "message"
+    | "pause"
+    | "end",
   message = ""
 ) {
   try {
@@ -1191,8 +1188,10 @@ async function importLibrary() {
 </div>
 
           <button
-            type="button"
-            onClick={() => setIsPaused(true)}
+            onClick={() => {
+  setIsPaused(true);
+  void sendPublicMode("pause");
+}}
             className="rounded-xl bg-red-600 px-6 py-4 text-lg font-bold text-white transition hover:bg-red-500"
           >
             STOP
@@ -1312,13 +1311,8 @@ async function importLibrary() {
         return;
       }
 
-      if (isPreparingIntermissionSong) {
-        setPreparedSongIndex(libraryIndex);
-        setIsPreparingIntermissionSong(false);
-      } else {
-        setCurrentSongIndex(libraryIndex);
-        setSetlistPosition(setlistIndex);
-      }
+      setCurrentSongIndex(libraryIndex);
+      setSetlistPosition(setlistIndex);
     }}
     onMoveSong={(fromIndex, toIndex) => {
       setSetlistSongIds((currentSetlist) => {
@@ -1367,20 +1361,15 @@ onRemoveSong={(indexToRemove) => {
     setlistSongIds={setlistSongIds}
     requestedSongIds={requestedSongIds}
     onPlayNow={(index) => {
-      if (isPreparingIntermissionSong) {
-        setPreparedSongIndex(index);
-        setIsPreparingIntermissionSong(false);
-      } else {
-        setCurrentSongIndex(index);
+      setCurrentSongIndex(index);
 
-        const selectedSongId = songs[index]?.id;
-        const setlistIndex = selectedSongId
-          ? setlistSongIds.indexOf(selectedSongId)
-          : -1;
+      const selectedSongId = songs[index]?.id;
+      const setlistIndex = selectedSongId
+        ? setlistSongIds.indexOf(selectedSongId)
+        : -1;
 
-        if (setlistIndex !== -1) {
-          setSetlistPosition(setlistIndex);
-        }
+      if (setlistIndex !== -1) {
+        setSetlistPosition(setlistIndex);
       }
     }}
     onPlayNext={(songId) => {
@@ -1594,86 +1583,6 @@ onRemoveSong={(indexToRemove) => {
           Effacer l’écran public
         </button>
       </div>
-    </div>
-  </div>
-)}
-
-{isIntermission && (
-  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-6">
-    <div className="w-full max-w-3xl rounded-3xl border border-amber-800 bg-zinc-950 p-8">
-      <div className="text-center">
-        <p className="text-sm font-semibold uppercase tracking-[0.3em] text-amber-400">
-          Entracte {intermissionCount}
-        </p>
-
-        <h2 className="mt-4 text-4xl font-bold">
-          Spectacle en pause
-        </h2>
-
-        <p className="mt-4 text-zinc-400">
-          Le déroulement du spectacle est conservé.
-          Vous pouvez préparer librement la reprise.
-        </p>
-      </div>
-
-      <div className="mt-8 rounded-2xl border border-zinc-800 bg-zinc-900/60 p-6">
-        <p className="text-xs font-semibold uppercase tracking-[0.25em] text-zinc-500">
-          Morceau actuellement préparé
-        </p>
-
-        <p className="mt-2 text-2xl font-bold">
-          {preparedSong ? preparedSong.title : currentSong.title}
-        </p>
-
-        <p className="mt-2 text-sm text-zinc-500">
-          {preparedSong
-            ? "Ce morceau est préparé pour la reprise."
-            : "Aucun autre morceau n’a été préparé."}
-        </p>
-      </div>
-
-      <div className="mt-6 grid grid-cols-3 gap-4">
-        <button
-          type="button"
-          onClick={() => {
-            if (preparedSongIndex !== null) {
-              setCurrentSongIndex(preparedSongIndex);
-              setPreparedSongIndex(null);
-            }
-            setIsPreparingIntermissionSong(false);
-            setIsIntermission(false);
-          }}  
-          className="rounded-xl bg-emerald-500 px-6 py-5 text-lg font-bold text-zinc-950"
-        >
-          ▶ Reprendre le spectacle
-        </button>
-
-        <button
-          type="button"
-          onClick={() => {
-            setIsPreparingIntermissionSong(true);
-            setIsSetlistOpen(true);
-          }}
-          className="rounded-xl border border-zinc-700 bg-zinc-900 px-6 py-5 text-lg font-semibold"
-        >
-          Choisir le morceau de reprise
-        </button>
-
-        <button
-          type="button"
-          onClick={() => {
-            setIsPreparingIntermissionSong(true);
-            setIsSearchOpen(true);
-          }}
-          className="rounded-xl border border-zinc-700 bg-zinc-900 px-6 py-5 text-lg font-semibold"
-        >
-          Bibliothèque
-        </button>
-      </div>
-
-      <p className="mt-6 text-center text-sm text-zinc-500">
-        Les demandes du public pourront continuer à être reçues pendant l’entracte.
-      </p>
     </div>
   </div>
 )}
@@ -1970,7 +1879,10 @@ onRemoveSong={(indexToRemove) => {
       <div className="mt-8 grid grid-cols-2 gap-4">
         <button
           type="button"
-          onClick={() => setIsPaused(false)}
+          onClick={() => {
+  setIsPaused(false);
+  void sendPublicMode("song");
+}}
           className="rounded-xl bg-emerald-500 px-6 py-5 text-lg font-bold text-zinc-950"
         >
           ▶ Reprendre
@@ -1980,6 +1892,7 @@ onRemoveSong={(indexToRemove) => {
           type="button"
           onClick={() => {
             setIsPaused(false);
+            void sendPublicMode("song");
           }}
           className="rounded-xl border border-zinc-700 bg-zinc-950 px-6 py-5 text-lg font-semibold"
         >
@@ -2001,12 +1914,11 @@ onRemoveSong={(indexToRemove) => {
           type="button"
           onClick={() => {
             setIsPaused(false);
-            setIsIntermission(true);
-            setIntermissionCount((count) => count + 1);
+            void sendPublicMode("end");
           }}
-          className="rounded-xl border border-amber-700 bg-amber-950/40 px-6 py-5 text-lg font-semibold text-amber-300"
+          className="rounded-xl border border-red-700 bg-red-950/40 px-6 py-5 text-lg font-semibold text-red-300"
         >
-          Entracte
+          🏁 Terminer le spectacle
         </button>
       </div>
 

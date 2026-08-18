@@ -16,7 +16,12 @@ type PublicSong = {
   needsLyricsSync?: boolean;
 };
 
-type PublicMode = "home" | "song" | "message";
+type PublicMode =
+  | "home"
+  | "song"
+  | "message"
+  | "pause"
+  | "end";
 
 type LocalView =
   | "home"
@@ -555,9 +560,55 @@ useEffect(() => {
           </div>
         )}
 
+        {liveState.mode === "pause" && (
+          <div className="w-full max-w-2xl text-center">
+            <p className="text-xs font-semibold uppercase tracking-[0.4em] text-red-400">
+              G3 Live
+            </p>
+
+            <div className="mt-8">
+              <p className="text-6xl">⏸️</p>
+
+              <h1 className="mt-6 text-5xl font-black">
+                Spectacle en pause
+              </h1>
+
+              <p className="mt-5 text-xl text-zinc-500">
+                On reprend dans un instant.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {liveState.mode === "end" && (
+          <div className="w-full max-w-2xl text-center">
+            <p className="text-xs font-semibold uppercase tracking-[0.4em] text-emerald-400">
+              G3 Live
+            </p>
+
+            <div className="mt-8">
+              <p className="text-6xl">❤️</p>
+
+              <h1 className="mt-6 text-5xl font-black">
+                Merci !
+              </h1>
+
+              <p className="mt-5 text-2xl text-zinc-300">
+                Merci d’avoir partagé ce moment avec nous.
+              </p>
+
+              <p className="mt-4 text-xl text-zinc-500">
+                À très bientôt 🎹🎶
+              </p>
+            </div>
+          </div>
+        )}
+
         {(
-  liveState.mode !== "message" ||
-  dismissedMessageUpdatedAt === liveState.messageUpdatedAt
+  (liveState.mode !== "message" ||
+    dismissedMessageUpdatedAt === liveState.messageUpdatedAt) &&
+  liveState.mode !== "pause" &&
+  liveState.mode !== "end"
 ) &&
   localView === "home" && (
             <div className="w-full max-w-xl text-center">
@@ -635,11 +686,15 @@ useEffect(() => {
           )}
 
         {liveState.mode !== "message" &&
+  liveState.mode !== "pause" &&
+  liveState.mode !== "end" &&
   localView === "blind-test" && (
     <BlindTestPanel />
   )}
 
         {liveState.mode !== "message" &&
+  liveState.mode !== "pause" &&
+  liveState.mode !== "end" &&
   localView === "about" && (
     <div className="h-full w-full max-w-2xl overflow-y-auto overscroll-contain px-2 pb-10 text-center">
       <p className="pt-2 text-xs font-semibold uppercase tracking-[0.35em] text-emerald-400">
@@ -716,75 +771,117 @@ useEffect(() => {
   )}
 
         {liveState.mode !== "message" &&
-          localView === "lyrics" && (
-            <>
-              {liveState.mode !== "song" ||
-              !currentSong ? (
-                <div className="text-center">
-                  <p className="text-4xl font-bold text-zinc-700">
-                    G3 Live
-                  </p>
+  liveState.mode !== "pause" &&
+  liveState.mode !== "end" &&
+  localView === "lyrics" && (
+    <>
+      {liveState.mode !== "song" ||
+      !currentSong ? (
+        <div className="text-center">
+          <p className="text-4xl font-bold text-zinc-700">
+            G3 Live
+          </p>
 
-                  <p className="mt-4 text-lg text-zinc-600">
-                    Aucun morceau en cours
-                  </p>
-                </div>
-              ) : currentSong.kind ===
-                "instrumental" ? (
-                <div className="text-center">
-                  <p className="text-xs font-semibold uppercase tracking-[0.4em] text-emerald-400">
-                    Instrumental
-                  </p>
+          <p className="mt-4 text-lg text-zinc-600">
+            Aucun morceau en cours
+          </p>
+        </div>
+      ) : currentSong.kind === "instrumental" ? (
+        <div className="text-center">
+          <p className="text-xs font-semibold uppercase tracking-[0.4em] text-emerald-400">
+            Instrumental
+          </p>
 
-                  <h1 className="mt-5 text-5xl font-bold">
-                    {currentSong.title}
-                  </h1>
+          <h1 className="mt-5 text-5xl font-bold">
+            {currentSong.title}
+          </h1>
 
-                  <p className="mt-8 text-5xl">
-                    🎹
-                  </p>
-                </div>
-              ) : currentSong.needsLyricsSync ||
-                lyricLines.length === 0 ? (
-                <div className="text-center">
-                  <h1 className="text-4xl font-bold">
-                    {currentSong.title}
-                  </h1>
+          <p className="mt-8 text-5xl">
+            🎹
+          </p>
+        </div>
+      ) : currentSong.needsLyricsSync ||
+        lyricLines.length === 0 ? (
+        <div className="text-center">
+          <h1 className="text-4xl font-bold">
+            {currentSong.title}
+          </h1>
 
-                  <p className="mt-5 text-zinc-600">
-                    Paroles indisponibles pour le moment
-                  </p>
-                </div>
-              ) : (
-                <div className="w-full max-w-5xl text-center">
-                  <p className="mb-8 text-sm font-semibold uppercase tracking-[0.3em] text-zinc-700">
-                    {currentSong.title}
-                  </p>
+          <p className="mt-5 text-zinc-600">
+            Paroles indisponibles pour le moment
+          </p>
+        </div>
+      ) : (
+        <div className="h-full w-full max-w-4xl overflow-hidden px-4">
+          <div className="flex h-full flex-col">
 
-                  <div className="flex min-h-36 items-center justify-center">
-                    {currentLine && (
-                      <p className="text-5xl font-black leading-tight sm:text-7xl">
-                        {currentLine.text}
-                      </p>
-                    )}
+            {/* TITRE DU MORCEAU */}
+            <div className="shrink-0 pb-4 text-center">
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-zinc-600">
+                {currentSong.title}
+              </p>
+            </div>
+
+            {/* PROMPTEUR */}
+            <div className="flex min-h-0 flex-1 flex-col justify-center overflow-hidden">
+              {lyricLines.map((line, index) => {
+                const distance =
+                  index - currentLineIndex;
+
+                /*
+                 * 2 lignes déjà chantées
+                 * ligne actuelle
+                 * 4 lignes à venir
+                 */
+                if (
+                  distance < -2 ||
+                  distance > 4
+                ) {
+                  return null;
+                }
+
+                const isCurrent =
+                  distance === 0;
+
+                const isPast =
+                  distance < 0;
+
+                return (
+                  <div
+                    key={`${line.time}-${index}`}
+                    className={`py-2 text-center text-2xl font-semibold leading-snug sm:text-3xl ${
+  isCurrent
+    ? "text-emerald-300"
+    : isPast
+      ? "text-zinc-700"
+      : "text-zinc-400"
+}`}
+                  >
+                    {line.text}
                   </div>
+                );
+              })}
+            </div>
 
-                  <div className="mt-10 flex min-h-20 items-center justify-center">
-                    {nextLine && (
-                      <p className="text-2xl font-medium text-zinc-600 sm:text-3xl">
-                        {nextLine.text}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              )}
-            </>
-          )}
-      </section>
+            {/* INDICATION BAS DE PAGE */}
+            <div className="shrink-0 pt-3 text-center">
+              <p className="text-xs text-zinc-700">
+                Paroles synchronisées • mode prompteur
+              </p>
+            </div>
 
-      <footer className="shrink-0 border-t border-zinc-900 px-5 py-3 text-center text-xs text-zinc-700">
-        G3 Live • by Green Bridge Studio
-      </footer>
-    </main>
-  );
+          </div>
+        </div>
+      )}
+    </>
+  )}
+
+</section>
+
+<footer className="shrink-0 border-t border-zinc-900 px-5 py-3 text-center text-xs text-zinc-700">
+  G3 Live • by Green Bridge Studio
+</footer>
+
+</main>
+);
 }
