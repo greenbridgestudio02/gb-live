@@ -56,8 +56,8 @@ export default function SongList({
   }
 
   return (
-    <div className="fixed inset-0 z-[60] flex bg-black/70">
-      <aside className="flex h-full w-full max-w-lg flex-col border-r border-zinc-700 bg-zinc-950 shadow-2xl">
+    <div className="fixed inset-0 z-[60] bg-zinc-950">
+  <div className="flex h-full w-full flex-col bg-zinc-950">
         <div className="flex items-center justify-between border-b border-zinc-800 p-5">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-400">
@@ -203,14 +203,7 @@ export default function SongList({
             Fermer
           </button>
         </div>
-      </aside>
-
-      <button
-        type="button"
-        onClick={onClose}
-        className="flex-1"
-        aria-label="Fermer la setlist"
-      />
+            </div>
     </div>
   );
 }

@@ -1,0 +1,1363 @@
+{
+  "songs": [
+    {
+      "id": "mon-amour",
+      "title": "Mistral Gagnant - Renaud",
+      "duration": "00:00",
+      "description": "Morceau chanté",
+      "stageNotes": "",
+      "nextAction": "Préparer la transition vers « Entre deux rives ».",
+      "lyrics": "A m’asseoir sur un banc\n\nCinq minutes avec toi\n\nEt regarder les gens\n\nTant qu'y en a\n\nTe parler du bon temps\n\nQu'est mort ou qui r'viendra\n\nEn serrant dans ma main\n\nTes p'tits doigts\n\nPis donner à bouffer\n\nA des pigeons idiots\n\nLeur filer des coups d'pied\n\nPour de faux\n\nEt entendre ton rire\n\nQui lézarde les murs\n\nQui sait surtout guérir\n\nMes blessures\n\nTe raconter un peu\n\nComment j'étais mino\n\nLes bombecs fabuleux\n\nQu'on piquait chez l'marchand\n\nCar-en-sac et minthos\n\nCaramels à un franc\n\nEt les mistral gagnants\n\nAh marcher sous la pluie\n\nCinq minutes avec toi\n\nEt regarder la vie\n\nTant qu'y en a\n\nTe raconter la Terre\n\nEn te bouffant des yeux\n\nTe parler de ta mère\n\nUn p'tit peu\n\nEt sauter dans les flaques\n\nPour la faire râler\n\nBousiller nos godasses\n\nEt s'marrer\n\nEt entendre ton rire\n\nComme on entend la mer\n\nS'arrêter repartir\n\nEn arrière\n\nTe raconter surtout\n\nLes carambars d'antan\n\nEt et les coco-boërs\n\nEt les vrais roudoudous\n\nQui nous coupaient les lèvres\n\nEt nous niquaient les dents\n\nEt les mistral gagnants\n\nA m’asseoir sur un banc\n\nCinq minutes avec toi\n\nRegarder le soleil\n\nQui s'en va\n\nTe parler du bon temps\n\nQu'est mort et je m'en fous\n\nTe dire que les méchants\n\nC'est pas nous\n\nQue si moi je suis barge\n\nCe n'est que de tes yeux\n\nCar ils ont l'avantage\n\nD'être deux\n\nEt entendre ton rire\n\nS'envoler aussi haut\n\nQue s'envolent les cris\n\nDes oiseaux\n\nTe raconter enfin\n\nQu'il faut aimer la vie\n\nEt l'aimer même si\n\nLe temps est assassin\n\nEt emporte avec lui\n\nLes rires des enfants\n\nEt les mistral gagnants\n\nEt les mistral gagnants",
+      "lyricLines": [
+        {
+          "text": "A m’asseoir sur un banc",
+          "time": 13.68
+        },
+        {
+          "text": "Cinq minutes avec toi",
+          "time": 15.02
+        },
+        {
+          "text": "Et regarder les gens",
+          "time": 16.39
+        },
+        {
+          "text": "Tant qu'y en a",
+          "time": 17.64
+        },
+        {
+          "text": "Te parler du bon temps",
+          "time": 20.11
+        },
+        {
+          "text": "Qu'est mort ou qui r'viendra",
+          "time": 21.31
+        },
+        {
+          "text": "En serrant dans ma main",
+          "time": 22.75
+        },
+        {
+          "text": "Tes p'tits doigts",
+          "time": 23.95
+        },
+        {
+          "text": "Pis donner à bouffer",
+          "time": 26.29
+        },
+        {
+          "text": "A des pigeons idiots",
+          "time": 27.62
+        },
+        {
+          "text": "Leur filer des coups d'pied",
+          "time": 29.08
+        },
+        {
+          "text": "Pour de faux",
+          "time": 30.22
+        },
+        {
+          "text": "Et entendre ton rire",
+          "time": 32.56
+        },
+        {
+          "text": "Qui lézarde les murs",
+          "time": 33.94
+        },
+        {
+          "text": "Qui sait surtout guérir",
+          "time": 35.39
+        },
+        {
+          "text": "Mes blessures",
+          "time": 36.61
+        },
+        {
+          "text": "Te raconter un peu",
+          "time": 39.01
+        },
+        {
+          "text": "Comment j'étais mino",
+          "time": 40.38
+        },
+        {
+          "text": "Les bombecs fabuleux",
+          "time": 41.78
+        },
+        {
+          "text": "Qu'on piquait chez l'marchand",
+          "time": 44.52
+        },
+        {
+          "text": "Car-en-sac et minthos",
+          "time": 45.97
+        },
+        {
+          "text": "Caramels à un franc",
+          "time": 47.5
+        },
+        {
+          "text": "Et les mistral gagnants",
+          "time": 50.38
+        },
+        {
+          "text": "Ah marcher sous la pluie",
+          "time": 54.91
+        },
+        {
+          "text": "Cinq minutes avec toi",
+          "time": 56.32
+        },
+        {
+          "text": "Et regarder la vie",
+          "time": 57.83
+        },
+        {
+          "text": "Tant qu'y en a",
+          "time": 58.87
+        },
+        {
+          "text": "Te raconter la Terre",
+          "time": 61.21
+        },
+        {
+          "text": "En te bouffant des yeux",
+          "time": 62.58
+        },
+        {
+          "text": "Te parler de ta mère",
+          "time": 63.97
+        },
+        {
+          "text": "Un p'tit peu",
+          "time": 65.16
+        },
+        {
+          "text": "Et sauter dans les flaques",
+          "time": 67.51
+        },
+        {
+          "text": "Pour la faire râler",
+          "time": 68.89
+        },
+        {
+          "text": "Bousiller nos godasses",
+          "time": 70.35
+        },
+        {
+          "text": "Et s'marrer",
+          "time": 71.5
+        },
+        {
+          "text": "Et entendre ton rire",
+          "time": 73.82
+        },
+        {
+          "text": "Comme on entend la mer",
+          "time": 75.21
+        },
+        {
+          "text": "S'arrêter repartir",
+          "time": 76.57
+        },
+        {
+          "text": "En arrière",
+          "time": 78.06
+        },
+        {
+          "text": "Te raconter surtout",
+          "time": 80.14
+        },
+        {
+          "text": "Les carambars d'antan",
+          "time": 81.59
+        },
+        {
+          "text": "Et et les coco-boërs",
+          "time": 82.99
+        },
+        {
+          "text": "Et les vrais roudoudous",
+          "time": 85.87
+        },
+        {
+          "text": "Qui nous coupaient les lèvres",
+          "time": 87.16
+        },
+        {
+          "text": "Et nous niquaient les dents",
+          "time": 88.57
+        },
+        {
+          "text": "Et les mistral gagnants",
+          "time": 91.56
+        },
+        {
+          "text": "A m’asseoir sur un banc",
+          "time": 108.41
+        },
+        {
+          "text": "Cinq minutes avec toi",
+          "time": 109.76
+        },
+        {
+          "text": "Regarder le soleil",
+          "time": 111.27
+        },
+        {
+          "text": "Qui s'en va",
+          "time": 112.45
+        },
+        {
+          "text": "Te parler du bon temps",
+          "time": 114.71
+        },
+        {
+          "text": "Qu'est mort et je m'en fous",
+          "time": 116.06
+        },
+        {
+          "text": "Te dire que les méchants",
+          "time": 117.57
+        },
+        {
+          "text": "C'est pas nous",
+          "time": 118.77
+        },
+        {
+          "text": "Que si moi je suis barge",
+          "time": 121.06
+        },
+        {
+          "text": "Ce n'est que de tes yeux",
+          "time": 122.52
+        },
+        {
+          "text": "Car ils ont l'avantage",
+          "time": 123.89
+        },
+        {
+          "text": "D'être deux",
+          "time": 125.11
+        },
+        {
+          "text": "Et entendre ton rire",
+          "time": 127.41
+        },
+        {
+          "text": "S'envoler aussi haut",
+          "time": 128.76
+        },
+        {
+          "text": "Que s'envolent les cris",
+          "time": 129.84
+        },
+        {
+          "text": "Des oiseaux",
+          "time": 131.42
+        },
+        {
+          "text": "Te raconter enfin",
+          "time": 133.78
+        },
+        {
+          "text": "Qu'il faut aimer la vie",
+          "time": 135.05
+        },
+        {
+          "text": "Et l'aimer même si",
+          "time": 136.51
+        },
+        {
+          "text": "Le temps est assassin",
+          "time": 139.21
+        },
+        {
+          "text": "Et emporte avec lui",
+          "time": 140.62
+        },
+        {
+          "text": "Les rires des enfants",
+          "time": 142.04
+        },
+        {
+          "text": "Et les mistral gagnants",
+          "time": 144.96
+        },
+        {
+          "text": "Et les mistral gagnants",
+          "time": 148.13
+        }
+      ],
+      "needsLyricsSync": false,
+      "kind": "vocal"
+    },
+    {
+      "id": "entre-deux-rives",
+      "title": "Mon Amour - Slimane",
+      "duration": "00:00",
+      "description": "Morceau chanté",
+      "stageNotes": "",
+      "nextAction": "Préparer le morceau « Le pont ».",
+      "lyrics": "Mon amour\n\nDis-moi à quoi tu penses\n\nSi tout ça a un sens\n\nDésolé si j'te dérange\n\nMon amour\n\nTe souviens-tu de nous ?\n\nDu premier rendez-vous ?\n\nC'était beau, c'était fou\n\nJe t'aime, j'sais pas pourquoi\n\nJ'rejoue la scène\n\nMais c'est toujours la même fin qui recommence\n\nTu n'entends pas\n\nMa peine, on en fait quoi ?\n\nEst-ce que tu m'aimes, ou pas ?\n\nMon amour\n\nJe ferai tout c'que je peux\n\nUn océan dans le feu\n\nL'impossible si tu le veux\n\nOh, mon amour\n\nAllez, rеviens à Paris\n\nFais-le pour nous, j't'en suppliе\n\nJe le promets, j'ai compris\n\nJe t’aime\n\nJ’sais pas pourquoi\n\nJe rejoue la scène\n\nEt c’est toujours la même fin qui recommence\n\nTu n’entends pas ma peine\n\nOn en fait quoi ?\n\nEst-ce que tu m’aimes ?\n\nOu pas ?\n\nDis-moi l'endroit, je t'attendrai\n\nEt si tu n'viens pas, je t'attendrai\n\nC'est bête je sais, je le ferai\n\nRempli d'espoir, je t'attendrai\n\nJe t’aime\n\nJ’sais pas pourquoi\n\nJe rejoue la scène\n\nEt c’est toujours la même fin qui recommence\n\nTu n’entends pas ma peine\n\nOn en fait quoi ?\n\nEst-ce que tu m’aimes ?\n\nEst-ce que tu m’aimes ?\n\nEst-ce que tu m’aimes ?\n\nEst-ce que tu m’aimes ?\n\nOu pas ?",
+      "kind": "vocal",
+      "bpm": 120,
+      "lyricLines": [
+        {
+          "text": "Mon amour",
+          "time": 0.24
+        },
+        {
+          "text": "Dis-moi à quoi tu penses",
+          "time": 2.43
+        },
+        {
+          "text": "Si tout ça a un sens",
+          "time": 5.75
+        },
+        {
+          "text": "Désolé si j'te dérange",
+          "time": 8.95
+        },
+        {
+          "text": "Mon amour",
+          "time": 13.35
+        },
+        {
+          "text": "Te souviens-tu de nous ?",
+          "time": 15.86
+        },
+        {
+          "text": "Du premier rendez-vous ?",
+          "time": 19.32
+        },
+        {
+          "text": "C'était beau, c'était fou",
+          "time": 22.67
+        },
+        {
+          "text": "Je t'aime, j'sais pas pourquoi",
+          "time": 27.19
+        },
+        {
+          "text": "J'rejoue la scène",
+          "time": 32.98
+        },
+        {
+          "text": "Mais c'est toujours la même fin qui recommence",
+          "time": 36.71
+        },
+        {
+          "text": "Tu n'entends pas",
+          "time": 39.31
+        },
+        {
+          "text": "Ma peine, on en fait quoi ?",
+          "time": 40.42
+        },
+        {
+          "text": "Est-ce que tu m'aimes, ou pas ?",
+          "time": 46.52
+        },
+        {
+          "text": "Mon amour",
+          "time": 53.92
+        },
+        {
+          "text": "Je ferai tout c'que je peux",
+          "time": 56.27
+        },
+        {
+          "text": "Un océan dans le feu",
+          "time": 59.63
+        },
+        {
+          "text": "L'impossible si tu le veux",
+          "time": 63
+        },
+        {
+          "text": "Oh, mon amour",
+          "time": 66.64
+        },
+        {
+          "text": "Allez, rеviens à Paris",
+          "time": 69.76
+        },
+        {
+          "text": "Fais-le pour nous, j't'en suppliе",
+          "time": 73.14
+        },
+        {
+          "text": "Je le promets, j'ai compris",
+          "time": 76.47
+        },
+        {
+          "text": "Je t’aime",
+          "time": 81.09
+        },
+        {
+          "text": "J’sais pas pourquoi",
+          "time": 83.67
+        },
+        {
+          "text": "Je rejoue la scène",
+          "time": 86.96
+        },
+        {
+          "text": "Et c’est toujours la même fin qui recommence",
+          "time": 90.88
+        },
+        {
+          "text": "Tu n’entends pas ma peine",
+          "time": 94.51
+        },
+        {
+          "text": "On en fait quoi ?",
+          "time": 97.2
+        },
+        {
+          "text": "Est-ce que tu m’aimes ?",
+          "time": 100.61
+        },
+        {
+          "text": "Ou pas ?",
+          "time": 104.83
+        },
+        {
+          "text": "Dis-moi l'endroit, je t'attendrai",
+          "time": 108.36
+        },
+        {
+          "text": "Et si tu n'viens pas, je t'attendrai",
+          "time": 114.88
+        },
+        {
+          "text": "C'est bête je sais, je le ferai",
+          "time": 121.83
+        },
+        {
+          "text": "Rempli d'espoir, je t'attendrai",
+          "time": 128.63
+        },
+        {
+          "text": "Je t’aime",
+          "time": 135.22
+        },
+        {
+          "text": "J’sais pas pourquoi",
+          "time": 137.72
+        },
+        {
+          "text": "Je rejoue la scène",
+          "time": 141.14
+        },
+        {
+          "text": "Et c’est toujours la même fin qui recommence",
+          "time": 144.98
+        },
+        {
+          "text": "Tu n’entends pas ma peine",
+          "time": 148.58
+        },
+        {
+          "text": "On en fait quoi ?",
+          "time": 151.07
+        },
+        {
+          "text": "Est-ce que tu m’aimes ?",
+          "time": 154.69
+        },
+        {
+          "text": "Est-ce que tu m’aimes ?",
+          "time": 161.53
+        },
+        {
+          "text": "Est-ce que tu m’aimes ?",
+          "time": 164.64
+        },
+        {
+          "text": "Est-ce que tu m’aimes ?",
+          "time": 168.2
+        },
+        {
+          "text": "Ou pas ?",
+          "time": 172.22
+        }
+      ],
+      "needsLyricsSync": false
+    },
+    {
+      "id": "le-pont",
+      "title": "M'man -Eddie Mitchel",
+      "duration": "04:40",
+      "description": "Morceau emblématique du spectacle",
+      "stageNotes": "Accentuer progressivement la dynamique.",
+      "nextAction": "Préparer le final du spectacle.",
+      "lyrics": "M'man\n\nJ'viens tout juste d'avoir mes 14 ans\n\nJ'veux plus d'école, j'suis devenu grand\n\nJ'te promets j'te gagnerai plein d'argent\n\nM'man\n\nJ'viens d'fumer ma tout première Week-End\n\nSur les fortif' où t'aimes pas qu'j'traîne\n\nj'me serais tué plutôt que d'refuser\n\nY a pas qu'les mères qui font les enfants\n\nLa zone, la rue coulent dans mon sang\n\nM'man, j'aimerais chanter tout ce que resentent les autres\n\nTa vie, la nôtre\n\nM'en veux pas, mais maintenant j'ai choisi\n\nM'man\n\nLes tours c'est pas toujours des guettos\n\nJ'ai pas d'passion pour les oiseaux\n\nMais comme eux j'aimerais voir ça d'en haut\n\nM'man\n\nJ'comprends mieux le regard des passants\n\nJ'vois pas comme eux, j'pense tout en grand\n\nEn couleur et sur un écran blanc\n\nY a pas qu'les mères qui font les enfants\n\nLa zone, la rue coulent dans mon sang\n\nTu sais, j'sais pas grand chose sur les choses de l'amour\n\nMais j'me doute toujours\n\nC'est pas moi, c'est pas moi qui choisis\n\nM'man, J'viens tout juste d'avoir 14 ans\n\nJ'veux plus d'école, j'suis devenu grand\n\nhey, regarde, ohh,  j'suis devenu grand\n\nooooooooh M'man\n\nJ'te promets je gagnerai plein d'argent\n\noh, j'suis devenu grand\n\nhey, M'man, je suis devenu grand M'man\n\nM'man, M'man",
+      "lyricLines": [
+        {
+          "text": "M'man",
+          "time": 0
+        },
+        {
+          "text": "J'viens tout juste d'avoir mes 14 ans",
+          "time": 0
+        },
+        {
+          "text": "J'veux plus d'école, j'suis devenu grand",
+          "time": 0
+        },
+        {
+          "text": "J'te promets j'te gagnerai plein d'argent",
+          "time": 0
+        },
+        {
+          "text": "M'man",
+          "time": 0
+        },
+        {
+          "text": "J'viens d'fumer ma tout première Week-End",
+          "time": 0
+        },
+        {
+          "text": "Sur les fortif' où t'aimes pas qu'j'traîne",
+          "time": 0
+        },
+        {
+          "text": "j'me serais tué plutôt que d'refuser",
+          "time": 0
+        },
+        {
+          "text": "Y a pas qu'les mères qui font les enfants",
+          "time": 0
+        },
+        {
+          "text": "La zone, la rue coulent dans mon sang",
+          "time": 0
+        },
+        {
+          "text": "M'man, j'aimerais chanter tout ce que resentent les autres",
+          "time": 0
+        },
+        {
+          "text": "Ta vie, la nôtre",
+          "time": 0
+        },
+        {
+          "text": "M'en veux pas, mais maintenant j'ai choisi",
+          "time": 0
+        },
+        {
+          "text": "M'man",
+          "time": 0
+        },
+        {
+          "text": "Les tours c'est pas toujours des guettos",
+          "time": 0
+        },
+        {
+          "text": "J'ai pas d'passion pour les oiseaux",
+          "time": 0
+        },
+        {
+          "text": "Mais comme eux j'aimerais voir ça d'en haut",
+          "time": 0
+        },
+        {
+          "text": "M'man",
+          "time": 0
+        },
+        {
+          "text": "J'comprends mieux le regard des passants",
+          "time": 0
+        },
+        {
+          "text": "J'vois pas comme eux, j'pense tout en grand",
+          "time": 0
+        },
+        {
+          "text": "En couleur et sur un écran blanc",
+          "time": 0
+        },
+        {
+          "text": "Y a pas qu'les mères qui font les enfants",
+          "time": 0
+        },
+        {
+          "text": "La zone, la rue coulent dans mon sang",
+          "time": 0
+        },
+        {
+          "text": "Tu sais, j'sais pas grand chose sur les choses de l'amour",
+          "time": 0
+        },
+        {
+          "text": "Mais j'me doute toujours",
+          "time": 0
+        },
+        {
+          "text": "C'est pas moi, c'est pas moi qui choisis",
+          "time": 0
+        },
+        {
+          "text": "M'man, J'viens tout juste d'avoir 14 ans",
+          "time": 0
+        },
+        {
+          "text": "J'veux plus d'école, j'suis devenu grand",
+          "time": 0
+        },
+        {
+          "text": "hey, regarde, ohh,  j'suis devenu grand",
+          "time": 0
+        },
+        {
+          "text": "ooooooooh M'man",
+          "time": 0
+        },
+        {
+          "text": "J'te promets je gagnerai plein d'argent",
+          "time": 0
+        },
+        {
+          "text": "oh, j'suis devenu grand",
+          "time": 0
+        },
+        {
+          "text": "hey, M'man, je suis devenu grand M'man",
+          "time": 0
+        },
+        {
+          "text": "M'man, M'man",
+          "time": 0
+        }
+      ],
+      "needsLyricsSync": true,
+      "kind": "vocal"
+    },
+    {
+      "id": "final",
+      "title": "Aline - Christophe",
+      "duration": "00:00",
+      "description": "Morceau chanté",
+      "stageNotes": "",
+      "nextAction": "Fin du spectacle.",
+      "lyrics": "J'avais dessiné sur le sable\n\nSon doux visage qui me souriait\n\nPuis il a plu sur cette plage\n\nDans cet orage, elle a disparu\n\nEt j'ai crié, crié, Aline, pour qu'elle revienne\n\nEt j'ai pleuré, pleuré, oh! j'avais trop de peine\n\nJe me suis assis aurès de son âme\n\nMais la belle dame s'était enfuie\n\nJe l'ai cherchée sans plus y croire\n\nEt sans un espoir, pour me guider\n\nEt j'ai crié, crié, Aline, pour qu'elle revienne\n\nEt j'ai pleuré, pleuré, oh! j'avais trop de peine\n\nJe n'ai gardé que ce doux visage\n\nComme une épave sur le sable mouillé\n\nEt j'ai crié, crié, Aline, pour qu'elle revienne\n\nEt j'ai pleuré, pleuré, oh! j'avais trop de peine\n\nEt j'ai crié, crié, Aline, pour qu'elle revienne\n\nEt j'ai pleuré, pleuré, oh! j'avais trop de peine",
+      "kind": "vocal",
+      "lyricLines": [
+        {
+          "text": "J'avais dessiné sur le sable",
+          "time": 0
+        },
+        {
+          "text": "Son doux visage qui me souriait",
+          "time": 0
+        },
+        {
+          "text": "Puis il a plu sur cette plage",
+          "time": 0
+        },
+        {
+          "text": "Dans cet orage, elle a disparu",
+          "time": 0
+        },
+        {
+          "text": "Et j'ai crié, crié, Aline, pour qu'elle revienne",
+          "time": 0
+        },
+        {
+          "text": "Et j'ai pleuré, pleuré, oh! j'avais trop de peine",
+          "time": 0
+        },
+        {
+          "text": "Je me suis assis aurès de son âme",
+          "time": 0
+        },
+        {
+          "text": "Mais la belle dame s'était enfuie",
+          "time": 0
+        },
+        {
+          "text": "Je l'ai cherchée sans plus y croire",
+          "time": 0
+        },
+        {
+          "text": "Et sans un espoir, pour me guider",
+          "time": 0
+        },
+        {
+          "text": "Et j'ai crié, crié, Aline, pour qu'elle revienne",
+          "time": 0
+        },
+        {
+          "text": "Et j'ai pleuré, pleuré, oh! j'avais trop de peine",
+          "time": 0
+        },
+        {
+          "text": "Je n'ai gardé que ce doux visage",
+          "time": 0
+        },
+        {
+          "text": "Comme une épave sur le sable mouillé",
+          "time": 0
+        },
+        {
+          "text": "Et j'ai crié, crié, Aline, pour qu'elle revienne",
+          "time": 0
+        },
+        {
+          "text": "Et j'ai pleuré, pleuré, oh! j'avais trop de peine",
+          "time": 0
+        },
+        {
+          "text": "Et j'ai crié, crié, Aline, pour qu'elle revienne",
+          "time": 0
+        },
+        {
+          "text": "Et j'ai pleuré, pleuré, oh! j'avais trop de peine",
+          "time": 0
+        }
+      ],
+      "needsLyricsSync": true
+    },
+    {
+      "id": "test-creation-morceau",
+      "title": "Là-bas - J.J Goldman",
+      "duration": "00:00",
+      "description": "Morceau chanté",
+      "stageNotes": "",
+      "nextAction": "",
+      "lyrics": "Là-bas\n\nTout est neuf et tout est sauvage\n\nLibre continent sans grillage\n\nIci, nos rêves sont étroits\n\nC’est pour ça que j’irai là-bas\n\nLà-bas\n\nFaut du cœur et faut du courage\n\nMais tout est possible à mon âge\n\nSi tu as la force et la foi\n\nL’ or est à portée de tes doigts\n\nC’est pour ça que j’irai là-bas\n\nN’y va pas\n\nY’a des tempêtes et des naufrages\n\nLe feu, les diables et les mirages\n\nJe te sais si fragile parfois\n\nReste au creux de moi\n\nOn a tant d’amour à faire\n\nTant de bonheur à venir\n\nJe te veux mari et père\n\nEt toi, tu rêves de partir\n\nIci, tout est joué d’avance\n\nEt l’on n’y peut rien changer\n\nTout dépend de ta naissance\n\nEt moi je ne suis pas bien né\n\nLà-bas\n\nLoin de nos vies, de nos villages\n\nJ’oublierai ta voix, ton visage\n\nJ’ai beau te serrer dans mes bras\n\nTu m’échappes déjà, là-bas\n\nJ’aurai ma chance, j’aurai mes droits\n\nEt la fierté qu’ici je n’ai pas\n\nTout ce que tu mérites est à toi\n\nIci, les autres imposent leur loi\n\nJe te perdrai peut-être là-bas\n\nMais je me perds si je reste là\n\nLa vie ne m’a pas laissé le choix\n\nToi et moi, ce sera là-bas ou pas\n\nTout est neuf et tout est sauvage\n\nLibre continent sans grillage\n\nBeau comme on n’imagine pas\n\nIci, même nos rêves sont étroits\n\nC’est pour ça que j’irai là-bas\n\nOn ne m’a pas laissé le choix\n\nJe me perds si je reste là\n\nC’est pour ça que j’irai là-bas",
+      "lyricLines": [
+        {
+          "text": "Là-bas",
+          "time": 0
+        },
+        {
+          "text": "Tout est neuf et tout est sauvage",
+          "time": 0
+        },
+        {
+          "text": "Libre continent sans grillage",
+          "time": 0
+        },
+        {
+          "text": "Ici, nos rêves sont étroits",
+          "time": 0
+        },
+        {
+          "text": "C’est pour ça que j’irai là-bas",
+          "time": 0
+        },
+        {
+          "text": "Là-bas",
+          "time": 0
+        },
+        {
+          "text": "Faut du cœur et faut du courage",
+          "time": 0
+        },
+        {
+          "text": "Mais tout est possible à mon âge",
+          "time": 0
+        },
+        {
+          "text": "Si tu as la force et la foi",
+          "time": 0
+        },
+        {
+          "text": "L’ or est à portée de tes doigts",
+          "time": 0
+        },
+        {
+          "text": "C’est pour ça que j’irai là-bas",
+          "time": 0
+        },
+        {
+          "text": "N’y va pas",
+          "time": 0
+        },
+        {
+          "text": "Y’a des tempêtes et des naufrages",
+          "time": 0
+        },
+        {
+          "text": "Le feu, les diables et les mirages",
+          "time": 0
+        },
+        {
+          "text": "Je te sais si fragile parfois",
+          "time": 0
+        },
+        {
+          "text": "Reste au creux de moi",
+          "time": 0
+        },
+        {
+          "text": "On a tant d’amour à faire",
+          "time": 0
+        },
+        {
+          "text": "Tant de bonheur à venir",
+          "time": 0
+        },
+        {
+          "text": "Je te veux mari et père",
+          "time": 0
+        },
+        {
+          "text": "Et toi, tu rêves de partir",
+          "time": 0
+        },
+        {
+          "text": "Ici, tout est joué d’avance",
+          "time": 0
+        },
+        {
+          "text": "Et l’on n’y peut rien changer",
+          "time": 0
+        },
+        {
+          "text": "Tout dépend de ta naissance",
+          "time": 0
+        },
+        {
+          "text": "Et moi je ne suis pas bien né",
+          "time": 0
+        },
+        {
+          "text": "Là-bas",
+          "time": 0
+        },
+        {
+          "text": "Loin de nos vies, de nos villages",
+          "time": 0
+        },
+        {
+          "text": "J’oublierai ta voix, ton visage",
+          "time": 0
+        },
+        {
+          "text": "J’ai beau te serrer dans mes bras",
+          "time": 0
+        },
+        {
+          "text": "Tu m’échappes déjà, là-bas",
+          "time": 0
+        },
+        {
+          "text": "J’aurai ma chance, j’aurai mes droits",
+          "time": 0
+        },
+        {
+          "text": "Et la fierté qu’ici je n’ai pas",
+          "time": 0
+        },
+        {
+          "text": "Tout ce que tu mérites est à toi",
+          "time": 0
+        },
+        {
+          "text": "Ici, les autres imposent leur loi",
+          "time": 0
+        },
+        {
+          "text": "Je te perdrai peut-être là-bas",
+          "time": 0
+        },
+        {
+          "text": "Mais je me perds si je reste là",
+          "time": 0
+        },
+        {
+          "text": "La vie ne m’a pas laissé le choix",
+          "time": 0
+        },
+        {
+          "text": "Toi et moi, ce sera là-bas ou pas",
+          "time": 0
+        },
+        {
+          "text": "Tout est neuf et tout est sauvage",
+          "time": 0
+        },
+        {
+          "text": "Libre continent sans grillage",
+          "time": 0
+        },
+        {
+          "text": "Beau comme on n’imagine pas",
+          "time": 0
+        },
+        {
+          "text": "Ici, même nos rêves sont étroits",
+          "time": 0
+        },
+        {
+          "text": "C’est pour ça que j’irai là-bas",
+          "time": 0
+        },
+        {
+          "text": "On ne m’a pas laissé le choix",
+          "time": 0
+        },
+        {
+          "text": "Je me perds si je reste là",
+          "time": 0
+        },
+        {
+          "text": "C’est pour ça que j’irai là-bas",
+          "time": 0
+        }
+      ],
+      "needsLyricsSync": true,
+      "kind": "vocal"
+    },
+    {
+      "id": "la-maison-bleue",
+      "title": "La groupie du pianiste - Michel Berger",
+      "duration": "00:00",
+      "description": "Morceau chanté",
+      "stageNotes": "",
+      "nextAction": "",
+      "kind": "vocal",
+      "lyrics": "Elle passe ses nuits sans dormir\n\nÀ gâcher son bel avenir\n\nLa groupie du pianiste\n\nDieu que cette fille a l'air triste\n\nAmoureuse d'un égoïste\n\nLa groupie du pianiste\n\nElle fout toute sa vie en l'air\n\nEt toute sa vie c'est pas grand chose\n\nQu'est-ce qu'elle aurait bien pu faire\n\nÀ part rêver seule dans son lit\n\nLe soir entre ses draps roses\n\nElle passe sa vie à l'attendre\n\nPour un mot pour un geste tendre\n\nLa groupie du pianiste\n\nDevant l'hôtel dans les coulisses\n\nElle rêve de la vie d'artiste\n\nLa groupie du pianiste\n\nElle le suivrait jusqu'en enfer\n\nEt même l'enfer c'est pas grand chose\n\nÀ côté d'être seule sur terre\n\nEt elle y pense dans son lit\n\nLe soir entre ses draps roses\n\nElle l'aime, elle l'adore\n\nPlus que tout elle l'aime\n\nC'est beau comme elle l'aime\n\nElle l'aime, elle l'adore\n\nC'est fou comme elle aime\n\nC'est beau comme elle l'aime\n\nIl a des droits sur son sourire\n\nElle a des droits sur ses désirs\n\nLa groupie du pianiste\n\nElle sait rester là sans rien dire\n\nPendant que lui joue ses délires\n\nLa groupie du pianiste\n\nQuand le concert est terminé\n\nElle met ses mains sur le clavier\n\nEn rêvant qu'il va l'emmener\n\nPasser le reste de sa vie\n\nTout simplement à l'écouter\n\nElle sait comprendre sa musique\n\nElle sait oublier qu'elle existe\n\nLa groupie du pianiste\n\nMais Dieu que cette fille prend des risques\n\nAmoureuse d'un égoïste\n\nLa groupie du pianiste\n\nElle fout toute sa vie en l'air\n\nEt toute sa vie c'est pas grand chose\n\nQu'est-ce qu'elle aurait bien pu faire\n\nÀ part rêver seule dans son lit\n\nLe soir entre ses draps roses\n\nElle l'aime, elle l'adore\n\nPlus que tout elle l'aime\n\nC'est beau comme elle l'aime\n\nElle l'aime, elle l'adore\n\nC'est fou comme elle aime\n\nC'est beau comme elle l'aime\n\nLa groupie du pianiste?",
+      "lyricLines": [
+        {
+          "text": "Elle passe ses nuits sans dormir",
+          "time": 0
+        },
+        {
+          "text": "À gâcher son bel avenir",
+          "time": 0
+        },
+        {
+          "text": "La groupie du pianiste",
+          "time": 0
+        },
+        {
+          "text": "Dieu que cette fille a l'air triste",
+          "time": 0
+        },
+        {
+          "text": "Amoureuse d'un égoïste",
+          "time": 0
+        },
+        {
+          "text": "La groupie du pianiste",
+          "time": 0
+        },
+        {
+          "text": "Elle fout toute sa vie en l'air",
+          "time": 0
+        },
+        {
+          "text": "Et toute sa vie c'est pas grand chose",
+          "time": 0
+        },
+        {
+          "text": "Qu'est-ce qu'elle aurait bien pu faire",
+          "time": 0
+        },
+        {
+          "text": "À part rêver seule dans son lit",
+          "time": 0
+        },
+        {
+          "text": "Le soir entre ses draps roses",
+          "time": 0
+        },
+        {
+          "text": "Elle passe sa vie à l'attendre",
+          "time": 0
+        },
+        {
+          "text": "Pour un mot pour un geste tendre",
+          "time": 0
+        },
+        {
+          "text": "La groupie du pianiste",
+          "time": 0
+        },
+        {
+          "text": "Devant l'hôtel dans les coulisses",
+          "time": 0
+        },
+        {
+          "text": "Elle rêve de la vie d'artiste",
+          "time": 0
+        },
+        {
+          "text": "La groupie du pianiste",
+          "time": 0
+        },
+        {
+          "text": "Elle le suivrait jusqu'en enfer",
+          "time": 0
+        },
+        {
+          "text": "Et même l'enfer c'est pas grand chose",
+          "time": 0
+        },
+        {
+          "text": "À côté d'être seule sur terre",
+          "time": 0
+        },
+        {
+          "text": "Et elle y pense dans son lit",
+          "time": 0
+        },
+        {
+          "text": "Le soir entre ses draps roses",
+          "time": 0
+        },
+        {
+          "text": "Elle l'aime, elle l'adore",
+          "time": 0
+        },
+        {
+          "text": "Plus que tout elle l'aime",
+          "time": 0
+        },
+        {
+          "text": "C'est beau comme elle l'aime",
+          "time": 0
+        },
+        {
+          "text": "Elle l'aime, elle l'adore",
+          "time": 0
+        },
+        {
+          "text": "C'est fou comme elle aime",
+          "time": 0
+        },
+        {
+          "text": "C'est beau comme elle l'aime",
+          "time": 0
+        },
+        {
+          "text": "Il a des droits sur son sourire",
+          "time": 0
+        },
+        {
+          "text": "Elle a des droits sur ses désirs",
+          "time": 0
+        },
+        {
+          "text": "La groupie du pianiste",
+          "time": 0
+        },
+        {
+          "text": "Elle sait rester là sans rien dire",
+          "time": 0
+        },
+        {
+          "text": "Pendant que lui joue ses délires",
+          "time": 0
+        },
+        {
+          "text": "La groupie du pianiste",
+          "time": 0
+        },
+        {
+          "text": "Quand le concert est terminé",
+          "time": 0
+        },
+        {
+          "text": "Elle met ses mains sur le clavier",
+          "time": 0
+        },
+        {
+          "text": "En rêvant qu'il va l'emmener",
+          "time": 0
+        },
+        {
+          "text": "Passer le reste de sa vie",
+          "time": 0
+        },
+        {
+          "text": "Tout simplement à l'écouter",
+          "time": 0
+        },
+        {
+          "text": "Elle sait comprendre sa musique",
+          "time": 0
+        },
+        {
+          "text": "Elle sait oublier qu'elle existe",
+          "time": 0
+        },
+        {
+          "text": "La groupie du pianiste",
+          "time": 0
+        },
+        {
+          "text": "Mais Dieu que cette fille prend des risques",
+          "time": 0
+        },
+        {
+          "text": "Amoureuse d'un égoïste",
+          "time": 0
+        },
+        {
+          "text": "La groupie du pianiste",
+          "time": 0
+        },
+        {
+          "text": "Elle fout toute sa vie en l'air",
+          "time": 0
+        },
+        {
+          "text": "Et toute sa vie c'est pas grand chose",
+          "time": 0
+        },
+        {
+          "text": "Qu'est-ce qu'elle aurait bien pu faire",
+          "time": 0
+        },
+        {
+          "text": "À part rêver seule dans son lit",
+          "time": 0
+        },
+        {
+          "text": "Le soir entre ses draps roses",
+          "time": 0
+        },
+        {
+          "text": "Elle l'aime, elle l'adore",
+          "time": 0
+        },
+        {
+          "text": "Plus que tout elle l'aime",
+          "time": 0
+        },
+        {
+          "text": "C'est beau comme elle l'aime",
+          "time": 0
+        },
+        {
+          "text": "Elle l'aime, elle l'adore",
+          "time": 0
+        },
+        {
+          "text": "C'est fou comme elle aime",
+          "time": 0
+        },
+        {
+          "text": "C'est beau comme elle l'aime",
+          "time": 0
+        },
+        {
+          "text": "La groupie du pianiste?",
+          "time": 0
+        }
+      ],
+      "needsLyricsSync": true
+    },
+    {
+      "id": "et-un-jour-une-femme-florent-pagny",
+      "title": "Et un jour une femme - Florent Pagny",
+      "duration": "00.:00",
+      "description": "Morceau chanté",
+      "stageNotes": "",
+      "nextAction": "",
+      "kind": "vocal",
+      "lyrics": "D’avoir passé des nuits blanches à rêver\n\nCe que les contes de fées vous laissent imaginer\n\nD’avoir perdu son enfance dans la rue\n\nDes illusions déçues, passer inaperçu\n\nD’être tombé plus bas que la poussière\n\nEt à la terre entière, en vouloir puis se taire\n\nD’avoir laissé jusqu’à sa dignité\n\nSans plus rien demander qu’on vienne vous achever\n\nEt un jour, une femme\n\nDont le regard vous frôle\n\nVous porte sur ses épaules, comme elle porte le monde\n\nEt jusqu’à bout de force\n\nRecouvre de son écorce, vos plaies les plus profondes\n\nPuis un jour, une femme\n\nMet sa main dans la vôtre pour vous parler d’un autre\n\nParce qu’elle porte le monde\n\nEt jusqu’au bout d’elle même\n\nVous prouve qu’elle vous aime\n\nPar l’amour qu’elle inonde\n\nJour après jour vous redonne confiance\n\nDe toute sa patience vous remet debout\n\nRetrouver en soi, un avenir peut-être\n\nEt surtout l’envie d’être, ce qu’elle attend de vous\n\nEt un jour, une femme\n\nDont le regard vous frôle\n\nVous porte sur ses épaules comme elle porte le monde\n\nEt jusqu’à bout de force, recouvre de son écorce\n\nVos plaies les plus profondes…\n\nVos plaies les plus profondes…\n\nEt un jour cette femme, met sa main dans la vôtre\n\nPour vous parler d’un autre, parce qu’elle porte le monde\n\nEt jusqu’au bout d’elle même, vous prouve qu’elle vous aime\n\nPar l’amour qu’elle inonde…\n\nPar l’amour qu’elle inonde…\n\nEt un jour, cette femme, dont le regard vous touche\n\nPorte jusqu’à sa bouche, le front d’un petit môme\n\nEt jusqu’au bout de soi, lui donne tout ce qu’elle a\n\nChaque pas, chaque seconde, jusqu’au bout du monde\n\nJusqu’au bout du monde",
+      "lyricLines": [
+        {
+          "text": "D’avoir passé des nuits blanches à rêver",
+          "time": 0
+        },
+        {
+          "text": "Ce que les contes de fées vous laissent imaginer",
+          "time": 0
+        },
+        {
+          "text": "D’avoir perdu son enfance dans la rue",
+          "time": 0
+        },
+        {
+          "text": "Des illusions déçues, passer inaperçu",
+          "time": 0
+        },
+        {
+          "text": "D’être tombé plus bas que la poussière",
+          "time": 0
+        },
+        {
+          "text": "Et à la terre entière, en vouloir puis se taire",
+          "time": 0
+        },
+        {
+          "text": "D’avoir laissé jusqu’à sa dignité",
+          "time": 0
+        },
+        {
+          "text": "Sans plus rien demander qu’on vienne vous achever",
+          "time": 0
+        },
+        {
+          "text": "Et un jour, une femme",
+          "time": 0
+        },
+        {
+          "text": "Dont le regard vous frôle",
+          "time": 0
+        },
+        {
+          "text": "Vous porte sur ses épaules, comme elle porte le monde",
+          "time": 0
+        },
+        {
+          "text": "Et jusqu’à bout de force",
+          "time": 0
+        },
+        {
+          "text": "Recouvre de son écorce, vos plaies les plus profondes",
+          "time": 0
+        },
+        {
+          "text": "Puis un jour, une femme",
+          "time": 0
+        },
+        {
+          "text": "Met sa main dans la vôtre pour vous parler d’un autre",
+          "time": 0
+        },
+        {
+          "text": "Parce qu’elle porte le monde",
+          "time": 0
+        },
+        {
+          "text": "Et jusqu’au bout d’elle même",
+          "time": 0
+        },
+        {
+          "text": "Vous prouve qu’elle vous aime",
+          "time": 0
+        },
+        {
+          "text": "Par l’amour qu’elle inonde",
+          "time": 0
+        },
+        {
+          "text": "Jour après jour vous redonne confiance",
+          "time": 0
+        },
+        {
+          "text": "De toute sa patience vous remet debout",
+          "time": 0
+        },
+        {
+          "text": "Retrouver en soi, un avenir peut-être",
+          "time": 0
+        },
+        {
+          "text": "Et surtout l’envie d’être, ce qu’elle attend de vous",
+          "time": 0
+        },
+        {
+          "text": "Et un jour, une femme",
+          "time": 0
+        },
+        {
+          "text": "Dont le regard vous frôle",
+          "time": 0
+        },
+        {
+          "text": "Vous porte sur ses épaules comme elle porte le monde",
+          "time": 0
+        },
+        {
+          "text": "Et jusqu’à bout de force, recouvre de son écorce",
+          "time": 0
+        },
+        {
+          "text": "Vos plaies les plus profondes…",
+          "time": 0
+        },
+        {
+          "text": "Vos plaies les plus profondes…",
+          "time": 0
+        },
+        {
+          "text": "Et un jour cette femme, met sa main dans la vôtre",
+          "time": 0
+        },
+        {
+          "text": "Pour vous parler d’un autre, parce qu’elle porte le monde",
+          "time": 0
+        },
+        {
+          "text": "Et jusqu’au bout d’elle même, vous prouve qu’elle vous aime",
+          "time": 0
+        },
+        {
+          "text": "Par l’amour qu’elle inonde…",
+          "time": 0
+        },
+        {
+          "text": "Par l’amour qu’elle inonde…",
+          "time": 0
+        },
+        {
+          "text": "Et un jour, cette femme, dont le regard vous touche",
+          "time": 0
+        },
+        {
+          "text": "Porte jusqu’à sa bouche, le front d’un petit môme",
+          "time": 0
+        },
+        {
+          "text": "Et jusqu’au bout de soi, lui donne tout ce qu’elle a",
+          "time": 0
+        },
+        {
+          "text": "Chaque pas, chaque seconde, jusqu’au bout du monde",
+          "time": 0
+        },
+        {
+          "text": "Jusqu’au bout du monde",
+          "time": 0
+        }
+      ],
+      "needsLyricsSync": true
+    },
+    {
+      "id": "essai-synchro",
+      "title": "Essai synchro",
+      "duration": "--:--",
+      "description": "Morceau instrumental",
+      "stageNotes": "",
+      "nextAction": "",
+      "kind": "instrumental",
+      "lyrics": "",
+      "lyricLines": [],
+      "needsLyricsSync": false
+    },
+    {
+      "id": "essai-synchro-2",
+      "title": "Essai synchro 2",
+      "duration": "--:--",
+      "description": "Morceau instrumental",
+      "stageNotes": "",
+      "nextAction": "",
+      "kind": "instrumental",
+      "lyrics": "",
+      "lyricLines": [],
+      "needsLyricsSync": false
+    }
+  ],
+  "setlistSongIds": [
+    "mon-amour",
+    "test-creation-morceau",
+    "le-pont",
+    "entre-deux-rives",
+    "final",
+    "la-maison-bleue",
+    "et-un-jour-une-femme-florent-pagny"
+  ],
+  "requestedSongIds": [],
+  "updatedAt": 1787091175679
+}

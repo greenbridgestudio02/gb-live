@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import SongList from "./components/SongList";
 import { show } from "../data/show";
@@ -288,6 +288,8 @@ export default function Home() {
   const [requestedSongIds, setRequestedSongIds] = useState<string[]>([]);
   const [requestsLoaded, setRequestsLoaded] = useState(false);
   const [isSyncEditorOpen, setIsSyncEditorOpen] = useState(false);
+  const [isSongEditorOpen, setIsSongEditorOpen] = useState(false);
+  const [isNewSongEditorOpen, setIsNewSongEditorOpen] = useState(false);
 
   const [isAboutEditorOpen, setIsAboutEditorOpen] = useState(false);
   const [aboutMe, setAboutMe] = useState({
@@ -301,6 +303,7 @@ export default function Home() {
 });
 
   const [songs, setSongs] = useState(show.songs);
+  const [songsLoaded, setSongsLoaded] = useState(false);
   const [setlistSongIds, setSetlistSongIds] = useState<string[]>(
   show.songs.map((song) => song.id)
 );
@@ -308,131 +311,260 @@ export default function Home() {
   const [isPreparationOpen, setIsPreparationOpen] = useState(false);
   const [isRequestsOpen, setIsRequestsOpen] = useState(false);
   const [isBlindTestOpen, setIsBlindTestOpen] = useState(false);
+  const lastServerUpdatedAtRef = useRef(0);
+  const applyingServerSnapshotRef = useRef(false);
 
 useEffect(() => {
-  const savedSetlist = localStorage.getItem("gb-live-setlist");
+  let stopped = false;
 
-  if (savedSetlist) {
+  async function loadServerLibrary() {
     try {
-      setSetlistSongIds(JSON.parse(savedSetlist));
-    } catch {
-      console.error("Impossible de charger la setlist sauvegardée.");
+      const response = await fetch("/api/library-sync", {
+        cache: "no-store",
+      });
+
+      if (!response.ok) {
+        throw new Error("Impossible de charger la bibliothèque serveur.");
+      }
+
+      const snapshot = await response.json();
+
+      if (typeof snapshot.updatedAt === "number") {
+        lastServerUpdatedAtRef.current = snapshot.updatedAt;
+      }
+
+      if (stopped) {
+        return;
+      }
+
+      if (Array.isArray(snapshot.songs) && snapshot.songs.length > 0) {
+        setSongs(snapshot.songs);
+      }
+
+      if (Array.isArray(snapshot.setlistSongIds)) {
+        setSetlistSongIds(snapshot.setlistSongIds);
+      }
+
+      if (Array.isArray(snapshot.requestedSongIds)) {
+        setRequestedSongIds(snapshot.requestedSongIds);
+      }
+    } catch (error) {
+      console.error(
+        "Impossible de charger la bibliothèque centrale G3 Live.",
+        error
+      );
+    } finally {
+      if (!stopped) {
+        setSongsLoaded(true);
+        setSetlistLoaded(true);
+        setRequestsLoaded(true);
+      }
     }
   }
 
-  setSetlistLoaded(true);
+  void loadServerLibrary();
+
+  localStorage.removeItem("g3-live-library-v2");
+  localStorage.removeItem("gb-live-songs");
+  localStorage.removeItem("gb-live-setlist");
+  localStorage.removeItem("g3-live-requests");
+
+  return () => {
+    stopped = true;
+  };
 }, []);
 
 useEffect(() => {
-  if (!setlistLoaded) {
+  let stopped = false;
+
+  async function loadAboutMe() {
+    try {
+      const response = await fetch("/api/about", {
+        cache: "no-store",
+      });
+
+      if (!response.ok) {
+        return;
+      }
+
+      const data = await response.json();
+
+      if (!stopped) {
+        setAboutMe({
+          name:
+            typeof data.name === "string"
+              ? data.name
+              : "",
+          headline:
+            typeof data.headline === "string"
+              ? data.headline
+              : "",
+          bio:
+            typeof data.bio === "string"
+              ? data.bio
+              : "",
+          instruments:
+            typeof data.instruments === "string"
+              ? data.instruments
+              : "",
+          website:
+            typeof data.website === "string"
+              ? data.website
+              : "",
+          instagram:
+            typeof data.instagram === "string"
+              ? data.instagram
+              : "",
+          facebook:
+            typeof data.facebook === "string"
+              ? data.facebook
+              : "",
+        });
+      }
+    } catch (error) {
+      console.error(
+        "Impossible de charger la fiche À propos de moi.",
+        error
+      );
+    }
+  }
+
+  void loadAboutMe();
+
+  return () => {
+    stopped = true;
+  };
+}, []);
+
+useEffect(() => {
+  if (!songsLoaded || !setlistLoaded || !requestsLoaded) {
     return;
   }
 
-  localStorage.setItem(
-    "gb-live-setlist",
-    JSON.stringify(setlistSongIds)
-  );
-}, [setlistSongIds, setlistLoaded]);
+  if (applyingServerSnapshotRef.current) {
+    applyingServerSnapshotRef.current = false;
+    return;
+  }
 
-  const setlistSongs = setlistSongIds
-  .map((songId) => songs.find((song) => song.id === songId))
+  const timeoutId = window.setTimeout(() => {
+    void fetch("/api/library-sync", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        songs,
+        setlistSongIds,
+        requestedSongIds,
+      }),
+    })
+      .then(async (response) => {
+        if (!response.ok) {
+          throw new Error("Sauvegarde serveur impossible.");
+        }
+
+        const result = await response.json();
+        const updatedAt = result?.snapshot?.updatedAt;
+
+        if (typeof updatedAt === "number") {
+          lastServerUpdatedAtRef.current = updatedAt;
+        }
+      })
+      .catch((error) => {
+        console.error(
+          "Impossible d'enregistrer automatiquement la bibliothèque sur le serveur.",
+          error
+        );
+      });
+  }, 300);
+
+  return () => {
+    window.clearTimeout(timeoutId);
+  };
+}, [
+  songs,
+  setlistSongIds,
+  requestedSongIds,
+  songsLoaded,
+  setlistLoaded,
+  requestsLoaded,
+]);
+
+useEffect(() => {
+  if (!songsLoaded || !setlistLoaded || !requestsLoaded) {
+    return;
+  }
+
+  let stopped = false;
+
+  async function refreshLibraryFromServer() {
+    try {
+      const response = await fetch("/api/library-sync", {
+        cache: "no-store",
+      });
+
+      if (!response.ok) {
+        return;
+      }
+
+      const snapshot = await response.json();
+
+      if (
+        stopped ||
+        typeof snapshot.updatedAt !== "number" ||
+        snapshot.updatedAt <= lastServerUpdatedAtRef.current
+      ) {
+        return;
+      }
+
+      applyingServerSnapshotRef.current = true;
+      lastServerUpdatedAtRef.current = snapshot.updatedAt;
+
+      if (Array.isArray(snapshot.songs)) {
+        setSongs(snapshot.songs);
+      }
+
+      if (Array.isArray(snapshot.setlistSongIds)) {
+        setSetlistSongIds(snapshot.setlistSongIds);
+      }
+
+      if (Array.isArray(snapshot.requestedSongIds)) {
+        setRequestedSongIds(snapshot.requestedSongIds);
+      }
+    } catch (error) {
+      console.error(
+        "Impossible d'actualiser automatiquement la bibliothèque.",
+        error
+      );
+    }
+  }
+
+  const intervalId = window.setInterval(() => {
+    void refreshLibraryFromServer();
+  }, 5000);
+
+  return () => {
+    stopped = true;
+    window.clearInterval(intervalId);
+  };
+}, [songsLoaded, setlistLoaded, requestsLoaded]);
+
+const setlistSongs = setlistSongIds
+  .map((songId) =>
+    songs.find((song) => song.id === songId)
+  )
   .filter(
     (song): song is (typeof songs)[number] =>
       song !== undefined
   );
 
-  const nextSetlistSong =
+const currentSong = songs[currentSongIndex];
+
+const nextSetlistSong =
   setlistPosition < setlistSongs.length - 1
     ? setlistSongs[setlistPosition + 1]
     : null;
 
-  const [songsLoaded, setSongsLoaded] = useState(false);
-  const [isSongEditorOpen, setIsSongEditorOpen] = useState(false);
-  const [isNewSongEditorOpen, setIsNewSongEditorOpen] = useState(false);
-
-useEffect(() => {
-  const savedLibrary = localStorage.getItem(
-    "g3-live-library-v2"
-  );
-
-  if (!savedLibrary) {
-    return;
-  }
-
-  try {
-    const snapshot = JSON.parse(savedLibrary);
-
-    if (Array.isArray(snapshot.songs)) {
-      setSongs(snapshot.songs);
-    }
-
-    if (Array.isArray(snapshot.setlistSongIds)) {
-      setSetlistSongIds(snapshot.setlistSongIds);
-    }
-
-    if (Array.isArray(snapshot.requestedSongIds)) {
-      setRequestedSongIds(snapshot.requestedSongIds);
-    }
-  } catch {
-    console.error(
-      "Impossible de charger la bibliothèque locale v2."
-    );
-  }
-}, []);
-
-useEffect(() => {
-  const savedSongs = localStorage.getItem("gb-live-songs");
-
-  if (savedSongs) {
-    try {
-      setSongs(JSON.parse(savedSongs));
-    } catch {
-      console.error(
-        "Impossible de charger les synchronisations sauvegardées."
-      );
-    }
-  }
-
-  setSongsLoaded(true);
-}, []);
-
-useEffect(() => {
-  if (!songsLoaded) {
-    return;
-  }
-
-  localStorage.setItem("gb-live-songs", JSON.stringify(songs));
-}, [songs, songsLoaded]);
-
-
-useEffect(() => {
-  const savedRequests = localStorage.getItem("g3-live-requests");
-
-  if (savedRequests) {
-    try {
-      setRequestedSongIds(JSON.parse(savedRequests));
-    } catch {
-      console.error(
-        "Impossible de charger les demandes du public sauvegardées."
-      );
-    }
-  }
-
-  setRequestsLoaded(true);
-}, []);
-
-useEffect(() => {
-  if (!requestsLoaded) {
-    return;
-  }
-
-  localStorage.setItem(
-    "g3-live-requests",
-    JSON.stringify(requestedSongIds)
-  );
-}, [requestedSongIds, requestsLoaded]);
-
-const currentSong = songs[currentSongIndex];
 useEffect(() => {
   if (!currentSong) {
     return;
@@ -509,7 +641,7 @@ async function sendPublicMode(
 
 function startShow() {
   setIsHomeMode(false);
-  void sendPublicMode("song");
+  setIsSetlistOpen(true);
 }
 
 function returnHome() {
@@ -639,11 +771,6 @@ async function importLibrary() {
       savedAt: Date.now(),
     };
 
-    localStorage.setItem(
-      "g3-live-library-v2",
-      JSON.stringify(localSnapshot)
-    );
-
     setSongs(localSnapshot.songs);
     setSetlistSongIds(localSnapshot.setlistSongIds);
     setRequestedSongIds(localSnapshot.requestedSongIds);
@@ -757,7 +884,33 @@ async function importLibrary() {
                 : [...currentRequests, songId]
             );
           }}
-          onClose={() => setIsSearchOpen(false)}
+          onEditSong={(index) => {
+  setCurrentSongIndex(index);
+  setIsSearchOpen(false);
+  setIsSongEditorOpen(true);
+}}
+
+onSyncSong={(index) => {
+  setCurrentSongIndex(index);
+  setIsSearchOpen(false);
+  setIsSyncEditorOpen(true);
+}}
+
+onDeleteSong={(songId) => {
+  setSongs((currentSongs) =>
+    currentSongs.filter((song) => song.id !== songId)
+  );
+
+  setSetlistSongIds((currentIds) =>
+    currentIds.filter((id) => id !== songId)
+  );
+
+  setRequestedSongIds((currentIds) =>
+    currentIds.filter((id) => id !== songId)
+  );
+}}
+
+onClose={() => setIsSearchOpen(false)}
         />
       )}
 
@@ -863,27 +1016,16 @@ async function importLibrary() {
           + Nouveau morceau
         </button>
 
-        <button
-          type="button"
-          onClick={() => {
-            setIsPreparationOpen(false);
-            setIsSongEditorOpen(true);
-          }}
-          className="rounded-xl border border-zinc-700 bg-zinc-900 px-6 py-4 text-left text-lg font-semibold"
-        >
-          Modifier le morceau
-        </button>
-
-        <button
-          type="button"
-          onClick={() => {
-            setIsPreparationOpen(false);
-            setIsSyncEditorOpen(true);
-          }}
-          className="rounded-xl border border-zinc-700 bg-zinc-900 px-6 py-4 text-left text-lg font-semibold"
-        >
-          Synchroniser les paroles
-        </button>
+<button
+  type="button"
+  onClick={() => {
+    setIsPreparationOpen(false);
+    setIsSearchOpen(true);
+  }}
+  className="rounded-xl border border-zinc-700 bg-zinc-900 px-6 py-4 text-left text-lg font-semibold"
+>
+  📚 Bibliothèque
+</button>
 
         <button
           type="button"
@@ -1075,6 +1217,82 @@ async function importLibrary() {
   </div>
 )}
 
+{isNewSongEditorOpen && (
+  <NewSongEditor
+    onClose={() => setIsNewSongEditorOpen(false)}
+    onSave={(newSong) => {
+      setSongs((currentSongs) => [
+        ...currentSongs,
+        newSong,
+      ]);
+
+      setCurrentSongIndex(songs.length);
+      setIsNewSongEditorOpen(false);
+    }}
+  />
+)}
+{isSongEditorOpen && (
+  <SongEditor
+    song={currentSong}
+    onClose={() => setIsSongEditorOpen(false)}
+    onSave={(updatedSong) => {
+      setSongs((currentSongs) =>
+        currentSongs.map((song, index) =>
+          index === currentSongIndex
+            ? updatedSong
+            : song
+        )
+      );
+
+      setIsSongEditorOpen(false);
+    }}
+  />
+)}
+
+{isSyncEditorOpen && (
+  <div className="fixed inset-0 z-[70] overflow-y-auto bg-black/90 p-6">
+    <div className="mx-auto max-w-4xl">
+      <div className="mb-4 flex justify-end">
+        <button
+          type="button"
+          onClick={() => setIsSyncEditorOpen(false)}
+          className="rounded-xl border border-zinc-700 bg-zinc-900 px-5 py-3 font-semibold"
+        >
+          Fermer
+        </button>
+      </div>
+
+      <LyricsSyncEditor
+        song={currentSong}
+        onValidate={(times) => {
+          setSongs((currentSongs) =>
+            currentSongs.map((song, index) => {
+              if (
+                index !== currentSongIndex ||
+                !song.lyricLines
+              ) {
+                return song;
+              }
+
+              return {
+                ...song,
+                lyricLines: song.lyricLines.map(
+                  (line, lineIndex) => ({
+                    ...line,
+                    time: times[lineIndex],
+                  })
+                ),
+                needsLyricsSync: false,
+              };
+            })
+          );
+
+          setIsSyncEditorOpen(false);
+        }}
+      />
+    </div>
+  </div>
+)}
     </main>
   );
 }
@@ -1239,23 +1457,27 @@ async function importLibrary() {
     setlistPosition={setlistPosition}
     currentSongId={currentSong.id}
     onSelectSong={(setlistIndex) => {
-      const selectedSong = setlistSongs[setlistIndex];
+  const selectedSong = setlistSongs[setlistIndex];
 
-      if (!selectedSong) {
-        return;
-      }
+  if (!selectedSong) {
+    return;
+  }
 
-      const libraryIndex = songs.findIndex(
-        (song) => song.id === selectedSong.id
-      );
+  const libraryIndex = songs.findIndex(
+    (song) => song.id === selectedSong.id
+  );
 
-      if (libraryIndex === -1) {
-        return;
-      }
+  if (libraryIndex === -1) {
+    return;
+  }
 
-      setCurrentSongIndex(libraryIndex);
-      setSetlistPosition(setlistIndex);
-    }}
+  setCurrentSongIndex(libraryIndex);
+  setSetlistPosition(setlistIndex);
+
+  setIsSetlistOpen(false);
+
+  void sendPublicMode("song");
+}}
     onMoveSong={(fromIndex, toIndex) => {
       setSetlistSongIds((currentSetlist) => {
         const newSetlist = [...currentSetlist];
@@ -1363,7 +1585,33 @@ onRemoveSong={(indexToRemove) => {
     return [...currentRequests, songId];
   });
 }}
-    onClose={() => setIsSearchOpen(false)}
+onEditSong={(index) => {
+  setCurrentSongIndex(index);
+  setIsSearchOpen(false);
+  setIsSongEditorOpen(true);
+}}
+
+onSyncSong={(index) => {
+  setCurrentSongIndex(index);
+  setIsSearchOpen(false);
+  setIsSyncEditorOpen(true);
+}}    
+
+onDeleteSong={(songId) => {
+  setSongs((currentSongs) =>
+    currentSongs.filter((song) => song.id !== songId)
+  );
+
+  setSetlistSongIds((currentIds) =>
+    currentIds.filter((id) => id !== songId)
+  );
+
+  setRequestedSongIds((currentIds) =>
+    currentIds.filter((id) => id !== songId)
+  );
+}}
+
+onClose={() => setIsSearchOpen(false)}
   />
 )}
 
@@ -1568,23 +1816,14 @@ onRemoveSong={(indexToRemove) => {
           type="button"
           onClick={() => {
             setIsPreparationOpen(false);
-            setIsSongEditorOpen(true);
+            setIsSearchOpen(true);
           }}
           className="rounded-xl border border-zinc-700 bg-zinc-900 px-6 py-4 text-left text-lg font-semibold"
         >
-          Modifier le morceau
+          📚 Bibliothèque
         </button>
 
-        <button
-          type="button"
-          onClick={() => {
-            setIsPreparationOpen(false);
-            setIsSyncEditorOpen(true);
-          }}
-          className="rounded-xl border border-zinc-700 bg-zinc-900 px-6 py-4 text-left text-lg font-semibold"
-        >
-          Synchroniser les paroles
-        </button>
+        
 
 <button
   type="button"
@@ -1601,6 +1840,17 @@ onRemoveSong={(indexToRemove) => {
 >
   ↓ Récupérer la bibliothèque
 </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            setIsPreparationOpen(false);
+            setIsAboutEditorOpen(true);
+          }}
+          className="rounded-xl border border-zinc-700 bg-zinc-900 px-6 py-4 text-left text-lg font-semibold"
+        >
+          👤 Modifier “À propos de moi”
+        </button>
 
       </div>
     </div>
