@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type PublicLyricLine = {
   time: number;
@@ -81,6 +81,12 @@ type BlindTestState = {
   dismissedMessageUpdatedAt,
   setDismissedMessageUpdatedAt,
 ] = useState<number | null>(null);
+
+const PUBLIC_LYRICS_LEAD = 0.15;
+
+const [displayElapsedTime, setDisplayElapsedTime] = useState(0);
+const publicClockStartRef = useRef<number | null>(null);
+const publicClockBaseRef = useRef(0);
 
 const [aboutMe, setAboutMe] = useState<AboutMe>({
   name: "",
@@ -387,48 +393,115 @@ const [
   setDismissedMessageUpdatedAt,
 ] = useState<number | null>(null);
 
+const PUBLIC_LYRICS_LEAD = 0.15;
+
+const [displayElapsedTime, setDisplayElapsedTime] =
+  useState(0);
+
+const publicClockStartRef =
+  useRef<number | null>(null);
+
+const publicClockBaseRef =
+  useRef(0);
+
   useEffect(() => {
-    let stopped = false;
+  let eventSource: EventSource | null = null;
 
-    async function refreshLiveState() {
-      try {
-        const response = await fetch("/api/live-state", {
-          cache: "no-store",
-        });
+  async function loadInitialState() {
+    try {
+      const response = await fetch("/api/live-state", {
+        cache: "no-store",
+      });
 
-        if (!response.ok) {
-          if (!stopped) {
-            setConnected(false);
-          }
-
-          return;
-        }
-
-        const state: LiveState =
-          await response.json();
-
-        if (!stopped) {
-          setLiveState(state);
-          setConnected(true);
-        }
-      } catch {
-        if (!stopped) {
-          setConnected(false);
-        }
+      if (!response.ok) {
+        setConnected(false);
+        return;
       }
+
+      const state: LiveState = await response.json();
+
+      setLiveState(state);
+      setConnected(true);
+    } catch {
+      setConnected(false);
+    }
+  }
+
+  void loadInitialState();
+
+  eventSource = new EventSource(
+    "/api/live-state?stream=1"
+  );
+
+  eventSource.onmessage = (event) => {
+    try {
+      const state: LiveState =
+        JSON.parse(event.data);
+
+      setLiveState(state);
+      setConnected(true);
+    } catch {
+      // On conserve le dernier état valide.
+    }
+  };
+
+  eventSource.onerror = () => {
+    setConnected(false);
+  };
+
+  return () => {
+    eventSource?.close();
+  };
+}, []);
+
+useEffect(() => {
+  publicClockBaseRef.current = liveState.elapsedTime;
+
+  if (liveState.isPlaying) {
+    publicClockStartRef.current = performance.now();
+  } else {
+    publicClockStartRef.current = null;
+    setDisplayElapsedTime(
+      liveState.elapsedTime + PUBLIC_LYRICS_LEAD
+    );
+  }
+}, [
+  liveState.elapsedTime,
+  liveState.isPlaying,
+  liveState.song?.id,
+]);
+
+useEffect(() => {
+  if (!liveState.isPlaying) {
+    return;
+  }
+
+  let animationFrameId: number;
+
+  function updatePublicClock() {
+    if (publicClockStartRef.current !== null) {
+      const locallyElapsed =
+        publicClockBaseRef.current +
+        (performance.now() -
+          publicClockStartRef.current) /
+          1000;
+
+      setDisplayElapsedTime(
+        locallyElapsed + PUBLIC_LYRICS_LEAD
+      );
     }
 
-    void refreshLiveState();
+    animationFrameId =
+      requestAnimationFrame(updatePublicClock);
+  }
 
-    const intervalId = window.setInterval(() => {
-      void refreshLiveState();
-    }, 250);
+  animationFrameId =
+    requestAnimationFrame(updatePublicClock);
 
-    return () => {
-      stopped = true;
-      window.clearInterval(intervalId);
-    };
-  }, []);
+  return () => {
+    cancelAnimationFrame(animationFrameId);
+  };
+}, [liveState.isPlaying]);
 
 useEffect(() => {
   let stopped = false;
@@ -499,7 +572,7 @@ useEffect(() => {
       index++
     ) {
       if (
-        liveState.elapsedTime >=
+        displayElapsedTime >=
         lyricLines[index].time
       ) {
         currentLineIndex = index;

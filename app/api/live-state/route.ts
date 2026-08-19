@@ -1,4 +1,13 @@
+import {
+  mkdir,
+  readFile,
+  writeFile,
+} from "node:fs/promises";
+
+import path from "node:path";
+
 export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
 
 type PublicLyricLine = {
   time: number;
@@ -36,8 +45,6 @@ type LiveState = {
 };
 
 type G3GlobalStore = typeof globalThis & {
-  __g3LiveState?: LiveState;
-
   __g3LiveClients?: Set<
     ReadableStreamDefaultController<Uint8Array>
   >;
@@ -45,27 +52,110 @@ type G3GlobalStore = typeof globalThis & {
 
 const store = globalThis as G3GlobalStore;
 
-if (!store.__g3LiveState) {
-  store.__g3LiveState = {
-    mode: "home",
-
-    song: null,
-
-    elapsedTime: 0,
-    isPlaying: false,
-
-    message: "",
-    messageUpdatedAt: 0,
-
-    updatedAt: Date.now(),
-  };
-}
-
 if (!store.__g3LiveClients) {
   store.__g3LiveClients = new Set();
 }
 
+const dataDirectory = path.join(
+  process.cwd(),
+  "data"
+);
+
+const liveStateFile = path.join(
+  dataDirectory,
+  "live-state.json"
+);
+
+const defaultState: LiveState = {
+  mode: "home",
+
+  song: null,
+
+  elapsedTime: 0,
+  isPlaying: false,
+
+  message: "",
+  messageUpdatedAt: 0,
+
+  updatedAt: Date.now(),
+};
+
 const encoder = new TextEncoder();
+
+async function readLiveState(): Promise<LiveState> {
+  try {
+    const content = await readFile(
+      liveStateFile,
+      "utf-8"
+    );
+
+    const parsed = JSON.parse(
+      content
+    ) as Partial<LiveState>;
+
+    return {
+      mode:
+        parsed.mode === "home" ||
+        parsed.mode === "song" ||
+        parsed.mode === "message" ||
+        parsed.mode === "pause" ||
+        parsed.mode === "end"
+          ? parsed.mode
+          : "home",
+
+      song:
+        parsed.song === null ||
+        typeof parsed.song === "object"
+          ? (parsed.song as PublicSong | null)
+          : null,
+
+      elapsedTime:
+        typeof parsed.elapsedTime === "number"
+          ? parsed.elapsedTime
+          : 0,
+
+      isPlaying:
+        typeof parsed.isPlaying === "boolean"
+          ? parsed.isPlaying
+          : false,
+
+      message:
+        typeof parsed.message === "string"
+          ? parsed.message
+          : "",
+
+      messageUpdatedAt:
+        typeof parsed.messageUpdatedAt === "number"
+          ? parsed.messageUpdatedAt
+          : 0,
+
+      updatedAt:
+        typeof parsed.updatedAt === "number"
+          ? parsed.updatedAt
+          : Date.now(),
+    };
+  } catch {
+    return defaultState;
+  }
+}
+
+async function saveLiveState(
+  state: LiveState
+) {
+  await mkdir(dataDirectory, {
+    recursive: true,
+  });
+
+  await writeFile(
+    liveStateFile,
+    JSON.stringify(
+      state,
+      null,
+      2
+    ),
+    "utf-8"
+  );
+}
 
 function broadcast(state: LiveState) {
   const message = encoder.encode(
@@ -76,7 +166,9 @@ function broadcast(state: LiveState) {
     try {
       controller.enqueue(message);
     } catch {
-      store.__g3LiveClients!.delete(controller);
+      store.__g3LiveClients!.delete(
+        controller
+      );
     }
   }
 }
@@ -118,24 +210,21 @@ function parseSong(
             ): line is Record<
               string,
               unknown
-            > => {
-              return (
-                typeof line === "object" &&
-                line !== null &&
-                typeof (
-                  line as Record<
-                    string,
-                    unknown
-                  >
-                ).time === "number" &&
-                typeof (
-                  line as Record<
-                    string,
-                    unknown
-                  >
-                ).text === "string"
-              );
-            }
+            > =>
+              typeof line === "object" &&
+              line !== null &&
+              typeof (
+                line as Record<
+                  string,
+                  unknown
+                >
+              ).time === "number" &&
+              typeof (
+                line as Record<
+                  string,
+                  unknown
+                >
+              ).text === "string"
           )
           .map((line) => ({
             time: line.time as number,
@@ -169,6 +258,9 @@ export async function GET(
 ) {
   const url = new URL(request.url);
 
+  const currentState =
+    await readLiveState();
+
   if (
     url.searchParams.get("stream") ===
     "1"
@@ -194,7 +286,7 @@ export async function GET(
           controller.enqueue(
             encoder.encode(
               `data: ${JSON.stringify(
-                store.__g3LiveState
+                currentState
               )}\n\n`
             )
           );
@@ -248,7 +340,7 @@ export async function GET(
   }
 
   return Response.json(
-    store.__g3LiveState,
+    currentState,
     {
       headers: {
         "Cache-Control": "no-store",
@@ -263,7 +355,7 @@ export async function POST(
   const body = await request.json();
 
   const currentState =
-    store.__g3LiveState!;
+    await readLiveState();
 
   let mode = currentState.mode;
 
@@ -328,8 +420,7 @@ export async function POST(
     updatedAt: Date.now(),
   };
 
-  store.__g3LiveState =
-    newState;
+  await saveLiveState(newState);
 
   broadcast(newState);
 

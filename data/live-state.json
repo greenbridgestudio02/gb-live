@@ -1,0 +1,197 @@
+{
+  "mode": "home",
+  "song": {
+    "id": "entre-deux-rives",
+    "title": "Mon Amour - Slimane",
+    "kind": "vocal",
+    "lyrics": "Mon amour\n\nDis-moi à quoi tu penses\n\nSi tout ça a un sens\n\nDésolé si j'te dérange\n\nMon amour\n\nTe souviens-tu de nous ?\n\nDu premier rendez-vous ?\n\nC'était beau, c'était fou\n\nJe t'aime, j'sais pas pourquoi\n\nJ'rejoue la scène\n\nMais c'est toujours la même fin qui recommence\n\nTu n'entends pas\n\nMa peine, on en fait quoi ?\n\nEst-ce que tu m'aimes, ou pas ?\n\nMon amour\n\nJe ferai tout c'que je peux\n\nUn océan dans le feu\n\nL'impossible si tu le veux\n\nOh, mon amour\n\nAllez, rеviens à Paris\n\nFais-le pour nous, j't'en suppliе\n\nJe le promets, j'ai compris\n\nJe t’aime\n\nJ’sais pas pourquoi\n\nJe rejoue la scène\n\nEt c’est toujours la même fin qui recommence\n\nTu n’entends pas ma peine\n\nOn en fait quoi ?\n\nEst-ce que tu m’aimes ?\n\nOu pas ?\n\nDis-moi l'endroit, je t'attendrai\n\nEt si tu n'viens pas, je t'attendrai\n\nC'est bête je sais, je le ferai\n\nRempli d'espoir, je t'attendrai\n\nJe t’aime\n\nJ’sais pas pourquoi\n\nJe rejoue la scène\n\nEt c’est toujours la même fin qui recommence\n\nTu n’entends pas ma peine\n\nOn en fait quoi ?\n\nEst-ce que tu m’aimes ?\n\nEst-ce que tu m’aimes ?\n\nEst-ce que tu m’aimes ?\n\nEst-ce que tu m’aimes ?\n\nOu pas ?",
+    "lyricLines": [
+      {
+        "time": 0.6080000000004656,
+        "text": "Mon amour"
+      },
+      {
+        "time": 3.169,
+        "text": "Dis-moi à quoi tu penses"
+      },
+      {
+        "time": 6.586,
+        "text": "Si tout ça a un sens"
+      },
+      {
+        "time": 9.818,
+        "text": "Désolé si j'te dérange"
+      },
+      {
+        "time": 14.085,
+        "text": "Mon amour"
+      },
+      {
+        "time": 16.644,
+        "text": "Te souviens-tu de nous ?"
+      },
+      {
+        "time": 20.01,
+        "text": "Du premier rendez-vous ?"
+      },
+      {
+        "time": 23.508,
+        "text": "C'était beau, c'était fou"
+      },
+      {
+        "time": 27.965000000000465,
+        "text": "Je t'aime, j'sais pas pourquoi"
+      },
+      {
+        "time": 33.848,
+        "text": "J'rejoue la scène"
+      },
+      {
+        "time": 37.643,
+        "text": "Mais c'est toujours la même fin qui recommence"
+      },
+      {
+        "time": 40.112,
+        "text": "Tu n'entends pas"
+      },
+      {
+        "time": 41.312,
+        "text": "Ma peine, on en fait quoi ?"
+      },
+      {
+        "time": 47.431,
+        "text": "Est-ce que tu m'aimes, ou pas ?"
+      },
+      {
+        "time": 54.747,
+        "text": "Mon amour"
+      },
+      {
+        "time": 57.148,
+        "text": "Je ferai tout c'que je peux"
+      },
+      {
+        "time": 60.447,
+        "text": "Un océan dans le feu"
+      },
+      {
+        "time": 63.776,
+        "text": "L'impossible si tu le veux"
+      },
+      {
+        "time": 67.331,
+        "text": "Oh, mon amour"
+      },
+      {
+        "time": 70.565,
+        "text": "Allez, rеviens à Paris"
+      },
+      {
+        "time": 73.962,
+        "text": "Fais-le pour nous, j't'en suppliе"
+      },
+      {
+        "time": 77.335,
+        "text": "Je le promets, j'ai compris"
+      },
+      {
+        "time": 81.868,
+        "text": "Je t’aime"
+      },
+      {
+        "time": 84.50300000000047,
+        "text": "J’sais pas pourquoi"
+      },
+      {
+        "time": 87.852,
+        "text": "Je rejoue la scène"
+      },
+      {
+        "time": 91.714,
+        "text": "Et c’est toujours la même fin qui recommence"
+      },
+      {
+        "time": 94.24400000000047,
+        "text": "Tu n’entends pas ma peine"
+      },
+      {
+        "time": 98.068,
+        "text": "On en fait quoi ?"
+      },
+      {
+        "time": 101.414,
+        "text": "Est-ce que tu m’aimes ?"
+      },
+      {
+        "time": 105.653,
+        "text": "Ou pas ?"
+      },
+      {
+        "time": 109.203,
+        "text": "Dis-moi l'endroit, je t'attendrai"
+      },
+      {
+        "time": 115.901,
+        "text": "Et si tu n'viens pas, je t'attendrai"
+      },
+      {
+        "time": 122.609,
+        "text": "C'est bête je sais, je le ferai"
+      },
+      {
+        "time": 129.449,
+        "text": "Rempli d'espoir, je t'attendrai"
+      },
+      {
+        "time": 136.023,
+        "text": "Je t’aime"
+      },
+      {
+        "time": 138.61700000000047,
+        "text": "J’sais pas pourquoi"
+      },
+      {
+        "time": 141.959,
+        "text": "Je rejoue la scène"
+      },
+      {
+        "time": 145.759,
+        "text": "Et c’est toujours la même fin qui recommence"
+      },
+      {
+        "time": 148.252,
+        "text": "Tu n’entends pas ma peine"
+      },
+      {
+        "time": 151.932,
+        "text": "On en fait quoi ?"
+      },
+      {
+        "time": 155.582,
+        "text": "Est-ce que tu m’aimes ?"
+      },
+      {
+        "time": 162.451,
+        "text": "Est-ce que tu m’aimes ?"
+      },
+      {
+        "time": 165.447,
+        "text": "Est-ce que tu m’aimes ?"
+      },
+      {
+        "time": 168.995,
+        "text": "Est-ce que tu m’aimes ?"
+      },
+      {
+        "time": 173.24,
+        "text": "Ou pas ?"
+      }
+    ],
+    "needsLyricsSync": false
+  },
+  "elapsedTime": 188.493,
+  "isPlaying": true,
+  "message": "",
+  "messageUpdatedAt": 0,
+  "updatedAt": 1787134488783
+}
