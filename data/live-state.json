@@ -1,197 +1,297 @@
 {
   "mode": "home",
   "song": {
-    "id": "entre-deux-rives",
-    "title": "Mon Amour - Slimane",
+    "id": "mon-amour",
+    "title": "Mistral Gagnant - Renaud",
     "kind": "vocal",
-    "lyrics": "Mon amour\n\nDis-moi à quoi tu penses\n\nSi tout ça a un sens\n\nDésolé si j'te dérange\n\nMon amour\n\nTe souviens-tu de nous ?\n\nDu premier rendez-vous ?\n\nC'était beau, c'était fou\n\nJe t'aime, j'sais pas pourquoi\n\nJ'rejoue la scène\n\nMais c'est toujours la même fin qui recommence\n\nTu n'entends pas\n\nMa peine, on en fait quoi ?\n\nEst-ce que tu m'aimes, ou pas ?\n\nMon amour\n\nJe ferai tout c'que je peux\n\nUn océan dans le feu\n\nL'impossible si tu le veux\n\nOh, mon amour\n\nAllez, rеviens à Paris\n\nFais-le pour nous, j't'en suppliе\n\nJe le promets, j'ai compris\n\nJe t’aime\n\nJ’sais pas pourquoi\n\nJe rejoue la scène\n\nEt c’est toujours la même fin qui recommence\n\nTu n’entends pas ma peine\n\nOn en fait quoi ?\n\nEst-ce que tu m’aimes ?\n\nOu pas ?\n\nDis-moi l'endroit, je t'attendrai\n\nEt si tu n'viens pas, je t'attendrai\n\nC'est bête je sais, je le ferai\n\nRempli d'espoir, je t'attendrai\n\nJe t’aime\n\nJ’sais pas pourquoi\n\nJe rejoue la scène\n\nEt c’est toujours la même fin qui recommence\n\nTu n’entends pas ma peine\n\nOn en fait quoi ?\n\nEst-ce que tu m’aimes ?\n\nEst-ce que tu m’aimes ?\n\nEst-ce que tu m’aimes ?\n\nEst-ce que tu m’aimes ?\n\nOu pas ?",
+    "lyrics": "A m’asseoir sur un banc\n\nCinq minutes avec toi\n\nEt regarder les gens\n\nTant qu'y en a\n\nTe parler du bon temps\n\nQu'est mort ou qui r'viendra\n\nEn serrant dans ma main\n\nTes p'tits doigts\n\nPis donner à bouffer\n\nA des pigeons idiots\n\nLeur filer des coups d'pied\n\nPour de faux\n\nEt entendre ton rire\n\nQui lézarde les murs\n\nQui sait surtout guérir\n\nMes blessures\n\nTe raconter un peu\n\nComment j'étais mino\n\nLes bombecs fabuleux\n\nQu'on piquait chez l'marchand\n\nCar-en-sac et minthos\n\nCaramels à un franc\n\nEt les mistral gagnants\n\nAh marcher sous la pluie\n\nCinq minutes avec toi\n\nEt regarder la vie\n\nTant qu'y en a\n\nTe raconter la Terre\n\nEn te bouffant des yeux\n\nTe parler de ta mère\n\nUn p'tit peu\n\nEt sauter dans les flaques\n\nPour la faire râler\n\nBousiller nos godasses\n\nEt s'marrer\n\nEt entendre ton rire\n\nComme on entend la mer\n\nS'arrêter repartir\n\nEn arrière\n\nTe raconter surtout\n\nLes carambars d'antan\n\nEt et les coco-boërs\n\nEt les vrais roudoudous\n\nQui nous coupaient les lèvres\n\nEt nous niquaient les dents\n\nEt les mistral gagnants\n\nA m’asseoir sur un banc\n\nCinq minutes avec toi\n\nRegarder le soleil\n\nQui s'en va\n\nTe parler du bon temps\n\nQu'est mort et je m'en fous\n\nTe dire que les méchants\n\nC'est pas nous\n\nQue si moi je suis barge\n\nCe n'est que de tes yeux\n\nCar ils ont l'avantage\n\nD'être deux\n\nEt entendre ton rire\n\nS'envoler aussi haut\n\nQue s'envolent les cris\n\nDes oiseaux\n\nTe raconter enfin\n\nQu'il faut aimer la vie\n\nEt l'aimer même si\n\nLe temps est assassin\n\nEt emporte avec lui\n\nLes rires des enfants\n\nEt les mistral gagnants\n\nEt les mistral gagnants",
     "lyricLines": [
       {
-        "time": 0.6080000000004656,
-        "text": "Mon amour"
+        "time": 0.802,
+        "text": "A m’asseoir sur un banc"
       },
       {
-        "time": 3.169,
-        "text": "Dis-moi à quoi tu penses"
+        "time": 2.411,
+        "text": "Cinq minutes avec toi"
       },
       {
-        "time": 6.586,
-        "text": "Si tout ça a un sens"
+        "time": 3.909,
+        "text": "Et regarder les gens"
       },
       {
-        "time": 9.818,
-        "text": "Désolé si j'te dérange"
+        "time": 4.902,
+        "text": "Tant qu'y en a"
       },
       {
-        "time": 14.085,
-        "text": "Mon amour"
+        "time": 7.143,
+        "text": "Te parler du bon temps"
       },
       {
-        "time": 16.644,
-        "text": "Te souviens-tu de nous ?"
+        "time": 8.59,
+        "text": "Qu'est mort ou qui r'viendra"
       },
       {
-        "time": 20.01,
-        "text": "Du premier rendez-vous ?"
+        "time": 10.34100000000003,
+        "text": "En serrant dans ma main"
       },
       {
-        "time": 23.508,
-        "text": "C'était beau, c'était fou"
+        "time": 11.391,
+        "text": "Tes p'tits doigts"
       },
       {
-        "time": 27.965000000000465,
-        "text": "Je t'aime, j'sais pas pourquoi"
+        "time": 13.462,
+        "text": "Pis donner à bouffer"
       },
       {
-        "time": 33.848,
-        "text": "J'rejoue la scène"
+        "time": 15.058,
+        "text": "A des pigeons idiots"
       },
       {
-        "time": 37.643,
-        "text": "Mais c'est toujours la même fin qui recommence"
+        "time": 16.717,
+        "text": "Leur filer des coups d'pied"
       },
       {
-        "time": 40.112,
-        "text": "Tu n'entends pas"
+        "time": 17.894,
+        "text": "Pour de faux"
       },
       {
-        "time": 41.312,
-        "text": "Ma peine, on en fait quoi ?"
+        "time": 19.969,
+        "text": "Et entendre ton rire"
       },
       {
-        "time": 47.431,
-        "text": "Est-ce que tu m'aimes, ou pas ?"
+        "time": 21.493,
+        "text": "Qui lézarde les murs"
       },
       {
-        "time": 54.747,
-        "text": "Mon amour"
+        "time": 22.669,
+        "text": "Qui sait surtout guérir"
       },
       {
-        "time": 57.148,
-        "text": "Je ferai tout c'que je peux"
+        "time": 24.035,
+        "text": "Mes blessures"
       },
       {
-        "time": 60.447,
-        "text": "Un océan dans le feu"
+        "time": 26.444,
+        "text": "Te raconter un peu"
       },
       {
-        "time": 63.776,
-        "text": "L'impossible si tu le veux"
+        "time": 27.605,
+        "text": "Comment j'étais mino"
       },
       {
-        "time": 67.331,
-        "text": "Oh, mon amour"
+        "time": 29.19200000000003,
+        "text": "Les bombecs fabuleux"
       },
       {
-        "time": 70.565,
-        "text": "Allez, rеviens à Paris"
+        "time": 31.846,
+        "text": "Qu'on piquait chez l'marchand"
       },
       {
-        "time": 73.962,
-        "text": "Fais-le pour nous, j't'en suppliе"
+        "time": 33.376,
+        "text": "Car-en-sac et minthos"
       },
       {
-        "time": 77.335,
-        "text": "Je le promets, j'ai compris"
+        "time": 34.763,
+        "text": "Caramels à un franc"
       },
       {
-        "time": 81.868,
-        "text": "Je t’aime"
+        "time": 37.375,
+        "text": "Et les mistral gagnants"
       },
       {
-        "time": 84.50300000000047,
-        "text": "J’sais pas pourquoi"
+        "time": 42.194,
+        "text": "Ah marcher sous la pluie"
       },
       {
-        "time": 87.852,
-        "text": "Je rejoue la scène"
+        "time": 43.846,
+        "text": "Cinq minutes avec toi"
       },
       {
-        "time": 91.714,
-        "text": "Et c’est toujours la même fin qui recommence"
+        "time": 45.213,
+        "text": "Et regarder la vie"
       },
       {
-        "time": 94.24400000000047,
-        "text": "Tu n’entends pas ma peine"
+        "time": 46.28700000000003,
+        "text": "Tant qu'y en a"
       },
       {
-        "time": 98.068,
-        "text": "On en fait quoi ?"
+        "time": 48.599,
+        "text": "Te raconter la Terre"
       },
       {
-        "time": 101.414,
-        "text": "Est-ce que tu m’aimes ?"
+        "time": 49.99600000000003,
+        "text": "En te bouffant des yeux"
       },
       {
-        "time": 105.653,
-        "text": "Ou pas ?"
+        "time": 51.36500000000003,
+        "text": "Te parler de ta mère"
       },
       {
-        "time": 109.203,
-        "text": "Dis-moi l'endroit, je t'attendrai"
+        "time": 52.445,
+        "text": "Un p'tit peu"
       },
       {
-        "time": 115.901,
-        "text": "Et si tu n'viens pas, je t'attendrai"
+        "time": 54.776,
+        "text": "Et sauter dans les flaques"
       },
       {
-        "time": 122.609,
-        "text": "C'est bête je sais, je le ferai"
+        "time": 56.261,
+        "text": "Pour la faire râler"
       },
       {
-        "time": 129.449,
-        "text": "Rempli d'espoir, je t'attendrai"
+        "time": 57.742,
+        "text": "Bousiller nos godasses"
       },
       {
-        "time": 136.023,
-        "text": "Je t’aime"
+        "time": 58.95400000000003,
+        "text": "Et s'marrer"
       },
       {
-        "time": 138.61700000000047,
-        "text": "J’sais pas pourquoi"
+        "time": 61.161,
+        "text": "Et entendre ton rire"
       },
       {
-        "time": 141.959,
-        "text": "Je rejoue la scène"
+        "time": 62.59700000000003,
+        "text": "Comme on entend la mer"
       },
       {
-        "time": 145.759,
-        "text": "Et c’est toujours la même fin qui recommence"
+        "time": 63.97800000000003,
+        "text": "S'arrêter repartir"
       },
       {
-        "time": 148.252,
-        "text": "Tu n’entends pas ma peine"
+        "time": 65.36,
+        "text": "En arrière"
       },
       {
-        "time": 151.932,
-        "text": "On en fait quoi ?"
+        "time": 67.57,
+        "text": "Te raconter surtout"
       },
       {
-        "time": 155.582,
-        "text": "Est-ce que tu m’aimes ?"
+        "time": 68.981,
+        "text": "Les carambars d'antan"
       },
       {
-        "time": 162.451,
-        "text": "Est-ce que tu m’aimes ?"
+        "time": 70.463,
+        "text": "Et et les coco-boërs"
       },
       {
-        "time": 165.447,
-        "text": "Est-ce que tu m’aimes ?"
+        "time": 73.153,
+        "text": "Et les vrais roudoudous"
       },
       {
-        "time": 168.995,
-        "text": "Est-ce que tu m’aimes ?"
+        "time": 74.577,
+        "text": "Qui nous coupaient les lèvres"
       },
       {
-        "time": 173.24,
-        "text": "Ou pas ?"
+        "time": 75.971,
+        "text": "Et nous niquaient les dents"
+      },
+      {
+        "time": 78.8,
+        "text": "Et les mistral gagnants"
+      },
+      {
+        "time": 95.971,
+        "text": "A m’asseoir sur un banc"
+      },
+      {
+        "time": 97.164,
+        "text": "Cinq minutes avec toi"
+      },
+      {
+        "time": 98.642,
+        "text": "Regarder le soleil"
+      },
+      {
+        "time": 99.799,
+        "text": "Qui s'en va"
+      },
+      {
+        "time": 101.965,
+        "text": "Te parler du bon temps"
+      },
+      {
+        "time": 103.202,
+        "text": "Qu'est mort et je m'en fous"
+      },
+      {
+        "time": 104.883,
+        "text": "Te dire que les méchants"
+      },
+      {
+        "time": 106.093,
+        "text": "C'est pas nous"
+      },
+      {
+        "time": 108.269,
+        "text": "Que si moi je suis barge"
+      },
+      {
+        "time": 109.736,
+        "text": "Ce n'est que de tes yeux"
+      },
+      {
+        "time": 111.26,
+        "text": "Car ils ont l'avantage"
+      },
+      {
+        "time": 112.421,
+        "text": "D'être deux"
+      },
+      {
+        "time": 114.667,
+        "text": "Et entendre ton rire"
+      },
+      {
+        "time": 116.151,
+        "text": "S'envoler aussi haut"
+      },
+      {
+        "time": 117.586,
+        "text": "Que s'envolent les cris"
+      },
+      {
+        "time": 118.801,
+        "text": "Des oiseaux"
+      },
+      {
+        "time": 120.926,
+        "text": "Te raconter enfin"
+      },
+      {
+        "time": 122.408,
+        "text": "Qu'il faut aimer la vie"
+      },
+      {
+        "time": 123.868,
+        "text": "Et l'aimer même si"
+      },
+      {
+        "time": 126.507,
+        "text": "Le temps est assassin"
+      },
+      {
+        "time": 128.02,
+        "text": "Et emporte avec lui"
+      },
+      {
+        "time": 129.387,
+        "text": "Les rires des enfants"
+      },
+      {
+        "time": 132.286,
+        "text": "Et les mistral gagnants"
+      },
+      {
+        "time": 135.337,
+        "text": "Et les mistral gagnants"
       }
     ],
     "needsLyricsSync": false
   },
-  "elapsedTime": 188.493,
-  "isPlaying": true,
+  "elapsedTime": 0,
+  "isPlaying": false,
   "message": "",
   "messageUpdatedAt": 0,
-  "updatedAt": 1787134488783
+  "updatedAt": 1787416545786
 }

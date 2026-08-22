@@ -310,6 +310,10 @@ export default function Home() {
   const [setlistLoaded, setSetlistLoaded] = useState(false);
   const [isPreparationOpen, setIsPreparationOpen] = useState(false);
   const [isRequestsOpen, setIsRequestsOpen] = useState(false);
+  const [midiOutputs, setMidiOutputs] = useState<string[]>([]);
+  const [selectedMidiOutput, setSelectedMidiOutput] = useState("");
+  const [midiLoading, setMidiLoading] = useState(false);
+  const [midiStatus, setMidiStatus] = useState("");
   const [isBlindTestOpen, setIsBlindTestOpen] = useState(false);
   const lastServerUpdatedAtRef = useRef(0);
   const applyingServerSnapshotRef = useRef(false);
@@ -715,6 +719,121 @@ useEffect(() => {
   };
 });
 
+async function refreshMidiOutputs() {
+  setMidiLoading(true);
+  setMidiStatus("");
+
+  try {
+    const response = await fetch("/api/midi", {
+      cache: "no-store",
+    });
+
+    const result = await response.json();
+
+    if (!result.ok) {
+      throw new Error(
+        result.error ?? "Impossible de lire les sorties MIDI."
+      );
+    }
+
+    const outputs = Array.isArray(result.outputs)
+      ? result.outputs
+      : [];
+
+    setMidiOutputs(outputs);
+
+    if (
+      selectedMidiOutput &&
+      outputs.includes(selectedMidiOutput)
+    ) {
+      // On conserve la sortie déjà choisie.
+    } else {
+      const montageOutput = outputs.find((name: string) =>
+        name.toLowerCase().includes("montage")
+      );
+
+      setSelectedMidiOutput(
+        montageOutput ?? outputs[0] ?? ""
+      );
+    }
+
+    if (outputs.length === 0) {
+      setMidiStatus("Aucune sortie MIDI détectée.");
+    } else {
+      setMidiStatus(
+        `${outputs.length} sortie(s) MIDI détectée(s).`
+      );
+    }
+  } catch (error) {
+    console.error(error);
+
+    setMidiOutputs([]);
+    setSelectedMidiOutput("");
+    setMidiStatus(
+      error instanceof Error
+        ? error.message
+        : "Erreur MIDI."
+    );
+  } finally {
+    setMidiLoading(false);
+  }
+}
+
+async function testMontageMidi() {
+  if (!selectedMidiOutput) {
+    setMidiStatus("Sélectionne une sortie MIDI.");
+    return;
+  }
+
+  if (!currentSong?.montage?.enabled) {
+    setMidiStatus(
+      `Le morceau « ${currentSong?.title ?? ""} » n'a pas de configuration M8x.`
+    );
+    return;
+  }
+
+  setMidiLoading(true);
+  setMidiStatus("Envoi MIDI en cours…");
+
+  try {
+    const response = await fetch("/api/midi", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        outputName: selectedMidiOutput,
+        channel: currentSong.montage.channel,
+        msb: currentSong.montage.bankMsb,
+        lsb: currentSong.montage.bankLsb,
+        program: currentSong.montage.program,
+      }),
+    });
+
+    const result = await response.json();
+
+    if (!result.ok) {
+      throw new Error(
+        result.error ?? "Échec de l'envoi MIDI."
+      );
+    }
+
+    setMidiStatus(
+      `Commande envoyée : MSB ${result.msb} · LSB ${result.lsb} · PC ${result.program}`
+    );
+  } catch (error) {
+    console.error(error);
+
+    setMidiStatus(
+      error instanceof Error
+        ? error.message
+        : "Erreur pendant l'envoi MIDI."
+    );
+  } finally {
+    setMidiLoading(false);
+  }
+}
+
 async function publishLibrary() {
   try {
     const response = await fetch("/api/library-sync", {
@@ -1005,6 +1124,85 @@ onClose={() => setIsSearchOpen(false)}
       </div>
 
       <div className="mt-6 grid gap-3">
+
+        <div className="mb-3 rounded-2xl border border-emerald-900 bg-emerald-950/20 p-4">
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.25em] text-emerald-400">
+                MIDI
+              </p>
+
+              <h3 className="mt-1 text-lg font-bold">
+                Yamaha MONTAGE M8x
+              </h3>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => void refreshMidiOutputs()}
+              disabled={midiLoading}
+              className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm font-semibold disabled:opacity-40"
+            >
+              ↻ Détecter
+            </button>
+          </div>
+
+          <select
+            value={selectedMidiOutput}
+            onChange={(event) =>
+              setSelectedMidiOutput(event.target.value)
+            }
+            className="mt-4 w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3 outline-none focus:border-emerald-500"
+          >
+            <option value="">
+              Sélectionner une sortie MIDI
+            </option>
+
+            {midiOutputs.map((output) => (
+              <option key={output} value={output}>
+                {output}
+              </option>
+            ))}
+          </select>
+
+          <button
+            type="button"
+            onClick={() => void testMontageMidi()}
+            disabled={
+              midiLoading ||
+              !selectedMidiOutput ||
+              !currentSong?.montage?.enabled
+            }
+            className="mt-3 w-full rounded-xl bg-emerald-500 px-5 py-3 font-bold text-zinc-950 disabled:opacity-30"
+          >
+            🎹 Tester le M8x avec le morceau courant
+          </button>
+
+          <div className="mt-3 rounded-xl bg-zinc-950/60 px-4 py-3 text-sm">
+            <p className="text-zinc-500">
+              Morceau courant
+            </p>
+
+            <p className="font-semibold text-zinc-200">
+              {currentSong?.title ?? "Aucun"}
+            </p>
+
+            {currentSong?.montage?.enabled && (
+              <p className="mt-1 text-emerald-400">
+                User {currentSong.montage.liveSetBank} · Page{" "}
+                {currentSong.montage.liveSetPage} · Slot{" "}
+                {currentSong.montage.liveSetSlot}
+              </p>
+            )}
+          </div>
+
+          {midiStatus && (
+            <p className="mt-3 text-sm text-zinc-400">
+              {midiStatus}
+            </p>
+          )}
+        </div>
+
         <button
           type="button"
           onClick={() => {
@@ -1016,16 +1214,16 @@ onClose={() => setIsSearchOpen(false)}
           + Nouveau morceau
         </button>
 
-<button
-  type="button"
-  onClick={() => {
-    setIsPreparationOpen(false);
-    setIsSearchOpen(true);
-  }}
-  className="rounded-xl border border-zinc-700 bg-zinc-900 px-6 py-4 text-left text-lg font-semibold"
->
-  📚 Bibliothèque
-</button>
+        <button
+          type="button"
+          onClick={() => {
+            setIsPreparationOpen(false);
+            setIsSearchOpen(true);
+          }}
+          className="rounded-xl border border-zinc-700 bg-zinc-900 px-6 py-4 text-left text-lg font-semibold"
+        >
+          📚 Bibliothèque
+        </button>
 
         <button
           type="button"
@@ -1800,7 +1998,101 @@ onClose={() => setIsSearchOpen(false)}
         </button>
       </div>
 
-      <div className="mt-6 grid gap-3">
+     <div className="mt-6 grid gap-3">
+
+  {/* MIDI MONTAGE M8x */}
+  <div className="mb-3 rounded-2xl border border-emerald-900 bg-emerald-950/20 p-4">
+    <div className="flex items-center justify-between gap-3">
+      <div>
+        <p className="text-xs font-semibold uppercase tracking-[0.25em] text-emerald-400">
+          MIDI
+        </p>
+
+        <h3 className="mt-1 text-lg font-bold">
+          Yamaha MONTAGE M8x
+        </h3>
+      </div>
+
+      <button
+        type="button"
+        onClick={() => void refreshMidiOutputs()}
+        disabled={midiLoading}
+        className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm font-semibold disabled:opacity-40"
+      >
+        ↻ Détecter
+      </button>
+    </div>
+
+    <select
+      value={selectedMidiOutput}
+      onChange={(event) =>
+        setSelectedMidiOutput(event.target.value)
+      }
+      className="mt-4 w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3 outline-none focus:border-emerald-500"
+    >
+      <option value="">
+        Sélectionner une sortie MIDI
+      </option>
+
+      {midiOutputs.map((output) => (
+        <option key={output} value={output}>
+          {output}
+        </option>
+      ))}
+    </select>
+
+    <button
+      type="button"
+      onClick={() => void testMontageMidi()}
+      disabled={
+        midiLoading ||
+        !selectedMidiOutput ||
+        !currentSong?.montage?.enabled
+      }
+      className="mt-3 w-full rounded-xl bg-emerald-500 px-5 py-3 font-bold text-zinc-950 disabled:opacity-30"
+    >
+      🎹 Tester le M8x avec le morceau courant
+    </button>
+
+    <div className="mt-3 rounded-xl bg-zinc-950/60 px-4 py-3 text-sm">
+      <p className="text-zinc-500">
+        Morceau courant
+      </p>
+
+      <p className="font-semibold text-zinc-200">
+        {currentSong?.title ?? "Aucun"}
+      </p>
+
+      {currentSong?.montage?.enabled && (
+        <p className="mt-1 text-emerald-400">
+          User {currentSong.montage.liveSetBank} · Page{" "}
+          {currentSong.montage.liveSetPage} · Slot{" "}
+          {currentSong.montage.liveSetSlot}
+        </p>
+      )}
+    </div>
+
+    {midiStatus && (
+      <p className="mt-3 text-sm text-zinc-400">
+        {midiStatus}
+      </p>
+    )}
+  </div>
+
+  {/* NOUVEAU MORCEAU */}
+  <button
+    type="button"
+    onClick={() => {
+      setIsPreparationOpen(false);
+      setIsNewSongEditorOpen(true);
+    }}
+    className="rounded-xl border border-zinc-700 bg-zinc-900 px-6 py-4 text-left text-lg font-semibold"
+  >
+    + Nouveau morceau
+  </button>
+
+
+
         <button
           type="button"
           onClick={() => {

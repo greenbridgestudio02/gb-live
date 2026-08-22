@@ -29,6 +29,22 @@ export default function SongEditor({
     song.key ?? ""
   );
 
+const [montageEnabled, setMontageEnabled] = useState(
+  song.montage?.enabled ?? false
+);
+
+const [montageBank, setMontageBank] = useState(
+  String(song.montage?.liveSetBank ?? 1)
+);
+
+const [montagePage, setMontagePage] = useState(
+  String(song.montage?.liveSetPage ?? 1)
+);
+
+const [montageSlot, setMontageSlot] = useState(
+  String(song.montage?.liveSetSlot ?? 1)
+);
+
   const lines = useMemo(() => {
     return lyricsText
       .split(/\n+/)
@@ -96,6 +112,31 @@ export default function SongEditor({
           switchingToVocal ||
           song.needsLyricsSync === true
         : false,
+    
+        montage: montageEnabled
+  ? {
+      enabled: true,
+
+      channel: 1,
+
+      bankMsb: 62,
+
+      bankLsb:
+        Number.parseInt(montagePage, 10) - 1,
+
+      program:
+        Number.parseInt(montageSlot, 10) - 1,
+
+      liveSetBank:
+        Number.parseInt(montageBank, 10),
+
+      liveSetPage:
+        Number.parseInt(montagePage, 10),
+
+      liveSetSlot:
+        Number.parseInt(montageSlot, 10),
+    }
+  : undefined,
     };
 
     onSave(updatedSong);
@@ -309,6 +350,105 @@ export default function SongEditor({
               ? "Toute modification des paroles peut nécessiter une nouvelle synchronisation."
               : "Le morceau sera utilisé directement en mode instrumental."}
           </p>
+
+<div className="mt-6 rounded-2xl border border-zinc-700 bg-zinc-900/60 p-5">
+  <div className="flex items-center justify-between gap-4">
+    <div>
+      <p className="text-xs font-semibold uppercase tracking-[0.25em] text-emerald-400">
+        MONTAGE M8x
+      </p>
+
+      <h3 className="mt-1 text-xl font-bold">
+        Pilotage du Yamaha MONTAGE
+      </h3>
+
+      <p className="mt-1 text-sm text-zinc-500">
+        Associe ce morceau à son emplacement dans le Live Set.
+      </p>
+    </div>
+
+    <label className="flex cursor-pointer items-center gap-3">
+      <input
+        type="checkbox"
+        checked={montageEnabled}
+        onChange={(event) =>
+          setMontageEnabled(event.target.checked)
+        }
+        className="h-5 w-5 accent-emerald-500"
+      />
+
+      <span className="font-semibold">
+        Piloter le M8x
+      </span>
+    </label>
+  </div>
+
+  {montageEnabled && (
+    <div className="mt-5 grid grid-cols-3 gap-4">
+      <div>
+        <label className="mb-2 block text-sm font-semibold text-zinc-400">
+          User Bank
+        </label>
+
+        <input
+          type="number"
+          min="1"
+          max="8"
+          value={montageBank}
+          onChange={(event) =>
+            setMontageBank(event.target.value)
+          }
+          className="w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3 outline-none focus:border-emerald-500"
+        />
+      </div>
+
+      <div>
+        <label className="mb-2 block text-sm font-semibold text-zinc-400">
+          Page
+        </label>
+
+        <input
+          type="number"
+          min="1"
+          value={montagePage}
+          onChange={(event) =>
+            setMontagePage(event.target.value)
+          }
+          className="w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3 outline-none focus:border-emerald-500"
+        />
+      </div>
+
+      <div>
+        <label className="mb-2 block text-sm font-semibold text-zinc-400">
+          Slot
+        </label>
+
+        <input
+          type="number"
+          min="1"
+          max="16"
+          value={montageSlot}
+          onChange={(event) =>
+            setMontageSlot(event.target.value)
+          }
+          className="w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3 outline-none focus:border-emerald-500"
+        />
+      </div>
+    </div>
+  )}
+
+  {montageEnabled && (
+    <div className="mt-4 rounded-xl border border-emerald-900/50 bg-emerald-950/20 px-4 py-3">
+      <p className="text-sm text-zinc-400">
+        Le M8x sera préparé sur :
+      </p>
+
+      <p className="mt-1 font-bold text-emerald-400">
+        User {montageBank} • Page {montagePage} • Slot {montageSlot}
+      </p>
+    </div>
+  )}
+</div>
 
           <div className="flex gap-3">
             <button
