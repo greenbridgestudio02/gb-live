@@ -644,7 +644,9 @@
         "liveSetBank": 1,
         "liveSetPage": 1,
         "liveSetSlot": 16
-      }
+      },
+      "audioFile": "/audio/piano-mman.wav",
+      "audioVolume": 0.15
     },
     {
       "id": "final",
@@ -2403,5 +2405,5 @@
     "et-un-jour-une-femme-florent-pagny"
   ],
   "requestedSongIds": [],
-  "updatedAt": 1787416462954
+  "updatedAt": 1787438650721
 }

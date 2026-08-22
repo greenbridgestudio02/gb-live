@@ -50,6 +50,8 @@ export type Song = {
 
   needsLyricsSync?: boolean;
 
+  audioFile?: string;
+
   montage?: MontageMidiConfig;
 };
 

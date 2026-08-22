@@ -14,6 +14,15 @@ export default function LyricsPlayer({ song }: LyricsPlayerProps) {
   const startTimeRef = useRef<number | null>(null);
   const pausedElapsedRef = useRef(0);
   const lastServerUpdateRef = useRef(0);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  useEffect(() => {
+  if (audioRef.current) {
+    audioRef.current.volume =
+      song.audioVolume ?? 1;
+  }
+}, [song.audioVolume, song.audioFile]);
+  const lastMidiTriggerRef = useRef(0);
+  const [audioArmed, setAudioArmed] = useState(false);
 
   const isInstrumental = song.kind === "instrumental";
   const lyricLines = song.lyricLines ?? [];
@@ -97,6 +106,21 @@ export default function LyricsPlayer({ song }: LyricsPlayerProps) {
     startTimeRef.current = null;
     pausedElapsedRef.current = 0;
     lastServerUpdateRef.current = 0;
+    fetch("/api/midi-trigger", {
+  cache: "no-store",
+})
+  .then((response) => response.json())
+  .then((event) => {
+    if (typeof event.timestamp === "number") {
+      lastMidiTriggerRef.current = event.timestamp;
+    }
+  })
+  .catch(() => {});
+    if (audioRef.current) {
+  audioRef.current.pause();
+  audioRef.current.currentTime = 0;
+  audioRef.current.load();
+}
 
     localStorage.setItem(
       "g3-live-public-elapsed-time",
@@ -136,61 +160,123 @@ export default function LyricsPlayer({ song }: LyricsPlayerProps) {
 
   // Chronomètre.
   useEffect(() => {
-    if (!isPlaying) {
-      return;
-    }
+  if (!isPlaying) {
+    return;
+  }
 
-    let animationFrameId: number;
+  let animationFrameId: number;
 
-    function update() {
-      if (startTimeRef.current !== null) {
-        const elapsed =
-          pausedElapsedRef.current +
-          (performance.now() - startTimeRef.current) / 1000;
+  function update() {
+    if (song.audioFile && audioRef.current) {
+      setElapsedTime(audioRef.current.currentTime);
+    } else if (startTimeRef.current !== null) {
+      const elapsed =
+        pausedElapsedRef.current +
+        (performance.now() - startTimeRef.current) / 1000;
 
-        setElapsedTime(elapsed);
-      }
-
-      animationFrameId =
-        requestAnimationFrame(update);
+      setElapsedTime(elapsed);
     }
 
     animationFrameId =
       requestAnimationFrame(update);
+  }
 
-    return () => {
-      cancelAnimationFrame(animationFrameId);
-    };
-  }, [isPlaying]);
+  animationFrameId =
+    requestAnimationFrame(update);
 
-  function togglePlayback() {
-    if (!hasSynchronizedLyrics) {
-      return;
+  return () => {
+    cancelAnimationFrame(animationFrameId);
+  };
+}, [isPlaying, song.audioFile]);
+async function armAudio() {
+  if (!song.audioFile || !audioRef.current) {
+    return;
+  }
+
+  try {
+    const audio = audioRef.current;
+
+    const previousMuted = audio.muted;
+
+    audio.muted = true;
+    audio.currentTime = 0;
+
+    await audio.play();
+
+    audio.pause();
+    audio.currentTime = 0;
+    audio.muted = previousMuted;
+
+    setElapsedTime(0);
+    pausedElapsedRef.current = 0;
+    setAudioArmed(true);
+  } catch (error) {
+    console.error(
+      "Impossible d'armer l'audio.",
+      error
+    );
+  }
+}
+  async function togglePlayback() {
+  if (!hasSynchronizedLyrics) {
+    return;
+  }
+
+  if (isPlaying) {
+    if (song.audioFile && audioRef.current) {
+      audioRef.current.pause();
+
+      const audioTime =
+        audioRef.current.currentTime;
+
+      setElapsedTime(audioTime);
+      pausedElapsedRef.current = audioTime;
+    } else {
+      pausedElapsedRef.current = elapsedTime;
     }
 
-    if (isPlaying) {
-      pausedElapsedRef.current = elapsedTime;
-      startTimeRef.current = null;
+    startTimeRef.current = null;
 
-      setIsPlaying(false);
+    setIsPlaying(false);
 
-      void sendLiveState(
-        elapsedTime,
-        false
+    void sendLiveState(
+      song.audioFile && audioRef.current
+        ? audioRef.current.currentTime
+        : elapsedTime,
+      false
+    );
+
+    return;
+  }
+
+  if (song.audioFile && audioRef.current) {
+    audioRef.current.currentTime =
+      elapsedTime;
+
+    try {
+      await audioRef.current.play();
+    } catch (error) {
+      console.error(
+        "Impossible de lancer le fichier audio.",
+        error
       );
 
       return;
     }
-
-    startTimeRef.current = performance.now();
-
-    setIsPlaying(true);
-
-    void sendLiveState(
-      elapsedTime,
-      true
-    );
+  } else {
+    startTimeRef.current =
+      performance.now();
   }
+
+  setIsPlaying(true);
+
+  void sendLiveState(
+    elapsedTime,
+    true
+  );
+}
+
+  
 
   function resetLyrics() {
     setIsPlaying(false);
@@ -198,13 +284,68 @@ export default function LyricsPlayer({ song }: LyricsPlayerProps) {
 
     startTimeRef.current = null;
     pausedElapsedRef.current = 0;
+    if (audioRef.current) {
+  audioRef.current.pause();
+  audioRef.current.currentTime = 0;
+}
 
     void sendLiveState(
       0,
       false
     );
   }
+useEffect(() => {
+  let stopped = false;
 
+  async function checkMidiTrigger() {
+    try {
+      const response = await fetch(
+        "/api/midi-trigger",
+        {
+          cache: "no-store",
+        }
+      );
+
+      if (!response.ok || stopped) {
+        return;
+      }
+
+      const event = await response.json();
+
+      if (
+        event.type !== "toggle-playback" ||
+        typeof event.timestamp !== "number" ||
+        event.timestamp <= lastMidiTriggerRef.current
+      ) {
+        return;
+      }
+
+      lastMidiTriggerRef.current =
+        event.timestamp;
+
+      void togglePlayback();
+    } catch {
+      // Listener MIDI temporairement indisponible.
+    }
+  }
+
+  const intervalId = window.setInterval(
+    () => {
+      void checkMidiTrigger();
+    },
+    100
+  );
+
+  return () => {
+    stopped = true;
+    window.clearInterval(intervalId);
+  };
+}, [
+  isPlaying,
+  hasSynchronizedLyrics,
+  song.id,
+  song.audioFile,
+]);
   // BLUETURN
   // Pédale gauche = ArrowLeft = lecture / pause des paroles.
   useEffect(() => {
@@ -256,6 +397,7 @@ export default function LyricsPlayer({ song }: LyricsPlayerProps) {
   if (isInstrumental) {
     return (
       <div className="flex h-full min-h-0 flex-col">
+        
         <div className="flex min-h-0 flex-1 items-center justify-center rounded-2xl border border-zinc-800 bg-zinc-900/40 p-4">
           <div className="w-full max-w-4xl text-center">
             <div className="flex items-center justify-center gap-4">
@@ -340,6 +482,28 @@ export default function LyricsPlayer({ song }: LyricsPlayerProps) {
   // MORCEAU CHANTÉ SYNCHRONISÉ
   return (
     <div className="flex h-full min-h-0 flex-col">
+      {song.audioFile && (
+  <audio
+    ref={audioRef}
+    src={song.audioFile}
+    preload="auto"
+  controls
+  onEnded={() => {
+          const finalTime =
+        audioRef.current?.currentTime ?? elapsedTime;
+
+      setElapsedTime(finalTime);
+      pausedElapsedRef.current = finalTime;
+      startTimeRef.current = null;
+      setIsPlaying(false);
+
+      void sendLiveState(
+        finalTime,
+        false
+      );
+    }}
+  />
+)}
       <div className="flex min-h-0 flex-1 items-center justify-center rounded-2xl border border-zinc-800 bg-zinc-900/40 p-6">
         <div className="w-full max-w-5xl text-center">
           <div className="min-h-16">
@@ -373,6 +537,15 @@ export default function LyricsPlayer({ song }: LyricsPlayerProps) {
       </div>
 
       <div className="mt-3 flex items-center justify-center gap-3">
+        {song.audioFile && !audioArmed && (
+  <button
+    type="button"
+    onClick={() => void armAudio()}
+    className="rounded-xl bg-amber-500 px-6 py-3 text-lg font-bold text-zinc-950"
+  >
+    🔊 Armer audio
+  </button>
+)}
         <button
           type="button"
           onClick={togglePlayback}

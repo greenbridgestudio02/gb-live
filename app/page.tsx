@@ -277,6 +277,7 @@ function BlindTestAdminPanel({
 export default function Home() {
   const [setlistPosition, setSetlistPosition] = useState(0);
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
+  const [playbackResetKey, setPlaybackResetKey] = useState(0);
   const [isHomeMode, setIsHomeMode] = useState(true);
   const [isPublicMessageOpen, setIsPublicMessageOpen] = useState(false);
   const [publicMessage, setPublicMessage] = useState("");
@@ -581,17 +582,39 @@ useEffect(() => {
 }, [currentSong]);
 
   function goToPreviousSong() {
-  const previousPosition = Math.max(setlistPosition - 1, 0);
-  const previousSongId = setlistSongIds[previousPosition];
-
-  const previousSongIndex = songs.findIndex(
-    (song) => song.id === previousSongId
+  const previousPosition = Math.max(
+    setlistPosition - 1,
+    0
   );
+
+  const previousSongId =
+    setlistSongIds[previousPosition];
+
+  const previousSongIndex =
+    songs.findIndex(
+      (song) => song.id === previousSongId
+    );
+
+  const previousSong =
+    songs[previousSongIndex];
 
   setSetlistPosition(previousPosition);
 
-  if (previousSongIndex !== -1) {
-    setCurrentSongIndex(previousSongIndex);
+  if (
+    previousSongIndex !== -1 &&
+    previousSong
+  ) {
+    setCurrentSongIndex(
+      previousSongIndex
+    );
+
+    setPlaybackResetKey(
+      (key) => key + 1
+    );
+
+    void prepareMontageForSong(
+      previousSong
+    );
   }
 }
 
@@ -601,16 +624,34 @@ function goToNextSong() {
     setlistSongIds.length - 1
   );
 
-  const nextSongId = setlistSongIds[nextPosition];
+  const nextSongId =
+    setlistSongIds[nextPosition];
 
-  const nextSongIndex = songs.findIndex(
-    (song) => song.id === nextSongId
-  );
+  const nextSongIndex =
+    songs.findIndex(
+      (song) => song.id === nextSongId
+    );
+
+  const nextSong =
+    songs[nextSongIndex];
 
   setSetlistPosition(nextPosition);
 
-  if (nextSongIndex !== -1) {
-    setCurrentSongIndex(nextSongIndex);
+  if (
+    nextSongIndex !== -1 &&
+    nextSong
+  ) {
+    setCurrentSongIndex(
+      nextSongIndex
+    );
+
+    setPlaybackResetKey(
+      (key) => key + 1
+    );
+
+    void prepareMontageForSong(
+      nextSong
+    );
   }
 }
 
@@ -776,6 +817,74 @@ async function refreshMidiOutputs() {
     );
   } finally {
     setMidiLoading(false);
+  }
+}
+
+async function prepareMontageForSong(
+  song: (typeof songs)[number]
+) {
+  if (!song?.montage?.enabled) {
+    return;
+  }
+
+  try {
+    // On cherche automatiquement la sortie du MONTAGE.
+    const outputsResponse = await fetch("/api/midi", {
+      cache: "no-store",
+    });
+
+    const outputsResult =
+      await outputsResponse.json();
+
+    if (!outputsResult.ok) {
+      return;
+    }
+
+    const outputs = Array.isArray(
+      outputsResult.outputs
+    )
+      ? outputsResult.outputs
+      : [];
+
+    const montageOutput =
+      outputs.find(
+        (name: string) =>
+          name === "MONTAGE M"
+      ) ??
+      outputs.find(
+        (name: string) =>
+          name.toLowerCase().includes("montage")
+      );
+
+    if (!montageOutput) {
+      console.warn(
+        "Sortie MIDI MONTAGE introuvable."
+      );
+      return;
+    }
+
+    await fetch("/api/midi", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        outputName: montageOutput,
+        channel: song.montage.channel,
+        msb: song.montage.bankMsb,
+        lsb: song.montage.bankLsb,
+        program: song.montage.program,
+      }),
+    });
+
+    console.log(
+      `MONTAGE préparé pour ${song.title}`
+    );
+  } catch (error) {
+    console.error(
+      "Impossible de préparer le MONTAGE.",
+      error
+    );
   }
 }
 
@@ -1557,7 +1666,10 @@ onClose={() => setIsSearchOpen(false)}
         </div>
 
         <div className="min-h-0 flex-1 overflow-hidden">
-  <LyricsPlayer song={currentSong} />
+  <LyricsPlayer
+    key={`${currentSong.id}-${playbackResetKey}`}
+    song={currentSong}
+  />
           </div>
       <div className="mb-2 flex items-center justify-between rounded-2xl border border-zinc-800 bg-zinc-900/60 px-6 py-4">
   <div>
@@ -1670,6 +1782,8 @@ onClose={() => setIsSearchOpen(false)}
   }
 
   setCurrentSongIndex(libraryIndex);
+  setPlaybackResetKey((key) => key + 1);
+  void prepareMontageForSong(selectedSong);
   setSetlistPosition(setlistIndex);
 
   setIsSetlistOpen(false);
@@ -1724,6 +1838,14 @@ onRemoveSong={(indexToRemove) => {
     requestedSongIds={requestedSongIds}
     onPlayNow={(index) => {
       setCurrentSongIndex(index);
+      setPlaybackResetKey((key) => key + 1);
+      const selectedSong = songs[index];
+
+if (selectedSong) {
+  void prepareMontageForSong(
+    selectedSong
+  );
+}
 
       const selectedSongId = songs[index]?.id;
       const setlistIndex = selectedSongId

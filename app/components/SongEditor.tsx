@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { Song, SongKind } from "../../types/show";
 
 type SongEditorProps = {
@@ -44,6 +44,19 @@ const [montagePage, setMontagePage] = useState(
 const [montageSlot, setMontageSlot] = useState(
   String(song.montage?.liveSetSlot ?? 1)
 );
+const [audioFile, setAudioFile] = useState(
+  song.audioFile ?? ""
+);
+const [audioVolume, setAudioVolume] = useState(
+  song.audioVolume ?? 1
+);
+
+const previewAudioRef = useRef<HTMLAudioElement | null>(null);
+useEffect(() => {
+  if (previewAudioRef.current) {
+    previewAudioRef.current.volume = audioVolume;
+  }
+}, [audioVolume, audioFile]);
 
   const lines = useMemo(() => {
     return lyricsText
@@ -112,8 +125,11 @@ const [montageSlot, setMontageSlot] = useState(
           switchingToVocal ||
           song.needsLyricsSync === true
         : false,
-    
-        montage: montageEnabled
+      audioFile: audioFile.trim() || undefined,
+      audioVolume,
+
+
+      montage: montageEnabled
   ? {
       enabled: true,
 
@@ -343,13 +359,67 @@ const [montageSlot, setMontageSlot] = useState(
             )}
           </div>
         </div>
+<div className="mt-6 rounded-2xl border border-amber-900/60 bg-amber-950/10 p-5">
+  <p className="text-xs font-semibold uppercase tracking-[0.25em] text-amber-400">
+    AUDIO GB LIVE
+  </p>
 
+  <h3 className="mt-1 text-xl font-bold">
+    Fichier audio du morceau
+  </h3>
+
+  <p className="mt-1 text-sm text-zinc-500">
+    Chemin du fichier WAV utilisé par GB Live.
+  </p>
+
+  <input
+    type="text"
+    value={audioFile}
+    onChange={(event) => setAudioFile(event.target.value)}
+    placeholder="/audio/piano-mman.wav"
+    className="mt-4 w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3 outline-none focus:border-amber-500"
+    />
+    <div className="mt-4">
+  <div className="flex items-center justify-between">
+    <label className="text-sm font-semibold text-zinc-300">
+      Volume audio GB Live
+    </label>
+
+    <span className="text-sm font-bold text-amber-400">
+      {Math.round(audioVolume * 100)} %
+    </span>
+  </div>
+
+  <input
+  type="range"
+  min="0"
+  max="1"
+  step="0.01"
+  value={audioVolume}
+  onChange={(event) =>
+    setAudioVolume(Number(event.target.value))
+  }
+  className="mt-3 w-full"
+/>
+</div>
+
+  {audioFile.trim() && (
+    <audio
+  ref={previewAudioRef}
+  controls
+  src={audioFile}
+  className="mt-4 w-full"
+/>
+  )}
+</div>
         <div className="mt-6 flex items-center justify-between border-t border-zinc-800 pt-6">
           <p className="text-sm text-zinc-500">
             {isVocal
               ? "Toute modification des paroles peut nécessiter une nouvelle synchronisation."
               : "Le morceau sera utilisé directement en mode instrumental."}
           </p>
+
+
 
 <div className="mt-6 rounded-2xl border border-zinc-700 bg-zinc-900/60 p-5">
   <div className="flex items-center justify-between gap-4">
