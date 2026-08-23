@@ -739,7 +739,19 @@
           "time": 169.49199999999988
         }
       ],
-      "needsLyricsSync": false
+      "needsLyricsSync": false,
+      "audioFile": "/audio/piano-aline.wav",
+      "audioVolume": 0.25,
+      "montage": {
+        "enabled": true,
+        "channel": 1,
+        "bankMsb": 62,
+        "bankLsb": 1,
+        "program": 14,
+        "liveSetBank": 1,
+        "liveSetPage": 2,
+        "liveSetSlot": 15
+      }
     },
     {
       "id": "test-creation-morceau",
@@ -2405,5 +2417,5 @@
     "et-un-jour-une-femme-florent-pagny"
   ],
   "requestedSongIds": [],
-  "updatedAt": 1787476291712
+  "updatedAt": 1787517887956
 }

@@ -625,6 +625,7 @@ useEffect(() => {
   }
 
   const previousSong = songs[previousSongIndex];
+  void prepareMontageForSong(previousSong);
 
   setSetlistPosition(previousPosition);
   setCurrentSongIndex(previousSongIndex);
@@ -669,6 +670,7 @@ async function goToNextSong() {
   }
 
   const nextSong = songs[nextSongIndex];
+  void prepareMontageForSong(nextSong);
 
   setSetlistPosition(nextPosition);
   setCurrentSongIndex(nextSongIndex);
@@ -868,6 +870,9 @@ async function refreshMidiOutputs() {
     setMidiLoading(false);
   }
 }
+useEffect(() => {
+  void refreshMidiOutputs();
+}, []);
 
 async function prepareMontageForSong(
   song: (typeof songs)[number]
@@ -1299,23 +1304,37 @@ onClose={() => setIsSearchOpen(false)}
         <div className="mb-3 rounded-2xl border border-emerald-900 bg-emerald-950/20 p-4">
           <div className="flex items-center justify-between gap-3">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.25em] text-emerald-400">
-                MIDI
-              </p>
+  <p className="text-xs font-semibold uppercase tracking-[0.25em] text-emerald-400">
+    MIDI
+  </p>
 
-              <h3 className="mt-1 text-lg font-bold">
-                Yamaha MONTAGE M8x
-              </h3>
-            </div>
+  <h3 className="mt-1 text-lg font-bold">
+    Yamaha MONTAGE M8x
+  </h3>
 
-            <button
-              type="button"
-              onClick={() => void refreshMidiOutputs()}
-              disabled={midiLoading}
-              className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm font-semibold disabled:opacity-40"
-            >
-              ↻ Détecter
-            </button>
+  <p
+    className={`mt-1 text-sm font-semibold ${
+      selectedMidiOutput
+        ? "text-emerald-400"
+        : "text-amber-400"
+    }`}
+  >
+    {selectedMidiOutput
+      ? `● Connecté : ${selectedMidiOutput}`
+      : "● Sortie MIDI non détectée"}
+  </p>
+</div>
+
+<button
+  type="button"
+  onClick={() => void refreshMidiOutputs()}
+  disabled={midiLoading}
+  className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm font-semibold disabled:opacity-40"
+>
+  {midiLoading
+    ? "Détection..."
+    : "↻ Détecter la sortie MIDI"}
+</button>
           </div>
 
           <select

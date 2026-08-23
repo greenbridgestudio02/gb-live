@@ -1,241 +1,97 @@
 {
   "mode": "song",
   "song": {
-    "id": "la-maison-bleue",
-    "title": "La groupie du pianiste - Michel Berger",
+    "id": "final",
+    "title": "Aline - Christophe",
     "kind": "vocal",
-    "lyrics": "Elle passe ses nuits sans dormir\n\nÀ gâcher son bel avenir\n\nLa groupie du pianiste\n\nDieu que cette fille a l'air triste\n\nAmoureuse d'un égoïste\n\nLa groupie du pianiste\n\nElle fout toute sa vie en l'air\n\nEt toute sa vie c'est pas grand chose\n\nQu'est-ce qu'elle aurait bien pu faire\n\nÀ part rêver seule dans son lit\n\nLe soir entre ses draps roses\n\nElle passe sa vie à l'attendre\n\nPour un mot pour un geste tendre\n\nLa groupie du pianiste\n\nDevant l'hôtel dans les coulisses\n\nElle rêve de la vie d'artiste\n\nLa groupie du pianiste\n\nElle le suivrait jusqu'en enfer\n\nEt même l'enfer c'est pas grand chose\n\nÀ côté d'être seule sur terre\n\nEt elle y pense dans son lit\n\nLe soir entre ses draps roses\n\nElle l'aime, elle l'adore\n\nPlus que tout elle l'aime\n\nC'est beau comme elle l'aime\n\nElle l'aime, elle l'adore\n\nC'est fou comme elle aime\n\nC'est beau comme elle l'aime\n\nIl a des droits sur son sourire\n\nElle a des droits sur ses désirs\n\nLa groupie du pianiste\n\nElle sait rester là sans rien dire\n\nPendant que lui joue ses délires\n\nLa groupie du pianiste\n\nQuand le concert est terminé\n\nElle met ses mains sur le clavier\n\nEn rêvant qu'il va l'emmener\n\nPasser le reste de sa vie\n\nTout simplement à l'écouter\n\nElle sait comprendre sa musique\n\nElle sait oublier qu'elle existe\n\nLa groupie du pianiste\n\nMais Dieu que cette fille prend des risques\n\nAmoureuse d'un égoïste\n\nLa groupie du pianiste\n\nElle fout toute sa vie en l'air\n\nEt toute sa vie c'est pas grand chose\n\nQu'est-ce qu'elle aurait bien pu faire\n\nÀ part rêver seule dans son lit\n\nLe soir entre ses draps roses\n\nElle l'aime, elle l'adore\n\nPlus que tout elle l'aime\n\nC'est beau comme elle l'aime\n\nElle l'aime, elle l'adore\n\nC'est fou comme elle aime\n\nC'est beau comme elle l'aime",
+    "lyrics": "J'avais dessiné sur le sable\n\nSon doux visage qui me souriait\n\nPuis il a plu sur cette plage\n\nDans cet orage, elle a disparu\n\nEt j'ai crié, crié, Aline, pour qu'elle revienne\n\nEt j'ai pleuré, pleuré, oh! j'avais trop de peine\n\nJe me suis assis aurès de son âme\n\nMais la belle dame s'était enfuie\n\nJe l'ai cherchée sans plus y croire\n\nEt sans un espoir, pour me guider\n\nEt j'ai crié, crié, Aline, pour qu'elle revienne\n\nEt j'ai pleuré, pleuré, oh! j'avais trop de peine\n\nJe n'ai gardé que ce doux visage\n\nComme une épave sur le sable mouillé\n\nEt j'ai crié, crié, Aline, pour qu'elle revienne\n\nEt j'ai pleuré, pleuré, oh! j'avais trop de peine\n\nEt j'ai crié, crié, Aline, pour qu'elle revienne\n\nEt j'ai pleuré, pleuré, oh! j'avais trop de peine\n\nEt j’ai crié, crié, Aline, pour qu’elle revienne\n\nAline",
     "lyricLines": [
       {
-        "time": 27.047,
-        "text": "Elle passe ses nuits sans dormir"
+        "time": 14.930999999999884,
+        "text": "J'avais dessiné sur le sable"
       },
       {
-        "time": 29.526,
-        "text": "À gâcher son bel avenir"
+        "time": 23.219999999999885,
+        "text": "Son doux visage qui me souriait"
       },
       {
-        "time": 32.193,
-        "text": "La groupie du pianiste"
+        "time": 31.291999999999884,
+        "text": "Puis il a plu sur cette plage"
       },
       {
-        "time": 38.76300000000023,
-        "text": "Dieu que cette fille a l'air triste"
+        "time": 39.41099999999988,
+        "text": "Dans cet orage, elle a disparu"
       },
       {
-        "time": 41.454,
-        "text": "Amoureuse d'un égoïste"
+        "time": 47.59999999999988,
+        "text": "Et j'ai crié, crié, Aline, pour qu'elle revienne"
       },
       {
-        "time": 44.089,
-        "text": "La groupie du pianiste"
+        "time": 55.878999999999884,
+        "text": "Et j'ai pleuré, pleuré, oh! j'avais trop de peine"
       },
       {
-        "time": 50.756,
-        "text": "Elle fout toute sa vie en l'air"
+        "time": 63.661999999999885,
+        "text": "Je me suis assis aurès de son âme"
       },
       {
-        "time": 53.298,
-        "text": "Et toute sa vie c'est pas grand chose"
+        "time": 71.91599999999988,
+        "text": "Mais la belle dame s'était enfuie"
       },
       {
-        "time": 55.761,
-        "text": "Qu'est-ce qu'elle aurait bien pu faire"
+        "time": 80.029,
+        "text": "Je l'ai cherchée sans plus y croire"
       },
       {
-        "time": 58.02,
-        "text": "À part rêver seule dans son lit"
+        "time": 87.97999999999989,
+        "text": "Et sans un espoir, pour me guider"
       },
       {
-        "time": 60.416,
-        "text": "Le soir entre ses draps roses"
+        "time": 96.32199999999989,
+        "text": "Et j'ai crié, crié, Aline, pour qu'elle revienne"
       },
       {
-        "time": 62.573,
-        "text": "Elle passe sa vie à l'attendre"
+        "time": 104.58599999999988,
+        "text": "Et j'ai pleuré, pleuré, oh! j'avais trop de peine"
       },
       {
-        "time": 65.057,
-        "text": "Pour un mot pour un geste tendre"
+        "time": 112.64199999999988,
+        "text": "Je n'ai gardé que ce doux visage"
       },
       {
-        "time": 67.714,
-        "text": "La groupie du pianiste"
+        "time": 120.755,
+        "text": "Comme une épave sur le sable mouillé"
       },
       {
-        "time": 74.22500000000024,
-        "text": "Devant l'hôtel dans les coulisses"
+        "time": 128.9109999999999,
+        "text": "Et j'ai crié, crié, Aline, pour qu'elle revienne"
       },
       {
-        "time": 76.726,
-        "text": "Elle rêve de la vie d'artiste"
+        "time": 137.226,
+        "text": "Et j'ai pleuré, pleuré, oh! j'avais trop de peine"
       },
       {
-        "time": 79.36000000000023,
-        "text": "La groupie du pianiste"
+        "time": 145.34899999999988,
+        "text": "Et j'ai crié, crié, Aline, pour qu'elle revienne"
       },
       {
-        "time": 85.98,
-        "text": "Elle le suivrait jusqu'en enfer"
+        "time": 153.49099999999987,
+        "text": "Et j'ai pleuré, pleuré, oh! j'avais trop de peine"
       },
       {
-        "time": 88.565,
-        "text": "Et même l'enfer c'est pas grand chose"
+        "time": 161.46399999999988,
+        "text": "Et j’ai crié, crié, Aline, pour qu’elle revienne"
       },
       {
-        "time": 90.983,
-        "text": "À côté d'être seule sur terre"
-      },
-      {
-        "time": 93.414,
-        "text": "Et elle y pense dans son lit"
-      },
-      {
-        "time": 95.73,
-        "text": "Le soir entre ses draps roses"
-      },
-      {
-        "time": 99.367,
-        "text": "Elle l'aime, elle l'adore"
-      },
-      {
-        "time": 103.529,
-        "text": "Plus que tout elle l'aime"
-      },
-      {
-        "time": 105.278,
-        "text": "C'est beau comme elle l'aime"
-      },
-      {
-        "time": 109.56200000000024,
-        "text": "Elle l'aime, elle l'adore"
-      },
-      {
-        "time": 112.839,
-        "text": "C'est fou comme elle aime"
-      },
-      {
-        "time": 114.692,
-        "text": "C'est beau comme elle l'aime"
-      },
-      {
-        "time": 130.895,
-        "text": "Il a des droits sur son sourire"
-      },
-      {
-        "time": 133.353,
-        "text": "Elle a des droits sur ses désirs"
-      },
-      {
-        "time": 136.04300000000023,
-        "text": "La groupie du pianiste"
-      },
-      {
-        "time": 142.694,
-        "text": "Elle sait rester là sans rien dire"
-      },
-      {
-        "time": 145.155,
-        "text": "Pendant que lui joue ses délires"
-      },
-      {
-        "time": 147.772,
-        "text": "La groupie du pianiste"
-      },
-      {
-        "time": 154.233,
-        "text": "Quand le concert est terminé"
-      },
-      {
-        "time": 156.736,
-        "text": "Elle met ses mains sur le clavier"
-      },
-      {
-        "time": 159.108,
-        "text": "En rêvant qu'il va l'emmener"
-      },
-      {
-        "time": 161.355,
-        "text": "Passer le reste de sa vie"
-      },
-      {
-        "time": 163.66,
-        "text": "Tout simplement à l'écouter"
-      },
-      {
-        "time": 165.886,
-        "text": "Elle sait comprendre sa musique"
-      },
-      {
-        "time": 168.372,
-        "text": "Elle sait oublier qu'elle existe"
-      },
-      {
-        "time": 170.961,
-        "text": "La groupie du pianiste"
-      },
-      {
-        "time": 177.477,
-        "text": "Mais Dieu que cette fille prend des risques"
-      },
-      {
-        "time": 179.86900000000023,
-        "text": "Amoureuse d'un égoïste"
-      },
-      {
-        "time": 182.51400000000024,
-        "text": "La groupie du pianiste"
-      },
-      {
-        "time": 189.047,
-        "text": "Elle fout toute sa vie en l'air"
-      },
-      {
-        "time": 191.56,
-        "text": "Et toute sa vie c'est pas grand chose"
-      },
-      {
-        "time": 194.038,
-        "text": "Qu'est-ce qu'elle aurait bien pu faire"
-      },
-      {
-        "time": 196.29,
-        "text": "À part rêver seule dans son lit"
-      },
-      {
-        "time": 198.642,
-        "text": "Le soir entre ses draps roses"
-      },
-      {
-        "time": 202.126,
-        "text": "Elle l'aime, elle l'adore"
-      },
-      {
-        "time": 206.057,
-        "text": "Plus que tout elle l'aime"
-      },
-      {
-        "time": 207.892,
-        "text": "C'est beau comme elle l'aime"
-      },
-      {
-        "time": 212.279,
-        "text": "Elle l'aime, elle l'adore"
-      },
-      {
-        "time": 215.495,
-        "text": "C'est fou comme elle aime"
-      },
-      {
-        "time": 217.164,
-        "text": "C'est beau comme elle l'aime"
+        "time": 169.49199999999988,
+        "text": "Aline"
       }
     ],
     "needsLyricsSync": false
   },
-  "elapsedTime": 0,
+  "elapsedTime": 175.9322,
   "isPlaying": false,
   "message": "",
   "messageUpdatedAt": 0,
-  "updatedAt": 1787481951204
+  "updatedAt": 1787518149906
 }

@@ -336,7 +336,7 @@ useEffect(() => {
     () => {
       void checkMidiTrigger();
     },
-    100
+    25
   );
 
   return () => {

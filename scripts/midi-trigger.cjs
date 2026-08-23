@@ -12,6 +12,8 @@ const triggerFile = path.join(
 
 const inputs = easymidi.getInputs();
 
+console.log("Entrées MIDI détectées :", inputs);
+
 if (!inputs.includes(inputName)) {
   console.error(
     `Entrée MIDI introuvable : ${inputName}`
@@ -22,10 +24,12 @@ if (!inputs.includes(inputName)) {
 const input = new easymidi.Input(inputName);
 
 console.log("Écoute MIDI active :", inputName);
-console.log("ASSIGN 1 = CC 86");
+console.log("Mode diagnostic : tous les CC seront affichés");
+console.log("ASSIGN 1 attendu = CC 86 / valeur 127");
 
 input.on("cc", (message) => {
-    console.log("CC reçu :", message);
+  console.log("CC reçu :", message);
+
   if (
     message.channel === 0 &&
     message.controller === 86 &&
