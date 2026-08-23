@@ -30,6 +30,7 @@ function BlindTestAdminPanel({
 
   type BlindTestState = {
     roundId: number;
+    isActive: boolean;
     isOpen: boolean;
     winner: BuzzEntry | null;
     buzzes: BuzzEntry[];
@@ -40,6 +41,17 @@ function BlindTestAdminPanel({
   const [blindState, setBlindState] =
     useState<BlindTestState | null>(null);
   const [busy, setBusy] = useState(false);
+  useEffect(() => {
+  void fetch("/api/blind-test", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      action: "activate",
+    }),
+  });
+}, []);
 
   useEffect(() => {
     let stopped = false;
@@ -72,6 +84,8 @@ function BlindTestAdminPanel({
 
   async function sendAction(
     action:
+      | "activate"
+      | "deactivate"
       | "open"
       | "close"
       | "reset"
@@ -114,7 +128,19 @@ function BlindTestAdminPanel({
 
           <button
             type="button"
-            onClick={onClose}
+            onClick={() => {
+  void fetch("/api/blind-test", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      action: "deactivate",
+    }),
+  });
+
+  onClose();
+}}
             className="flex h-12 w-12 items-center justify-center rounded-xl border border-zinc-700 bg-zinc-900 text-2xl font-bold"
           >
             ×
@@ -581,7 +607,7 @@ useEffect(() => {
   );
 }, [currentSong]);
 
-  function goToPreviousSong() {
+  async function goToPreviousSong() {
   const previousPosition = Math.max(
     setlistPosition - 1,
     0
@@ -590,71 +616,85 @@ useEffect(() => {
   const previousSongId =
     setlistSongIds[previousPosition];
 
-  const previousSongIndex =
-    songs.findIndex(
-      (song) => song.id === previousSongId
-    );
+  const previousSongIndex = songs.findIndex(
+    (song) => song.id === previousSongId
+  );
 
-  const previousSong =
-    songs[previousSongIndex];
+  if (previousSongIndex === -1) {
+    return;
+  }
+
+  const previousSong = songs[previousSongIndex];
 
   setSetlistPosition(previousPosition);
+  setCurrentSongIndex(previousSongIndex);
 
-  if (
-    previousSongIndex !== -1 &&
-    previousSong
-  ) {
-    setCurrentSongIndex(
-      previousSongIndex
-    );
-
-    setPlaybackResetKey(
-      (key) => key + 1
-    );
-
-    void prepareMontageForSong(
-      previousSong
-    );
-  }
+  await fetch("/api/live-state", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    cache: "no-store",
+    body: JSON.stringify({
+      mode: "song",
+      song: {
+        id: previousSong.id,
+        title: previousSong.title,
+        kind: previousSong.kind ?? "vocal",
+        lyrics: previousSong.lyrics,
+        lyricLines: previousSong.lyricLines ?? [],
+        needsLyricsSync:
+          previousSong.needsLyricsSync === true,
+      },
+      elapsedTime: 0,
+      isPlaying: false,
+    }),
+  });
 }
 
-function goToNextSong() {
+async function goToNextSong() {
   const nextPosition = Math.min(
     setlistPosition + 1,
     setlistSongIds.length - 1
   );
 
-  const nextSongId =
-    setlistSongIds[nextPosition];
+  const nextSongId = setlistSongIds[nextPosition];
 
-  const nextSongIndex =
-    songs.findIndex(
-      (song) => song.id === nextSongId
-    );
+  const nextSongIndex = songs.findIndex(
+    (song) => song.id === nextSongId
+  );
 
-  const nextSong =
-    songs[nextSongIndex];
+  if (nextSongIndex === -1) {
+    return;
+  }
+
+  const nextSong = songs[nextSongIndex];
 
   setSetlistPosition(nextPosition);
+  setCurrentSongIndex(nextSongIndex);
 
-  if (
-    nextSongIndex !== -1 &&
-    nextSong
-  ) {
-    setCurrentSongIndex(
-      nextSongIndex
-    );
-
-    setPlaybackResetKey(
-      (key) => key + 1
-    );
-
-    void prepareMontageForSong(
-      nextSong
-    );
-  }
+  await fetch("/api/live-state", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    cache: "no-store",
+    body: JSON.stringify({
+      mode: "song",
+      song: {
+        id: nextSong.id,
+        title: nextSong.title,
+        kind: nextSong.kind ?? "vocal",
+        lyrics: nextSong.lyrics,
+        lyricLines: nextSong.lyricLines ?? [],
+        needsLyricsSync:
+          nextSong.needsLyricsSync === true,
+      },
+      elapsedTime: 0,
+      isPlaying: false,
+    }),
+  });
 }
-
 async function sendPublicMode(
   mode:
     | "home"
@@ -664,6 +704,11 @@ async function sendPublicMode(
     | "end",
   message = ""
 ) {
+  console.log(
+  "PUBLIC MODE ENVOYÉ :",
+  mode,
+  new Date().toLocaleTimeString()
+);
   try {
     await fetch("/api/live-state", {
       method: "POST",
@@ -686,7 +731,17 @@ async function sendPublicMode(
 
 function startShow() {
   setIsHomeMode(false);
+
+  const currentPosition = setlistSongIds.findIndex(
+    (songId) => songId === currentSong?.id
+  );
+
+  if (currentPosition !== -1) {
+    setSetlistPosition(currentPosition);
+  }
+
   setIsSetlistOpen(true);
+  void sendPublicMode("song");
 }
 
 function returnHome() {
@@ -694,12 +749,6 @@ function returnHome() {
   setIsPublicMessageOpen(false);
   void sendPublicMode("home");
 }
-
-useEffect(() => {
-  if (isHomeMode) {
-    void sendPublicMode("home");
-  }
-}, [isHomeMode]);
 
 function showPublicMessage(message: string) {
   const cleanMessage = message.trim();
@@ -1062,6 +1111,19 @@ async function importLibrary() {
       </div>
 
       {isSearchOpen && (
+        <button
+          type="button"
+          onClick={() => {
+            setIsSearchOpen(false);
+            setIsNewSongEditorOpen(true);
+          }}
+          className="fixed right-24 top-6 z-[100] rounded-xl bg-emerald-500 px-5 py-3 font-bold text-zinc-950 shadow-lg"
+        >
+          + Nouveau morceau
+        </button>
+      )}
+
+      {isSearchOpen && (
         <SongSearch
           songs={songs}
           setlistSongIds={setlistSongIds}
@@ -1316,38 +1378,11 @@ onClose={() => setIsSearchOpen(false)}
           type="button"
           onClick={() => {
             setIsPreparationOpen(false);
-            setIsNewSongEditorOpen(true);
-          }}
-          className="rounded-xl border border-zinc-700 bg-zinc-900 px-6 py-4 text-left text-lg font-semibold"
-        >
-          + Nouveau morceau
-        </button>
-
-        <button
-          type="button"
-          onClick={() => {
-            setIsPreparationOpen(false);
             setIsSearchOpen(true);
           }}
           className="rounded-xl border border-zinc-700 bg-zinc-900 px-6 py-4 text-left text-lg font-semibold"
         >
           📚 Bibliothèque
-        </button>
-
-        <button
-          type="button"
-          onClick={publishLibrary}
-          className="rounded-xl border border-sky-700 bg-sky-950/30 px-6 py-4 text-left text-lg font-semibold text-sky-300"
-        >
-          ↑ Publier la bibliothèque
-        </button>
-
-        <button
-          type="button"
-          onClick={importLibrary}
-          className="rounded-xl border border-violet-700 bg-violet-950/30 px-6 py-4 text-left text-lg font-semibold text-violet-300"
-        >
-          ↓ Récupérer la bibliothèque
         </button>
 
         <button
@@ -1752,13 +1787,6 @@ onClose={() => setIsSearchOpen(false)}
   Accueil
 </button>
 
-  <button
-    type="button"
-    onClick={() => setIsPreparationOpen(true)}
-    className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 font-semibold"
-  >
-    Préparation
-  </button>
 </div>
 </section>
   {isSetlistOpen && (
@@ -1766,7 +1794,7 @@ onClose={() => setIsSearchOpen(false)}
     songs={setlistSongs}
     setlistPosition={setlistPosition}
     currentSongId={currentSong.id}
-    onSelectSong={(setlistIndex) => {
+    onSelectSong={async (setlistIndex) => {
   const selectedSong = setlistSongs[setlistIndex];
 
   if (!selectedSong) {
@@ -1783,12 +1811,36 @@ onClose={() => setIsSearchOpen(false)}
 
   setCurrentSongIndex(libraryIndex);
   setPlaybackResetKey((key) => key + 1);
+
   void prepareMontageForSong(selectedSong);
+
   setSetlistPosition(setlistIndex);
-
   setIsSetlistOpen(false);
+  setIsHomeMode(false);
 
-  void sendPublicMode("song");
+  await fetch("/api/live-state", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    cache: "no-store",
+    body: JSON.stringify({
+      mode: "song",
+
+      song: {
+        id: selectedSong.id,
+        title: selectedSong.title,
+        kind: selectedSong.kind ?? "vocal",
+        lyrics: selectedSong.lyrics,
+        lyricLines: selectedSong.lyricLines ?? [],
+        needsLyricsSync:
+          selectedSong.needsLyricsSync === true,
+      },
+
+      elapsedTime: 0,
+      isPlaying: false,
+    }),
+  });
 }}
     onMoveSong={(fromIndex, toIndex) => {
       setSetlistSongIds((currentSetlist) => {
@@ -1829,6 +1881,19 @@ onRemoveSong={(indexToRemove) => {
 
     onClose={() => setIsSetlistOpen(false)}
   />
+)}
+
+{isSearchOpen && (
+  <button
+    type="button"
+    onClick={() => {
+setIsSearchOpen(false);
+setIsNewSongEditorOpen(true);
+    }}
+    className="fixed right-24 top-6 z-[100] rounded-xl bg-emerald-500 px-5 py-3 font-bold text-zinc-950 shadow-lg"
+  >
+    + Nouveau morceau
+  </button>
 )}
 
 {isSearchOpen && (
@@ -2092,180 +2157,6 @@ onClose={() => setIsSearchOpen(false)}
         >
           Effacer l’écran public
         </button>
-      </div>
-    </div>
-  </div>
-)}
-
-{isPreparationOpen && (
-  <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/80 p-6">
-    <div className="w-full max-w-xl rounded-3xl border border-zinc-700 bg-zinc-950 p-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-400">
-            G3 Live
-          </p>
-
-          <h2 className="mt-1 text-2xl font-bold">
-            Préparation
-          </h2>
-        </div>
-
-        <button
-          type="button"
-          onClick={() => setIsPreparationOpen(false)}
-          className="flex h-12 w-12 items-center justify-center rounded-xl border border-zinc-700 bg-zinc-900 text-2xl font-bold"
-        >
-          ×
-        </button>
-      </div>
-
-     <div className="mt-6 grid gap-3">
-
-  {/* MIDI MONTAGE M8x */}
-  <div className="mb-3 rounded-2xl border border-emerald-900 bg-emerald-950/20 p-4">
-    <div className="flex items-center justify-between gap-3">
-      <div>
-        <p className="text-xs font-semibold uppercase tracking-[0.25em] text-emerald-400">
-          MIDI
-        </p>
-
-        <h3 className="mt-1 text-lg font-bold">
-          Yamaha MONTAGE M8x
-        </h3>
-      </div>
-
-      <button
-        type="button"
-        onClick={() => void refreshMidiOutputs()}
-        disabled={midiLoading}
-        className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm font-semibold disabled:opacity-40"
-      >
-        ↻ Détecter
-      </button>
-    </div>
-
-    <select
-      value={selectedMidiOutput}
-      onChange={(event) =>
-        setSelectedMidiOutput(event.target.value)
-      }
-      className="mt-4 w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3 outline-none focus:border-emerald-500"
-    >
-      <option value="">
-        Sélectionner une sortie MIDI
-      </option>
-
-      {midiOutputs.map((output) => (
-        <option key={output} value={output}>
-          {output}
-        </option>
-      ))}
-    </select>
-
-    <button
-      type="button"
-      onClick={() => void testMontageMidi()}
-      disabled={
-        midiLoading ||
-        !selectedMidiOutput ||
-        !currentSong?.montage?.enabled
-      }
-      className="mt-3 w-full rounded-xl bg-emerald-500 px-5 py-3 font-bold text-zinc-950 disabled:opacity-30"
-    >
-      🎹 Tester le M8x avec le morceau courant
-    </button>
-
-    <div className="mt-3 rounded-xl bg-zinc-950/60 px-4 py-3 text-sm">
-      <p className="text-zinc-500">
-        Morceau courant
-      </p>
-
-      <p className="font-semibold text-zinc-200">
-        {currentSong?.title ?? "Aucun"}
-      </p>
-
-      {currentSong?.montage?.enabled && (
-        <p className="mt-1 text-emerald-400">
-          User {currentSong.montage.liveSetBank} · Page{" "}
-          {currentSong.montage.liveSetPage} · Slot{" "}
-          {currentSong.montage.liveSetSlot}
-        </p>
-      )}
-    </div>
-
-    {midiStatus && (
-      <p className="mt-3 text-sm text-zinc-400">
-        {midiStatus}
-      </p>
-    )}
-  </div>
-
-  {/* NOUVEAU MORCEAU */}
-  <button
-    type="button"
-    onClick={() => {
-      setIsPreparationOpen(false);
-      setIsNewSongEditorOpen(true);
-    }}
-    className="rounded-xl border border-zinc-700 bg-zinc-900 px-6 py-4 text-left text-lg font-semibold"
-  >
-    + Nouveau morceau
-  </button>
-
-
-
-        <button
-          type="button"
-          onClick={() => {
-            setIsPreparationOpen(false);
-            setIsNewSongEditorOpen(true);
-          }}
-          className="rounded-xl border border-zinc-700 bg-zinc-900 px-6 py-4 text-left text-lg font-semibold"
-        >
-          + Nouveau morceau
-        </button>
-
-        <button
-          type="button"
-          onClick={() => {
-            setIsPreparationOpen(false);
-            setIsSearchOpen(true);
-          }}
-          className="rounded-xl border border-zinc-700 bg-zinc-900 px-6 py-4 text-left text-lg font-semibold"
-        >
-          📚 Bibliothèque
-        </button>
-
-        
-
-<button
-  type="button"
-  onClick={publishLibrary}
-  className="rounded-xl border border-sky-700 bg-sky-950/30 px-6 py-4 text-left text-lg font-semibold text-sky-300"
->
-  ↑ Publier la bibliothèque
-</button>
-
-<button
-  type="button"
-  onClick={importLibrary}
-  className="rounded-xl border border-violet-700 bg-violet-950/30 px-6 py-4 text-left text-lg font-semibold text-violet-300"
->
-  ↓ Récupérer la bibliothèque
-</button>
-
-        <button
-          type="button"
-          onClick={() => {
-            setIsPreparationOpen(false);
-            setIsAboutEditorOpen(true);
-          }}
-          className="rounded-xl border border-zinc-700 bg-zinc-900 px-6 py-4 text-left text-lg font-semibold"
-        >
-          👤 Modifier “À propos de moi”
-        </button>
-
       </div>
     </div>
   </div>

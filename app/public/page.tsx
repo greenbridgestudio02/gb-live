@@ -65,6 +65,7 @@ function BlindTestPanel() {
 
 type BlindTestState = {
   roundId: number;
+  isActive: boolean;
   isOpen: boolean;
   winner: BuzzEntry | null;
   buzzes: BuzzEntry[];
@@ -395,6 +396,49 @@ const [
 
 const PUBLIC_LYRICS_LEAD = 0.15;
 
+const [isBlindTestOpen, setIsBlindTestOpen] =
+  useState(false);
+
+  useEffect(() => {
+  let stopped = false;
+
+  async function refreshBlindTestState() {
+    try {
+      const response = await fetch(
+        "/api/blind-test",
+        {
+          cache: "no-store",
+        }
+      );
+
+      if (!response.ok) {
+        return;
+      }
+
+      const state = await response.json();
+
+      if (!stopped) {
+        setIsBlindTestOpen(
+          state.isActive === true
+        );
+      }
+    } catch {
+      // On conserve le dernier état connu.
+    }
+  }
+
+  void refreshBlindTestState();
+
+  const intervalId = window.setInterval(() => {
+    void refreshBlindTestState();
+  }, 500);
+
+  return () => {
+    stopped = true;
+    window.clearInterval(intervalId);
+  };
+}, []);
+
 const [displayElapsedTime, setDisplayElapsedTime] =
   useState(0);
 
@@ -501,7 +545,10 @@ useEffect(() => {
   return () => {
     cancelAnimationFrame(animationFrameId);
   };
-}, [liveState.isPlaying]);
+}, [
+  liveState.isPlaying,
+  liveState.song?.id,
+]);
 
 useEffect(() => {
   let stopped = false;
@@ -540,22 +587,23 @@ useEffect(() => {
 
 
   useEffect(() => {
-    if (liveState.mode === "home") {
-      setLocalView("home");
-      setUserReturnedHome(false);
-      return;
-    }
+  if (liveState.mode === "home") {
+    setLocalView("home");
+    setUserReturnedHome(false);
+    return;
+  }
 
-    if (liveState.mode === "song") {
-      if (!userReturnedHome) {
-        setLocalView("lyrics");
-      }
-    }
-  }, [
-    liveState.mode,
-    liveState.song?.id,
-    userReturnedHome,
-  ]);
+  if (
+    liveState.mode === "song" &&
+    liveState.song?.id
+  ) {
+    setLocalView("lyrics");
+    setUserReturnedHome(false);
+  }
+}, [
+  liveState.mode,
+  liveState.song?.id,
+]);
 
   const currentSong = liveState.song;
   const lyricLines =
@@ -592,6 +640,33 @@ useEffect(() => {
     currentLineIndex < lyricLines.length - 1
       ? lyricLines[currentLineIndex + 1]
       : null;
+
+useEffect(() => {
+  if (
+    liveState.mode !== "song" ||
+    localView !== "lyrics" ||
+    !currentSong ||
+    lyricLines.length === 0
+  ) {
+    return;
+  }
+
+  const lastLine =
+    lyricLines[lyricLines.length - 1];
+
+  if (
+    displayElapsedTime >= lastLine.time + 4
+  ) {
+    setLocalView("home");
+    setUserReturnedHome(true);
+  }
+}, [
+  displayElapsedTime,
+  liveState.mode,
+  localView,
+  currentSong,
+  lyricLines,
+]);
 
   function goHome() {
     setLocalView("home");
@@ -743,15 +818,17 @@ useEffect(() => {
   🎤 Paroles Live
 </button>
 
-<button
-  type="button"
-  onClick={() =>
-    setLocalView("blind-test")
-  }
-  className="w-full rounded-2xl border border-amber-700 bg-amber-950/30 px-6 py-5 text-xl font-bold text-amber-300 transition hover:bg-amber-950/50 active:scale-[0.99]"
->
-  🔔 Blind Test
-</button>
+{isBlindTestOpen && (
+  <button
+    type="button"
+    onClick={() =>
+      setLocalView("blind-test")
+    }
+    className="w-full rounded-2xl border border-amber-700 bg-amber-950/30 px-6 py-5 text-xl font-bold text-amber-300 transition hover:bg-amber-950/50 active:scale-[0.99]"
+  >
+    🔔 Blind Test
+  </button>
+)}
 
 <button
   type="button"
@@ -911,7 +988,7 @@ useEffect(() => {
       ) : currentSong.needsLyricsSync ||
         lyricLines.length === 0 ? (
         <div className="text-center">
-          <h1 className="text-4xl font-bold">
+          <h1 className="text-center text-3xl font-black leading-tight text-white">
             {currentSong.title}
           </h1>
 
@@ -923,12 +1000,12 @@ useEffect(() => {
         <div className="h-full w-full max-w-4xl overflow-hidden px-4">
           <div className="flex h-full flex-col">
 
-            {/* TITRE DU MORCEAU */}
-            <div className="shrink-0 pb-4 text-center">
-              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-zinc-600">
-                {currentSong.title}
-              </p>
-            </div>
+{/* TITRE DU MORCEAU */}
+<div className="shrink-0 border-b border-zinc-800 bg-black/95 px-4 py-3 text-center">
+  <p className="text-2xl font-black leading-tight text-white">
+    {currentSong.title}
+  </p>
+</div>
 
             {/* PROMPTEUR */}
             <div className="flex min-h-0 flex-1 flex-col justify-center overflow-hidden">

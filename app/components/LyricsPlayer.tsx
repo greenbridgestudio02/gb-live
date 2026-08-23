@@ -76,6 +76,8 @@ export default function LyricsPlayer({ song }: LyricsPlayerProps) {
         },
         cache: "no-store",
         body: JSON.stringify({
+          mode: "song",
+
           song: {
             id: song.id,
             title: song.title,
@@ -85,6 +87,7 @@ export default function LyricsPlayer({ song }: LyricsPlayerProps) {
             needsLyricsSync:
               song.needsLyricsSync === true,
           },
+          
           elapsedTime: time,
           isPlaying: playing,
         }),
@@ -537,15 +540,7 @@ useEffect(() => {
       </div>
 
       <div className="mt-3 flex items-center justify-center gap-3">
-        {song.audioFile && !audioArmed && (
-  <button
-    type="button"
-    onClick={() => void armAudio()}
-    className="rounded-xl bg-amber-500 px-6 py-3 text-lg font-bold text-zinc-950"
-  >
-    🔊 Armer audio
-  </button>
-)}
+
         <button
           type="button"
           onClick={togglePlayback}

@@ -14,15 +14,11 @@ type PlayerScore = {
 
 type BlindTestState = {
   roundId: number;
-
+  isActive: boolean;
   isOpen: boolean;
-
   winner: BuzzEntry | null;
-
   buzzes: BuzzEntry[];
-
   scores: PlayerScore[];
-
   updatedAt: number;
 };
 
@@ -35,15 +31,11 @@ const store = globalThis as G3BlindTestStore;
 if (!store.__g3BlindTestState) {
   store.__g3BlindTestState = {
     roundId: 0,
-
+    isActive: false,
     isOpen: false,
-
     winner: null,
-
     buzzes: [],
-
     scores: [],
-
     updatedAt: Date.now(),
   };
 }
@@ -52,10 +44,6 @@ function getState() {
   return store.__g3BlindTestState!;
 }
 
-/*
- * Permet de conserver automatiquement
- * un joueur dans le classement.
- */
 function ensurePlayerScore(
   scores: PlayerScore[],
   playerId: string,
@@ -66,16 +54,9 @@ function ensurePlayerScore(
   );
 
   if (existingPlayer) {
-    /*
-     * Le pseudo peut avoir été modifié
-     * depuis sa première participation.
-     */
     return scores.map((player) =>
       player.playerId === playerId
-        ? {
-            ...player,
-            playerName,
-          }
+        ? { ...player, playerName }
         : player
     );
   }
@@ -100,28 +81,44 @@ export async function GET() {
 
 export async function POST(request: Request) {
   const body = await request.json();
-
   const action = body?.action;
-
   const current = getState();
 
-  /*
-   * OUVRIR UNE NOUVELLE MANCHE
-   *
-   * Les scores sont conservés.
-   */
+  if (action === "activate") {
+    store.__g3BlindTestState = {
+      ...current,
+      isActive: true,
+      updatedAt: Date.now(),
+    };
+
+    return Response.json({
+      ok: true,
+      state: getState(),
+    });
+  }
+
+  if (action === "deactivate") {
+    store.__g3BlindTestState = {
+      ...current,
+      isActive: false,
+      isOpen: false,
+      updatedAt: Date.now(),
+    };
+
+    return Response.json({
+      ok: true,
+      state: getState(),
+    });
+  }
+
   if (action === "open") {
     store.__g3BlindTestState = {
       roundId: current.roundId + 1,
-
+      isActive: true,
       isOpen: true,
-
       winner: null,
-
       buzzes: [],
-
       scores: current.scores,
-
       updatedAt: Date.now(),
     };
 
@@ -131,15 +128,10 @@ export async function POST(request: Request) {
     });
   }
 
-  /*
-   * FERMER LES BUZZERS
-   */
   if (action === "close") {
     store.__g3BlindTestState = {
       ...current,
-
       isOpen: false,
-
       updatedAt: Date.now(),
     };
 
@@ -149,24 +141,14 @@ export async function POST(request: Request) {
     });
   }
 
-  /*
-   * NOUVELLE MANCHE,
-   * MAIS BUZZERS ENCORE FERMÉS.
-   *
-   * Les scores sont conservés.
-   */
   if (action === "reset") {
     store.__g3BlindTestState = {
       roundId: current.roundId + 1,
-
+      isActive: true,
       isOpen: false,
-
       winner: null,
-
       buzzes: [],
-
       scores: current.scores,
-
       updatedAt: Date.now(),
     };
 
@@ -176,23 +158,13 @@ export async function POST(request: Request) {
     });
   }
 
-  /*
-   * REMISE À ZÉRO DU CLASSEMENT.
-   *
-   * On conserve les joueurs,
-   * mais tous repartent à 0.
-   */
   if (action === "reset-scores") {
     store.__g3BlindTestState = {
       ...current,
-
-      scores: current.scores.map(
-        (player) => ({
-          ...player,
-          points: 0,
-        })
-      ),
-
+      scores: current.scores.map((player) => ({
+        ...player,
+        points: 0,
+      })),
       updatedAt: Date.now(),
     };
 
@@ -202,12 +174,6 @@ export async function POST(request: Request) {
     });
   }
 
-  /*
-   * BONNE RÉPONSE
-   *
-   * Le joueur actuellement premier
-   * gagne 1 point.
-   */
   if (action === "correct") {
     if (!current.winner) {
       return Response.json({
@@ -224,8 +190,7 @@ export async function POST(request: Request) {
     );
 
     scores = scores.map((player) =>
-      player.playerId ===
-      current.winner!.playerId
+      player.playerId === current.winner!.playerId
         ? {
             ...player,
             points: player.points + 1,
@@ -233,17 +198,10 @@ export async function POST(request: Request) {
         : player
     );
 
-    /*
-     * Le buzz reste visible côté Admin,
-     * mais on ferme les buzzers.
-     */
     store.__g3BlindTestState = {
       ...current,
-
       scores,
-
       isOpen: false,
-
       updatedAt: Date.now(),
     };
 
@@ -253,17 +211,6 @@ export async function POST(request: Request) {
     });
   }
 
-  /*
-   * MAUVAISE RÉPONSE
-   *
-   * Le premier joueur est éliminé
-   * de cette tentative.
-   *
-   * S'il existe déjà un deuxième buzz,
-   * il devient automatiquement prioritaire.
-   *
-   * Sinon les buzzers restent ouverts.
-   */
   if (action === "wrong") {
     if (!current.winner) {
       return Response.json({
@@ -273,25 +220,18 @@ export async function POST(request: Request) {
       });
     }
 
-    const remainingBuzzes =
-      current.buzzes.filter(
-        (buzz) =>
-          buzz.playerId !==
-          current.winner!.playerId
-      );
+    const remainingBuzzes = current.buzzes.filter(
+      (buzz) =>
+        buzz.playerId !== current.winner!.playerId
+    );
 
-    const nextWinner =
-      remainingBuzzes[0] ?? null;
+    const nextWinner = remainingBuzzes[0] ?? null;
 
     store.__g3BlindTestState = {
       ...current,
-
       winner: nextWinner,
-
       buzzes: remainingBuzzes,
-
       isOpen: true,
-
       updatedAt: Date.now(),
     };
 
@@ -301,9 +241,6 @@ export async function POST(request: Request) {
     });
   }
 
-  /*
-   * BUZZ D'UN JOUEUR
-   */
   if (action === "buzz") {
     const playerId =
       typeof body.playerId === "string"
@@ -335,14 +272,9 @@ export async function POST(request: Request) {
       });
     }
 
-    /*
-     * Un joueur ne peut buzzer
-     * qu'une seule fois dans une manche.
-     */
     if (
       current.buzzes.some(
-        (entry) =>
-          entry.playerId === playerId
+        (entry) => entry.playerId === playerId
       )
     ) {
       return Response.json({
@@ -361,25 +293,13 @@ export async function POST(request: Request) {
     const newBuzzes = [
       ...current.buzzes,
       buzz,
-    ].sort(
-      (a, b) =>
-        a.buzzedAt - b.buzzedAt
-    );
+    ].sort((a, b) => a.buzzedAt - b.buzzedAt);
 
-    /*
-     * Le premier joueur reste gagnant
-     * jusqu'à validation ou mauvaise réponse.
-     */
     const winner =
       current.winner ??
       newBuzzes[0] ??
       null;
 
-    /*
-     * Dès qu'un joueur participe,
-     * il entre aussi dans le classement,
-     * même avec 0 point.
-     */
     const scores = ensurePlayerScore(
       current.scores,
       playerId,
@@ -388,20 +308,10 @@ export async function POST(request: Request) {
 
     store.__g3BlindTestState = {
       ...current,
-
       winner,
-
       buzzes: newBuzzes,
-
       scores,
-
-      /*
-       * Important :
-       * on continue d'enregistrer
-       * l'ordre des autres buzz.
-       */
       isOpen: true,
-
       updatedAt: Date.now(),
     };
 
@@ -411,21 +321,22 @@ export async function POST(request: Request) {
     });
   }
 
-if (action === "new-game") {
-  store.__g3BlindTestState = {
-    roundId: 0,
-    isOpen: false,
-    winner: null,
-    buzzes: [],
-    scores: [],
-    updatedAt: Date.now(),
-  };
+  if (action === "new-game") {
+    store.__g3BlindTestState = {
+      roundId: 0,
+      isActive: true,
+      isOpen: false,
+      winner: null,
+      buzzes: [],
+      scores: [],
+      updatedAt: Date.now(),
+    };
 
-  return Response.json({
-    ok: true,
-    state: getState(),
-  });
-}
+    return Response.json({
+      ok: true,
+      state: getState(),
+    });
+  }
 
   return Response.json(
     {
