@@ -164,23 +164,25 @@ export default function ScreenPage() {
   </div>
 ) : (
         <div className="flex h-full flex-col">
-          <header className="shrink-0 px-12 py-8 text-center">
-            <p className="text-lg font-semibold uppercase tracking-[0.45em] text-emerald-400">
-              GB LIVE
-            </p>
+          <header className="shrink-0 px-12 pt-5 pb-2 text-center">
+  <img
+    src="/g3-live-logo.png"
+    alt="G3 Live"
+    className="mx-auto h-56 w-auto object-contain"
+  />
 
-            <h1 className="mt-3 text-4xl font-black">
-              {currentSong.title}
-            </h1>
+  <h1 className="mt-1 text-4xl font-black text-white">
+    {currentSong.title}
+  </h1>
 
-            {currentSong.artist && (
-              <p className="mt-2 text-2xl text-zinc-500">
-                {currentSong.artist}
-              </p>
-            )}
-          </header>
+  {currentSong.artist && (
+    <p className="mt-1 text-2xl font-semibold text-zinc-400">
+      {currentSong.artist}
+    </p>
+  )}
+</header>
 
-          <section className="flex min-h-0 flex-1 items-center justify-center px-16">
+          <section className="flex min-h-0 flex-1 items-center justify-center px-16 -translate-y-20">
             {lyricLines.length === 0 ? (
               <p className="text-3xl text-zinc-600">
                 ♪
@@ -217,9 +219,7 @@ export default function ScreenPage() {
             )}
           </section>
 
-          <footer className="shrink-0 px-8 py-5 text-center text-sm text-zinc-700">
-            GB Live • by Green Bridge Studio
-          </footer>
+          
         </div>
       )}
     </main>
