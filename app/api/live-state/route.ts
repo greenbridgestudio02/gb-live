@@ -28,7 +28,8 @@ type PublicMode =
   | "song"
   | "message"
   | "pause"
-  | "end";
+  | "end"
+  | "dj";
 
 type LiveState = {
   mode: PublicMode;
@@ -99,7 +100,8 @@ async function readLiveState(): Promise<LiveState> {
         parsed.mode === "song" ||
         parsed.mode === "message" ||
         parsed.mode === "pause" ||
-        parsed.mode === "end"
+        parsed.mode === "end" ||
+        parsed.mode === "dj"
           ? parsed.mode
           : "home",
 
@@ -364,7 +366,8 @@ export async function POST(
     body.mode === "song" ||
     body.mode === "message" ||
     body.mode === "pause" ||
-    body.mode === "end"
+    body.mode === "end" ||
+    body.mode === "dj"
   ) {
     mode = body.mode;
   }

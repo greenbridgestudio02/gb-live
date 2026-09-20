@@ -176,6 +176,18 @@ export default function ScreenPage() {
       {liveState.message}
     </p>
   </div>
+) : liveState.mode === "dj" ? (
+  <div className="flex h-full w-full flex-col items-center justify-center bg-black text-center">
+    <img
+      src="/g3-live-logo.png"
+      alt="G3 Live"
+      className="h-72 w-auto object-contain"
+    />
+
+    <p className="mt-4 text-5xl font-black uppercase tracking-[0.35em] text-violet-300">
+      DJ SET
+    </p>
+  </div>
 ) : (
         <div className="flex h-full flex-col">
           <header className="shrink-0 px-12 pt-5 pb-2 text-center">
