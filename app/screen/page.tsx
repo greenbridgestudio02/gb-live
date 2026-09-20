@@ -155,22 +155,14 @@ export default function ScreenPage() {
   return (
     <main className="h-screen w-screen overflow-hidden bg-black text-white">
       {showWelcome ? (
-        <div className="flex h-full items-center justify-center">
-          <div className="text-center">
-            <p className="text-2xl font-semibold uppercase tracking-[0.5em] text-emerald-400">
-              GB LIVE
-            </p>
-
-            <h1 className="mt-8 text-7xl font-black">
-              Bienvenue
-            </h1>
-
-            <p className="mt-6 text-2xl text-zinc-500">
-              by Green Bridge Studio
-            </p>
-          </div>
-        </div>
-      ) : (
+  <div className="flex h-full w-full items-center justify-center bg-black p-8">
+    <img
+      src="/g3-live-logo.png"
+      alt="G3 Live by Green Bridge Studio"
+      className="max-h-[90vh] max-w-[90vw] object-contain"
+    />
+  </div>
+) : (
         <div className="flex h-full flex-col">
           <header className="shrink-0 px-12 py-8 text-center">
             <p className="text-lg font-semibold uppercase tracking-[0.45em] text-emerald-400">
