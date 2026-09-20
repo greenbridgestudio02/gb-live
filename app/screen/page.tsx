@@ -164,6 +164,18 @@ export default function ScreenPage() {
       className="max-h-[90vh] max-w-[90vw] object-contain"
     />
   </div>
+) : liveState.mode === "message" ? (
+  <div className="flex h-full w-full flex-col items-center justify-center bg-black px-16 text-center">
+    <img
+      src="/g3-live-logo.png"
+      alt="G3 Live"
+      className="h-48 w-auto object-contain"
+    />
+
+    <p className="mt-8 max-w-5xl text-6xl font-black leading-tight text-amber-300">
+      {liveState.message}
+    </p>
+  </div>
 ) : (
         <div className="flex h-full flex-col">
           <header className="shrink-0 px-12 pt-5 pb-2 text-center">

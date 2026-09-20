@@ -758,7 +758,7 @@ function showPublicMessage(message: string) {
   if (!cleanMessage) {
     return;
   }
-
+setIsPublicScreenHidden(true);
   void sendPublicMode("message", cleanMessage);
 }
 
@@ -1696,6 +1696,13 @@ onClose={() => setIsSearchOpen(false)}
   >
     🎤 Paroles
   </button>
+  <button
+  type="button"
+  onClick={() => setIsPublicMessageOpen(true)}
+  className="rounded-lg border border-amber-700 bg-amber-950/40 px-4 py-2 text-sm font-semibold text-amber-300 hover:bg-amber-900/50"
+>
+  💬 Message
+</button>
 </div>
         <div className="text-right">
           <p className="text-sm text-zinc-500">
