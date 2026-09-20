@@ -6,12 +6,15 @@ import type { Song } from "../../types/show";
 type LyricsPlayerProps = {
   song: Song;
   stopped?: boolean;
+  publicScreenHidden?: boolean;
 };
 
 export default function LyricsPlayer({
   song,
   stopped = false,
-}: LyricsPlayerProps) {  const [isPlaying, setIsPlaying] = useState(false);
+  publicScreenHidden = false,
+}: LyricsPlayerProps) { 
+  const [isPlaying, setIsPlaying] = useState(false);
   const [elapsedTime, setElapsedTime] = useState(0);
 
   const startTimeRef = useRef<number | null>(null);
@@ -162,9 +165,9 @@ useEffect(() => {
 
   // Envoi régulier au serveur pendant la lecture.
   useEffect(() => {
-    if (!isPlaying) {
-      return;
-    }
+    if (!isPlaying || stopped || publicScreenHidden) {
+  return;
+}
 
     const now = performance.now();
 
@@ -178,7 +181,13 @@ useEffect(() => {
       elapsedTime,
       true
     );
-  }, [elapsedTime, isPlaying, song.id]);
+  }, [
+  elapsedTime,
+  isPlaying,
+  song.id,
+  stopped,
+  publicScreenHidden,
+]);
 
   // Chronomètre.
   useEffect(() => {

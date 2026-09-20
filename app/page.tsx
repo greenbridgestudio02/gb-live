@@ -309,7 +309,7 @@ export default function Home() {
   const [publicMessage, setPublicMessage] = useState("");
 
   const [isPaused, setIsPaused] = useState(false);
-
+  const [isPublicScreenHidden, setIsPublicScreenHidden] = useState(false);  
   const [isSetlistOpen, setIsSetlistOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [requestedSongIds, setRequestedSongIds] = useState<string[]>([]);
@@ -1670,7 +1670,33 @@ onClose={() => setIsSearchOpen(false)}
 
 
 </div>
+<div className="flex items-center gap-2">
+  <span className="mr-2 text-xs font-semibold uppercase tracking-wider text-zinc-500">
+    Écran public
+  </span>
 
+  <button
+    type="button"
+    onClick={() => {
+  setIsPublicScreenHidden(true);
+  void sendPublicMode("home");
+}}
+    className="rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm font-semibold hover:bg-zinc-800"
+  >
+    📺 Logo
+  </button>
+
+  <button
+    type="button"
+    onClick={() => {
+  setIsPublicScreenHidden(false);
+  void sendPublicMode("song");
+}}
+    className="rounded-lg border border-emerald-700 bg-emerald-950/40 px-4 py-2 text-sm font-semibold text-emerald-300 hover:bg-emerald-900/50"
+  >
+    🎤 Paroles
+  </button>
+</div>
         <div className="text-right">
           <p className="text-sm text-zinc-500">
             Morceau
@@ -1724,6 +1750,7 @@ onClose={() => setIsSearchOpen(false)}
   key={`${currentSong.id}-${playbackResetKey}`}
   song={currentSong}
   stopped={isPaused}
+  publicScreenHidden={isPublicScreenHidden}
 />
           </div>
       <div className="mb-2 flex items-center justify-between rounded-2xl border border-zinc-800 bg-zinc-900/60 px-6 py-4">

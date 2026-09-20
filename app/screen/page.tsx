@@ -150,7 +150,9 @@ export default function ScreenPage() {
   }
 
   const showWelcome =
-    !currentSong || liveState.mode === "pause";
+  !currentSong ||
+  liveState.mode === "pause" ||
+  liveState.mode === "home";
 
   return (
     <main className="h-screen w-screen overflow-hidden bg-black text-white">
