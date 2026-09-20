@@ -291,7 +291,19 @@
         }
       ],
       "needsLyricsSync": false,
-      "kind": "vocal"
+      "kind": "vocal",
+      "audioFile": "/audio/Piano-mistralgagnant.wav",
+      "audioVolume": 0.25,
+      "montage": {
+        "enabled": true,
+        "channel": 1,
+        "bankMsb": 62,
+        "bankLsb": 0,
+        "program": 6,
+        "liveSetBank": 1,
+        "liveSetPage": 1,
+        "liveSetSlot": 7
+      }
     },
     {
       "id": "entre-deux-rives",
@@ -485,7 +497,19 @@
           "time": 173.24
         }
       ],
-      "needsLyricsSync": false
+      "needsLyricsSync": false,
+      "audioFile": "/audio/Piano-monamour.wav",
+      "audioVolume": 0.25,
+      "montage": {
+        "enabled": true,
+        "channel": 1,
+        "bankMsb": 62,
+        "bankLsb": 0,
+        "program": 5,
+        "liveSetBank": 1,
+        "liveSetPage": 1,
+        "liveSetSlot": 6
+      }
     },
     {
       "id": "le-pont",
@@ -944,7 +968,19 @@
         }
       ],
       "needsLyricsSync": false,
-      "kind": "vocal"
+      "kind": "vocal",
+      "audioFile": "/audio/Piano-labas.wav",
+      "audioVolume": 0.25,
+      "montage": {
+        "enabled": true,
+        "channel": 1,
+        "bankMsb": 62,
+        "bankLsb": 2,
+        "program": 3,
+        "liveSetBank": 1,
+        "liveSetPage": 3,
+        "liveSetSlot": 4
+      }
     },
     {
       "id": "la-maison-bleue",
@@ -1181,7 +1217,19 @@
           "time": 217.164
         }
       ],
-      "needsLyricsSync": false
+      "needsLyricsSync": false,
+      "audioFile": "/audio/Piano-lagroupie.wav",
+      "audioVolume": 0.25,
+      "montage": {
+        "enabled": true,
+        "channel": 1,
+        "bankMsb": 62,
+        "bankLsb": 0,
+        "program": 4,
+        "liveSetBank": 1,
+        "liveSetPage": 1,
+        "liveSetSlot": 5
+      }
     },
     {
       "id": "et-un-jour-une-femme-florent-pagny",
@@ -1350,7 +1398,19 @@
           "time": 257.453
         }
       ],
-      "needsLyricsSync": false
+      "needsLyricsSync": false,
+      "audioFile": "/audio/Piano-unjourunefemme.wav",
+      "audioVolume": 0.25,
+      "montage": {
+        "enabled": true,
+        "channel": 1,
+        "bankMsb": 62,
+        "bankLsb": 0,
+        "program": 2,
+        "liveSetBank": 1,
+        "liveSetPage": 1,
+        "liveSetSlot": 3
+      }
     },
     {
       "id": "la-corrida-francis-cabrel",
@@ -1364,182 +1424,194 @@
       "lyricLines": [
         {
           "text": "Depuis le temps que je patiente",
-          "time": 0
+          "time": 52.06790000000037
         },
         {
           "text": "Dans cette chambre noire,",
-          "time": 0
+          "time": 54.45970000000112
         },
         {
           "text": "J’entends qu’on s’amuse et qu’on chante",
-          "time": 0
+          "time": 57.49360000000149
         },
         {
           "text": "Au bout du couloir.",
-          "time": 0
+          "time": 59.60770000000112
         },
         {
           "text": "Quelqu’un a touché le verrou",
-          "time": 0
+          "time": 62.29370000000112
         },
         {
           "text": "Et j’ai plongé vers le grand jour",
-          "time": 0
+          "time": 64.75020000000112
         },
         {
           "text": "J’ai vu les fanfares, les barrières",
-          "time": 0
+          "time": 67.64980000000074
         },
         {
           "text": "Et les gens autour.",
-          "time": 0
+          "time": 70.17790000000038
         },
         {
           "text": "Dans les premiers moments, j’ai cru",
-          "time": 0
+          "time": 82.29960000000149
         },
         {
           "text": "Qu’il fallait seulement se défendre.",
-          "time": 0
+          "time": 84.70770000000111
         },
         {
           "text": "Mais cette place est sans issue,",
-          "time": 0
+          "time": 87.82170000000112
         },
         {
           "text": "Je commence à comprendre.",
-          "time": 0
+          "time": 89.97830000000074
         },
         {
           "text": "Ils ont refermé derrière moi,",
-          "time": 0
+          "time": 92.772
         },
         {
           "text": "Ils ont eu peur que je recule.",
-          "time": 0
+          "time": 95.21360000000149
         },
         {
           "text": "Je vais bien finir par l’avoir",
-          "time": 0
+          "time": 97.96780000000075
         },
         {
           "text": "Cette danseuse ridicule...",
-          "time": 0
+          "time": 99.76190000000037
         },
         {
           "text": "Est-ce que ce monde est sérieux ?",
-          "time": 0
+          "time": 107.39160000000149
         },
         {
           "text": "Andalousie, je me souviens :",
-          "time": 0
+          "time": 122.68980000000074
         },
         {
           "text": "Les prairies bordées de cactus...",
-          "time": 0
+          "time": 125.19770000000112
         },
         {
           "text": "Je ne vais pas trembler devant",
-          "time": 0
+          "time": 128.19570000000112
         },
         {
           "text": "Ce pantin, ce minus !",
-          "time": 0
+          "time": 129.55770000000112
         },
         {
           "text": "Je vais l’attraper, lui et son chapeau,",
-          "time": 0
+          "time": 133.11830000000074
         },
         {
           "text": "Les faire tourner comme un soleil !",
-          "time": 0
+          "time": 135.39770000000112
         },
         {
           "text": "Ce soir, la femme du torero",
-          "time": 0
+          "time": 138.2457000000011
         },
         {
           "text": "Dormira sur ses deux oreilles.",
-          "time": 0
+          "time": 140.05170000000112
         },
         {
           "text": "Est-ce que ce monde est sérieux ?",
-          "time": 0
+          "time": 147.778
         },
         {
           "text": "J’en ai poursuivi des fantômes",
-          "time": 0
+          "time": 167.38390000000038
         },
         {
           "text": "Presque touché leurs ballerines",
-          "time": 0
+          "time": 169.91980000000075
         },
         {
           "text": "Ils ont frappé fort dans mon cou",
-          "time": 0
+          "time": 175.6496000000015
         },
         {
           "text": "Pour que je m’incline",
-          "time": 0
+          "time": 178.41980000000075
         },
         {
           "text": "Ils sortent d’où ces acrobates",
-          "time": 0
+          "time": 183.49390000000037
         },
         {
           "text": "Avec leurs costumes de papier ?",
-          "time": 0
+          "time": 187.01570000000112
         },
         {
           "text": "J’ai jamais appris à me battre",
-          "time": 0
+          "time": 193.29780000000073
         },
         {
           "text": "Contre des poupées",
-          "time": 0
+          "time": 196.022
         },
         {
           "text": "Sentir le sable sous ma tête",
-          "time": 0
+          "time": 226.23580000000075
         },
         {
           "text": "C’est fou comme ça peut faire du bien",
-          "time": 0
+          "time": 228.8177000000011
         },
         {
           "text": "J’ai prié pour que tout s’arrête",
-          "time": 0
+          "time": 231.70580000000075
         },
         {
           "text": "Andalousie je me souviens",
-          "time": 0
+          "time": 233.80170000000112
         },
         {
           "text": "Je les entends rire comme je râle",
-          "time": 0
+          "time": 236.68580000000074
         },
         {
           "text": "Je les vois danser comme je succombe",
-          "time": 0
+          "time": 239.02180000000075
         },
         {
           "text": "Je ne pensais pas qu’on puisse autant",
-          "time": 0
+          "time": 241.90380000000076
         },
         {
           "text": "S’amuser autour d’une tombe",
-          "time": 0
+          "time": 243.68970000000112
         },
         {
           "text": "Est-ce que ce monde est sérieux ?",
-          "time": 0
+          "time": 251.38380000000075
         },
         {
           "text": "Est-ce que ce monde est sérieux ?",
-          "time": 0
+          "time": 272.21170000000114
         }
       ],
-      "needsLyricsSync": true
+      "needsLyricsSync": false,
+      "audioFile": "/audio/Piano-lacorrida.wav",
+      "audioVolume": 0.25,
+      "montage": {
+        "enabled": true,
+        "channel": 1,
+        "bankMsb": 62,
+        "bankLsb": 0,
+        "program": 12,
+        "liveSetBank": 1,
+        "liveSetPage": 1,
+        "liveSetSlot": 13
+      }
     },
     {
       "id": "if-i-ain-t-got-you-alicia-keys",
@@ -1553,158 +1625,170 @@
       "lyricLines": [
         {
           "text": "Some people live for the fortune",
-          "time": 0
+          "time": 27.143799999998883
         },
         {
           "text": "Some people live just for the fame",
-          "time": 0
+          "time": 32.94579999999888
         },
         {
           "text": "Some people live for the power",
-          "time": 0
+          "time": 39.23579999999888
         },
         {
           "text": "Some people live just to play the game",
-          "time": 0
+          "time": 45.202
         },
         {
           "text": "Some people think that the physical things define what's within",
-          "time": 0
+          "time": 50.564
         },
         {
           "text": "And I have been there before, and that life's a bore",
-          "time": 0
+          "time": 61.2685
         },
         {
           "text": "So full of the superficial",
-          "time": 0
+          "time": 68.18009999999963
         },
         {
           "text": "Some people want it all",
-          "time": 0
+          "time": 73.28179999999888
         },
         {
           "text": "But I don't want nothing at all",
-          "time": 0
+          "time": 76.33179999999888
         },
         {
           "text": "If it ain't you baby",
-          "time": 0
+          "time": 79.634
         },
         {
           "text": "If I ain't got you baby",
-          "time": 0
+          "time": 82.65579999999888
         },
         {
           "text": "Some people want diamond rings",
-          "time": 0
+          "time": 85.46590000000037
         },
         {
           "text": "Some just want everything",
-          "time": 0
+          "time": 88.57579999999888
         },
         {
           "text": "But everthing means nothing",
-          "time": 0
+          "time": 91.38369999999925
         },
         {
           "text": "If I ain't got you",
-          "time": 0
+          "time": 94.39179999999888
         },
         {
           "text": "Some people search for a fountain",
-          "time": 0
+          "time": 100.07259999999962
         },
         {
           "text": "That promises forever young",
-          "time": 0
+          "time": 105.658
         },
         {
           "text": "Some people need three dozen roses",
-          "time": 0
+          "time": 112.23769999999925
         },
         {
           "text": "And that's the only way to prove you love them",
-          "time": 0
+          "time": 118.16990000000037
         },
         {
           "text": "Hand me the world on a silver platter",
-          "time": 0
+          "time": 123.79579999999888
         },
         {
           "text": "And what good would it be",
-          "time": 0
+          "time": 129.37979999999888
         },
         {
           "text": "With no one to share, with no one who truly cares for me",
-          "time": 0
+          "time": 136.04229999999887
         },
         {
           "text": "Some people want it all",
-          "time": 0
+          "time": 146.70790000000036
         },
         {
           "text": "But I don't want nothing at all",
-          "time": 0
+          "time": 149.7817999999989
         },
         {
           "text": "If it ain't you baby",
-          "time": 0
+          "time": 153.11819999999926
         },
         {
           "text": "If I ain't got you baby",
-          "time": 0
+          "time": 156.0597999999989
         },
         {
           "text": "Some people want diamond rings",
-          "time": 0
+          "time": 158.98169999999925
         },
         {
           "text": "Some just want everything",
-          "time": 0
+          "time": 162.0777999999989
         },
         {
           "text": "But everthing means nothing",
-          "time": 0
+          "time": 165.30559999999963
         },
         {
           "text": "If I ain't got you",
-          "time": 0
+          "time": 168.012
         },
         {
           "text": "Some people want it all",
-          "time": 0
+          "time": 171.23579999999887
         },
         {
           "text": "But I don't want nothing at all",
-          "time": 0
+          "time": 174.23390000000038
         },
         {
           "text": "If it ain't you baby",
-          "time": 0
+          "time": 177.578
         },
         {
           "text": "If I ain't got you baby",
-          "time": 0
+          "time": 180.42579999999887
         },
         {
           "text": "Some people want diamond rings",
-          "time": 0
+          "time": 183.41390000000038
         },
         {
           "text": "Some just want everything",
-          "time": 0
+          "time": 186.32979999999887
         },
         {
           "text": "But everthing means nothing",
-          "time": 0
+          "time": 189.42779999999888
         },
         {
           "text": "If I ain't got you",
-          "time": 0
+          "time": 192.42769999999925
         }
       ],
-      "needsLyricsSync": true
+      "needsLyricsSync": false,
+      "audioFile": "/audio/Piano-ifiaintgotyou.wav",
+      "audioVolume": 0.25,
+      "montage": {
+        "enabled": true,
+        "channel": 1,
+        "bankMsb": 62,
+        "bankLsb": 0,
+        "program": 13,
+        "liveSetBank": 1,
+        "liveSetPage": 1,
+        "liveSetSlot": 14
+      }
     },
     {
       "id": "fix-you-coldplay",
@@ -1718,114 +1802,126 @@
       "lyricLines": [
         {
           "text": "When you try your best, but you don't succeed",
-          "time": 0
+          "time": 17.016200000001117
         },
         {
           "text": "When you get what you want, but not what you need",
-          "time": 0
+          "time": 24.40210000000149
         },
         {
           "text": "When you feel so tired, but you can't sleep",
-          "time": 0
+          "time": 31.272200000001117
         },
         {
           "text": "Stuck in reverse",
-          "time": 0
+          "time": 37.516
         },
         {
           "text": "And the tears come streaming down your face",
-          "time": 0
+          "time": 45.460200000001116
         },
         {
           "text": "When you lose something you can't replace",
-          "time": 0
+          "time": 52.34010000000149
         },
         {
           "text": "When you love someone, but it goes to waste",
-          "time": 0
+          "time": 59.474900000000375
         },
         {
           "text": "Could it be worse?",
-          "time": 0
+          "time": 65.7245
         },
         {
           "text": "Lights will guide you home",
-          "time": 0
+          "time": 75.4625
         },
         {
           "text": "And ignite your bones",
-          "time": 0
+          "time": 82.5185
         },
         {
           "text": "And I will try to fix you",
-          "time": 0
+          "time": 89.67210000000149
         },
         {
           "text": "And high up above or down below",
-          "time": 0
+          "time": 108.80010000000149
         },
         {
           "text": "When you're too in love to let it go",
-          "time": 0
+          "time": 115.66220000000112
         },
         {
           "text": "But if you never try, you'll never know",
-          "time": 0
+          "time": 122.66220000000112
         },
         {
           "text": "Just what you're worth",
-          "time": 0
+          "time": 129.0321000000015
         },
         {
           "text": "Lights will guide you home",
-          "time": 0
+          "time": 138.81220000000113
         },
         {
           "text": "And ignite your bones",
-          "time": 0
+          "time": 145.89620000000113
         },
         {
           "text": "And I will try to fix you",
-          "time": 0
+          "time": 152.91610000000148
         },
         {
           "text": "Tears stream down your face",
-          "time": 0
+          "time": 214.3061000000015
         },
         {
           "text": "When you lose something you cannot replace",
-          "time": 0
+          "time": 220.218
         },
         {
           "text": "Tears stream down your face, and I",
-          "time": 0
+          "time": 227.08410000000148
         },
         {
           "text": "Tears stream down your face",
-          "time": 0
+          "time": 241.80030000000073
         },
         {
           "text": "I promise you I will learn from my mistakes",
-          "time": 0
+          "time": 247.56840000000037
         },
         {
           "text": "Tears stream down your face, and I",
-          "time": 0
+          "time": 255.4481000000015
         },
         {
           "text": "Lights will guide you home",
-          "time": 0
+          "time": 269.12210000000147
         },
         {
           "text": "And ignite your bones",
-          "time": 0
+          "time": 276.1321000000015
         },
         {
           "text": "And I will try to fix you",
-          "time": 0
+          "time": 282.63490000000036
         }
       ],
-      "needsLyricsSync": true
+      "needsLyricsSync": false,
+      "audioFile": "/audio/Piano-fixyou.wav",
+      "audioVolume": 0.25,
+      "montage": {
+        "enabled": true,
+        "channel": 1,
+        "bankMsb": 62,
+        "bankLsb": 0,
+        "program": 14,
+        "liveSetBank": 1,
+        "liveSetPage": 1,
+        "liveSetSlot": 15
+      }
     },
     {
       "id": "fistful-of-love-antony-and-the-johnsons",
@@ -1839,162 +1935,174 @@
       "lyricLines": [
         {
           "text": "I was lying in my bed last night staring",
-          "time": 0
+          "time": 4.6136999999992545
         },
         {
           "text": "At a ceiling full of stars",
-          "time": 0
+          "time": 7.40589999999851
         },
         {
           "text": "When it suddenly hit me",
-          "time": 0
+          "time": 13.496
         },
         {
           "text": "I just have to let you know how I feel",
-          "time": 0
+          "time": 17.7055
         },
         {
           "text": "We live together in a photograph of time",
-          "time": 0
+          "time": 23.835699999999257
         },
         {
           "text": "I look into your eyes",
-          "time": 0
+          "time": 36.28159999999963
         },
         {
           "text": "And the seas open up to me",
-          "time": 0
+          "time": 40.18609999999963
         },
         {
           "text": "I tell you I love you",
-          "time": 0
+          "time": 48.783799999998884
         },
         {
           "text": "And I always will",
-          "time": 0
+          "time": 53.03969999999926
         },
         {
           "text": "And I know you can't tell me",
-          "time": 0
+          "time": 60.147699999999254
         },
         {
           "text": "I know you can't tell me",
-          "time": 0
+          "time": 72.21369999999925
         },
         {
           "text": "So I'm left to pick up",
-          "time": 0
+          "time": 84.11559999999963
         },
         {
           "text": "The hints, the little symbols of your devotion",
-          "time": 0
+          "time": 87.76779999999889
         },
         {
           "text": "So I'm left to pick up",
-          "time": 0
+          "time": 96.11819999999925
         },
         {
           "text": "The hints, the little symbols of your devotion",
-          "time": 0
+          "time": 99.3035
         },
         {
           "text": "And I feel your fists",
-          "time": 0
+          "time": 107.98769999999925
         },
         {
           "text": "And I know it's out of love",
-          "time": 0
+          "time": 112.83759999999963
         },
         {
           "text": "And I feel the whip",
-          "time": 0
+          "time": 119.38569999999926
         },
         {
           "text": "And I know it's out of love",
-          "time": 0
+          "time": 124.50159999999963
         },
         {
           "text": "And I feel your burning eyes, burning holes",
-          "time": 0
+          "time": 131.03379999999888
         },
         {
           "text": "Straight through my heart",
-          "time": 0
+          "time": 137.90179999999887
         },
         {
           "text": "It's out of love",
-          "time": 0
+          "time": 139.9095999999996
         },
         {
           "text": "It's out of love",
-          "time": 0
+          "time": 145.29569999999924
         },
         {
           "text": "I accept and I collect upon my body",
-          "time": 0
+          "time": 153.51969999999926
         },
         {
           "text": "The memories of your devotion",
-          "time": 0
+          "time": 159.13359999999963
         },
         {
           "text": "I accept and I collect upon by body",
-          "time": 0
+          "time": 164.75629999999887
         },
         {
           "text": "The memories of your devotion",
-          "time": 0
+          "time": 169.1698999999985
         },
         {
           "text": "And I feel your fists",
-          "time": 0
+          "time": 176.03969999999924
         },
         {
           "text": "And I know it's out of love",
-          "time": 0
+          "time": 181.1077999999989
         },
         {
           "text": "And I feel the whip",
-          "time": 0
+          "time": 187.34759999999963
         },
         {
           "text": "And I know it's out of love",
-          "time": 0
+          "time": 192.20559999999963
         },
         {
           "text": "And I feel your burning eyes, burning holes",
-          "time": 0
+          "time": 197.79769999999925
         },
         {
           "text": "Straight through my heart",
-          "time": 0
+          "time": 205.32569999999924
         },
         {
           "text": "It's out of love, ooh hoo",
-          "time": 0
+          "time": 207.69019999999927
         },
         {
           "text": "It's out of love",
-          "time": 0
+          "time": 212.4057999999989
         },
         {
           "text": "Give me a little bit serious love",
-          "time": 0
+          "time": 218.57019999999926
         },
         {
           "text": "Give me a little full love",
-          "time": 0
+          "time": 221.02779999999888
         },
         {
           "text": "Be full of love",
-          "time": 0
+          "time": 226.13809999999964
         },
         {
           "text": "Fists, fists, fists full of love...",
-          "time": 0
+          "time": 227.47
         }
       ],
-      "needsLyricsSync": true
+      "needsLyricsSync": false,
+      "audioFile": "/audio/Piano-fistfuloflove.wav",
+      "audioVolume": 0.25,
+      "montage": {
+        "enabled": true,
+        "channel": 1,
+        "bankMsb": 62,
+        "bankLsb": 1,
+        "program": 0,
+        "liveSetBank": 1,
+        "liveSetPage": 2,
+        "liveSetSlot": 1
+      }
     },
     {
       "id": "ecris-l-histoire-gregory-lemarchal",
@@ -2008,182 +2116,194 @@
       "lyricLines": [
         {
           "text": "Voudrais-tu me voir, m’oublier,",
-          "time": 0
+          "time": 21.403599999999628
         },
         {
           "text": "M’approcher, me croire, m’inviter",
-          "time": 0
+          "time": 23.59390000000037
         },
         {
           "text": "Ou n’pas savoir, quand viendra la fin ?",
-          "time": 0
+          "time": 26.167800000000746
         },
         {
           "text": "C’est toi qui choisis, de rester,",
-          "time": 0
+          "time": 30.901400000000372
         },
         {
           "text": "Me laisser ici, en douter",
-          "time": 0
+          "time": 33.365599999999624
         },
         {
           "text": "C’est toi aussi, qui sait et c’est bien",
-          "time": 0
+          "time": 35.7875
         },
         {
           "text": "Que veux tu qu’je fasse ?",
-          "time": 0
+          "time": 40.5075
         },
         {
           "text": "M’effacer ou m’avancer pour",
-          "time": 0
+          "time": 42.885400000000374
         },
         {
           "text": "Etre dans ta trace",
-          "time": 0
+          "time": 45.323699999999256
         },
         {
           "text": "Tout de dire ou bien me taire",
-          "time": 0
+          "time": 47.791599999999626
         },
         {
           "text": "Que veux tu que je fasse ?",
-          "time": 0
+          "time": 50.02190000000037
         },
         {
           "text": "Ecris l'histoire",
-          "time": 0
+          "time": 53.870300000000746
         },
         {
           "text": "Tout c'que tu voudras entre mes lignes",
-          "time": 0
+          "time": 56.27769999999926
         },
         {
           "text": "Ton Territoire",
-          "time": 0
+          "time": 63.447599999999625
         },
         {
           "text": "Etendu si loin sur le mien",
-          "time": 0
+          "time": 65.79759999999963
         },
         {
           "text": "Ecris l'histoire",
-          "time": 0
+          "time": 72.8895
         },
         {
           "text": "Dans ma mémoire",
-          "time": 0
+          "time": 77.52940000000038
         },
         {
           "text": "Mais n'écris jamais la fin",
-          "time": 0
+          "time": 82.52359999999963
         },
         {
           "text": "Dis moi, tu m’préfères, à genoux,",
-          "time": 0
+          "time": 93.06559999999963
         },
         {
           "text": "Parti ou par terre, à tes pieds",
-          "time": 0
+          "time": 95.81540000000037
         },
         {
           "text": "Pour avoir l’air de n’pas être rien ?",
-          "time": 0
+          "time": 98.18969999999925
         },
         {
           "text": "Faut-il que j’arête ? Un mot et",
-          "time": 0
+          "time": 102.96359999999963
         },
         {
           "text": "J’n’en fais qu’à ta tête, j’disparais,",
-          "time": 0
+          "time": 104.50169999999926
         },
         {
           "text": "Change de planète, sauf si tu m’retiens",
-          "time": 0
+          "time": 107.7935
         },
         {
           "text": "Que veux-tu de moi ?",
-          "time": 0
+          "time": 112.46
         },
         {
           "text": "J’attendrai que tu me le dises",
-          "time": 0
+          "time": 114.8015
         },
         {
           "text": "Un amour ou pas ?",
-          "time": 0
+          "time": 117.32140000000037
         },
         {
           "text": "Quelqu’un qui te demande à toi :",
-          "time": 0
+          "time": 119.566
         },
         {
           "text": "Voudrais-tu de moi ?",
-          "time": 0
+          "time": 122.1955
         },
         {
           "text": "Ecris l'histoire",
-          "time": 0
+          "time": 125.86169999999926
         },
         {
           "text": "Tout c'que tu voudras entre mes lignes",
-          "time": 0
+          "time": 128.22940000000037
         },
         {
           "text": "Ton Territoire",
-          "time": 0
+          "time": 135.40780000000075
         },
         {
           "text": "Etendu si loin sur le mien",
-          "time": 0
+          "time": 137.698
         },
         {
           "text": "Ecris l'histoire",
-          "time": 0
+          "time": 144.96369999999925
         },
         {
           "text": "Dans ma mémoire",
-          "time": 0
+          "time": 149.69559999999962
         },
         {
           "text": "Mais n'écris jamais la fin",
-          "time": 0
+          "time": 154.45969999999926
         },
         {
           "text": "Ecris l'histoire",
-          "time": 0
+          "time": 164.108
         },
         {
           "text": "Tout c'que tu voudras entre mes lignes",
-          "time": 0
+          "time": 166.59959999999964
         },
         {
           "text": "Ton Territoire",
-          "time": 0
+          "time": 173.80959999999962
         },
         {
           "text": "Etendu si loin sur le mien",
-          "time": 0
+          "time": 176.19159999999962
         },
         {
           "text": "Ecris l'histoire",
-          "time": 0
+          "time": 183.29759999999962
         },
         {
           "text": "Dans ma mémoire",
-          "time": 0
+          "time": 188.08340000000038
         },
         {
           "text": "Mais n'écris jamais la fin",
-          "time": 0
+          "time": 192.78609999999964
         },
         {
           "text": "Mais n'écris jamais la fin",
-          "time": 0
+          "time": 197.46580000000074
         }
       ],
-      "needsLyricsSync": true
+      "needsLyricsSync": false,
+      "audioFile": "/audio/Piano-ecrislhistoire.wav",
+      "audioVolume": 0.25,
+      "montage": {
+        "enabled": true,
+        "channel": 1,
+        "bankMsb": 62,
+        "bankLsb": 1,
+        "program": 1,
+        "liveSetBank": 1,
+        "liveSetPage": 2,
+        "liveSetSlot": 2
+      }
     },
     {
       "id": "yeux-disent-lomepal",
@@ -2197,214 +2317,226 @@
       "lyricLines": [
         {
           "text": "Recharge mes batteries, j'ai besoin de ton regard",
-          "time": 0
+          "time": 20.38940000000037
         },
         {
           "text": "Recharge mes batteries, recharge mes batteries",
-          "time": 0
+          "time": 24.885400000000374
         },
         {
           "text": "Enchanté, Antoine, je brise les rêves et les cœurs mais j'ai un bon fond, promis",
-          "time": 0
+          "time": 27.3215
         },
         {
           "text": "Je voulais plus d'air, plus de distance, j'en ai juste un peu trop mis",
-          "time": 0
+          "time": 31.609400000000374
         },
         {
           "text": "Assis ensemble sans se dire un seul mot dans le tro-mé",
-          "time": 0
+          "time": 35.725199999999255
         },
         {
           "text": "Je pouvais devenir un artiste, alors je l'ai fait",
-          "time": 0
+          "time": 37.865599999999624
         },
         {
           "text": "Mais j'ai vu qu’elle avait mal sous le plexus, et mes excuses n'avaient plus un seul effet",
-          "time": 0
+          "time": 40.441300000000744
         },
         {
           "text": "Aïe, attention à ce que les cerveaux agités promettent",
-          "time": 0
+          "time": 44.9355
         },
         {
           "text": "J'ai déjà menti, oui mais le jour où je lui ai dit que j’étais honnête, j'étais honnête",
-          "time": 0
+          "time": 48.61540000000037
         },
         {
           "text": "Aïe, comment on a fait pour atteindre ce stade ?",
-          "time": 0
+          "time": 52.6755
         },
         {
           "text": "Ok, je suis peut-être peu stable, je sais plus si je veux renaître ou juste être une star",
-          "time": 0
+          "time": 56.209300000000745
         },
         {
           "text": "J'me suis perdu comme les lettres de Stan (aïe)",
-          "time": 0
+          "time": 59.933400000000375
         },
         {
           "text": "Un jour, elle m'a dit qu’elle souffrait, qu'c'était terrible dans sa tête",
-          "time": 0
+          "time": 62.581300000000745
         },
         {
           "text": "Mais ce jour là, je l'ai pas écoutée, j'avais des rimes dans la tête",
-          "time": 0
+          "time": 66.46919999999926
         },
         {
           "text": "Je parle trop souvent de ma musique, ça a peut-être un peu empiété",
-          "time": 0
+          "time": 70.11730000000074
         },
         {
           "text": "Je lui ai dit qu’elle était pas unique, ce soir elle dort avec sa fierté",
-          "time": 0
+          "time": 73.81719999999926
         },
         {
           "text": "Pas de vengeance, pas de sourires forcés",
-          "time": 0
+          "time": 77.3195
         },
         {
           "text": "Yeux disent le contraire, yeux disent le contraire",
-          "time": 0
+          "time": 81.15730000000075
         },
         {
           "text": "J'ai craché des mots tranchants, fille n'a pas été blessée",
-          "time": 0
+          "time": 84.99519999999926
         },
         {
           "text": "Yeux disent le contraire, yeux disent le contraire",
-          "time": 0
+          "time": 89.60940000000038
         },
         {
           "text": "Oups, je l'ai touché dans l'cœur, aïe aïe",
-          "time": 0
+          "time": 93.80340000000037
         },
         {
           "text": "Je l'ai touché dans l'cœur, aïe aïe",
-          "time": 0
+          "time": 98.21519999999926
         },
         {
           "text": "Je l'ai touché dans l'cœur, aïe aïe",
-          "time": 0
+          "time": 102.5175
         },
         {
           "text": "Je l'ai touché dans l'cœur",
-          "time": 0
+          "time": 106.68130000000075
         },
         {
           "text": "Je l'ai touché dans l'cœur",
-          "time": 0
+          "time": 108.94119999999926
         },
         {
           "text": "J'ai la belle vie, j'fais des bons morceaux, j'fais des bons concerts",
-          "time": 0
+          "time": 111.19119999999926
         },
         {
           "text": "J'écoute mes maquettes à fond, j'entends plus les bons conseils",
-          "time": 0
+          "time": 113.71359999999963
         },
         {
           "text": "J'ai la dalle comme ce con d'Luffy, faut que je comble le vide",
-          "time": 0
+          "time": 116.06590000000037
         },
         {
           "text": "L'image de soi-même, c'est précieux, quelques doutes et mes démons revenaient",
-          "time": 0
+          "time": 119.11730000000074
         },
         {
           "text": "Elle est belle mais si je regarde ses yeux, c'est peut-être juste pour y voir mon reflet",
-          "time": 0
+          "time": 123.13719999999925
         },
         {
           "text": "On a marché sans se dire un mot pendant des heures à Paris, aïe aïe aïe",
-          "time": 0
+          "time": 128.4774000000004
         },
         {
           "text": "Elle est irremplaçable, mais je m'en rendrai compte seulement quand elle sera partie",
-          "time": 0
+          "time": 133.1795
         },
         {
           "text": "On profite jamais de ce qu'on a",
-          "time": 0
+          "time": 137.21990000000037
         },
         {
           "text": "J'ai cherché la réponse en fixant le plafond jusqu’à cinq heures",
-          "time": 0
+          "time": 139.23759999999962
         },
         {
           "text": "Le genre de problème qui casse un cœur",
-          "time": 0
+          "time": 142.69730000000075
         },
         {
           "text": "Pas de vengeance, pas de sourire forcés",
-          "time": 0
+          "time": 145.06209999999962
         },
         {
           "text": "Yeux disent le contraire, yeux disent le contraire",
-          "time": 0
+          "time": 148.74940000000038
         },
         {
           "text": "J'ai craché des mots tranchants, fille n'a pas été blessée",
-          "time": 0
+          "time": 152.68719999999925
         },
         {
           "text": "Yeux disent le contraire, yeux disent le contraire",
-          "time": 0
+          "time": 157.14130000000074
         },
         {
           "text": "Oups, je l'ai touché dans l'cœur, aïe aïe",
-          "time": 0
+          "time": 161.38930000000076
         },
         {
           "text": "Je l'ai touché dans l'cœur, aïe aïe",
-          "time": 0
+          "time": 165.74330000000074
         },
         {
           "text": "Je l'ai touché dans l'cœur, aïe aïe",
-          "time": 0
+          "time": 169.98730000000074
         },
         {
           "text": "Je l'ai touché dans l'cœur",
-          "time": 0
+          "time": 174.24740000000037
         },
         {
           "text": "Je l'ai touché dans l'cœur",
-          "time": 0
+          "time": 176.96519999999924
         },
         {
           "text": "Oups, je l'ai touché dans l'cœur",
-          "time": 0
+          "time": 178.58369999999925
         },
         {
           "text": "Je l'ai touché dans l'cœur",
-          "time": 0
+          "time": 180.55159999999964
         },
         {
           "text": "Je l'ai touché dans l'cœur",
-          "time": 0
+          "time": 182.69780000000074
         },
         {
           "text": "Je l'ai touché dans l'cœur",
-          "time": 0
+          "time": 184.80330000000075
         },
         {
           "text": "Oups, je l'ai touché dans l'cœur",
-          "time": 0
+          "time": 186.74380000000073
         },
         {
           "text": "Je l'ai touché dans l'cœur",
-          "time": 0
+          "time": 188.95330000000075
         },
         {
           "text": "Je l'ai touché dans l'cœur",
-          "time": 0
+          "time": 191.07340000000036
         },
         {
           "text": "Oups, je l'ai touché dans l'cœur, aïe aïe",
-          "time": 0
+          "time": 195.25730000000075
         }
       ],
-      "needsLyricsSync": true
+      "needsLyricsSync": false,
+      "audioFile": "/audio/Piano-yeuxdisent.wav",
+      "audioVolume": 0.25,
+      "montage": {
+        "enabled": true,
+        "channel": 1,
+        "bankMsb": 62,
+        "bankLsb": 1,
+        "program": 2,
+        "liveSetBank": 1,
+        "liveSetPage": 2,
+        "liveSetSlot": 3
+      }
     }
   ],
   "setlistSongIds": [
@@ -2414,8 +2546,14 @@
     "entre-deux-rives",
     "final",
     "la-maison-bleue",
-    "et-un-jour-une-femme-florent-pagny"
+    "et-un-jour-une-femme-florent-pagny",
+    "la-corrida-francis-cabrel",
+    "if-i-ain-t-got-you-alicia-keys",
+    "fix-you-coldplay",
+    "fistful-of-love-antony-and-the-johnsons",
+    "ecris-l-histoire-gregory-lemarchal",
+    "yeux-disent-lomepal"
   ],
   "requestedSongIds": [],
-  "updatedAt": 1787517887956
+  "updatedAt": 1787591003597
 }
