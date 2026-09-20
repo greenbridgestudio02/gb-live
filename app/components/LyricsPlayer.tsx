@@ -5,10 +5,13 @@ import type { Song } from "../../types/show";
 
 type LyricsPlayerProps = {
   song: Song;
+  stopped?: boolean;
 };
 
-export default function LyricsPlayer({ song }: LyricsPlayerProps) {
-  const [isPlaying, setIsPlaying] = useState(false);
+export default function LyricsPlayer({
+  song,
+  stopped = false,
+}: LyricsPlayerProps) {  const [isPlaying, setIsPlaying] = useState(false);
   const [elapsedTime, setElapsedTime] = useState(0);
 
   const startTimeRef = useRef<number | null>(null);
@@ -63,6 +66,22 @@ export default function LyricsPlayer({ song }: LyricsPlayerProps) {
     currentLineIndex < lyricLines.length - 1
       ? lyricLines[currentLineIndex + 1]
       : null;
+
+useEffect(() => {
+  if (!stopped) {
+    return;
+  }
+
+  setIsPlaying(false);
+
+  pausedElapsedRef.current = elapsedTime;
+  startTimeRef.current = null;
+
+  if (audioRef.current) {
+    audioRef.current.pause();
+  }
+}, [stopped]);
+
 
   async function sendLiveState(
     time: number,

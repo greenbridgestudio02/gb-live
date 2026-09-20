@@ -1721,9 +1721,10 @@ onClose={() => setIsSearchOpen(false)}
 
         <div className="min-h-0 flex-1 overflow-hidden">
   <LyricsPlayer
-    key={`${currentSong.id}-${playbackResetKey}`}
-    song={currentSong}
-  />
+  key={`${currentSong.id}-${playbackResetKey}`}
+  song={currentSong}
+  stopped={isPaused}
+/>
           </div>
       <div className="mb-2 flex items-center justify-between rounded-2xl border border-zinc-800 bg-zinc-900/60 px-6 py-4">
   <div>
@@ -2407,9 +2408,9 @@ onClose={() => setIsSearchOpen(false)}
         <button
           type="button"
           onClick={() => {
-            setIsPaused(false);
-            void sendPublicMode("song");
-          }}
+  setPlaybackResetKey((value) => value + 1);
+  setIsPaused(false);
+}}
           className="rounded-xl border border-zinc-700 bg-zinc-950 px-6 py-5 text-lg font-semibold"
         >
           ↺ Recommencer

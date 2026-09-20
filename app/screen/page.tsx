@@ -149,9 +149,12 @@ export default function ScreenPage() {
     }
   }
 
+  const showWelcome =
+    !currentSong || liveState.mode === "pause";
+
   return (
     <main className="h-screen w-screen overflow-hidden bg-black text-white">
-      {!currentSong ? (
+      {showWelcome ? (
         <div className="flex h-full items-center justify-center">
           <div className="text-center">
             <p className="text-2xl font-semibold uppercase tracking-[0.5em] text-emerald-400">
