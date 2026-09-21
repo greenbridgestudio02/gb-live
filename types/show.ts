@@ -52,6 +52,8 @@ export type Song = {
 
   audioFile?: string;
 
+  audioVolume?: number;
+
   montage?: MontageMidiConfig;
 };
 
