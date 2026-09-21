@@ -177,16 +177,15 @@ export default function ScreenPage() {
     </p>
   </div>
 ) : liveState.mode === "dj" ? (
-  <div className="flex h-full w-full flex-col items-center justify-center bg-black text-center">
-    <img
-      src="/g3-live-logo.png"
-      alt="G3 Live"
-      className="h-72 w-auto object-contain"
+  <div className="h-full w-full overflow-hidden bg-black">
+    <video
+      src="/dj-loop.mp4"
+      autoPlay
+      loop
+      muted
+      playsInline
+      className="h-full w-full object-cover"
     />
-
-    <p className="mt-4 text-5xl font-black uppercase tracking-[0.35em] text-violet-300">
-      DJ SET
-    </p>
   </div>
 ) : (
         <div className="flex h-full flex-col">
