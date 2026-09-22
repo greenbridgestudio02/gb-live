@@ -1,4 +1,5 @@
 import {
+  copyFile,
   mkdir,
   readFile,
   writeFile,
@@ -24,6 +25,15 @@ const dataDirectory = path.join(
 const libraryFile = path.join(
   dataDirectory,
   "library.json"
+);
+
+const backupFiles = Array.from(
+  { length: 5 },
+  (_, index) =>
+    path.join(
+      dataDirectory,
+      `library-backup-${index + 1}.json`
+    )
 );
 
 const emptySnapshot: LibrarySnapshot = {
@@ -77,12 +87,36 @@ async function readLibrary(): Promise<LibrarySnapshot> {
   }
 }
 
+async function backupLibrary() {
+  try {
+    for (let index = backupFiles.length - 1; index > 0; index--) {
+      try {
+        await copyFile(
+          backupFiles[index - 1],
+          backupFiles[index]
+        );
+      } catch {
+        // La sauvegarde précédente n'existe peut-être pas encore.
+      }
+    }
+
+    await copyFile(
+      libraryFile,
+      backupFiles[0]
+    );
+  } catch {
+    // library.json n'existe peut-être pas encore.
+  }
+}
+
 async function saveLibrary(
   snapshot: LibrarySnapshot
 ) {
   await mkdir(dataDirectory, {
     recursive: true,
   });
+
+  await backupLibrary();
 
   await writeFile(
     libraryFile,
