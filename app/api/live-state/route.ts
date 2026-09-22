@@ -398,15 +398,11 @@ export async function POST(
       : currentState.message;
 
   let messageUpdatedAt =
-    currentState.messageUpdatedAt;
+  currentState.messageUpdatedAt;
 
-  if (
-    body.mode === "message" &&
-    typeof body.message === "string"
-  ) {
-    messageUpdatedAt =
-      Date.now();
-  }
+if (typeof body.message === "string") {
+  messageUpdatedAt = Date.now();
+}
 
   const newState: LiveState = {
     mode,

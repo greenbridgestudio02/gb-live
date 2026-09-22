@@ -759,8 +759,17 @@ function showPublicMessage(message: string) {
   if (!cleanMessage) {
     return;
   }
-setIsPublicScreenHidden(true);
-  void sendPublicMode("message", cleanMessage);
+
+  void fetch("/api/live-state", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    cache: "no-store",
+    body: JSON.stringify({
+      message: cleanMessage,
+    }),
+  });
 }
 
 function clearPublicMessage() {

@@ -40,9 +40,11 @@ export default function ScreenPage() {
   });
 
   const [displayElapsedTime, setDisplayElapsedTime] = useState(0);
+const [isMessageVisible, setIsMessageVisible] = useState(false);
 
   const clockStartRef = useRef<number | null>(null);
   const clockBaseRef = useRef(0);
+const lastMessageUpdatedAtRef = useRef(0);
 
   useEffect(() => {
     let eventSource: EventSource | null = null;
@@ -56,7 +58,9 @@ export default function ScreenPage() {
         if (!response.ok) return;
 
         const state: LiveState = await response.json();
-        setLiveState(state);
+
+lastMessageUpdatedAtRef.current = state.messageUpdatedAt;
+setLiveState(state);
       } catch {
         // On conserve le dernier état connu.
       }
@@ -67,18 +71,39 @@ export default function ScreenPage() {
     eventSource = new EventSource("/api/live-state?stream=1");
 
     eventSource.onmessage = (event) => {
-      try {
-        const state: LiveState = JSON.parse(event.data);
-        setLiveState(state);
-      } catch {
-        // On conserve le dernier état valide.
-      }
-    };
+  try {
+    const state: LiveState = JSON.parse(event.data);
+
+    setLiveState(state);
+
+    if (
+  state.message &&
+  state.messageUpdatedAt > lastMessageUpdatedAtRef.current
+) {
+  lastMessageUpdatedAtRef.current = state.messageUpdatedAt;
+  setIsMessageVisible(true);
+}
+  } catch {
+    // On conserve le dernier état valide.
+  }
+};
 
     return () => {
       eventSource?.close();
     };
   }, []);
+
+  useEffect(() => {
+    if (!isMessageVisible) return;
+
+    const timer = window.setTimeout(() => {
+      setIsMessageVisible(false);
+    }, 8000);
+
+    return () => {
+      window.clearTimeout(timer);
+    };
+  }, [liveState.messageUpdatedAt, isMessageVisible]);
 
   useEffect(() => {
     clockBaseRef.current = liveState.elapsedTime;
@@ -245,6 +270,16 @@ export default function ScreenPage() {
           </section>
 
           
+        </div>
+            )}
+
+      {isMessageVisible && liveState.message && (
+        <div className="pointer-events-none absolute inset-x-0 bottom-12 z-50 flex justify-center px-12">
+          <div className="max-w-5xl rounded-3xl border-2 border-amber-300 bg-black/90 px-12 py-7 text-center shadow-2xl">
+            <p className="text-5xl font-black leading-tight text-amber-300">
+              {liveState.message}
+            </p>
+          </div>
         </div>
       )}
     </main>
