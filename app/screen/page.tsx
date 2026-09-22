@@ -41,11 +41,15 @@ export default function ScreenPage() {
 
   const [displayElapsedTime, setDisplayElapsedTime] = useState(0);
 const [isMessageVisible, setIsMessageVisible] = useState(false);
-
+const [lyricsFinished, setLyricsFinished] = useState(false);
   const clockStartRef = useRef<number | null>(null);
   const clockBaseRef = useRef(0);
 const lastMessageUpdatedAtRef = useRef(0);
 
+
+useEffect(() => {
+  setLyricsFinished(false);
+}, [liveState.song?.id]);
   useEffect(() => {
     let eventSource: EventSource | null = null;
 
@@ -151,13 +155,40 @@ setLiveState(state);
     liveState.song?.id,
   ]);
 
+useEffect(() => {
+  const lyricLines = liveState.song?.lyricLines ?? [];
+
+  if (
+    !liveState.isPlaying ||
+    lyricLines.length === 0 ||
+    lyricsFinished
+  ) {
+    return;
+  }
+
+  const lastLine = lyricLines[lyricLines.length - 1];
+  const timeAfterLastLine =
+    displayElapsedTime - lastLine.time;
+
+  if (timeAfterLastLine < 8) {
+    return;
+  }
+
+  setLyricsFinished(true);
+}, [
+  displayElapsedTime,
+  liveState.isPlaying,
+  liveState.song,
+  lyricsFinished,
+]);
+
   const currentSong = liveState.song;
   const lyricLines = currentSong?.lyricLines ?? [];
 
   let currentLineIndex = -1;
 
   if (lyricLines.length > 0) {
-    currentLineIndex = 0;
+  currentLineIndex = -1;
 
     for (
       let index = 0;
@@ -177,7 +208,8 @@ setLiveState(state);
   const showWelcome =
   !currentSong ||
   liveState.mode === "pause" ||
-  liveState.mode === "home";
+  liveState.mode === "home" ||
+  lyricsFinished;
 
   return (
     <main className="h-screen w-screen overflow-hidden bg-black text-white">
@@ -242,7 +274,9 @@ setLiveState(state);
                 {lyricLines.map((line, index) => {
                   const distance =
                     index - currentLineIndex;
-
+                  if (currentLineIndex === -1) {
+  return null;
+}
                   if (distance < -1 || distance > 2) {
                     return null;
                   }
