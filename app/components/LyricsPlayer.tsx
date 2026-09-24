@@ -28,6 +28,8 @@ export default function LyricsPlayer({
   }
 }, [song.audioVolume, song.audioFile]);
   const lastMidiTriggerRef = useRef(0);
+  const midiCheckInFlightRef = useRef(false);
+  const isPlayingRef = useRef(false);
   const [audioArmed, setAudioArmed] = useState(false);
 
   const isInstrumental = song.kind === "instrumental";
@@ -74,7 +76,7 @@ useEffect(() => {
   if (!stopped) {
     return;
   }
-
+isPlayingRef.current = false;
   setIsPlaying(false);
 
   pausedElapsedRef.current = elapsedTime;
@@ -125,8 +127,9 @@ useEffect(() => {
   // Changement de morceau : remise à zéro
   // et envoi immédiat au serveur.
   useEffect(() => {
-    setIsPlaying(false);
-    setElapsedTime(0);
+  isPlayingRef.current = false;
+  setIsPlaying(false);
+  setElapsedTime(0);
 
     startTimeRef.current = null;
     pausedElapsedRef.current = 0;
@@ -253,7 +256,7 @@ async function armAudio() {
     return;
   }
 
-  if (isPlaying) {
+  if (isPlayingRef.current) {
     if (song.audioFile && audioRef.current) {
       audioRef.current.pause();
 
@@ -268,6 +271,7 @@ async function armAudio() {
 
     startTimeRef.current = null;
 
+    isPlayingRef.current = false;
     setIsPlaying(false);
 
     void sendLiveState(
@@ -286,6 +290,7 @@ async function armAudio() {
 
     try {
       await audioRef.current.play();
+      
     } catch (error) {
       console.error(
         "Impossible de lancer le fichier audio.",
@@ -299,6 +304,7 @@ async function armAudio() {
       performance.now();
   }
 
+  isPlayingRef.current = true;
   setIsPlaying(true);
 
   void sendLiveState(
@@ -310,8 +316,9 @@ async function armAudio() {
   
 
   function resetLyrics() {
-    setIsPlaying(false);
-    setElapsedTime(0);
+  isPlayingRef.current = false;
+  setIsPlaying(false);
+  setElapsedTime(0);
 
     startTimeRef.current = null;
     pausedElapsedRef.current = 0;
@@ -325,11 +332,22 @@ async function armAudio() {
       false
     );
   }
+
+useEffect(() => {
+  isPlayingRef.current = isPlaying;
+}, [isPlaying]);
+
 useEffect(() => {
   let stopped = false;
 
   async function checkMidiTrigger() {
-    try {
+  if (midiCheckInFlightRef.current) {
+    return;
+  }
+
+  midiCheckInFlightRef.current = true;
+
+  try {
       const response = await fetch(
         "/api/midi-trigger",
         {
@@ -344,7 +362,7 @@ useEffect(() => {
       const event = await response.json();
 
       if (
-        event.type !== "toggle-playback" ||
+        (event.type !== "play" && event.type !== "pause") ||
         typeof event.timestamp !== "number" ||
         event.timestamp <= lastMidiTriggerRef.current
       ) {
@@ -352,12 +370,23 @@ useEffect(() => {
       }
 
       lastMidiTriggerRef.current =
-        event.timestamp;
+  event.timestamp;
 
-      void togglePlayback();
+
+
+
+
+if (
+  (event.type === "play" && !isPlayingRef.current) ||
+  (event.type === "pause" && isPlayingRef.current)
+) {
+  void togglePlayback();
+}
     } catch {
-      // Listener MIDI temporairement indisponible.
-    }
+  // Listener MIDI temporairement indisponible.
+} finally {
+  midiCheckInFlightRef.current = false;
+}
   }
 
   const intervalId = window.setInterval(
@@ -372,7 +401,6 @@ useEffect(() => {
     window.clearInterval(intervalId);
   };
 }, [
-  isPlaying,
   hasSynchronizedLyrics,
   song.id,
   song.audioFile,
@@ -518,6 +546,9 @@ useEffect(() => {
     ref={audioRef}
     src={song.audioFile}
     preload="auto"
+    
+
+
   controls
   onEnded={() => {
           const finalTime =
@@ -526,6 +557,7 @@ useEffect(() => {
       setElapsedTime(finalTime);
       pausedElapsedRef.current = finalTime;
       startTimeRef.current = null;
+      isPlayingRef.current = false;
       setIsPlaying(false);
 
       void sendLiveState(

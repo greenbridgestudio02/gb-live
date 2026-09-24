@@ -1,3 +1,5 @@
+import { writeFile } from "node:fs/promises";
+
 import {
   execFile,
 } from "node:child_process";
@@ -95,33 +97,37 @@ export async function POST(
       );
     }
 
-    const scriptPath = path.join(
-      process.cwd(),
-      "scripts",
-      "midi-send.cjs"
-    );
+    const commandFile = path.join(
+  process.cwd(),
+  "data",
+  "midi-command.json"
+);
 
-    const { stdout } =
-      await execFileAsync(
-        process.execPath,
-        [
-          scriptPath,
-          outputName,
-          String(channel),
-          String(msb),
-          String(lsb),
-          String(program),
-        ],
-        {
-          cwd: process.cwd(),
-          timeout: 5000,
-        }
-      );
+const command = {
+  type: "program-change",
+  outputName,
+  channel,
+  msb,
+  lsb,
+  program,
+  timestamp: Date.now(),
+};
 
-    const result =
-      JSON.parse(stdout);
+await writeFile(
+  commandFile,
+  JSON.stringify(command, null, 2),
+  "utf8"
+);
 
-    return Response.json(result);
+return Response.json({
+  ok: true,
+  output: outputName,
+  channel,
+  msb,
+  lsb,
+  program,
+});
+
   } catch (error) {
     console.error(
       "Impossible d'envoyer la commande MIDI.",

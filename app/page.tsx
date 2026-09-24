@@ -892,40 +892,8 @@ async function prepareMontageForSong(
   }
 
   try {
-    // On cherche automatiquement la sortie du MONTAGE.
-    const outputsResponse = await fetch("/api/midi", {
-      cache: "no-store",
-    });
-
-    const outputsResult =
-      await outputsResponse.json();
-
-    if (!outputsResult.ok) {
-      return;
-    }
-
-    const outputs = Array.isArray(
-      outputsResult.outputs
-    )
-      ? outputsResult.outputs
-      : [];
-
     const montageOutput =
-      outputs.find(
-        (name: string) =>
-          name === "MONTAGE M"
-      ) ??
-      outputs.find(
-        (name: string) =>
-          name.toLowerCase().includes("montage")
-      );
-
-    if (!montageOutput) {
-      console.warn(
-        "Sortie MIDI MONTAGE introuvable."
-      );
-      return;
-    }
+  selectedMidiOutput || "MONTAGE M";
 
     await fetch("/api/midi", {
       method: "POST",

@@ -14,6 +14,8 @@ echo   "updatedAt": 0
 echo }
 ) > data\live-state.json
 
+start "GB Live MIDI" /min cmd /c "node scripts\midi-trigger.cjs"
+
 start "" cmd /c "timeout /t 3 /nobreak >nul & start http://localhost:3000 & start http://localhost:3000/screen"
 
 npm start
