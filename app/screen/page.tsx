@@ -45,11 +45,20 @@ const [lyricsFinished, setLyricsFinished] = useState(false);
   const clockStartRef = useRef<number | null>(null);
   const clockBaseRef = useRef(0);
 const lastMessageUpdatedAtRef = useRef(0);
+const songHasPlayedRef = useRef(false);
 
 
 useEffect(() => {
   setLyricsFinished(false);
+  songHasPlayedRef.current = false;
 }, [liveState.song?.id]);
+
+useEffect(() => {
+  if (liveState.isPlaying) {
+    songHasPlayedRef.current = true;
+  }
+}, [liveState.isPlaying]);
+
   useEffect(() => {
     let eventSource: EventSource | null = null;
 
@@ -159,14 +168,20 @@ useEffect(() => {
   const lyricLines = liveState.song?.lyricLines ?? [];
 
   if (
-    !liveState.isPlaying ||
-    lyricLines.length === 0 ||
-    lyricsFinished
-  ) {
-    return;
-  }
+  lyricLines.length === 0 ||
+  lyricsFinished
+) {
+  return;
+}
 
   const lastLine = lyricLines[lyricLines.length - 1];
+  if (
+  !liveState.isPlaying &&
+  songHasPlayedRef.current
+) {
+  setLyricsFinished(true);
+  return;
+}
   const timeAfterLastLine =
     displayElapsedTime - lastLine.time;
 
