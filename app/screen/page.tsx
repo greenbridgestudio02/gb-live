@@ -14,6 +14,8 @@ type LiveSong = {
   kind?: string;
   needsLyricsSync?: boolean;
   lyricLines?: LyricLine[];
+  videoFile?: string;
+  videoMode?: "video" | "video-lyrics";
 };
 
 type LiveState = {
@@ -21,6 +23,7 @@ type LiveState = {
   song: LiveSong | null;
   elapsedTime: number;
   isPlaying: boolean;
+  playbackEnded?: boolean;
   message: string;
   messageUpdatedAt: number;
   updatedAt: number;
@@ -46,6 +49,7 @@ const [lyricsFinished, setLyricsFinished] = useState(false);
   const clockBaseRef = useRef(0);
 const lastMessageUpdatedAtRef = useRef(0);
 const songHasPlayedRef = useRef(false);
+const videoRef = useRef<HTMLVideoElement | null>(null);
 
 
 useEffect(() => {
@@ -58,6 +62,31 @@ useEffect(() => {
     songHasPlayedRef.current = true;
   }
 }, [liveState.isPlaying]);
+
+useEffect(() => {
+  const video = videoRef.current;
+
+  if (!video || !liveState.song?.videoFile) {
+    return;
+  }
+
+  const targetTime = liveState.elapsedTime ?? 0;
+
+  if (Math.abs(video.currentTime - targetTime) > 0.5) {
+    video.currentTime = targetTime;
+  }
+
+  if (liveState.isPlaying) {
+    video.play().catch(() => {});
+  } else {
+    video.pause();
+  }
+}, [
+  liveState.song?.id,
+  liveState.song?.videoFile,
+  liveState.elapsedTime,
+  liveState.isPlaying,
+]);
 
   useEffect(() => {
     let eventSource: EventSource | null = null;
@@ -176,7 +205,7 @@ useEffect(() => {
 
   const lastLine = lyricLines[lyricLines.length - 1];
   if (
-  !liveState.isPlaying &&
+  liveState.playbackEnded &&
   songHasPlayedRef.current
 ) {
   setLyricsFinished(true);
@@ -257,6 +286,17 @@ useEffect(() => {
       muted
       playsInline
       className="h-full w-full object-cover"
+    />
+  </div>
+) : currentSong.videoFile && currentSong.videoMode === "video" ? (
+  <div className="h-full w-full overflow-hidden bg-black">
+    <video
+      ref={videoRef}
+      src={currentSong.videoFile}
+      muted
+      playsInline
+      preload="auto"
+      className="h-full w-full object-contain"
     />
   </div>
 ) : (

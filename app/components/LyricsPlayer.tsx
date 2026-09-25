@@ -89,9 +89,10 @@ isPlayingRef.current = false;
 
 
   async function sendLiveState(
-    time: number,
-    playing: boolean
-  ) {
+  time: number,
+  playing: boolean,
+  playbackEnded = false
+) {
     try {
       await fetch("/api/live-state", {
         method: "POST",
@@ -108,12 +109,15 @@ isPlayingRef.current = false;
             kind: song.kind ?? "vocal",
             lyrics: song.lyrics,
             lyricLines: song.lyricLines ?? [],
+            videoFile: song.videoFile,
+videoMode: song.videoMode,
             needsLyricsSync:
               song.needsLyricsSync === true,
           },
           
           elapsedTime: time,
           isPlaying: playing,
+          playbackEnded,
         }),
       });
     } catch (error) {
@@ -561,9 +565,10 @@ if (
       setIsPlaying(false);
 
       void sendLiveState(
-        finalTime,
-        false
-      );
+  finalTime,
+  false,
+  true
+);
     }}
   />
 )}

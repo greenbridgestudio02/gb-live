@@ -53,6 +53,8 @@ export type Song = {
   audioFile?: string;
 
   audioVolume?: number;
+  videoFile?: string;
+videoMode?: "video" | "video-lyrics";
 
   montage?: MontageMidiConfig;
 };

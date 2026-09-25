@@ -644,6 +644,8 @@ useEffect(() => {
         kind: previousSong.kind ?? "vocal",
         lyrics: previousSong.lyrics,
         lyricLines: previousSong.lyricLines ?? [],
+        videoFile: previousSong.videoFile,
+videoMode: previousSong.videoMode,
         needsLyricsSync:
           previousSong.needsLyricsSync === true,
       },
@@ -689,6 +691,8 @@ async function goToNextSong() {
         kind: nextSong.kind ?? "vocal",
         lyrics: nextSong.lyrics,
         lyricLines: nextSong.lyricLines ?? [],
+        videoFile: nextSong.videoFile,
+videoMode: nextSong.videoMode,
         needsLyricsSync:
           nextSong.needsLyricsSync === true,
       },
@@ -1875,6 +1879,8 @@ onClose={() => setIsSearchOpen(false)}
         kind: selectedSong.kind ?? "vocal",
         lyrics: selectedSong.lyrics,
         lyricLines: selectedSong.lyricLines ?? [],
+        videoFile: selectedSong.videoFile,
+videoMode: selectedSong.videoMode,
         needsLyricsSync:
           selectedSong.needsLyricsSync === true,
       },

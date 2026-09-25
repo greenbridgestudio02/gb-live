@@ -20,6 +20,8 @@ type PublicSong = {
   kind?: "vocal" | "instrumental";
   lyrics: string;
   lyricLines: PublicLyricLine[];
+  videoFile?: string;
+  videoMode?: "video" | "video-lyrics";
   needsLyricsSync?: boolean;
 };
 
@@ -38,6 +40,7 @@ type LiveState = {
 
   elapsedTime: number;
   isPlaying: boolean;
+  playbackEnded: boolean;
 
   message: string;
   messageUpdatedAt: number;
@@ -74,6 +77,7 @@ const defaultState: LiveState = {
 
   elapsedTime: 0,
   isPlaying: false,
+  playbackEnded: false,
 
   message: "",
   messageUpdatedAt: 0,
@@ -120,6 +124,10 @@ async function readLiveState(): Promise<LiveState> {
         typeof parsed.isPlaying === "boolean"
           ? parsed.isPlaying
           : false,
+          playbackEnded:
+          typeof parsed.playbackEnded === "boolean"
+            ? parsed.playbackEnded
+            : false,
 
       message:
         typeof parsed.message === "string"
@@ -248,7 +256,18 @@ function parseSong(
         ? rawSong.lyrics
         : "",
 
-    lyricLines,
+        lyricLines,
+
+    videoFile:
+      typeof rawSong.videoFile === "string"
+        ? rawSong.videoFile
+        : undefined,
+
+    videoMode:
+      rawSong.videoMode === "video" ||
+      rawSong.videoMode === "video-lyrics"
+        ? rawSong.videoMode
+        : undefined,
 
     needsLyricsSync:
       rawSong.needsLyricsSync === true,
@@ -392,6 +411,11 @@ export async function POST(
       ? body.isPlaying
       : currentState.isPlaying;
 
+      const playbackEnded =
+  typeof body.playbackEnded === "boolean"
+    ? body.playbackEnded
+    : currentState.playbackEnded;
+
   const message =
     typeof body.message === "string"
       ? body.message
@@ -412,6 +436,7 @@ if (typeof body.message === "string") {
     elapsedTime,
 
     isPlaying,
+    playbackEnded,
 
     message,
     messageUpdatedAt,
