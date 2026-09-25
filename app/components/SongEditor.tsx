@@ -50,6 +50,19 @@ const [audioFile, setAudioFile] = useState(
 const [audioVolume, setAudioVolume] = useState(
   song.audioVolume ?? 1
 );
+const [videoFile, setVideoFile] = useState(
+  song.videoFile ?? ""
+);
+
+const [videoMode, setVideoMode] = useState<
+  "" | "video" | "video-lyrics"
+>(
+  song.videoMode ?? ""
+);
+
+const [videoOffset, setVideoOffset] = useState(
+  song.videoOffset ?? 0
+);
 
 const previewAudioRef = useRef<HTMLAudioElement | null>(null);
 useEffect(() => {
@@ -127,6 +140,13 @@ useEffect(() => {
         : false,
       audioFile: audioFile.trim() || undefined,
       audioVolume,
+      videoFile: videoFile.trim() || undefined,
+videoMode: videoFile.trim()
+  ? videoMode || "video"
+  : undefined,
+videoOffset: videoFile.trim()
+  ? videoOffset
+  : undefined,
 
 
       montage: montageEnabled
@@ -410,6 +430,111 @@ useEffect(() => {
   src={audioFile}
   className="mt-4 w-full"
 />
+  )}
+</div>
+<div className="mt-6 rounded-2xl border border-sky-900/60 bg-sky-950/10 p-5">
+  <p className="text-xs font-semibold uppercase tracking-[0.25em] text-sky-400">
+    VIDÉO GB LIVE
+  </p>
+
+  <h3 className="mt-1 text-xl font-bold">
+    Clip vidéo du morceau
+  </h3>
+
+  <p className="mt-1 text-sm text-zinc-500">
+    Vidéo affichée sur l&apos;écran public pendant ce morceau.
+  </p>
+
+  <div className="mt-4">
+    <label className="mb-2 block text-sm font-semibold text-zinc-300">
+      Fichier vidéo
+    </label>
+
+    <input
+      type="text"
+      value={videoFile}
+      onChange={(event) => setVideoFile(event.target.value)}
+      placeholder="/labas.mp4"
+      className="w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3 outline-none focus:border-sky-500"
+    />
+  </div>
+
+  {videoFile.trim() && (
+    <>
+      <div className="mt-5">
+        <label className="mb-2 block text-sm font-semibold text-zinc-300">
+          Affichage sur l&apos;écran public
+        </label>
+
+        <select
+          value={videoMode}
+          onChange={(event) =>
+            setVideoMode(
+              event.target.value as "video" | "video-lyrics"
+            )
+          }
+          className="w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3 outline-none focus:border-sky-500"
+        >
+          <option value="">Choisir...</option>
+          <option value="video">Vidéo seule</option>
+          <option value="video-lyrics">
+            Vidéo + paroles
+          </option>
+        </select>
+      </div>
+
+      <div className="mt-5">
+        <div className="flex items-center justify-between">
+          <label className="text-sm font-semibold text-zinc-300">
+            Décalage vidéo / audio
+          </label>
+
+          <span className="font-bold text-sky-400">
+            {videoOffset >= 0 ? "+" : ""}
+            {videoOffset.toFixed(2)} s
+          </span>
+        </div>
+
+        <div className="mt-3 flex items-center gap-3">
+          <button
+            type="button"
+            onClick={() =>
+              setVideoOffset((value) =>
+                Number((value - 0.05).toFixed(2))
+              )
+            }
+            className="rounded-xl border border-zinc-700 bg-zinc-900 px-5 py-3 font-bold"
+          >
+            − 0,05 s
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setVideoOffset(0)}
+            className="rounded-xl border border-zinc-700 bg-zinc-900 px-5 py-3 font-semibold"
+          >
+            Remettre à 0
+          </button>
+
+          <button
+            type="button"
+            onClick={() =>
+              setVideoOffset((value) =>
+                Number((value + 0.05).toFixed(2))
+              )
+            }
+            className="rounded-xl border border-zinc-700 bg-zinc-900 px-5 py-3 font-bold"
+          >
+            + 0,05 s
+          </button>
+        </div>
+
+        <p className="mt-3 text-sm text-zinc-500">
+          Valeur positive : la vidéo démarre plus tard. Valeur négative :
+          elle démarre plus loin dans le clip.
+        </p>
+      </div>
+    </>
   )}
 </div>
         <div className="mt-6 flex items-center justify-between border-t border-zinc-800 pt-6">

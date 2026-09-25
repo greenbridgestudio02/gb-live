@@ -213,6 +213,11 @@ useEffect(() => {
 }
 
   const lastLine = lyricLines[lyricLines.length - 1];
+  const hasVideo = Boolean(liveState.song?.videoFile);
+
+if (hasVideo && !liveState.playbackEnded) {
+  return;
+}
   if (
   liveState.playbackEnded &&
   songHasPlayedRef.current
@@ -222,6 +227,7 @@ useEffect(() => {
 }
   const timeAfterLastLine =
     displayElapsedTime - lastLine.time;
+    
 
   if (timeAfterLastLine < 8) {
     return;
@@ -237,6 +243,15 @@ useEffect(() => {
 
   const currentSong = liveState.song;
   const lyricLines = currentSong?.lyricLines ?? [];
+  const lastLyricTime =
+  lyricLines.length > 0
+    ? lyricLines[lyricLines.length - 1].time
+    : 0;
+
+const hideLastVideoLyric =
+  currentSong?.videoMode === "video-lyrics" &&
+  lyricLines.length > 0 &&
+  displayElapsedTime - lastLyricTime >= 4;
 
   let currentLineIndex = -1;
 
@@ -326,6 +341,12 @@ useEffect(() => {
         if (currentLineIndex === -1) {
           return null;
         }
+        if (
+  index === lyricLines.length - 1 &&
+  hideLastVideoLyric
+) {
+  return null;
+}
 
         if (distance < 0 || distance > 1) {
   return null;
