@@ -22,6 +22,7 @@ type PublicSong = {
   lyricLines: PublicLyricLine[];
   videoFile?: string;
   videoMode?: "video" | "video-lyrics";
+  videoOffset?: number;
   needsLyricsSync?: boolean;
 };
 
@@ -268,6 +269,10 @@ function parseSong(
       rawSong.videoMode === "video-lyrics"
         ? rawSong.videoMode
         : undefined,
+        videoOffset:
+  typeof rawSong.videoOffset === "number"
+    ? rawSong.videoOffset
+    : undefined,
 
     needsLyricsSync:
       rawSong.needsLyricsSync === true,

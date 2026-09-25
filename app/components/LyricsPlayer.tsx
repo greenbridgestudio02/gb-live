@@ -110,7 +110,8 @@ isPlayingRef.current = false;
             lyrics: song.lyrics,
             lyricLines: song.lyricLines ?? [],
             videoFile: song.videoFile,
-videoMode: song.videoMode,
+            videoMode: song.videoMode,
+            videoOffset: song.videoOffset,
             needsLyricsSync:
               song.needsLyricsSync === true,
           },

@@ -16,6 +16,7 @@ type LiveSong = {
   lyricLines?: LyricLine[];
   videoFile?: string;
   videoMode?: "video" | "video-lyrics";
+  videoOffset?: number;
 };
 
 type LiveState = {
@@ -70,20 +71,28 @@ useEffect(() => {
     return;
   }
 
-  const targetTime = liveState.elapsedTime ?? 0;
+  const videoOffset = liveState.song.videoOffset ?? 0;
+const targetTime = Math.max(
+  0,
+  (liveState.elapsedTime ?? 0) - videoOffset
+);
 
   if (Math.abs(video.currentTime - targetTime) > 0.5) {
     video.currentTime = targetTime;
   }
 
-  if (liveState.isPlaying) {
-    video.play().catch(() => {});
-  } else {
-    video.pause();
-  }
+  if (
+  liveState.isPlaying &&
+  (liveState.elapsedTime ?? 0) >= videoOffset
+) {
+  video.play().catch(() => {});
+} else {
+  video.pause();
+}
 }, [
   liveState.song?.id,
   liveState.song?.videoFile,
+  liveState.song?.videoOffset,
   liveState.elapsedTime,
   liveState.isPlaying,
 ]);
@@ -299,6 +308,49 @@ useEffect(() => {
       className="h-full w-full object-contain"
     />
   </div>
+) : currentSong.videoFile && currentSong.videoMode === "video-lyrics" ? (
+  <div className="relative h-full w-full overflow-hidden bg-black">
+    <video
+      ref={videoRef}
+      src={currentSong.videoFile}
+      muted
+      playsInline
+      preload="auto"
+      className="h-full w-full object-contain"
+    />
+
+    <div className="absolute inset-x-0 bottom-0 px-16 pb-14 pt-32 text-center">
+      {lyricLines.map((line, index) => {
+        const distance = index - currentLineIndex;
+
+        if (currentLineIndex === -1) {
+          return null;
+        }
+
+        if (distance < 0 || distance > 1) {
+  return null;
+}
+
+        const isCurrent = distance === 0;
+        const isPast = distance < 0;
+
+        return (
+          <div
+            key={`${line.time}-${index}`}
+            className={`py-3 font-bold leading-tight drop-shadow-[0_3px_6px_rgba(0,0,0,1)] transition-all duration-300 ${
+              isCurrent
+                ? "text-6xl text-white"
+                : isPast
+                  ? "text-3xl text-zinc-300"
+                  : "text-4xl text-zinc-300"
+            }`}
+          >
+            {line.text}
+          </div>
+        );
+      })}
+    </div>
+  </div>
 ) : (
         <div className="flex h-full flex-col">
           <header className="shrink-0 px-12 pt-5 pb-2 text-center">
@@ -332,9 +384,9 @@ useEffect(() => {
                   if (currentLineIndex === -1) {
   return null;
 }
-                  if (distance < -1 || distance > 2) {
-                    return null;
-                  }
+                  if (distance < 0 || distance > 2) {
+  return null;
+}
 
                   const isCurrent = distance === 0;
                   const isPast = distance < 0;
