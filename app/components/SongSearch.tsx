@@ -68,7 +68,7 @@ export default function SongSearch({
 
   return (
     <div className="fixed inset-0 z-[60] flex items-start justify-center bg-black/80 p-6 pt-12">
-      <div className="w-full max-w-5xl overflow-hidden rounded-3xl border border-zinc-700 bg-zinc-950 shadow-2xl">
+      <div className="w-full max-w-[1500px] overflow-hidden rounded-3xl border border-zinc-700 bg-zinc-950 shadow-2xl">
 
         {/* EN-TÊTE */}
         <div className="flex items-center justify-between border-b border-zinc-800 p-5">
@@ -112,216 +112,192 @@ export default function SongSearch({
         </div>
 
         {/* LISTE */}
-        <div className="max-h-[65vh] overflow-y-auto px-5 pb-5">
+                <div className="max-h-[65vh] overflow-auto px-5 pb-5">
           {results.length > 0 ? (
-            <div className="space-y-3">
-              {results.map(
-                ({ song, index }) => {
-                  const isInSetlist =
-                    setlistSongIds.includes(
-                      song.id
-                    );
+            <div className="w-full overflow-hidden rounded-xl border border-zinc-800">
 
-                  const isRequested =
-                    requestedSongIds.includes(
-                      song.id
-                    );
+              {/* EN-TÊTE DU TABLEAU */}
+              <div className="grid grid-cols-[45px_minmax(220px,1fr)_75px_105px_75px_90px_115px_125px_430px] items-center gap-2 border-b border-zinc-700 bg-zinc-900 px-3 py-2 text-xs font-bold uppercase tracking-wide text-zinc-500">
+                <span>#</span>
+                <span>Morceau</span>
+                <span>Durée</span>
+                <span>Type</span>
+                <span>BPM</span>
+                <span>Tonalité</span>
+                <span>Paroles</span>
+                <span>Setlist</span>
+                <span>Actions</span>
+              </div>
 
-                  const needsSync =
-                    song.kind !==
-                      "instrumental" &&
-                    (song.needsLyricsSync ===
-                      true ||
-                      !song.lyricLines ||
-                      song.lyricLines.length ===
-                        0);
+              {results.map(({ song, index }) => {
+                const isInSetlist =
+                  setlistSongIds.includes(song.id);
 
-                  return (
-                    <div
-                      key={song.id}
-                      className="rounded-2xl border border-zinc-800 bg-zinc-900 p-5"
+                const isRequested =
+                  requestedSongIds.includes(song.id);
+
+                const needsSync =
+                  song.kind !== "instrumental" &&
+                  (song.needsLyricsSync === true ||
+                    !song.lyricLines ||
+                    song.lyricLines.length === 0);
+
+                return (
+                  <div
+                    key={song.id}
+                    className="grid grid-cols-[45px_minmax(220px,1fr)_75px_105px_75px_90px_115px_125px_430px] items-center gap-2 border-b border-zinc-800 bg-zinc-950 px-3 py-2 text-sm last:border-b-0 hover:bg-zinc-900"
+                  >
+                    {/* NUMÉRO */}
+                    <span className="font-semibold text-zinc-600">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+
+                    {/* TITRE */}
+                    <span
+                      className="truncate font-bold text-white"
+                      title={song.title}
                     >
-                      {/* IDENTITÉ DU MORCEAU */}
-                      <div className="flex items-start gap-4">
+                      {song.title}
+                    </span>
 
-                        <span className="mt-1 w-10 shrink-0 text-sm font-semibold text-zinc-600">
-                          {String(
-                            index + 1
-                          ).padStart(
-                            2,
-                            "0"
-                          )}
+                    {/* DURÉE */}
+                    <span className="text-zinc-400">
+                      {song.duration}
+                    </span>
+
+                    {/* TYPE */}
+                    <span className="text-zinc-400">
+                      {song.kind === "instrumental"
+                        ? "🎹 Instrumental"
+                        : "Vocal"}
+                    </span>
+
+                    {/* BPM */}
+                    <span className="text-zinc-400">
+                      {song.bpm ? `${song.bpm}` : "—"}
+                    </span>
+
+                    {/* TONALITÉ */}
+                    <span className="text-zinc-400">
+                      {song.key || "—"}
+                    </span>
+
+                    {/* PAROLES */}
+                    <span>
+                      {song.kind === "instrumental" ? (
+                        <span className="text-zinc-600">
+                          —
                         </span>
+                      ) : needsSync ? (
+                        <span className="font-semibold text-amber-300">
+                          ⚠ À synchroniser
+                        </span>
+                      ) : (
+                        <span className="font-semibold text-emerald-300">
+                          ✓ Synchronisé
+                        </span>
+                      )}
+                    </span>
 
-                        <div className="min-w-0 flex-1">
-
-                          {/* TITRE */}
-                          <h3 className="truncate text-2xl font-black text-white">
-                            {song.title}
-                          </h3>
-
-                          {/* INFOS */}
-                          <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm text-zinc-500">
-
-                            <span>
-                              {song.duration}
-                            </span>
-
-                            {song.kind ===
-                              "instrumental" && (
-                              <span>
-                                🎹 Instrumental
-                              </span>
-                            )}
-
-                            {song.bpm && (
-                              <span>
-                                ♩ {song.bpm} BPM
-                              </span>
-                            )}
-
-                            {song.key && (
-                              <span>
-                                Tonalité :{" "}
-                                {song.key}
-                              </span>
-                            )}
-
-                          </div>
-
-                          {/* ÉTATS */}
-                          <div className="mt-3 flex flex-wrap gap-2">
-
-                            {song.kind !==
-                              "instrumental" &&
-                              (needsSync ? (
-                                <span className="rounded-lg border border-amber-800 bg-amber-950/30 px-3 py-2 text-xs font-semibold text-amber-300">
-                                  ⚠️ À
-                                  synchroniser
-                                </span>
-                              ) : (
-                                <span className="rounded-lg border border-emerald-800 bg-emerald-950/30 px-3 py-2 text-xs font-semibold text-emerald-300">
-                                  ✅ Synchronisé
-                                </span>
-                              ))}
-
-                            {isRequested && (
-                              <span className="rounded-lg border border-amber-700 bg-amber-950/40 px-3 py-2 text-xs font-semibold text-amber-300">
-                                🙋 Demandé
-                              </span>
-                            )}
-
-                            {isInSetlist ? (
-                              <span className="rounded-lg border border-emerald-800 bg-emerald-950/40 px-3 py-2 text-xs font-semibold text-emerald-300">
-                                ✓ Dans la
-                                setlist
-                              </span>
-                            ) : (
-                              <button
-                                type="button"
-                                onClick={() =>
-                                  onAddToSetlist(
-                                    song.id
-                                  )
-                                }
-                                className="rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm font-semibold transition hover:border-emerald-500 hover:text-emerald-300"
-                              >
-                                + Ajouter à la
-                                setlist
-                              </button>
-                            )}
-
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* ACTIONS */}
-                      <div className="mt-5 grid grid-cols-2 gap-2 lg:grid-cols-6">
-
+                    {/* SETLIST */}
+                    <span>
+                      {isInSetlist ? (
+                        <span className="font-semibold text-emerald-300">
+                          ✓ Dans la setlist
+                        </span>
+                      ) : (
                         <button
                           type="button"
                           onClick={() =>
-                            onEditSong(index)
+                            onAddToSetlist(song.id)
                           }
-                          className="rounded-lg border border-sky-800 bg-sky-950/20 px-4 py-2 font-semibold text-sky-300 transition hover:bg-sky-950/50"
+                          className="rounded-md border border-zinc-700 bg-zinc-900 px-2 py-1 text-xs font-semibold transition hover:border-emerald-500 hover:text-emerald-300"
                         >
-                          ✏️ Modifier
+                          + Ajouter
                         </button>
+                      )}
+                    </span>
 
-                        <button
-                          type="button"
-                          onClick={() =>
-                            onSyncSong(index)
+                    {/* ACTIONS */}
+                    <div className="flex items-center gap-1">
+
+                      <button
+                        type="button"
+                        onClick={() => onEditSong(index)}
+                        className="rounded-md border border-sky-800 bg-sky-950/20 px-2 py-1 text-xs font-semibold text-sky-300 transition hover:bg-sky-950/50"
+                        title="Modifier le morceau"
+                      >
+                        Modifier
+                      </button>
+
+                      {song.kind !== "instrumental" ? (
+  <button
+    type="button"
+    onClick={() => onSyncSong(index)}
+    className="w-[74px] rounded-md border border-violet-700 bg-violet-950/30 px-2 py-1 text-xs font-semibold text-violet-300 transition hover:bg-violet-950/60"
+    title="Synchroniser les paroles"
+  >
+    Synchro
+  </button>
+) : (
+  <span className="w-[74px]" />
+)}
+
+                      <button
+                        type="button"
+                        onClick={() => playNow(index)}
+                        className="rounded-md bg-emerald-500 px-2 py-1 text-xs font-bold text-zinc-950"
+                        title="Jouer maintenant"
+                      >
+                        ▶ Jouer
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => playNext(song.id)}
+                        className="rounded-md border border-zinc-700 bg-zinc-900 px-2 py-1 text-xs font-semibold transition hover:border-emerald-500 hover:text-emerald-300"
+                        title="Jouer ensuite"
+                      >
+                        Ensuite
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => onRequestSong(song.id)}
+                        disabled={isRequested}
+                        className="rounded-md border border-amber-700 bg-amber-950/30 px-2 py-1 text-xs font-semibold text-amber-300 transition hover:bg-amber-950/60 disabled:cursor-not-allowed disabled:opacity-40"
+                        title={
+                          isRequested
+                            ? "Demande déjà enregistrée"
+                            : "Demande du public"
+                        }
+                      >
+                        {isRequested ? "✓ Demandé" : "🙋 Demande"}
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const confirmed = window.confirm(
+                            `Supprimer définitivement "${song.title}" de la bibliothèque ?`
+                          );
+
+                          if (!confirmed) {
+                            return;
                           }
-                          disabled={
-                            song.kind ===
-                            "instrumental"
-                          }
-                          className="rounded-lg border border-violet-700 bg-violet-950/30 px-4 py-2 font-semibold text-violet-300 transition hover:bg-violet-950/60 disabled:cursor-not-allowed disabled:opacity-30"
-                        >
-                          🎤 Synchroniser
-                        </button>
 
-                        <button
-                          type="button"
-                          onClick={() =>
-                            playNow(index)
-                          }
-                          className="rounded-lg bg-emerald-500 px-4 py-2 font-bold text-zinc-950"
-                        >
-                          ▶ Jouer maintenant
-                        </button>
+                          onDeleteSong(song.id);
+                        }}
+                        className="rounded-md border border-red-800 bg-red-950/30 px-2 py-1 text-xs font-semibold text-red-300 transition hover:bg-red-950/60"
+                        title="Supprimer définitivement"
+                      >
+                        🗑
+                      </button>
 
-                        <button
-                          type="button"
-                          onClick={() =>
-                            playNext(song.id)
-                          }
-                          className="rounded-lg border border-zinc-700 bg-zinc-950 px-4 py-2 font-semibold transition hover:border-emerald-500 hover:text-emerald-300"
-                        >
-                          Jouer ensuite
-                        </button>
-
-                        <button
-                          type="button"
-                          onClick={() =>
-                            onRequestSong(
-                              song.id
-                            )
-                          }
-                          disabled={
-                            isRequested
-                          }
-                          className="rounded-lg border border-amber-700 bg-amber-950/30 px-4 py-2 font-semibold text-amber-300 transition hover:bg-amber-950/60 disabled:cursor-not-allowed disabled:opacity-40"
-                        >
-                          {isRequested
-                            ? "✓ Demande enregistrée"
-                            : "🙋 Demande du public"}
-                        </button>
-
-                            <button
-  type="button"
-  onClick={() => {
-    const confirmed = window.confirm(
-      `Supprimer définitivement "${song.title}" de la bibliothèque ?`
-    );
-
-    if (!confirmed) {
-      return;
-    }
-
-    onDeleteSong(song.id);
-  }}
-  className="rounded-lg border border-red-800 bg-red-950/30 px-4 py-2 font-semibold text-red-300 transition hover:bg-red-950/60"
->
-  🗑️ Supprimer
-</button>
-
-                      </div>
                     </div>
-                  );
-                }
-              )}
+                  </div>
+                );
+              })}
             </div>
           ) : (
             <div className="py-10 text-center text-zinc-500">
