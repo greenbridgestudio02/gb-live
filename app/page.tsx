@@ -750,7 +750,7 @@ function startShow() {
   }
 
   setIsSetlistOpen(true);
-  void sendPublicMode("song");
+  void sendPublicMode("home");
 }
 
 function returnHome() {
@@ -1130,7 +1130,7 @@ async function importLibrary() {
             }
 
             setIsHomeMode(false);
-            void sendPublicMode("song");
+            void sendPublicMode("home");
           }}
           onPlayNext={(songId) => {
             setSetlistSongIds((currentSetlist) => {

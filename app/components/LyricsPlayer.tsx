@@ -101,7 +101,7 @@ isPlayingRef.current = false;
         },
         cache: "no-store",
         body: JSON.stringify({
-          mode: "song",
+          mode: playing ? "song" : undefined,
 
           song: {
             id: song.id,
