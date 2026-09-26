@@ -63,6 +63,15 @@ const [videoMode, setVideoMode] = useState<
 const [videoOffset, setVideoOffset] = useState(
   song.videoOffset ?? 0
 );
+const [videoPlaybackMode, setVideoPlaybackMode] = useState<
+  "sync" | "loop" | "timed"
+>(
+  song.videoPlaybackMode ?? (song.audioFile ? "sync" : "loop")
+);
+
+const [videoDuration, setVideoDuration] = useState(
+  song.videoDuration ?? 180
+);
 
 const previewAudioRef = useRef<HTMLAudioElement | null>(null);
 useEffect(() => {
@@ -148,6 +157,14 @@ videoOffset: videoFile.trim()
   ? videoOffset
   : undefined,
 
+  videoPlaybackMode: videoFile.trim()
+  ? videoPlaybackMode
+  : undefined,
+
+videoDuration:
+  videoFile.trim() && videoPlaybackMode === "timed"
+    ? videoDuration
+    : undefined,
 
       montage: montageEnabled
   ? {
@@ -465,6 +482,72 @@ videoOffset: videoFile.trim()
         <label className="mb-2 block text-sm font-semibold text-zinc-300">
           Affichage sur l&apos;écran public
         </label>
+
+      <div className="mt-5">
+        <label className="mb-2 block text-sm font-semibold text-zinc-300">
+          Lecture de la vidéo
+        </label>
+
+        {audioFile.trim() ? (
+          <div className="rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3">
+            <p className="font-semibold text-sky-400">
+              Synchronisée sur le WAV
+            </p>
+            <p className="mt-1 text-sm text-zinc-500">
+              Le WAV pilote la lecture et la fin de la vidéo.
+            </p>
+          </div>
+        ) : (
+          <select
+            value={videoPlaybackMode === "sync" ? "loop" : videoPlaybackMode}
+            onChange={(event) =>
+              setVideoPlaybackMode(
+                event.target.value as "loop" | "timed"
+              )
+            }
+            className="w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3 outline-none focus:border-sky-500"
+          >
+            <option value="loop">
+              Boucle jusqu&apos;à ASSIGN 2
+            </option>
+            <option value="timed">
+              Durée définie
+            </option>
+          </select>
+        )}
+      </div>
+
+      {!audioFile.trim() && videoPlaybackMode === "timed" && (
+        <div className="mt-5">
+          <div className="flex items-center justify-between">
+            <label className="text-sm font-semibold text-zinc-300">
+              Durée du visuel
+            </label>
+
+            <span className="font-bold text-sky-400">
+              {Math.floor(videoDuration / 60)} min{" "}
+              {videoDuration % 60} s
+            </span>
+          </div>
+
+          <input
+            type="number"
+            min="5"
+            step="5"
+            value={videoDuration}
+            onChange={(event) =>
+              setVideoDuration(
+                Math.max(5, Number(event.target.value) || 5)
+              )
+            }
+            className="mt-3 w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3 outline-none focus:border-sky-500"
+          />
+
+          <p className="mt-2 text-sm text-zinc-500">
+            Durée en secondes. À la fin, l&apos;écran revient automatiquement au logo G3 Live.
+          </p>
+        </div>
+      )}
 
         <select
           value={videoMode}

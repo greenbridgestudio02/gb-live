@@ -21,9 +21,11 @@ type PublicSong = {
   lyrics: string;
   lyricLines: PublicLyricLine[];
   videoFile?: string;
-  videoMode?: "video" | "video-lyrics";
-  videoOffset?: number;
-  needsLyricsSync?: boolean;
+videoMode?: "video" | "video-lyrics";
+videoOffset?: number;
+videoPlaybackMode?: "sync" | "loop" | "timed";
+videoDuration?: number;
+needsLyricsSync?: boolean;
 };
 
 type PublicMode =
@@ -273,6 +275,19 @@ function parseSong(
   typeof rawSong.videoOffset === "number"
     ? rawSong.videoOffset
     : undefined,
+
+videoPlaybackMode:
+  rawSong.videoPlaybackMode === "sync" ||
+  rawSong.videoPlaybackMode === "loop" ||
+  rawSong.videoPlaybackMode === "timed"
+    ? rawSong.videoPlaybackMode
+    : undefined,
+
+videoDuration:
+  typeof rawSong.videoDuration === "number"
+    ? rawSong.videoDuration
+    : undefined,
+
 
     needsLyricsSync:
       rawSong.needsLyricsSync === true,

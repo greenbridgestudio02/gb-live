@@ -37,6 +37,10 @@ export default function LyricsPlayer({
 
   const hasSynchronizedLyrics =
     lyricLines.length > 0 && !song.needsLyricsSync;
+    const hasLiveVideo =
+  isInstrumental &&
+  Boolean(song.videoFile) &&
+  !song.audioFile;
 
   const currentLineIndex = useMemo(() => {
     if (lyricLines.length === 0) {
@@ -91,7 +95,8 @@ isPlayingRef.current = false;
   async function sendLiveState(
   time: number,
   playing: boolean,
-  playbackEnded = false
+  playbackEnded = false,
+  forceHome = false
 ) {
     try {
       await fetch("/api/live-state", {
@@ -101,7 +106,11 @@ isPlayingRef.current = false;
         },
         cache: "no-store",
         body: JSON.stringify({
-          mode: playing ? "song" : undefined,
+          mode: forceHome
+  ? "home"
+  : playing
+    ? "song"
+    : undefined,
 
           song: {
             id: song.id,
@@ -112,6 +121,8 @@ isPlayingRef.current = false;
             videoFile: song.videoFile,
             videoMode: song.videoMode,
             videoOffset: song.videoOffset,
+            videoPlaybackMode: song.videoPlaybackMode,
+videoDuration: song.videoDuration,
             needsLyricsSync:
               song.needsLyricsSync === true,
           },
@@ -160,7 +171,7 @@ isPlayingRef.current = false;
       "0"
     );
 
-    void sendLiveState(0, false);
+    void sendLiveState(0, false, false, true);
   }, [song.id]);
 
   // Sauvegarde locale de secours.
@@ -256,10 +267,42 @@ async function armAudio() {
     );
   }
 }
-  async function togglePlayback() {
-  if (!hasSynchronizedLyrics) {
+useEffect(() => {
+  if (
+    !hasLiveVideo ||
+    song.videoPlaybackMode !== "timed" ||
+    !song.videoDuration ||
+    !isPlaying ||
+    elapsedTime < song.videoDuration
+  ) {
     return;
   }
+
+  isPlayingRef.current = false;
+  setIsPlaying(false);
+
+  startTimeRef.current = null;
+  pausedElapsedRef.current = 0;
+  setElapsedTime(0);
+
+  void sendLiveState(
+    song.videoDuration,
+    false,
+    true,
+    true
+  );
+}, [
+  elapsedTime,
+  hasLiveVideo,
+  isPlaying,
+  song.videoDuration,
+  song.videoPlaybackMode,
+]);
+
+  async function togglePlayback() {
+  if (!hasSynchronizedLyrics && !hasLiveVideo) {
+  return;
+}
 
   if (isPlayingRef.current) {
     if (song.audioFile && audioRef.current) {
@@ -271,8 +314,13 @@ async function armAudio() {
       setElapsedTime(audioTime);
       pausedElapsedRef.current = audioTime;
     } else {
-      pausedElapsedRef.current = elapsedTime;
-    }
+  if (hasLiveVideo) {
+    pausedElapsedRef.current = 0;
+    setElapsedTime(0);
+  } else {
+    pausedElapsedRef.current = elapsedTime;
+  }
+}
 
     startTimeRef.current = null;
 
@@ -280,11 +328,13 @@ async function armAudio() {
     setIsPlaying(false);
 
     void sendLiveState(
-      song.audioFile && audioRef.current
-        ? audioRef.current.currentTime
-        : elapsedTime,
-      false
-    );
+  song.audioFile && audioRef.current
+    ? audioRef.current.currentTime
+    : elapsedTime,
+  false,
+  false,
+  hasLiveVideo
+);
 
     return;
   }
@@ -512,6 +562,27 @@ if (
               )}
             </div>
           </div>
+                      {hasLiveVideo && (
+              <div className="mt-5 flex items-center justify-center gap-4">
+                <button
+                  type="button"
+                  onClick={() => void togglePlayback()}
+                  disabled={isPlaying}
+                  className="rounded-xl bg-emerald-600 px-6 py-3 font-bold text-white disabled:opacity-40"
+                >
+                  ASSIGN 1 — PLAY
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => void togglePlayback()}
+                  disabled={!isPlaying}
+                  className="rounded-xl bg-red-600 px-6 py-3 font-bold text-white disabled:opacity-40"
+                >
+                  ASSIGN 2 — STOP
+                </button>
+              </div>
+            )}
         </div>
       </div>
     );

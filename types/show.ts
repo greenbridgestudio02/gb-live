@@ -56,6 +56,8 @@ export type Song = {
   videoFile?: string;
 videoMode?: "video" | "video-lyrics";
 videoOffset?: number;
+videoPlaybackMode?: "sync" | "loop" | "timed";
+videoDuration?: number;
 
   montage?: MontageMidiConfig;
 };

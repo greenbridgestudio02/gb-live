@@ -17,6 +17,8 @@ type LiveSong = {
   videoFile?: string;
   videoMode?: "video" | "video-lyrics";
   videoOffset?: number;
+  videoPlaybackMode?: "sync" | "loop" | "timed";
+videoDuration?: number;
 };
 
 type LiveState = {
@@ -71,6 +73,13 @@ useEffect(() => {
     return;
   }
 
+const videoPlaybackMode =
+  liveState.song.videoPlaybackMode ?? "sync";
+
+if (videoPlaybackMode !== "sync") {
+  return;
+}
+
   const videoOffset = liveState.song.videoOffset ?? 0;
 const targetTime = Math.max(
   0,
@@ -94,6 +103,38 @@ const targetTime = Math.max(
   liveState.song?.videoFile,
   liveState.song?.videoOffset,
   liveState.elapsedTime,
+  liveState.isPlaying,
+]);
+
+useEffect(() => {
+  const video = videoRef.current;
+  const song = liveState.song;
+
+  if (!video || !song?.videoFile) {
+    return;
+  }
+
+  const videoPlaybackMode =
+    song.videoPlaybackMode ?? "sync";
+
+  if (
+    videoPlaybackMode !== "loop" &&
+    videoPlaybackMode !== "timed"
+  ) {
+    return;
+  }
+
+  video.loop = true;
+
+  if (liveState.isPlaying) {
+    video.play().catch(() => {});
+  } else {
+    video.pause();
+  }
+}, [
+  liveState.song?.id,
+  liveState.song?.videoFile,
+  liveState.song?.videoPlaybackMode,
   liveState.isPlaying,
 ]);
 
@@ -203,6 +244,32 @@ setLiveState(state);
   ]);
 
 useEffect(() => {
+  const song = liveState.song;
+
+  if (
+    !song ||
+    song.videoPlaybackMode !== "timed" ||
+    !liveState.isPlaying ||
+    !song.videoDuration
+  ) {
+    return;
+  }
+
+  const actualElapsedTime =
+    displayElapsedTime - LYRICS_LEAD;
+
+  if (actualElapsedTime < song.videoDuration) {
+    return;
+  }
+
+  setLyricsFinished(true);
+}, [
+  displayElapsedTime,
+  liveState.isPlaying,
+  liveState.song,
+]);
+
+useEffect(() => {
   const lyricLines = liveState.song?.lyricLines ?? [];
 
   if (
@@ -234,6 +301,7 @@ if (hasVideo && !liveState.playbackEnded) {
   }
 
   setLyricsFinished(true);
+  
 }, [
   displayElapsedTime,
   liveState.isPlaying,

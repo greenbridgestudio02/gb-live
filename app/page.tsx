@@ -647,6 +647,8 @@ useEffect(() => {
         videoFile: previousSong.videoFile,
         videoMode: previousSong.videoMode,
 videoOffset: previousSong.videoOffset,
+videoPlaybackMode: previousSong.videoPlaybackMode,
+videoDuration: previousSong.videoDuration,
         needsLyricsSync:
           previousSong.needsLyricsSync === true,
       },
@@ -695,6 +697,8 @@ async function goToNextSong() {
         videoFile: nextSong.videoFile,
         videoMode: nextSong.videoMode,
         videoOffset: nextSong.videoOffset,
+        videoPlaybackMode: nextSong.videoPlaybackMode,
+videoDuration: nextSong.videoDuration,
           needsLyricsSync:
           nextSong.needsLyricsSync === true,
       },
@@ -1884,6 +1888,8 @@ onClose={() => setIsSearchOpen(false)}
         videoFile: selectedSong.videoFile,
         videoMode: selectedSong.videoMode,
         videoOffset: selectedSong.videoOffset,  
+        videoPlaybackMode: selectedSong.videoPlaybackMode,
+videoDuration: selectedSong.videoDuration,
         needsLyricsSync:
           selectedSong.needsLyricsSync === true,
       },
