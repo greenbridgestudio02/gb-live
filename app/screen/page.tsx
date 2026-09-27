@@ -364,6 +364,26 @@ const hideLastVideoLyric =
     }
   }
 
+const currentLyric =
+  currentLineIndex >= 0
+    ? lyricLines[currentLineIndex]
+    : null;
+
+const nextLyric =
+  currentLineIndex >= 0 &&
+  currentLineIndex < lyricLines.length - 1
+    ? lyricLines[currentLineIndex + 1]
+    : null;
+
+const LONG_LYRICS_GAP = 8;
+const LYRIC_VISIBLE_DURATION = 4;
+
+const hideLyricDuringLongGap =
+  currentLyric !== null &&
+  nextLyric !== null &&
+  nextLyric.time - currentLyric.time >= LONG_LYRICS_GAP &&
+  displayElapsedTime - currentLyric.time >= LYRIC_VISIBLE_DURATION;
+
   const showWelcome =
   !currentSong ||
   liveState.mode === "pause" ||
@@ -445,6 +465,9 @@ const hideLastVideoLyric =
 
         const isCurrent = distance === 0;
         const isPast = distance < 0;
+        if (isCurrent && hideLyricDuringLongGap) {
+  return null;
+}
 
         return (
           <div
@@ -502,6 +525,9 @@ const hideLastVideoLyric =
 
                   const isCurrent = distance === 0;
                   const isPast = distance < 0;
+                  if (isCurrent && hideLyricDuringLongGap) {
+  return null;
+}
 
                   return (
                     <div
