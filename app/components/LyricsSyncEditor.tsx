@@ -26,6 +26,7 @@ export default function LyricsSyncEditor({
 
   const startTimeRef = useRef<number | null>(null);
   const animationFrameRef = useRef<number | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     setIsRunning(false);
@@ -62,13 +63,25 @@ export default function LyricsSyncEditor({
     };
   }, [isRunning]);
 
-  function startSync() {
-    setTimes(lyricLines.map(() => 0));
-    setCurrentIndex(0);
-    setElapsedTime(0);
-    startTimeRef.current = performance.now();
-    setIsRunning(true);
+  async function startSync() {
+  setTimes(lyricLines.map(() => 0));
+  setCurrentIndex(0);
+  setElapsedTime(0);
+
+  if (audioRef.current && song.audioFile) {
+    audioRef.current.currentTime = 0;
+
+    try {
+      await audioRef.current.play();
+    } catch (error) {
+      console.error("Impossible de lancer le WAV.", error);
+      return;
+    }
   }
+
+  startTimeRef.current = performance.now();
+  setIsRunning(true);
+}
 
   function markCurrentLine() {
     if (!isRunning) {
@@ -91,10 +104,15 @@ export default function LyricsSyncEditor({
     });
 
     if (currentIndex === lyricLines.length - 1) {
-      setCurrentIndex(lyricLines.length);
-      setIsRunning(false);
-      return;
-    }
+  setCurrentIndex(lyricLines.length);
+  setIsRunning(false);
+
+  if (audioRef.current) {
+    audioRef.current.pause();
+  }
+
+  return;
+}
 
     setCurrentIndex((index) => index + 1);
   }
@@ -132,6 +150,10 @@ export default function LyricsSyncEditor({
     setTimes(lyricLines.map(() => 0));
     setCurrentIndex(0);
     startTimeRef.current = null;
+    if (audioRef.current) {
+  audioRef.current.pause();
+  audioRef.current.currentTime = 0;
+}
   }
 
   function validateSync() {
@@ -206,6 +228,13 @@ export default function LyricsSyncEditor({
 
   return (
     <div className="flex h-[calc(100vh-7rem)] min-h-0 flex-col rounded-3xl border border-zinc-700 bg-zinc-950 p-4 text-zinc-100">
+      {song.audioFile && (
+  <audio
+    ref={audioRef}
+    src={song.audioFile}
+    preload="auto"
+  />
+)}
       <div className="shrink-0 text-center">
         <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-400">
           G3 Live
