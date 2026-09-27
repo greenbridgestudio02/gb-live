@@ -33,6 +33,13 @@ type LiveState = {
 };
 
 const LYRICS_LEAD = 0.15;
+const DJ_VIDEOS = [
+  "/01-club-original.mp4",
+  "/02-laser-festival.mp4",
+  "/03-disco-chic.mp4",
+  "/04-cyber-city.mp4",
+  "/05-sunset-beach.mp4",
+];
 
 export default function ScreenPage() {
   const [liveState, setLiveState] = useState<LiveState>({
@@ -48,11 +55,27 @@ export default function ScreenPage() {
   const [displayElapsedTime, setDisplayElapsedTime] = useState(0);
 const [isMessageVisible, setIsMessageVisible] = useState(false);
 const [lyricsFinished, setLyricsFinished] = useState(false);
+const [djVideoIndex, setDjVideoIndex] = useState(0);
   const clockStartRef = useRef<number | null>(null);
   const clockBaseRef = useRef(0);
 const lastMessageUpdatedAtRef = useRef(0);
 const songHasPlayedRef = useRef(false);
 const videoRef = useRef<HTMLVideoElement | null>(null);
+useEffect(() => {
+  if (liveState.mode !== "dj") {
+    return;
+  }
+
+  const timer = window.setInterval(() => {
+    setDjVideoIndex((currentIndex) =>
+      (currentIndex + 1) % DJ_VIDEOS.length
+    );
+  }, 90000);
+
+  return () => {
+    window.clearInterval(timer);
+  };
+}, [liveState.mode]);
 
 
 useEffect(() => {
@@ -372,7 +395,7 @@ const hideLastVideoLyric =
 ) : liveState.mode === "dj" ? (
   <div className="h-full w-full overflow-hidden bg-black">
     <video
-      src="/dj-loop.mp4"
+      src={DJ_VIDEOS[djVideoIndex]}
       autoPlay
       loop
       muted
