@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useRef, useState } from "react";
 
@@ -786,8 +786,8 @@ function showPublicMessage(message: string) {
     },
     cache: "no-store",
     body: JSON.stringify({
-      message: cleanMessage,
-    }),
+  message: cleanMessage,
+}),
   });
 }
 
@@ -2524,5 +2524,7 @@ onClose={() => setIsSearchOpen(false)}
     </main>
   );
 }
+
+
 
 

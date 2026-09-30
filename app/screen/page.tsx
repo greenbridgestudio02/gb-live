@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useRef, useState } from "react";
 
@@ -209,13 +209,7 @@ useEffect(() => {
     async function loadInitialState() {
   try {
     const response = await fetch("/api/live-state", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        mode: "home",
-      }),
+      cache: "no-store",
     });
 
         if (!response.ok) return;
@@ -439,7 +433,7 @@ const hideLyricDuringLongGap =
   lyricsFinished;
 
   return (
-    <main className="h-screen w-screen overflow-hidden bg-black text-white">
+    <main className="relative h-screen w-screen overflow-hidden bg-black text-white">
       {liveState.mode === "coup-parfait-success" ? (
   <div className="flex h-full w-full flex-col items-center justify-center bg-black px-12 text-center">
     <p className="animate-bounce text-[12rem] leading-none">
@@ -719,3 +713,9 @@ const hideLyricDuringLongGap =
     </main>
   );
 }
+
+
+
+
+
+
