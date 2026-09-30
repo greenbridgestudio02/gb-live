@@ -1,0 +1,1 @@
+﻿"use client"; export default function CoupParfaitPanel({ onClose }: { onClose: () => void }) { return <div>LE COUP PARFAIT <button onClick={onClose}>Fermer</button></div>; }

@@ -53,7 +53,7 @@ export type Song = {
   audioFile?: string;
 
   audioVolume?: number;
-  videoFile?: string;
+    videoFile?: string;
 videoMode?: "video" | "video-lyrics";
 videoOffset?: number;
 videoPlaybackMode?: "sync" | "loop" | "timed";

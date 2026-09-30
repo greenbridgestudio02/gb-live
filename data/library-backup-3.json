@@ -1,0 +1,2760 @@
+{
+  "songs": [
+    {
+      "id": "mon-amour",
+      "title": "Mistral Gagnant - Renaud",
+      "duration": "00:00",
+      "description": "Morceau chanté",
+      "stageNotes": "1 - commencer intro au piano seul\n2 - lancer les paroles (début direct sur couplet)",
+      "nextAction": "Préparer la transition vers « Entre deux rives ».",
+      "lyrics": "A m’asseoir sur un banc\n\nCinq minutes avec toi\n\nEt regarder les gens\n\nTant qu'y en a\n\nTe parler du bon temps\n\nQu'est mort ou qui r'viendra\n\nEn serrant dans ma main\n\nTes p'tits doigts\n\nPis donner à bouffer\n\nA des pigeons idiots\n\nLeur filer des coups d'pied\n\nPour de faux\n\nEt entendre ton rire\n\nQui lézarde les murs\n\nQui sait surtout guérir\n\nMes blessures\n\nTe raconter un peu\n\nComment j'étais mino\n\nLes bombecs fabuleux\n\nQu'on piquait chez l'marchand\n\nCar-en-sac et minthos\n\nCaramels à un franc\n\nEt les mistral gagnants\n\nAh marcher sous la pluie\n\nCinq minutes avec toi\n\nEt regarder la vie\n\nTant qu'y en a\n\nTe raconter la Terre\n\nEn te bouffant des yeux\n\nTe parler de ta mère\n\nUn p'tit peu\n\nEt sauter dans les flaques\n\nPour la faire râler\n\nBousiller nos godasses\n\nEt s'marrer\n\nEt entendre ton rire\n\nComme on entend la mer\n\nS'arrêter repartir\n\nEn arrière\n\nTe raconter surtout\n\nLes carambars d'antan\n\nEt et les coco-boërs\n\nEt les vrais roudoudous\n\nQui nous coupaient les lèvres\n\nEt nous niquaient les dents\n\nEt les mistral gagnants\n\nA m’asseoir sur un banc\n\nCinq minutes avec toi\n\nRegarder le soleil\n\nQui s'en va\n\nTe parler du bon temps\n\nQu'est mort et je m'en fous\n\nTe dire que les méchants\n\nC'est pas nous\n\nQue si moi je suis barge\n\nCe n'est que de tes yeux\n\nCar ils ont l'avantage\n\nD'être deux\n\nEt entendre ton rire\n\nS'envoler aussi haut\n\nQue s'envolent les cris\n\nDes oiseaux\n\nTe raconter enfin\n\nQu'il faut aimer la vie\n\nEt l'aimer même si\n\nLe temps est assassin\n\nEt emporte avec lui\n\nLes rires des enfants\n\nEt les mistral gagnants\n\nEt les mistral gagnants",
+      "lyricLines": [
+        {
+          "text": "A m’asseoir sur un banc",
+          "time": 0.871
+        },
+        {
+          "text": "Cinq minutes avec toi",
+          "time": 2.5047999999821187
+        },
+        {
+          "text": "Et regarder les gens",
+          "time": 3.8752999999821185
+        },
+        {
+          "text": "Tant qu'y en a",
+          "time": 4.890899999976158
+        },
+        {
+          "text": "Te parler du bon temps",
+          "time": 7.016699999988079
+        },
+        {
+          "text": "Qu'est mort ou qui r'viendra",
+          "time": 8.324799999982119
+        },
+        {
+          "text": "En serrant dans ma main",
+          "time": 9.878299999982119
+        },
+        {
+          "text": "Tes p'tits doigts",
+          "time": 10.8585
+        },
+        {
+          "text": "Pis donner à bouffer",
+          "time": 13.048399999976159
+        },
+        {
+          "text": "A des pigeons idiots",
+          "time": 14.41669999998808
+        },
+        {
+          "text": "Leur filer des coups d'pied",
+          "time": 15.890799999982118
+        },
+        {
+          "text": "Pour de faux",
+          "time": 16.81909999999404
+        },
+        {
+          "text": "Et entendre ton rire",
+          "time": 19.00089999997616
+        },
+        {
+          "text": "Qui lézarde les murs",
+          "time": 20.300199999988077
+        },
+        {
+          "text": "Qui sait surtout guérir",
+          "time": 21.671
+        },
+        {
+          "text": "Mes blessures",
+          "time": 22.79719999998808
+        },
+        {
+          "text": "Te raconter un peu",
+          "time": 25.097
+        },
+        {
+          "text": "Comment j'étais mino",
+          "time": 26.30829999998212
+        },
+        {
+          "text": "Les bombecs fabuleux",
+          "time": 27.710199999988077
+        },
+        {
+          "text": "Qu'on piquait chez l'marchand",
+          "time": 30.63489999997616
+        },
+        {
+          "text": "Car-en-sac et minthos",
+          "time": 31.8065
+        },
+        {
+          "text": "Caramels à un franc",
+          "time": 33.16059999999404
+        },
+        {
+          "text": "Et les mistral gagnants",
+          "time": 35.92209999999404
+        },
+        {
+          "text": "Ah marcher sous la pluie",
+          "time": 40.37459999999404
+        },
+        {
+          "text": "Cinq minutes avec toi",
+          "time": 41.59279999998212
+        },
+        {
+          "text": "Et regarder la vie",
+          "time": 42.91019999998808
+        },
+        {
+          "text": "Tant qu'y en a",
+          "time": 43.97679999998212
+        },
+        {
+          "text": "Te raconter la Terre",
+          "time": 46.07139999997616
+        },
+        {
+          "text": "En te bouffant des yeux",
+          "time": 47.34279999998212
+        },
+        {
+          "text": "Te parler de ta mère",
+          "time": 48.676799999982116
+        },
+        {
+          "text": "Un p'tit peu",
+          "time": 49.86509999999404
+        },
+        {
+          "text": "Et sauter dans les flaques",
+          "time": 51.95629999998212
+        },
+        {
+          "text": "Pour la faire râler",
+          "time": 53.26279999998212
+        },
+        {
+          "text": "Bousiller nos godasses",
+          "time": 54.82
+        },
+        {
+          "text": "Et s'marrer",
+          "time": 55.91489999997616
+        },
+        {
+          "text": "Et entendre ton rire",
+          "time": 58.007299999982116
+        },
+        {
+          "text": "Comme on entend la mer",
+          "time": 59.31059999999404
+        },
+        {
+          "text": "S'arrêter repartir",
+          "time": 60.65239999997616
+        },
+        {
+          "text": "En arrière",
+          "time": 61.939
+        },
+        {
+          "text": "Te raconter surtout",
+          "time": 64.00259999999403
+        },
+        {
+          "text": "Les carambars d'antan",
+          "time": 65.453
+        },
+        {
+          "text": "Et et les coco-boërs",
+          "time": 66.79269999998807
+        },
+        {
+          "text": "Et les vrais roudoudous",
+          "time": 69.41859999999404
+        },
+        {
+          "text": "Qui nous coupaient les lèvres",
+          "time": 70.7835
+        },
+        {
+          "text": "Et nous niquaient les dents",
+          "time": 72.02679999998212
+        },
+        {
+          "text": "Et les mistral gagnants",
+          "time": 74.68519999998809
+        },
+        {
+          "text": "A m’asseoir sur un banc",
+          "time": 90.42679999998212
+        },
+        {
+          "text": "Cinq minutes avec toi",
+          "time": 92.03089999997616
+        },
+        {
+          "text": "Regarder le soleil",
+          "time": 93.50059999999404
+        },
+        {
+          "text": "Qui s'en va",
+          "time": 94.53439999997616
+        },
+        {
+          "text": "Te parler du bon temps",
+          "time": 96.629
+        },
+        {
+          "text": "Qu'est mort et je m'en fous",
+          "time": 97.86489999997616
+        },
+        {
+          "text": "Te dire que les méchants",
+          "time": 99.26869999998807
+        },
+        {
+          "text": "C'est pas nous",
+          "time": 100.49259999999404
+        },
+        {
+          "text": "Que si moi je suis barge",
+          "time": 102.61229999998211
+        },
+        {
+          "text": "Ce n'est que de tes yeux",
+          "time": 103.94429999998212
+        },
+        {
+          "text": "Car ils ont l'avantage",
+          "time": 105.35489999997615
+        },
+        {
+          "text": "D'être deux",
+          "time": 106.53239999997616
+        },
+        {
+          "text": "Et entendre ton rire",
+          "time": 108.62619999998807
+        },
+        {
+          "text": "S'envoler aussi haut",
+          "time": 109.91819999998808
+        },
+        {
+          "text": "Que s'envolent les cris",
+          "time": 111.32279999998212
+        },
+        {
+          "text": "Des oiseaux",
+          "time": 112.427
+        },
+        {
+          "text": "Te raconter enfin",
+          "time": 114.59059999999404
+        },
+        {
+          "text": "Qu'il faut aimer la vie",
+          "time": 115.7665
+        },
+        {
+          "text": "Et l'aimer même si",
+          "time": 117.2045
+        },
+        {
+          "text": "Le temps est assassin",
+          "time": 119.81619999998807
+        },
+        {
+          "text": "Et emporte avec lui",
+          "time": 121.10829999998212
+        },
+        {
+          "text": "Les rires des enfants",
+          "time": 122.55869999998808
+        },
+        {
+          "text": "Et les mistral gagnants",
+          "time": 125.25869999998808
+        },
+        {
+          "text": "Et les mistral gagnants",
+          "time": 127.99659999999405
+        }
+      ],
+      "needsLyricsSync": false,
+      "kind": "vocal",
+      "audioFile": "/audio/Piano-mistralgagnant.wav",
+      "audioVolume": 0.25,
+      "montage": {
+        "enabled": true,
+        "channel": 1,
+        "bankMsb": 62,
+        "bankLsb": 0,
+        "program": 6,
+        "liveSetBank": 1,
+        "liveSetPage": 1,
+        "liveSetSlot": 7
+      },
+      "videoFile": "/mistralgagnant.mp4",
+      "videoMode": "video-lyrics",
+      "videoOffset": -16.4,
+      "videoPlaybackMode": "sync"
+    },
+    {
+      "id": "entre-deux-rives",
+      "title": "Mon Amour - Slimane",
+      "duration": "00:00",
+      "description": "Morceau chanté",
+      "stageNotes": "",
+      "nextAction": "Préparer le morceau « Le pont ».",
+      "lyrics": "Mon amour\n\nDis-moi à quoi tu penses\n\nSi tout ça a un sens\n\nDésolé si j'te dérange\n\nMon amour\n\nTe souviens-tu de nous ?\n\nDu premier rendez-vous ?\n\nC'était beau, c'était fou\n\nJe t'aime, j'sais pas pourquoi\n\nJ'rejoue la scène\n\nMais c'est toujours la même fin qui recommence\n\nTu n'entends pas\n\nMa peine, on en fait quoi ?\n\nEst-ce que tu m'aimes, ou pas ?\n\nMon amour\n\nJe ferai tout c'que je peux\n\nUn océan dans le feu\n\nL'impossible si tu le veux\n\nOh, mon amour\n\nAllez, rеviens à Paris\n\nFais-le pour nous, j't'en suppliе\n\nJe le promets, j'ai compris\n\nJe t’aime\n\nJ’sais pas pourquoi\n\nJe rejoue la scène\n\nEt c’est toujours la même fin qui recommence\n\nTu n’entends pas ma peine\n\nOn en fait quoi ?\n\nEst-ce que tu m’aimes ?\n\nOu pas ?\n\nDis-moi l'endroit, je t'attendrai\n\nEt si tu n'viens pas, je t'attendrai\n\nC'est bête je sais, je le ferai\n\nRempli d'espoir, je t'attendrai\n\nJe t’aime\n\nJ’sais pas pourquoi\n\nJe rejoue la scène\n\nEt c’est toujours la même fin qui recommence\n\nTu n’entends pas ma peine\n\nOn en fait quoi ?\n\nEst-ce que tu m’aimes ?\n\nEst-ce que tu m’aimes ?\n\nEst-ce que tu m’aimes ?\n\nEst-ce que tu m’aimes ?\n\nOu pas ?",
+      "kind": "vocal",
+      "bpm": 120,
+      "lyricLines": [
+        {
+          "text": "Mon amour",
+          "time": 0.6080000000004656
+        },
+        {
+          "text": "Dis-moi à quoi tu penses",
+          "time": 3.169
+        },
+        {
+          "text": "Si tout ça a un sens",
+          "time": 6.586
+        },
+        {
+          "text": "Désolé si j'te dérange",
+          "time": 9.818
+        },
+        {
+          "text": "Mon amour",
+          "time": 14.085
+        },
+        {
+          "text": "Te souviens-tu de nous ?",
+          "time": 16.644
+        },
+        {
+          "text": "Du premier rendez-vous ?",
+          "time": 20.01
+        },
+        {
+          "text": "C'était beau, c'était fou",
+          "time": 23.508
+        },
+        {
+          "text": "Je t'aime, j'sais pas pourquoi",
+          "time": 27.965000000000465
+        },
+        {
+          "text": "J'rejoue la scène",
+          "time": 33.848
+        },
+        {
+          "text": "Mais c'est toujours la même fin qui recommence",
+          "time": 37.643
+        },
+        {
+          "text": "Tu n'entends pas",
+          "time": 40.112
+        },
+        {
+          "text": "Ma peine, on en fait quoi ?",
+          "time": 41.312
+        },
+        {
+          "text": "Est-ce que tu m'aimes, ou pas ?",
+          "time": 47.431
+        },
+        {
+          "text": "Mon amour",
+          "time": 54.747
+        },
+        {
+          "text": "Je ferai tout c'que je peux",
+          "time": 57.148
+        },
+        {
+          "text": "Un océan dans le feu",
+          "time": 60.447
+        },
+        {
+          "text": "L'impossible si tu le veux",
+          "time": 63.776
+        },
+        {
+          "text": "Oh, mon amour",
+          "time": 67.331
+        },
+        {
+          "text": "Allez, rеviens à Paris",
+          "time": 70.565
+        },
+        {
+          "text": "Fais-le pour nous, j't'en suppliе",
+          "time": 73.962
+        },
+        {
+          "text": "Je le promets, j'ai compris",
+          "time": 77.335
+        },
+        {
+          "text": "Je t’aime",
+          "time": 81.868
+        },
+        {
+          "text": "J’sais pas pourquoi",
+          "time": 84.50300000000047
+        },
+        {
+          "text": "Je rejoue la scène",
+          "time": 87.852
+        },
+        {
+          "text": "Et c’est toujours la même fin qui recommence",
+          "time": 91.714
+        },
+        {
+          "text": "Tu n’entends pas ma peine",
+          "time": 94.24400000000047
+        },
+        {
+          "text": "On en fait quoi ?",
+          "time": 98.068
+        },
+        {
+          "text": "Est-ce que tu m’aimes ?",
+          "time": 101.414
+        },
+        {
+          "text": "Ou pas ?",
+          "time": 105.653
+        },
+        {
+          "text": "Dis-moi l'endroit, je t'attendrai",
+          "time": 109.203
+        },
+        {
+          "text": "Et si tu n'viens pas, je t'attendrai",
+          "time": 115.901
+        },
+        {
+          "text": "C'est bête je sais, je le ferai",
+          "time": 122.609
+        },
+        {
+          "text": "Rempli d'espoir, je t'attendrai",
+          "time": 129.449
+        },
+        {
+          "text": "Je t’aime",
+          "time": 136.023
+        },
+        {
+          "text": "J’sais pas pourquoi",
+          "time": 138.61700000000047
+        },
+        {
+          "text": "Je rejoue la scène",
+          "time": 141.959
+        },
+        {
+          "text": "Et c’est toujours la même fin qui recommence",
+          "time": 145.759
+        },
+        {
+          "text": "Tu n’entends pas ma peine",
+          "time": 148.252
+        },
+        {
+          "text": "On en fait quoi ?",
+          "time": 151.932
+        },
+        {
+          "text": "Est-ce que tu m’aimes ?",
+          "time": 155.582
+        },
+        {
+          "text": "Est-ce que tu m’aimes ?",
+          "time": 162.451
+        },
+        {
+          "text": "Est-ce que tu m’aimes ?",
+          "time": 165.447
+        },
+        {
+          "text": "Est-ce que tu m’aimes ?",
+          "time": 168.995
+        },
+        {
+          "text": "Ou pas ?",
+          "time": 173.24
+        }
+      ],
+      "needsLyricsSync": false,
+      "audioFile": "/audio/Piano-monamour.wav",
+      "videoFile": "/monamour.mp4",
+      "videoMode": "video-lyrics",
+      "videoOffset": 0,
+      "audioVolume": 0.25,
+      "montage": {
+        "enabled": true,
+        "channel": 1,
+        "bankMsb": 62,
+        "bankLsb": 0,
+        "program": 5,
+        "liveSetBank": 1,
+        "liveSetPage": 1,
+        "liveSetSlot": 6
+      }
+    },
+    {
+      "id": "le-pont",
+      "title": "M'man -Eddie Mitchel",
+      "duration": "04:40",
+      "description": "Morceau emblématique du spectacle",
+      "stageNotes": "Accentuer progressivement la dynamique.",
+      "nextAction": "Préparer le final du spectacle.",
+      "lyrics": "M'man\n\nJ'viens tout juste d'avoir mes 14 ans\n\nJ'veux plus d'école, j'suis devenu grand\n\nJ'te promets j'te gagnerai plein d'argent\n\nM'man\n\nJ'viens d'fumer ma tout première Week-End\n\nSur les fortif' où t'aimes pas qu'j'traîne\n\nj'me serais tué plutôt que d'refuser\n\nY a pas qu'les mères qui font les enfants\n\nLa zone, la rue coulent dans mon sang\n\nM'man, j'aimerais chanter tout ce que resentent les autres\n\nTa vie, la nôtre\n\nM'en veux pas, mais maintenant j'ai choisi\n\nM'man\n\nLes tours c'est pas toujours des guettos\n\nJ'ai pas d'passion pour les oiseaux\n\nMais comme eux j'aimerais voir ça d'en haut\n\nM'man\n\nJ'comprends mieux le regard des passants\n\nJ'vois pas comme eux, j'pense tout en grand\n\nEn couleur et sur un écran blanc\n\nY a pas qu'les mères qui font les enfants\n\nLa zone, la rue coulent dans mon sang\n\nTu sais, j'sais pas grand chose sur les choses de l'amour\n\nMais j'me doute toujours\n\nC'est pas moi, c'est pas moi qui choisis\n\nM'man, J'viens tout juste d'avoir 14 ans\n\nJ'veux plus d'école, j'suis devenu grand\n\nhey, regarde, ohh,  j'suis devenu grand\n\nooooooooh M'man\n\nJ'te promets je gagnerai plein d'argent\n\noh, j'suis devenu grand\n\nhey, M'man, je suis devenu grand M'man\n\nM'man, M'man",
+      "lyricLines": [
+        {
+          "text": "M'man",
+          "time": 16.377
+        },
+        {
+          "text": "J'viens tout juste d'avoir mes 14 ans",
+          "time": 17.731
+        },
+        {
+          "text": "J'veux plus d'école, j'suis devenu grand",
+          "time": 22.342
+        },
+        {
+          "text": "J'te promets j'te gagnerai plein d'argent",
+          "time": 26.9
+        },
+        {
+          "text": "M'man",
+          "time": 32.74
+        },
+        {
+          "text": "J'viens d'fumer ma tout première Week-End",
+          "time": 34.11
+        },
+        {
+          "text": "Sur les fortif' où t'aimes pas qu'j'traîne",
+          "time": 38.61
+        },
+        {
+          "text": "j'me serais tué plutôt que d'refuser",
+          "time": 43.151
+        },
+        {
+          "text": "Y a pas qu'les mères qui font les enfants",
+          "time": 49.994
+        },
+        {
+          "text": "La zone, la rue coulent dans mon sang",
+          "time": 57.511
+        },
+        {
+          "text": "M'man, j'aimerais chanter tout ce que resentent les autres",
+          "time": 65.025
+        },
+        {
+          "text": "Ta vie, la nôtre",
+          "time": 72.508
+        },
+        {
+          "text": "M'en veux pas, mais maintenant j'ai choisi",
+          "time": 76.275
+        },
+        {
+          "text": "M'man",
+          "time": 99.068
+        },
+        {
+          "text": "Les tours c'est pas toujours des guettos",
+          "time": 100.398
+        },
+        {
+          "text": "J'ai pas d'passion pour les oiseaux",
+          "time": 104.852
+        },
+        {
+          "text": "Mais comme eux j'aimerais voir ça d'en haut",
+          "time": 109.404
+        },
+        {
+          "text": "M'man",
+          "time": 115.172
+        },
+        {
+          "text": "J'comprends mieux le regard des passants",
+          "time": 116.43700000000047
+        },
+        {
+          "text": "J'vois pas comme eux, j'pense tout en grand",
+          "time": 120.969
+        },
+        {
+          "text": "En couleur et sur un écran blanc",
+          "time": 125.488
+        },
+        {
+          "text": "Y a pas qu'les mères qui font les enfants",
+          "time": 132.065
+        },
+        {
+          "text": "La zone, la rue coulent dans mon sang",
+          "time": 139.75
+        },
+        {
+          "text": "Tu sais, j'sais pas grand chose sur les choses de l'amour",
+          "time": 147.166
+        },
+        {
+          "text": "Mais j'me doute toujours",
+          "time": 154.435
+        },
+        {
+          "text": "C'est pas moi, c'est pas moi qui choisis",
+          "time": 158.671
+        },
+        {
+          "text": "M'man, J'viens tout juste d'avoir 14 ans",
+          "time": 181.25400000000047
+        },
+        {
+          "text": "J'veux plus d'école, j'suis devenu grand",
+          "time": 186.939
+        },
+        {
+          "text": "hey, regarde, ohh,  j'suis devenu grand",
+          "time": 190.176
+        },
+        {
+          "text": "ooooooooh M'man",
+          "time": 195.032
+        },
+        {
+          "text": "J'te promets je gagnerai plein d'argent",
+          "time": 198.293
+        },
+        {
+          "text": "oh, j'suis devenu grand",
+          "time": 202.378
+        },
+        {
+          "text": "hey, M'man, je suis devenu grand M'man",
+          "time": 205.875
+        },
+        {
+          "text": "M'man, M'man",
+          "time": 212.71600000000046
+        }
+      ],
+      "needsLyricsSync": false,
+      "kind": "vocal",
+      "montage": {
+        "enabled": true,
+        "channel": 1,
+        "bankMsb": 62,
+        "bankLsb": 0,
+        "program": 15,
+        "liveSetBank": 1,
+        "liveSetPage": 1,
+        "liveSetSlot": 16
+      },
+      "audioFile": "/audio/piano-mman.wav",
+      "audioVolume": 0.15,
+      "videoFile": "/mman.mp4",
+      "videoMode": "video-lyrics",
+      "videoOffset": 0,
+      "videoPlaybackMode": "sync"
+    },
+    {
+      "id": "final",
+      "title": "Aline - Christophe",
+      "duration": "00:00",
+      "description": "Morceau chanté",
+      "stageNotes": "",
+      "nextAction": "Fin du spectacle.",
+      "lyrics": "J'avais dessiné\n\nSur le sable\n\nSon doux visage\n\nQui me souriait\n\nPuis il a plu\n\nSur cette plage\n\nDans cet orage\n\nElle a disparu\n\nEt j'ai crié\n\nCrié\n\nAline\n\nPour qu'elle revienne\n\nEt j'ai pleuré\n\nPleuré\n\nOh! j'avais\n\nTrop de peine\n\nJe me suis assis\n\nAuprès de son âme\n\nMais la belle dame\n\nS'était enfuie\n\nJe l'ai cherchée\n\nSans plus y croire\n\nEt sans un espoir\n\nPour me guider\n\nEt j'ai crié\n\nCrié\n\nAline\n\nPour qu'elle revienne\n\nEt j'ai pleuré\n\nPleuré\n\nOh! j'avais\n\nTrop de peine\n\nJe n'ai gardé\n\nQue ce doux visage\n\nComme une épave\n\nSur le sable mouillé\n\nEt j'ai crié\n\nCrié\n\nAline\n\nPour qu'elle revienne\n\nEt j'ai pleuré\n\nPleuré\n\nOh! j'avais\n\nTrop de peine\n\nEt j'ai crié\n\nCrié\n\nAline\n\nPour qu'elle revienne\n\nEt j'ai pleuré\n\nPleuré\n\nOh! j'avais\n\nTrop de peine\n\nEt j’ai crié\n\nCrié\n\nAline\n\nPour qu’elle revienne\n\nAline",
+      "kind": "vocal",
+      "lyricLines": [
+        {
+          "text": "J'avais dessiné",
+          "time": 14.7935
+        },
+        {
+          "text": "Sur le sable",
+          "time": 19.54920000001788
+        },
+        {
+          "text": "Son doux visage",
+          "time": 23.089
+        },
+        {
+          "text": "Qui me souriait",
+          "time": 26.8435
+        },
+        {
+          "text": "Puis il a plu",
+          "time": 31.08120000001788
+        },
+        {
+          "text": "Sur cette plage",
+          "time": 34.99690000000596
+        },
+        {
+          "text": "Dans cet orage",
+          "time": 39.19360000002384
+        },
+        {
+          "text": "Elle a disparu",
+          "time": 43.35360000002384
+        },
+        {
+          "text": "Et j'ai crié",
+          "time": 47.773100000023845
+        },
+        {
+          "text": "Crié",
+          "time": 50.40310000002384
+        },
+        {
+          "text": "Aline",
+          "time": 52.4995
+        },
+        {
+          "text": "Pour qu'elle revienne",
+          "time": 53.549600000023844
+        },
+        {
+          "text": "Et j'ai pleuré",
+          "time": 55.79740000000596
+        },
+        {
+          "text": "Pleuré",
+          "time": 58.3895
+        },
+        {
+          "text": "Oh! j'avais",
+          "time": 60.37980000001192
+        },
+        {
+          "text": "Trop de peine",
+          "time": 62.26
+        },
+        {
+          "text": "Je me suis assis",
+          "time": 63.55960000002384
+        },
+        {
+          "text": "Auprès de son âme",
+          "time": 67.707
+        },
+        {
+          "text": "Mais la belle dame",
+          "time": 71.72340000000597
+        },
+        {
+          "text": "S'était enfuie",
+          "time": 75.8495
+        },
+        {
+          "text": "Je l'ai cherchée",
+          "time": 79.88510000002384
+        },
+        {
+          "text": "Sans plus y croire",
+          "time": 83.8655
+        },
+        {
+          "text": "Et sans un espoir",
+          "time": 87.93110000002385
+        },
+        {
+          "text": "Pour me guider",
+          "time": 92.05540000000596
+        },
+        {
+          "text": "Et j'ai crié",
+          "time": 96.16730000001192
+        },
+        {
+          "text": "Crié",
+          "time": 98.9255
+        },
+        {
+          "text": "Aline",
+          "time": 100.94690000000595
+        },
+        {
+          "text": "Pour qu'elle revienne",
+          "time": 102.14730000001192
+        },
+        {
+          "text": "Et j'ai pleuré",
+          "time": 104.62380000001193
+        },
+        {
+          "text": "Pleuré",
+          "time": 107.25120000001787
+        },
+        {
+          "text": "Oh! j'avais",
+          "time": 109.20540000000597
+        },
+        {
+          "text": "Trop de peine",
+          "time": 111.05920000001788
+        },
+        {
+          "text": "Je n'ai gardé",
+          "time": 112.54740000000596
+        },
+        {
+          "text": "Que ce doux visage",
+          "time": 116.51510000002384
+        },
+        {
+          "text": "Comme une épave",
+          "time": 120.722
+        },
+        {
+          "text": "Sur le sable mouillé",
+          "time": 124.58680000001192
+        },
+        {
+          "text": "Et j'ai crié",
+          "time": 128.909
+        },
+        {
+          "text": "Crié",
+          "time": 131.731
+        },
+        {
+          "text": "Aline",
+          "time": 133.6798000000119
+        },
+        {
+          "text": "Pour qu'elle revienne",
+          "time": 135.0235
+        },
+        {
+          "text": "Et j'ai pleuré",
+          "time": 137.28340000000597
+        },
+        {
+          "text": "Pleuré",
+          "time": 139.78110000002386
+        },
+        {
+          "text": "Oh! j'avais",
+          "time": 141.67360000002384
+        },
+        {
+          "text": "Trop de peine",
+          "time": 143.57790000000597
+        },
+        {
+          "text": "Et j'ai crié",
+          "time": 145.16970000001788
+        },
+        {
+          "text": "Crié",
+          "time": 147.83920000001788
+        },
+        {
+          "text": "Aline",
+          "time": 149.67620000001787
+        },
+        {
+          "text": "Pour qu'elle revienne",
+          "time": 151.0915
+        },
+        {
+          "text": "Et j'ai pleuré",
+          "time": 153.4753000000119
+        },
+        {
+          "text": "Pleuré",
+          "time": 156.0115
+        },
+        {
+          "text": "Oh! j'avais",
+          "time": 158.037
+        },
+        {
+          "text": "Trop de peine",
+          "time": 159.88310000002383
+        },
+        {
+          "text": "Et j’ai crié",
+          "time": 161.54760000002383
+        },
+        {
+          "text": "Crié",
+          "time": 164.10490000000596
+        },
+        {
+          "text": "Aline",
+          "time": 166.1177000000179
+        },
+        {
+          "text": "Pour qu’elle revienne",
+          "time": 167.55720000001787
+        },
+        {
+          "text": "Aline",
+          "time": 169.543
+        }
+      ],
+      "needsLyricsSync": false,
+      "audioFile": "/audio/piano-aline.wav",
+      "audioVolume": 0.25,
+      "montage": {
+        "enabled": true,
+        "channel": 1,
+        "bankMsb": 62,
+        "bankLsb": 1,
+        "program": 14,
+        "liveSetBank": 1,
+        "liveSetPage": 2,
+        "liveSetSlot": 15
+      },
+      "videoFile": "/aline.mp4",
+      "videoMode": "video-lyrics",
+      "videoOffset": 0,
+      "videoPlaybackMode": "sync"
+    },
+    {
+      "id": "test-creation-morceau",
+      "title": "Là-bas - J.J Goldman",
+      "duration": "00:00",
+      "description": "Morceau chanté",
+      "stageNotes": "",
+      "nextAction": "",
+      "lyrics": "Là-bas\n\nTout est neuf et tout est sauvage\n\nLibre continent sans grillage\n\nIci, nos rêves sont étroits\n\nC’est pour ça que j’irai là-bas\n\nLà-bas\n\nFaut du cœur et faut du courage\n\nMais tout est possible à mon âge\n\nSi tu as la force et la foi\n\nL’ or est à portée de tes doigts\n\nC’est pour ça que j’irai là-bas\n\nN’y va pas\n\nY’a des tempêtes et des naufrages\n\nLe feu, les diables et les mirages\n\nJe te sais si fragile parfois\n\nReste au creux de moi\n\nOn a tant d’amour à faire\n\nTant de bonheur à venir\n\nJe te veux mari et père\n\nEt toi, tu rêves de partir\n\nIci, tout est joué d’avance\n\nEt l’on n’y peut rien changer\n\nTout dépend de ta naissance\n\nEt moi je ne suis pas bien né\n\nLà-bas\n\nLoin de nos vies, de nos villages\n\nJ’oublierai ta voix, ton visage\n\nJ’ai beau te serrer dans mes bras\n\nTu m’échappes déjà, là-bas\n\nJ’aurai ma chance, j’aurai mes droits\n\nEt la fierté qu’ici je n’ai pas\n\nTout ce que tu mérites est à toi\n\nIci, les autres imposent leur loi\n\nJe te perdrai peut-être là-bas\n\nMais je me perds si je reste là\n\nLa vie ne m’a pas laissé le choix\n\nToi et moi, ce sera là-bas ou pas\n\nTout est neuf et tout est sauvage\n\nLibre continent sans grillage\n\nBeau comme on n’imagine pas\n\nIci, même nos rêves sont étroits\n\nC’est pour ça que j’irai là-bas\n\nOn ne m’a pas laissé le choix\n\nJe me perds si je reste là\n\nC’est pour ça que j’irai là-bas",
+      "lyricLines": [
+        {
+          "text": "Là-bas",
+          "time": 22.695
+        },
+        {
+          "text": "Tout est neuf et tout est sauvage",
+          "time": 27.14
+        },
+        {
+          "text": "Libre continent sans grillage",
+          "time": 33.485
+        },
+        {
+          "text": "Ici, nos rêves sont étroits",
+          "time": 40.023
+        },
+        {
+          "text": "C’est pour ça que j’irai là-bas",
+          "time": 46.519
+        },
+        {
+          "text": "Là-bas",
+          "time": 55.008
+        },
+        {
+          "text": "Faut du cœur et faut du courage",
+          "time": 59.44
+        },
+        {
+          "text": "Mais tout est possible à mon âge",
+          "time": 65.937
+        },
+        {
+          "text": "Si tu as la force et la foi",
+          "time": 72.404
+        },
+        {
+          "text": "L’ or est à portée de tes doigts",
+          "time": 78.822
+        },
+        {
+          "text": "C’est pour ça que j’irai là-bas",
+          "time": 85.364
+        },
+        {
+          "text": "N’y va pas",
+          "time": 93.604
+        },
+        {
+          "text": "Y’a des tempêtes et des naufrages",
+          "time": 98.332
+        },
+        {
+          "text": "Le feu, les diables et les mirages",
+          "time": 104.721
+        },
+        {
+          "text": "Je te sais si fragile parfois",
+          "time": 111.244
+        },
+        {
+          "text": "Reste au creux de moi",
+          "time": 117.762
+        },
+        {
+          "text": "On a tant d’amour à faire",
+          "time": 119.413
+        },
+        {
+          "text": "Tant de bonheur à venir",
+          "time": 122.606
+        },
+        {
+          "text": "Je te veux mari et père",
+          "time": 125.82
+        },
+        {
+          "text": "Et toi, tu rêves de partir",
+          "time": 128.898
+        },
+        {
+          "text": "Ici, tout est joué d’avance",
+          "time": 132.33600000000013
+        },
+        {
+          "text": "Et l’on n’y peut rien changer",
+          "time": 135.56800000000013
+        },
+        {
+          "text": "Tout dépend de ta naissance",
+          "time": 138.814
+        },
+        {
+          "text": "Et moi je ne suis pas bien né",
+          "time": 141.762
+        },
+        {
+          "text": "Là-bas",
+          "time": 150.76900000000012
+        },
+        {
+          "text": "Loin de nos vies, de nos villages",
+          "time": 155.2120000000001
+        },
+        {
+          "text": "J’oublierai ta voix, ton visage",
+          "time": 161.402
+        },
+        {
+          "text": "J’ai beau te serrer dans mes bras",
+          "time": 167.973
+        },
+        {
+          "text": "Tu m’échappes déjà, là-bas",
+          "time": 174.481
+        },
+        {
+          "text": "J’aurai ma chance, j’aurai mes droits",
+          "time": 176.70100000000022
+        },
+        {
+          "text": "Et la fierté qu’ici je n’ai pas",
+          "time": 179.843
+        },
+        {
+          "text": "Tout ce que tu mérites est à toi",
+          "time": 183.279
+        },
+        {
+          "text": "Ici, les autres imposent leur loi",
+          "time": 186.39
+        },
+        {
+          "text": "Je te perdrai peut-être là-bas",
+          "time": 189.66200000000023
+        },
+        {
+          "text": "Mais je me perds si je reste là",
+          "time": 192.91200000000023
+        },
+        {
+          "text": "La vie ne m’a pas laissé le choix",
+          "time": 196.12400000000022
+        },
+        {
+          "text": "Toi et moi, ce sera là-bas ou pas",
+          "time": 199.324
+        },
+        {
+          "text": "Tout est neuf et tout est sauvage",
+          "time": 202.771
+        },
+        {
+          "text": "Libre continent sans grillage",
+          "time": 205.817
+        },
+        {
+          "text": "Beau comme on n’imagine pas",
+          "time": 209.253
+        },
+        {
+          "text": "Ici, même nos rêves sont étroits",
+          "time": 212.168
+        },
+        {
+          "text": "C’est pour ça que j’irai là-bas",
+          "time": 215.752
+        },
+        {
+          "text": "On ne m’a pas laissé le choix",
+          "time": 218.755
+        },
+        {
+          "text": "Je me perds si je reste là",
+          "time": 222.128
+        },
+        {
+          "text": "C’est pour ça que j’irai là-bas",
+          "time": 225.454
+        }
+      ],
+      "needsLyricsSync": false,
+      "kind": "vocal",
+      "audioFile": "/audio/Piano-labas.wav",
+      "audioVolume": 0.25,
+      "montage": {
+        "enabled": true,
+        "channel": 1,
+        "bankMsb": 62,
+        "bankLsb": 0,
+        "program": 3,
+        "liveSetBank": 1,
+        "liveSetPage": 1,
+        "liveSetSlot": 4
+      },
+      "videoFile": "/labas.mp4",
+      "videoMode": "video-lyrics",
+      "videoOffset": -6.3
+    },
+    {
+      "id": "la-maison-bleue",
+      "title": "La groupie du pianiste - Michel Berger",
+      "duration": "00:00",
+      "description": "Morceau chanté",
+      "stageNotes": "",
+      "nextAction": "",
+      "kind": "vocal",
+      "lyrics": "Elle passe ses nuits sans dormir\n\nÀ gâcher son bel avenir\n\nLa groupie du pianiste\n\nDieu que cette fille a l'air triste\n\nAmoureuse d'un égoïste\n\nLa groupie du pianiste\n\nElle fout toute sa vie en l'air\n\nEt toute sa vie c'est pas grand chose\n\nQu'est-ce qu'elle aurait bien pu faire\n\nÀ part rêver seule dans son lit\n\nLe soir entre ses draps roses\n\nElle passe sa vie à l'attendre\n\nPour un mot pour un geste tendre\n\nLa groupie du pianiste\n\nDevant l'hôtel dans les coulisses\n\nElle rêve de la vie d'artiste\n\nLa groupie du pianiste\n\nElle le suivrait jusqu'en enfer\n\nEt même l'enfer c'est pas grand chose\n\nÀ côté d'être seule sur terre\n\nEt elle y pense dans son lit\n\nLe soir entre ses draps roses\n\nElle l'aime, elle l'adore\n\nPlus que tout elle l'aime\n\nC'est beau comme elle l'aime\n\nElle l'aime, elle l'adore\n\nC'est fou comme elle aime\n\nC'est beau comme elle l'aime\n\nIl a des droits sur son sourire\n\nElle a des droits sur ses désirs\n\nLa groupie du pianiste\n\nElle sait rester là sans rien dire\n\nPendant que lui joue ses délires\n\nLa groupie du pianiste\n\nQuand le concert est terminé\n\nElle met ses mains sur le clavier\n\nEn rêvant qu'il va l'emmener\n\nPasser le reste de sa vie\n\nTout simplement à l'écouter\n\nElle sait comprendre sa musique\n\nElle sait oublier qu'elle existe\n\nLa groupie du pianiste\n\nMais Dieu que cette fille prend des risques\n\nAmoureuse d'un égoïste\n\nLa groupie du pianiste\n\nElle fout toute sa vie en l'air\n\nEt toute sa vie c'est pas grand chose\n\nQu'est-ce qu'elle aurait bien pu faire\n\nÀ part rêver seule dans son lit\n\nLe soir entre ses draps roses\n\nElle l'aime, elle l'adore\n\nPlus que tout elle l'aime\n\nC'est beau comme elle l'aime\n\nElle l'aime, elle l'adore\n\nC'est fou comme elle aime\n\nC'est beau comme elle l'aime",
+      "lyricLines": [
+        {
+          "text": "Elle passe ses nuits sans dormir",
+          "time": 27.047
+        },
+        {
+          "text": "À gâcher son bel avenir",
+          "time": 29.526
+        },
+        {
+          "text": "La groupie du pianiste",
+          "time": 32.193
+        },
+        {
+          "text": "Dieu que cette fille a l'air triste",
+          "time": 38.76300000000023
+        },
+        {
+          "text": "Amoureuse d'un égoïste",
+          "time": 41.454
+        },
+        {
+          "text": "La groupie du pianiste",
+          "time": 44.089
+        },
+        {
+          "text": "Elle fout toute sa vie en l'air",
+          "time": 50.756
+        },
+        {
+          "text": "Et toute sa vie c'est pas grand chose",
+          "time": 53.298
+        },
+        {
+          "text": "Qu'est-ce qu'elle aurait bien pu faire",
+          "time": 55.761
+        },
+        {
+          "text": "À part rêver seule dans son lit",
+          "time": 58.02
+        },
+        {
+          "text": "Le soir entre ses draps roses",
+          "time": 60.416
+        },
+        {
+          "text": "Elle passe sa vie à l'attendre",
+          "time": 62.573
+        },
+        {
+          "text": "Pour un mot pour un geste tendre",
+          "time": 65.057
+        },
+        {
+          "text": "La groupie du pianiste",
+          "time": 67.714
+        },
+        {
+          "text": "Devant l'hôtel dans les coulisses",
+          "time": 74.22500000000024
+        },
+        {
+          "text": "Elle rêve de la vie d'artiste",
+          "time": 76.726
+        },
+        {
+          "text": "La groupie du pianiste",
+          "time": 79.36000000000023
+        },
+        {
+          "text": "Elle le suivrait jusqu'en enfer",
+          "time": 85.98
+        },
+        {
+          "text": "Et même l'enfer c'est pas grand chose",
+          "time": 88.565
+        },
+        {
+          "text": "À côté d'être seule sur terre",
+          "time": 90.983
+        },
+        {
+          "text": "Et elle y pense dans son lit",
+          "time": 93.414
+        },
+        {
+          "text": "Le soir entre ses draps roses",
+          "time": 95.73
+        },
+        {
+          "text": "Elle l'aime, elle l'adore",
+          "time": 99.367
+        },
+        {
+          "text": "Plus que tout elle l'aime",
+          "time": 103.529
+        },
+        {
+          "text": "C'est beau comme elle l'aime",
+          "time": 105.278
+        },
+        {
+          "text": "Elle l'aime, elle l'adore",
+          "time": 109.56200000000024
+        },
+        {
+          "text": "C'est fou comme elle aime",
+          "time": 112.839
+        },
+        {
+          "text": "C'est beau comme elle l'aime",
+          "time": 114.692
+        },
+        {
+          "text": "Il a des droits sur son sourire",
+          "time": 130.895
+        },
+        {
+          "text": "Elle a des droits sur ses désirs",
+          "time": 133.353
+        },
+        {
+          "text": "La groupie du pianiste",
+          "time": 136.04300000000023
+        },
+        {
+          "text": "Elle sait rester là sans rien dire",
+          "time": 142.694
+        },
+        {
+          "text": "Pendant que lui joue ses délires",
+          "time": 145.155
+        },
+        {
+          "text": "La groupie du pianiste",
+          "time": 147.772
+        },
+        {
+          "text": "Quand le concert est terminé",
+          "time": 154.233
+        },
+        {
+          "text": "Elle met ses mains sur le clavier",
+          "time": 156.736
+        },
+        {
+          "text": "En rêvant qu'il va l'emmener",
+          "time": 159.108
+        },
+        {
+          "text": "Passer le reste de sa vie",
+          "time": 161.355
+        },
+        {
+          "text": "Tout simplement à l'écouter",
+          "time": 163.66
+        },
+        {
+          "text": "Elle sait comprendre sa musique",
+          "time": 165.886
+        },
+        {
+          "text": "Elle sait oublier qu'elle existe",
+          "time": 168.372
+        },
+        {
+          "text": "La groupie du pianiste",
+          "time": 170.961
+        },
+        {
+          "text": "Mais Dieu que cette fille prend des risques",
+          "time": 177.477
+        },
+        {
+          "text": "Amoureuse d'un égoïste",
+          "time": 179.86900000000023
+        },
+        {
+          "text": "La groupie du pianiste",
+          "time": 182.51400000000024
+        },
+        {
+          "text": "Elle fout toute sa vie en l'air",
+          "time": 189.047
+        },
+        {
+          "text": "Et toute sa vie c'est pas grand chose",
+          "time": 191.56
+        },
+        {
+          "text": "Qu'est-ce qu'elle aurait bien pu faire",
+          "time": 194.038
+        },
+        {
+          "text": "À part rêver seule dans son lit",
+          "time": 196.29
+        },
+        {
+          "text": "Le soir entre ses draps roses",
+          "time": 198.642
+        },
+        {
+          "text": "Elle l'aime, elle l'adore",
+          "time": 202.126
+        },
+        {
+          "text": "Plus que tout elle l'aime",
+          "time": 206.057
+        },
+        {
+          "text": "C'est beau comme elle l'aime",
+          "time": 207.892
+        },
+        {
+          "text": "Elle l'aime, elle l'adore",
+          "time": 212.279
+        },
+        {
+          "text": "C'est fou comme elle aime",
+          "time": 215.495
+        },
+        {
+          "text": "C'est beau comme elle l'aime",
+          "time": 217.164
+        }
+      ],
+      "needsLyricsSync": false,
+      "audioFile": "/audio/Piano-lagroupie.wav",
+      "audioVolume": 0.25,
+      "montage": {
+        "enabled": true,
+        "channel": 1,
+        "bankMsb": 62,
+        "bankLsb": 0,
+        "program": 4,
+        "liveSetBank": 1,
+        "liveSetPage": 1,
+        "liveSetSlot": 5
+      }
+    },
+    {
+      "id": "et-un-jour-une-femme-florent-pagny",
+      "title": "Et un jour une femme - Florent Pagny",
+      "duration": "00.:01",
+      "description": "Morceau chanté",
+      "stageNotes": "",
+      "nextAction": "",
+      "kind": "vocal",
+      "lyrics": "D’avoir passé des nuits blanches à rêver\n\nCe que les contes de fées vous laissent imaginer\n\nD’avoir perdu son enfance dans la rue\n\nDes illusions déçues, passer inaperçu\n\nD’être tombé plus bas que la poussière\n\nEt à la terre entière, en vouloir puis se taire\n\nD’avoir laissé jusqu’à sa dignité\n\nSans plus rien demander qu’on vienne vous achever\n\nEt un jour, une femme\n\nDont le regard vous frôle\n\nVous porte sur ses épaules, comme elle porte le monde\n\nEt jusqu’à bout de force\n\nRecouvre de son écorce, vos plaies les plus profondes\n\nPuis un jour, une femme\n\nMet sa main dans la vôtre pour vous parler d’un autre\n\nParce qu’elle porte le monde\n\nEt jusqu’au bout d’elle même\n\nVous prouve qu’elle vous aime\n\nPar l’amour qu’elle inonde\n\nJour après jour vous redonne confiance\n\nDe toute sa patience vous remet debout\n\nRetrouver en soi, un avenir peut-être\n\nEt surtout l’envie d’être, ce qu’elle attend de vous\n\nEt un jour, une femme\n\nDont le regard vous frôle\n\nVous porte sur ses épaules comme elle porte le monde\n\nEt jusqu’à bout de force, recouvre de son écorce\n\nVos plaies les plus profondes…\n\nVos plaies les plus profondes…\n\nEt un jour cette femme, met sa main dans la vôtre\n\nPour vous parler d’un autre, parce qu’elle porte le monde\n\nEt jusqu’au bout d’elle même, vous prouve qu’elle vous aime\n\nPar l’amour qu’elle inonde…\n\nPar l’amour qu’elle inonde…\n\nEt un jour, cette femme, dont le regard vous touche\n\nPorte jusqu’à sa bouche, le front d’un petit môme\n\nEt jusqu’au bout de soi, lui donne tout ce qu’elle a\n\nChaque pas, chaque seconde, jusqu’au bout du monde\n\nJusqu’au bout du monde",
+      "lyricLines": [
+        {
+          "text": "D’avoir passé des nuits blanches à rêver",
+          "time": 29.662
+        },
+        {
+          "text": "Ce que les contes de fées vous laissent imaginer",
+          "time": 35.177
+        },
+        {
+          "text": "D’avoir perdu son enfance dans la rue",
+          "time": 44.099
+        },
+        {
+          "text": "Des illusions déçues, passer inaperçu",
+          "time": 49.042
+        },
+        {
+          "text": "D’être tombé plus bas que la poussière",
+          "time": 58.385
+        },
+        {
+          "text": "Et à la terre entière, en vouloir puis se taire",
+          "time": 63.786
+        },
+        {
+          "text": "D’avoir laissé jusqu’à sa dignité",
+          "time": 72.685
+        },
+        {
+          "text": "Sans plus rien demander qu’on vienne vous achever",
+          "time": 77.48600000000023
+        },
+        {
+          "text": "Et un jour, une femme",
+          "time": 84.868
+        },
+        {
+          "text": "Dont le regard vous frôle",
+          "time": 88.016
+        },
+        {
+          "text": "Vous porte sur ses épaules, comme elle porte le monde",
+          "time": 92.487
+        },
+        {
+          "text": "Et jusqu’à bout de force",
+          "time": 99.189
+        },
+        {
+          "text": "Recouvre de son écorce, vos plaies les plus profondes",
+          "time": 102.46700000000023
+        },
+        {
+          "text": "Puis un jour, une femme",
+          "time": 113.552
+        },
+        {
+          "text": "Met sa main dans la vôtre pour vous parler d’un autre",
+          "time": 116.63000000000024
+        },
+        {
+          "text": "Parce qu’elle porte le monde",
+          "time": 123.763
+        },
+        {
+          "text": "Et jusqu’au bout d’elle même",
+          "time": 127.457
+        },
+        {
+          "text": "Vous prouve qu’elle vous aime",
+          "time": 131.05900000000022
+        },
+        {
+          "text": "Par l’amour qu’elle inonde",
+          "time": 134.948
+        },
+        {
+          "text": "Jour après jour vous redonne confiance",
+          "time": 144.343
+        },
+        {
+          "text": "De toute sa patience vous remet debout",
+          "time": 149.72400000000025
+        },
+        {
+          "text": "Retrouver en soi, un avenir peut-être",
+          "time": 158.694
+        },
+        {
+          "text": "Et surtout l’envie d’être, ce qu’elle attend de vous",
+          "time": 163.61000000000024
+        },
+        {
+          "text": "Et un jour, une femme",
+          "time": 170.60100000000023
+        },
+        {
+          "text": "Dont le regard vous frôle",
+          "time": 173.931
+        },
+        {
+          "text": "Vous porte sur ses épaules comme elle porte le monde",
+          "time": 178.436
+        },
+        {
+          "text": "Et jusqu’à bout de force, recouvre de son écorce",
+          "time": 184.935
+        },
+        {
+          "text": "Vos plaies les plus profondes…",
+          "time": 192.113
+        },
+        {
+          "text": "Vos plaies les plus profondes…",
+          "time": 193.729
+        },
+        {
+          "text": "Et un jour cette femme, met sa main dans la vôtre",
+          "time": 199.52
+        },
+        {
+          "text": "Pour vous parler d’un autre, parce qu’elle porte le monde",
+          "time": 207.052
+        },
+        {
+          "text": "Et jusqu’au bout d’elle même, vous prouve qu’elle vous aime",
+          "time": 213.585
+        },
+        {
+          "text": "Par l’amour qu’elle inonde…",
+          "time": 220.984
+        },
+        {
+          "text": "Par l’amour qu’elle inonde…",
+          "time": 224.566
+        },
+        {
+          "text": "Et un jour, cette femme, dont le regard vous touche",
+          "time": 228.085
+        },
+        {
+          "text": "Porte jusqu’à sa bouche, le front d’un petit môme",
+          "time": 235.738
+        },
+        {
+          "text": "Et jusqu’au bout de soi, lui donne tout ce qu’elle a",
+          "time": 242.338
+        },
+        {
+          "text": "Chaque pas, chaque seconde, jusqu’au bout du monde",
+          "time": 249.339
+        },
+        {
+          "text": "Jusqu’au bout du monde",
+          "time": 257.453
+        }
+      ],
+      "needsLyricsSync": false,
+      "audioFile": "/audio/Piano-unjourunefemme.wav",
+      "audioVolume": 0.25,
+      "montage": {
+        "enabled": true,
+        "channel": 1,
+        "bankMsb": 62,
+        "bankLsb": 0,
+        "program": 2,
+        "liveSetBank": 1,
+        "liveSetPage": 1,
+        "liveSetSlot": 3
+      },
+      "videoFile": "/etunjourunefemme.mp4",
+      "videoMode": "video",
+      "videoOffset": 0,
+      "videoPlaybackMode": "sync",
+      "audioStartOffset": 28.657
+    },
+    {
+      "id": "la-corrida-francis-cabrel",
+      "title": "La Corrida - Francis Cabrel",
+      "duration": "00:00",
+      "description": "Morceau chanté",
+      "stageNotes": "",
+      "nextAction": "",
+      "kind": "vocal",
+      "lyrics": "Depuis le temps que je patiente\n\nDans cette chambre noire,\n\nJ’entends qu’on s’amuse et qu’on chante\n\nAu bout du couloir.\n\nQuelqu’un a touché le verrou\n\nEt j’ai plongé vers le grand jour\n\nJ’ai vu les fanfares, les barrières\n\nEt les gens autour.\n\nDans les premiers moments, j’ai cru\n\nQu’il fallait seulement se défendre.\n\nMais cette place est sans issue,\n\nJe commence à comprendre.\n\nIls ont refermé derrière moi,\n\nIls ont eu peur que je recule.\n\nJe vais bien finir par l’avoir\n\nCette danseuse ridicule...\n\nEst-ce que ce monde est sérieux ?\n\nAndalousie, je me souviens :\n\nLes prairies bordées de cactus...\n\nJe ne vais pas trembler devant\n\nCe pantin, ce minus !\n\nJe vais l’attraper, lui et son chapeau,\n\nLes faire tourner comme un soleil !\n\nCe soir, la femme du torero\n\nDormira sur ses deux oreilles.\n\nEst-ce que ce monde est sérieux ?\n\nJ’en ai poursuivi des fantômes\n\nPresque touché leurs ballerines\n\nIls ont frappé fort dans mon cou\n\nPour que je m’incline\n\nIls sortent d’où ces acrobates\n\nAvec leurs costumes de papier ?\n\nJ’ai jamais appris à me battre\n\nContre des poupées\n\nSentir le sable sous ma tête\n\nC’est fou comme ça peut faire du bien\n\nJ’ai prié pour que tout s’arrête\n\nAndalousie je me souviens\n\nJe les entends rire comme je râle\n\nJe les vois danser comme je succombe\n\nJe ne pensais pas qu’on puisse autant\n\nS’amuser autour d’une tombe\n\nEst-ce que ce monde est sérieux ?\n\nEst-ce que ce monde est sérieux ?",
+      "lyricLines": [
+        {
+          "text": "Depuis le temps que je patiente",
+          "time": 52.06790000000037
+        },
+        {
+          "text": "Dans cette chambre noire,",
+          "time": 54.45970000000112
+        },
+        {
+          "text": "J’entends qu’on s’amuse et qu’on chante",
+          "time": 57.49360000000149
+        },
+        {
+          "text": "Au bout du couloir.",
+          "time": 59.60770000000112
+        },
+        {
+          "text": "Quelqu’un a touché le verrou",
+          "time": 62.29370000000112
+        },
+        {
+          "text": "Et j’ai plongé vers le grand jour",
+          "time": 64.75020000000112
+        },
+        {
+          "text": "J’ai vu les fanfares, les barrières",
+          "time": 67.64980000000074
+        },
+        {
+          "text": "Et les gens autour.",
+          "time": 70.17790000000038
+        },
+        {
+          "text": "Dans les premiers moments, j’ai cru",
+          "time": 82.29960000000149
+        },
+        {
+          "text": "Qu’il fallait seulement se défendre.",
+          "time": 84.70770000000111
+        },
+        {
+          "text": "Mais cette place est sans issue,",
+          "time": 87.82170000000112
+        },
+        {
+          "text": "Je commence à comprendre.",
+          "time": 89.97830000000074
+        },
+        {
+          "text": "Ils ont refermé derrière moi,",
+          "time": 92.772
+        },
+        {
+          "text": "Ils ont eu peur que je recule.",
+          "time": 95.21360000000149
+        },
+        {
+          "text": "Je vais bien finir par l’avoir",
+          "time": 97.96780000000075
+        },
+        {
+          "text": "Cette danseuse ridicule...",
+          "time": 99.76190000000037
+        },
+        {
+          "text": "Est-ce que ce monde est sérieux ?",
+          "time": 107.39160000000149
+        },
+        {
+          "text": "Andalousie, je me souviens :",
+          "time": 122.68980000000074
+        },
+        {
+          "text": "Les prairies bordées de cactus...",
+          "time": 125.19770000000112
+        },
+        {
+          "text": "Je ne vais pas trembler devant",
+          "time": 128.19570000000112
+        },
+        {
+          "text": "Ce pantin, ce minus !",
+          "time": 129.55770000000112
+        },
+        {
+          "text": "Je vais l’attraper, lui et son chapeau,",
+          "time": 133.11830000000074
+        },
+        {
+          "text": "Les faire tourner comme un soleil !",
+          "time": 135.39770000000112
+        },
+        {
+          "text": "Ce soir, la femme du torero",
+          "time": 138.2457000000011
+        },
+        {
+          "text": "Dormira sur ses deux oreilles.",
+          "time": 140.05170000000112
+        },
+        {
+          "text": "Est-ce que ce monde est sérieux ?",
+          "time": 147.778
+        },
+        {
+          "text": "J’en ai poursuivi des fantômes",
+          "time": 167.38390000000038
+        },
+        {
+          "text": "Presque touché leurs ballerines",
+          "time": 169.91980000000075
+        },
+        {
+          "text": "Ils ont frappé fort dans mon cou",
+          "time": 175.6496000000015
+        },
+        {
+          "text": "Pour que je m’incline",
+          "time": 178.41980000000075
+        },
+        {
+          "text": "Ils sortent d’où ces acrobates",
+          "time": 183.49390000000037
+        },
+        {
+          "text": "Avec leurs costumes de papier ?",
+          "time": 187.01570000000112
+        },
+        {
+          "text": "J’ai jamais appris à me battre",
+          "time": 193.29780000000073
+        },
+        {
+          "text": "Contre des poupées",
+          "time": 196.022
+        },
+        {
+          "text": "Sentir le sable sous ma tête",
+          "time": 226.23580000000075
+        },
+        {
+          "text": "C’est fou comme ça peut faire du bien",
+          "time": 228.8177000000011
+        },
+        {
+          "text": "J’ai prié pour que tout s’arrête",
+          "time": 231.70580000000075
+        },
+        {
+          "text": "Andalousie je me souviens",
+          "time": 233.80170000000112
+        },
+        {
+          "text": "Je les entends rire comme je râle",
+          "time": 236.68580000000074
+        },
+        {
+          "text": "Je les vois danser comme je succombe",
+          "time": 239.02180000000075
+        },
+        {
+          "text": "Je ne pensais pas qu’on puisse autant",
+          "time": 241.90380000000076
+        },
+        {
+          "text": "S’amuser autour d’une tombe",
+          "time": 243.68970000000112
+        },
+        {
+          "text": "Est-ce que ce monde est sérieux ?",
+          "time": 251.38380000000075
+        },
+        {
+          "text": "Est-ce que ce monde est sérieux ?",
+          "time": 272.21170000000114
+        }
+      ],
+      "needsLyricsSync": false,
+      "audioFile": "/audio/Piano-lacorrida.wav",
+      "audioVolume": 0.25,
+      "montage": {
+        "enabled": true,
+        "channel": 1,
+        "bankMsb": 62,
+        "bankLsb": 0,
+        "program": 12,
+        "liveSetBank": 1,
+        "liveSetPage": 1,
+        "liveSetSlot": 13
+      }
+    },
+    {
+      "id": "if-i-ain-t-got-you-alicia-keys",
+      "title": "If I Ain't Got You - Alicia Keys",
+      "duration": "--:--",
+      "description": "Morceau chanté",
+      "stageNotes": "",
+      "nextAction": "",
+      "kind": "vocal",
+      "lyrics": "Some people live for the fortune\n\nSome people live just for the fame\n\nSome people live for the power\n\nSome people live just to play the game\n\nSome people think that the physical things define what's within\n\nAnd I have been there before, and that life's a bore\n\nSo full of the superficial\n\nSome people want it all\n\nBut I don't want nothing at all\n\nIf it ain't you baby\n\nIf I ain't got you baby\n\nSome people want diamond rings\n\nSome just want everything\n\nBut everthing means nothing\n\nIf I ain't got you\n\nSome people search for a fountain\n\nThat promises forever young\n\nSome people need three dozen roses\n\nAnd that's the only way to prove you love them\n\nHand me the world on a silver platter\n\nAnd what good would it be\n\nWith no one to share, with no one who truly cares for me\n\nSome people want it all\n\nBut I don't want nothing at all\n\nIf it ain't you baby\n\nIf I ain't got you baby\n\nSome people want diamond rings\n\nSome just want everything\n\nBut everthing means nothing\n\nIf I ain't got you\n\nSome people want it all\n\nBut I don't want nothing at all\n\nIf it ain't you baby\n\nIf I ain't got you baby\n\nSome people want diamond rings\n\nSome just want everything\n\nBut everthing means nothing\n\nIf I ain't got you",
+      "lyricLines": [
+        {
+          "text": "Some people live for the fortune",
+          "time": 27.143799999998883
+        },
+        {
+          "text": "Some people live just for the fame",
+          "time": 32.94579999999888
+        },
+        {
+          "text": "Some people live for the power",
+          "time": 39.23579999999888
+        },
+        {
+          "text": "Some people live just to play the game",
+          "time": 45.202
+        },
+        {
+          "text": "Some people think that the physical things define what's within",
+          "time": 50.564
+        },
+        {
+          "text": "And I have been there before, and that life's a bore",
+          "time": 61.2685
+        },
+        {
+          "text": "So full of the superficial",
+          "time": 68.18009999999963
+        },
+        {
+          "text": "Some people want it all",
+          "time": 73.28179999999888
+        },
+        {
+          "text": "But I don't want nothing at all",
+          "time": 76.33179999999888
+        },
+        {
+          "text": "If it ain't you baby",
+          "time": 79.634
+        },
+        {
+          "text": "If I ain't got you baby",
+          "time": 82.65579999999888
+        },
+        {
+          "text": "Some people want diamond rings",
+          "time": 85.46590000000037
+        },
+        {
+          "text": "Some just want everything",
+          "time": 88.57579999999888
+        },
+        {
+          "text": "But everthing means nothing",
+          "time": 91.38369999999925
+        },
+        {
+          "text": "If I ain't got you",
+          "time": 94.39179999999888
+        },
+        {
+          "text": "Some people search for a fountain",
+          "time": 100.07259999999962
+        },
+        {
+          "text": "That promises forever young",
+          "time": 105.658
+        },
+        {
+          "text": "Some people need three dozen roses",
+          "time": 112.23769999999925
+        },
+        {
+          "text": "And that's the only way to prove you love them",
+          "time": 118.16990000000037
+        },
+        {
+          "text": "Hand me the world on a silver platter",
+          "time": 123.79579999999888
+        },
+        {
+          "text": "And what good would it be",
+          "time": 129.37979999999888
+        },
+        {
+          "text": "With no one to share, with no one who truly cares for me",
+          "time": 136.04229999999887
+        },
+        {
+          "text": "Some people want it all",
+          "time": 146.70790000000036
+        },
+        {
+          "text": "But I don't want nothing at all",
+          "time": 149.7817999999989
+        },
+        {
+          "text": "If it ain't you baby",
+          "time": 153.11819999999926
+        },
+        {
+          "text": "If I ain't got you baby",
+          "time": 156.0597999999989
+        },
+        {
+          "text": "Some people want diamond rings",
+          "time": 158.98169999999925
+        },
+        {
+          "text": "Some just want everything",
+          "time": 162.0777999999989
+        },
+        {
+          "text": "But everthing means nothing",
+          "time": 165.30559999999963
+        },
+        {
+          "text": "If I ain't got you",
+          "time": 168.012
+        },
+        {
+          "text": "Some people want it all",
+          "time": 171.23579999999887
+        },
+        {
+          "text": "But I don't want nothing at all",
+          "time": 174.23390000000038
+        },
+        {
+          "text": "If it ain't you baby",
+          "time": 177.578
+        },
+        {
+          "text": "If I ain't got you baby",
+          "time": 180.42579999999887
+        },
+        {
+          "text": "Some people want diamond rings",
+          "time": 183.41390000000038
+        },
+        {
+          "text": "Some just want everything",
+          "time": 186.32979999999887
+        },
+        {
+          "text": "But everthing means nothing",
+          "time": 189.42779999999888
+        },
+        {
+          "text": "If I ain't got you",
+          "time": 192.42769999999925
+        }
+      ],
+      "needsLyricsSync": false,
+      "audioFile": "/audio/Piano-ifiaintgotyou.wav",
+      "audioVolume": 0.25,
+      "montage": {
+        "enabled": true,
+        "channel": 1,
+        "bankMsb": 62,
+        "bankLsb": 0,
+        "program": 13,
+        "liveSetBank": 1,
+        "liveSetPage": 1,
+        "liveSetSlot": 14
+      }
+    },
+    {
+      "id": "fix-you-coldplay",
+      "title": "Fix You - Coldplay",
+      "duration": "--:--",
+      "description": "Morceau chanté",
+      "stageNotes": "",
+      "nextAction": "",
+      "kind": "vocal",
+      "lyrics": "When you try your best, but you don't succeed\n\nWhen you get what you want, but not what you need\n\nWhen you feel so tired, but you can't sleep\n\nStuck in reverse\n\nAnd the tears come streaming down your face\n\nWhen you lose something you can't replace\n\nWhen you love someone, but it goes to waste\n\nCould it be worse?\n\nLights will guide you home\n\nAnd ignite your bones\n\nAnd I will try to fix you\n\nAnd high up above or down below\n\nWhen you're too in love to let it go\n\nBut if you never try, you'll never know\n\nJust what you're worth\n\nLights will guide you home\n\nAnd ignite your bones\n\nAnd I will try to fix you\n\nTears stream down your face\n\nWhen you lose something you cannot replace\n\nTears stream down your face, and I\n\nTears stream down your face\n\nI promise you I will learn from my mistakes\n\nTears stream down your face, and I\n\nLights will guide you home\n\nAnd ignite your bones\n\nAnd I will try to fix you",
+      "lyricLines": [
+        {
+          "text": "When you try your best, but you don't succeed",
+          "time": 17.016200000001117
+        },
+        {
+          "text": "When you get what you want, but not what you need",
+          "time": 24.40210000000149
+        },
+        {
+          "text": "When you feel so tired, but you can't sleep",
+          "time": 31.272200000001117
+        },
+        {
+          "text": "Stuck in reverse",
+          "time": 37.516
+        },
+        {
+          "text": "And the tears come streaming down your face",
+          "time": 45.460200000001116
+        },
+        {
+          "text": "When you lose something you can't replace",
+          "time": 52.34010000000149
+        },
+        {
+          "text": "When you love someone, but it goes to waste",
+          "time": 59.474900000000375
+        },
+        {
+          "text": "Could it be worse?",
+          "time": 65.7245
+        },
+        {
+          "text": "Lights will guide you home",
+          "time": 75.4625
+        },
+        {
+          "text": "And ignite your bones",
+          "time": 82.5185
+        },
+        {
+          "text": "And I will try to fix you",
+          "time": 89.67210000000149
+        },
+        {
+          "text": "And high up above or down below",
+          "time": 108.80010000000149
+        },
+        {
+          "text": "When you're too in love to let it go",
+          "time": 115.66220000000112
+        },
+        {
+          "text": "But if you never try, you'll never know",
+          "time": 122.66220000000112
+        },
+        {
+          "text": "Just what you're worth",
+          "time": 129.0321000000015
+        },
+        {
+          "text": "Lights will guide you home",
+          "time": 138.81220000000113
+        },
+        {
+          "text": "And ignite your bones",
+          "time": 145.89620000000113
+        },
+        {
+          "text": "And I will try to fix you",
+          "time": 152.91610000000148
+        },
+        {
+          "text": "Tears stream down your face",
+          "time": 214.3061000000015
+        },
+        {
+          "text": "When you lose something you cannot replace",
+          "time": 220.218
+        },
+        {
+          "text": "Tears stream down your face, and I",
+          "time": 227.08410000000148
+        },
+        {
+          "text": "Tears stream down your face",
+          "time": 241.80030000000073
+        },
+        {
+          "text": "I promise you I will learn from my mistakes",
+          "time": 247.56840000000037
+        },
+        {
+          "text": "Tears stream down your face, and I",
+          "time": 255.4481000000015
+        },
+        {
+          "text": "Lights will guide you home",
+          "time": 269.12210000000147
+        },
+        {
+          "text": "And ignite your bones",
+          "time": 276.1321000000015
+        },
+        {
+          "text": "And I will try to fix you",
+          "time": 282.63490000000036
+        }
+      ],
+      "needsLyricsSync": false,
+      "audioFile": "/audio/Piano-fixyou.wav",
+      "audioVolume": 0.25,
+      "montage": {
+        "enabled": true,
+        "channel": 1,
+        "bankMsb": 62,
+        "bankLsb": 0,
+        "program": 14,
+        "liveSetBank": 1,
+        "liveSetPage": 1,
+        "liveSetSlot": 15
+      }
+    },
+    {
+      "id": "fistful-of-love-antony-and-the-johnsons",
+      "title": "Fistful of Love - Antony And The Johnsons",
+      "duration": "--:--",
+      "description": "Morceau chanté",
+      "stageNotes": "",
+      "nextAction": "",
+      "kind": "vocal",
+      "lyrics": "I was lying in my bed last night staring\n\nAt a ceiling full of stars\n\nWhen it suddenly hit me\n\nI just have to let you know how I feel\n\nWe live together in a photograph of time\n\nI look into your eyes\n\nAnd the seas open up to me\n\nI tell you I love you\n\nAnd I always will\n\nAnd I know you can't tell me\n\nI know you can't tell me\n\nSo I'm left to pick up\n\nThe hints, the little symbols of your devotion\n\nSo I'm left to pick up\n\nThe hints, the little symbols of your devotion\n\nAnd I feel your fists\n\nAnd I know it's out of love\n\nAnd I feel the whip\n\nAnd I know it's out of love\n\nAnd I feel your burning eyes, burning holes\n\nStraight through my heart\n\nIt's out of love\n\nIt's out of love\n\nI accept and I collect upon my body\n\nThe memories of your devotion\n\nI accept and I collect upon by body\n\nThe memories of your devotion\n\nAnd I feel your fists\n\nAnd I know it's out of love\n\nAnd I feel the whip\n\nAnd I know it's out of love\n\nAnd I feel your burning eyes, burning holes\n\nStraight through my heart\n\nIt's out of love, ooh hoo\n\nIt's out of love\n\nGive me a little bit serious love\n\nGive me a little full love\n\nBe full of love\n\nFists, fists, fists full of love...",
+      "lyricLines": [
+        {
+          "text": "I was lying in my bed last night staring",
+          "time": 4.6136999999992545
+        },
+        {
+          "text": "At a ceiling full of stars",
+          "time": 7.40589999999851
+        },
+        {
+          "text": "When it suddenly hit me",
+          "time": 13.496
+        },
+        {
+          "text": "I just have to let you know how I feel",
+          "time": 17.7055
+        },
+        {
+          "text": "We live together in a photograph of time",
+          "time": 23.835699999999257
+        },
+        {
+          "text": "I look into your eyes",
+          "time": 36.28159999999963
+        },
+        {
+          "text": "And the seas open up to me",
+          "time": 40.18609999999963
+        },
+        {
+          "text": "I tell you I love you",
+          "time": 48.783799999998884
+        },
+        {
+          "text": "And I always will",
+          "time": 53.03969999999926
+        },
+        {
+          "text": "And I know you can't tell me",
+          "time": 60.147699999999254
+        },
+        {
+          "text": "I know you can't tell me",
+          "time": 72.21369999999925
+        },
+        {
+          "text": "So I'm left to pick up",
+          "time": 84.11559999999963
+        },
+        {
+          "text": "The hints, the little symbols of your devotion",
+          "time": 87.76779999999889
+        },
+        {
+          "text": "So I'm left to pick up",
+          "time": 96.11819999999925
+        },
+        {
+          "text": "The hints, the little symbols of your devotion",
+          "time": 99.3035
+        },
+        {
+          "text": "And I feel your fists",
+          "time": 107.98769999999925
+        },
+        {
+          "text": "And I know it's out of love",
+          "time": 112.83759999999963
+        },
+        {
+          "text": "And I feel the whip",
+          "time": 119.38569999999926
+        },
+        {
+          "text": "And I know it's out of love",
+          "time": 124.50159999999963
+        },
+        {
+          "text": "And I feel your burning eyes, burning holes",
+          "time": 131.03379999999888
+        },
+        {
+          "text": "Straight through my heart",
+          "time": 137.90179999999887
+        },
+        {
+          "text": "It's out of love",
+          "time": 139.9095999999996
+        },
+        {
+          "text": "It's out of love",
+          "time": 145.29569999999924
+        },
+        {
+          "text": "I accept and I collect upon my body",
+          "time": 153.51969999999926
+        },
+        {
+          "text": "The memories of your devotion",
+          "time": 159.13359999999963
+        },
+        {
+          "text": "I accept and I collect upon by body",
+          "time": 164.75629999999887
+        },
+        {
+          "text": "The memories of your devotion",
+          "time": 169.1698999999985
+        },
+        {
+          "text": "And I feel your fists",
+          "time": 176.03969999999924
+        },
+        {
+          "text": "And I know it's out of love",
+          "time": 181.1077999999989
+        },
+        {
+          "text": "And I feel the whip",
+          "time": 187.34759999999963
+        },
+        {
+          "text": "And I know it's out of love",
+          "time": 192.20559999999963
+        },
+        {
+          "text": "And I feel your burning eyes, burning holes",
+          "time": 197.79769999999925
+        },
+        {
+          "text": "Straight through my heart",
+          "time": 205.32569999999924
+        },
+        {
+          "text": "It's out of love, ooh hoo",
+          "time": 207.69019999999927
+        },
+        {
+          "text": "It's out of love",
+          "time": 212.4057999999989
+        },
+        {
+          "text": "Give me a little bit serious love",
+          "time": 218.57019999999926
+        },
+        {
+          "text": "Give me a little full love",
+          "time": 221.02779999999888
+        },
+        {
+          "text": "Be full of love",
+          "time": 226.13809999999964
+        },
+        {
+          "text": "Fists, fists, fists full of love...",
+          "time": 227.47
+        }
+      ],
+      "needsLyricsSync": false,
+      "audioFile": "/audio/Piano-fistfuloflove.wav",
+      "audioVolume": 0.25,
+      "montage": {
+        "enabled": true,
+        "channel": 1,
+        "bankMsb": 62,
+        "bankLsb": 1,
+        "program": 0,
+        "liveSetBank": 1,
+        "liveSetPage": 2,
+        "liveSetSlot": 1
+      }
+    },
+    {
+      "id": "ecris-l-histoire-gregory-lemarchal",
+      "title": "Ecris l'Histoire - Grégory Lemarchal",
+      "duration": "--:--",
+      "description": "Morceau chanté",
+      "stageNotes": "",
+      "nextAction": "",
+      "kind": "vocal",
+      "lyrics": "Voudrais-tu me voir, m’oublier,\n\nM’approcher, me croire, m’inviter\n\nOu n’pas savoir, quand viendra la fin ?\n\nC’est toi qui choisis, de rester,\n\nMe laisser ici, en douter\n\nC’est toi aussi, qui sait et c’est bien\n\nQue veux tu qu’je fasse ?\n\nM’effacer ou m’avancer pour\n\nEtre dans ta trace\n\nTout de dire ou bien me taire\n\nQue veux tu que je fasse ?\n\nEcris l'histoire\n\nTout c'que tu voudras entre mes lignes\n\nTon Territoire\n\nEtendu si loin sur le mien\n\nEcris l'histoire\n\nDans ma mémoire\n\nMais n'écris jamais la fin\n\nDis moi, tu m’préfères, à genoux,\n\nParti ou par terre, à tes pieds\n\nPour avoir l’air de n’pas être rien ?\n\nFaut-il que j’arête ? Un mot et\n\nJ’n’en fais qu’à ta tête, j’disparais,\n\nChange de planète, sauf si tu m’retiens\n\nQue veux-tu de moi ?\n\nJ’attendrai que tu me le dises\n\nUn amour ou pas ?\n\nQuelqu’un qui te demande à toi :\n\nVoudrais-tu de moi ?\n\nEcris l'histoire\n\nTout c'que tu voudras entre mes lignes\n\nTon Territoire\n\nEtendu si loin sur le mien\n\nEcris l'histoire\n\nDans ma mémoire\n\nMais n'écris jamais la fin\n\nEcris l'histoire\n\nTout c'que tu voudras entre mes lignes\n\nTon Territoire\n\nEtendu si loin sur le mien\n\nEcris l'histoire\n\nDans ma mémoire\n\nMais n'écris jamais la fin\n\nMais n'écris jamais la fin",
+      "lyricLines": [
+        {
+          "text": "Voudrais-tu me voir, m’oublier,",
+          "time": 21.403599999999628
+        },
+        {
+          "text": "M’approcher, me croire, m’inviter",
+          "time": 23.59390000000037
+        },
+        {
+          "text": "Ou n’pas savoir, quand viendra la fin ?",
+          "time": 26.167800000000746
+        },
+        {
+          "text": "C’est toi qui choisis, de rester,",
+          "time": 30.901400000000372
+        },
+        {
+          "text": "Me laisser ici, en douter",
+          "time": 33.365599999999624
+        },
+        {
+          "text": "C’est toi aussi, qui sait et c’est bien",
+          "time": 35.7875
+        },
+        {
+          "text": "Que veux tu qu’je fasse ?",
+          "time": 40.5075
+        },
+        {
+          "text": "M’effacer ou m’avancer pour",
+          "time": 42.885400000000374
+        },
+        {
+          "text": "Etre dans ta trace",
+          "time": 45.323699999999256
+        },
+        {
+          "text": "Tout de dire ou bien me taire",
+          "time": 47.791599999999626
+        },
+        {
+          "text": "Que veux tu que je fasse ?",
+          "time": 50.02190000000037
+        },
+        {
+          "text": "Ecris l'histoire",
+          "time": 53.870300000000746
+        },
+        {
+          "text": "Tout c'que tu voudras entre mes lignes",
+          "time": 56.27769999999926
+        },
+        {
+          "text": "Ton Territoire",
+          "time": 63.447599999999625
+        },
+        {
+          "text": "Etendu si loin sur le mien",
+          "time": 65.79759999999963
+        },
+        {
+          "text": "Ecris l'histoire",
+          "time": 72.8895
+        },
+        {
+          "text": "Dans ma mémoire",
+          "time": 77.52940000000038
+        },
+        {
+          "text": "Mais n'écris jamais la fin",
+          "time": 82.52359999999963
+        },
+        {
+          "text": "Dis moi, tu m’préfères, à genoux,",
+          "time": 93.06559999999963
+        },
+        {
+          "text": "Parti ou par terre, à tes pieds",
+          "time": 95.81540000000037
+        },
+        {
+          "text": "Pour avoir l’air de n’pas être rien ?",
+          "time": 98.18969999999925
+        },
+        {
+          "text": "Faut-il que j’arête ? Un mot et",
+          "time": 102.96359999999963
+        },
+        {
+          "text": "J’n’en fais qu’à ta tête, j’disparais,",
+          "time": 104.50169999999926
+        },
+        {
+          "text": "Change de planète, sauf si tu m’retiens",
+          "time": 107.7935
+        },
+        {
+          "text": "Que veux-tu de moi ?",
+          "time": 112.46
+        },
+        {
+          "text": "J’attendrai que tu me le dises",
+          "time": 114.8015
+        },
+        {
+          "text": "Un amour ou pas ?",
+          "time": 117.32140000000037
+        },
+        {
+          "text": "Quelqu’un qui te demande à toi :",
+          "time": 119.566
+        },
+        {
+          "text": "Voudrais-tu de moi ?",
+          "time": 122.1955
+        },
+        {
+          "text": "Ecris l'histoire",
+          "time": 125.86169999999926
+        },
+        {
+          "text": "Tout c'que tu voudras entre mes lignes",
+          "time": 128.22940000000037
+        },
+        {
+          "text": "Ton Territoire",
+          "time": 135.40780000000075
+        },
+        {
+          "text": "Etendu si loin sur le mien",
+          "time": 137.698
+        },
+        {
+          "text": "Ecris l'histoire",
+          "time": 144.96369999999925
+        },
+        {
+          "text": "Dans ma mémoire",
+          "time": 149.69559999999962
+        },
+        {
+          "text": "Mais n'écris jamais la fin",
+          "time": 154.45969999999926
+        },
+        {
+          "text": "Ecris l'histoire",
+          "time": 164.108
+        },
+        {
+          "text": "Tout c'que tu voudras entre mes lignes",
+          "time": 166.59959999999964
+        },
+        {
+          "text": "Ton Territoire",
+          "time": 173.80959999999962
+        },
+        {
+          "text": "Etendu si loin sur le mien",
+          "time": 176.19159999999962
+        },
+        {
+          "text": "Ecris l'histoire",
+          "time": 183.29759999999962
+        },
+        {
+          "text": "Dans ma mémoire",
+          "time": 188.08340000000038
+        },
+        {
+          "text": "Mais n'écris jamais la fin",
+          "time": 192.78609999999964
+        },
+        {
+          "text": "Mais n'écris jamais la fin",
+          "time": 197.46580000000074
+        }
+      ],
+      "needsLyricsSync": false,
+      "audioFile": "/audio/Piano-ecrislhistoire.wav",
+      "audioVolume": 0.25,
+      "montage": {
+        "enabled": true,
+        "channel": 1,
+        "bankMsb": 62,
+        "bankLsb": 1,
+        "program": 1,
+        "liveSetBank": 1,
+        "liveSetPage": 2,
+        "liveSetSlot": 2
+      }
+    },
+    {
+      "id": "yeux-disent-lomepal",
+      "title": "Yeux disent - Lomepal",
+      "duration": "--:--",
+      "description": "Morceau chanté",
+      "stageNotes": "",
+      "nextAction": "",
+      "kind": "vocal",
+      "lyrics": "Recharge mes batteries, j'ai besoin de ton regard\n\nRecharge mes batteries, recharge mes batteries\n\nEnchanté, Antoine, je brise les rêves et les cœurs mais j'ai un bon fond, promis\n\nJe voulais plus d'air, plus de distance, j'en ai juste un peu trop mis\n\nAssis ensemble sans se dire un seul mot dans le tro-mé\n\nJe pouvais devenir un artiste, alors je l'ai fait\n\nMais j'ai vu qu’elle avait mal sous le plexus, et mes excuses n'avaient plus un seul effet\n\nAïe, attention à ce que les cerveaux agités promettent\n\nJ'ai déjà menti, oui mais le jour où je lui ai dit que j’étais honnête, j'étais honnête\n\nAïe, comment on a fait pour atteindre ce stade ?\n\nOk, je suis peut-être peu stable, je sais plus si je veux renaître ou juste être une star\n\nJ'me suis perdu comme les lettres de Stan (aïe)\n\nUn jour, elle m'a dit qu’elle souffrait, qu'c'était terrible dans sa tête\n\nMais ce jour là, je l'ai pas écoutée, j'avais des rimes dans la tête\n\nJe parle trop souvent de ma musique, ça a peut-être un peu empiété\n\nJe lui ai dit qu’elle était pas unique, ce soir elle dort avec sa fierté\n\nPas de vengeance, pas de sourires forcés\n\nYeux disent le contraire, yeux disent le contraire\n\nJ'ai craché des mots tranchants, fille n'a pas été blessée\n\nYeux disent le contraire, yeux disent le contraire\n\nOups, je l'ai touché dans l'cœur, aïe aïe\n\nJe l'ai touché dans l'cœur, aïe aïe\n\nJe l'ai touché dans l'cœur, aïe aïe\n\nJe l'ai touché dans l'cœur\n\nJe l'ai touché dans l'cœur\n\nJ'ai la belle vie, j'fais des bons morceaux, j'fais des bons concerts\n\nJ'écoute mes maquettes à fond, j'entends plus les bons conseils\n\nJ'ai la dalle comme ce con d'Luffy, faut que je comble le vide\n\nL'image de soi-même, c'est précieux, quelques doutes et mes démons revenaient\n\nElle est belle mais si je regarde ses yeux, c'est peut-être juste pour y voir mon reflet\n\nOn a marché sans se dire un mot pendant des heures à Paris, aïe aïe aïe\n\nElle est irremplaçable, mais je m'en rendrai compte seulement quand elle sera partie\n\nOn profite jamais de ce qu'on a\n\nJ'ai cherché la réponse en fixant le plafond jusqu’à cinq heures\n\nLe genre de problème qui casse un cœur\n\nPas de vengeance, pas de sourire forcés\n\nYeux disent le contraire, yeux disent le contraire\n\nJ'ai craché des mots tranchants, fille n'a pas été blessée\n\nYeux disent le contraire, yeux disent le contraire\n\nOups, je l'ai touché dans l'cœur, aïe aïe\n\nJe l'ai touché dans l'cœur, aïe aïe\n\nJe l'ai touché dans l'cœur, aïe aïe\n\nJe l'ai touché dans l'cœur\n\nJe l'ai touché dans l'cœur\n\nOups, je l'ai touché dans l'cœur\n\nJe l'ai touché dans l'cœur\n\nJe l'ai touché dans l'cœur\n\nJe l'ai touché dans l'cœur\n\nOups, je l'ai touché dans l'cœur\n\nJe l'ai touché dans l'cœur\n\nJe l'ai touché dans l'cœur\n\nOups, je l'ai touché dans l'cœur, aïe aïe",
+      "lyricLines": [
+        {
+          "text": "Recharge mes batteries, j'ai besoin de ton regard",
+          "time": 20.38940000000037
+        },
+        {
+          "text": "Recharge mes batteries, recharge mes batteries",
+          "time": 24.885400000000374
+        },
+        {
+          "text": "Enchanté, Antoine, je brise les rêves et les cœurs mais j'ai un bon fond, promis",
+          "time": 27.3215
+        },
+        {
+          "text": "Je voulais plus d'air, plus de distance, j'en ai juste un peu trop mis",
+          "time": 31.609400000000374
+        },
+        {
+          "text": "Assis ensemble sans se dire un seul mot dans le tro-mé",
+          "time": 35.725199999999255
+        },
+        {
+          "text": "Je pouvais devenir un artiste, alors je l'ai fait",
+          "time": 37.865599999999624
+        },
+        {
+          "text": "Mais j'ai vu qu’elle avait mal sous le plexus, et mes excuses n'avaient plus un seul effet",
+          "time": 40.441300000000744
+        },
+        {
+          "text": "Aïe, attention à ce que les cerveaux agités promettent",
+          "time": 44.9355
+        },
+        {
+          "text": "J'ai déjà menti, oui mais le jour où je lui ai dit que j’étais honnête, j'étais honnête",
+          "time": 48.61540000000037
+        },
+        {
+          "text": "Aïe, comment on a fait pour atteindre ce stade ?",
+          "time": 52.6755
+        },
+        {
+          "text": "Ok, je suis peut-être peu stable, je sais plus si je veux renaître ou juste être une star",
+          "time": 56.209300000000745
+        },
+        {
+          "text": "J'me suis perdu comme les lettres de Stan (aïe)",
+          "time": 59.933400000000375
+        },
+        {
+          "text": "Un jour, elle m'a dit qu’elle souffrait, qu'c'était terrible dans sa tête",
+          "time": 62.581300000000745
+        },
+        {
+          "text": "Mais ce jour là, je l'ai pas écoutée, j'avais des rimes dans la tête",
+          "time": 66.46919999999926
+        },
+        {
+          "text": "Je parle trop souvent de ma musique, ça a peut-être un peu empiété",
+          "time": 70.11730000000074
+        },
+        {
+          "text": "Je lui ai dit qu’elle était pas unique, ce soir elle dort avec sa fierté",
+          "time": 73.81719999999926
+        },
+        {
+          "text": "Pas de vengeance, pas de sourires forcés",
+          "time": 77.3195
+        },
+        {
+          "text": "Yeux disent le contraire, yeux disent le contraire",
+          "time": 81.15730000000075
+        },
+        {
+          "text": "J'ai craché des mots tranchants, fille n'a pas été blessée",
+          "time": 84.99519999999926
+        },
+        {
+          "text": "Yeux disent le contraire, yeux disent le contraire",
+          "time": 89.60940000000038
+        },
+        {
+          "text": "Oups, je l'ai touché dans l'cœur, aïe aïe",
+          "time": 93.80340000000037
+        },
+        {
+          "text": "Je l'ai touché dans l'cœur, aïe aïe",
+          "time": 98.21519999999926
+        },
+        {
+          "text": "Je l'ai touché dans l'cœur, aïe aïe",
+          "time": 102.5175
+        },
+        {
+          "text": "Je l'ai touché dans l'cœur",
+          "time": 106.68130000000075
+        },
+        {
+          "text": "Je l'ai touché dans l'cœur",
+          "time": 108.94119999999926
+        },
+        {
+          "text": "J'ai la belle vie, j'fais des bons morceaux, j'fais des bons concerts",
+          "time": 111.19119999999926
+        },
+        {
+          "text": "J'écoute mes maquettes à fond, j'entends plus les bons conseils",
+          "time": 113.71359999999963
+        },
+        {
+          "text": "J'ai la dalle comme ce con d'Luffy, faut que je comble le vide",
+          "time": 116.06590000000037
+        },
+        {
+          "text": "L'image de soi-même, c'est précieux, quelques doutes et mes démons revenaient",
+          "time": 119.11730000000074
+        },
+        {
+          "text": "Elle est belle mais si je regarde ses yeux, c'est peut-être juste pour y voir mon reflet",
+          "time": 123.13719999999925
+        },
+        {
+          "text": "On a marché sans se dire un mot pendant des heures à Paris, aïe aïe aïe",
+          "time": 128.4774000000004
+        },
+        {
+          "text": "Elle est irremplaçable, mais je m'en rendrai compte seulement quand elle sera partie",
+          "time": 133.1795
+        },
+        {
+          "text": "On profite jamais de ce qu'on a",
+          "time": 137.21990000000037
+        },
+        {
+          "text": "J'ai cherché la réponse en fixant le plafond jusqu’à cinq heures",
+          "time": 139.23759999999962
+        },
+        {
+          "text": "Le genre de problème qui casse un cœur",
+          "time": 142.69730000000075
+        },
+        {
+          "text": "Pas de vengeance, pas de sourire forcés",
+          "time": 145.06209999999962
+        },
+        {
+          "text": "Yeux disent le contraire, yeux disent le contraire",
+          "time": 148.74940000000038
+        },
+        {
+          "text": "J'ai craché des mots tranchants, fille n'a pas été blessée",
+          "time": 152.68719999999925
+        },
+        {
+          "text": "Yeux disent le contraire, yeux disent le contraire",
+          "time": 157.14130000000074
+        },
+        {
+          "text": "Oups, je l'ai touché dans l'cœur, aïe aïe",
+          "time": 161.38930000000076
+        },
+        {
+          "text": "Je l'ai touché dans l'cœur, aïe aïe",
+          "time": 165.74330000000074
+        },
+        {
+          "text": "Je l'ai touché dans l'cœur, aïe aïe",
+          "time": 169.98730000000074
+        },
+        {
+          "text": "Je l'ai touché dans l'cœur",
+          "time": 174.24740000000037
+        },
+        {
+          "text": "Je l'ai touché dans l'cœur",
+          "time": 176.96519999999924
+        },
+        {
+          "text": "Oups, je l'ai touché dans l'cœur",
+          "time": 178.58369999999925
+        },
+        {
+          "text": "Je l'ai touché dans l'cœur",
+          "time": 180.55159999999964
+        },
+        {
+          "text": "Je l'ai touché dans l'cœur",
+          "time": 182.69780000000074
+        },
+        {
+          "text": "Je l'ai touché dans l'cœur",
+          "time": 184.80330000000075
+        },
+        {
+          "text": "Oups, je l'ai touché dans l'cœur",
+          "time": 186.74380000000073
+        },
+        {
+          "text": "Je l'ai touché dans l'cœur",
+          "time": 188.95330000000075
+        },
+        {
+          "text": "Je l'ai touché dans l'cœur",
+          "time": 191.07340000000036
+        },
+        {
+          "text": "Oups, je l'ai touché dans l'cœur, aïe aïe",
+          "time": 195.25730000000075
+        }
+      ],
+      "needsLyricsSync": false,
+      "audioFile": "/audio/Piano-yeuxdisent.wav",
+      "audioVolume": 0.25,
+      "montage": {
+        "enabled": true,
+        "channel": 1,
+        "bankMsb": 62,
+        "bankLsb": 1,
+        "program": 2,
+        "liveSetBank": 1,
+        "liveSetPage": 2,
+        "liveSetSlot": 3
+      }
+    },
+    {
+      "id": "essai-de-nouveau-morceau",
+      "title": "essai de nouveau morceau",
+      "duration": "--:--",
+      "description": "Morceau instrumental",
+      "stageNotes": "",
+      "nextAction": "",
+      "kind": "instrumental",
+      "lyrics": "",
+      "lyricLines": [],
+      "needsLyricsSync": false
+    },
+    {
+      "id": "una-matina",
+      "title": "Una Matina",
+      "duration": "--:--",
+      "description": "Morceau instrumental",
+      "stageNotes": "",
+      "nextAction": "",
+      "kind": "instrumental",
+      "lyrics": "",
+      "lyricLines": [],
+      "needsLyricsSync": false,
+      "audioVolume": 1,
+      "videoFile": "/unamatina.mp4",
+      "videoMode": "video",
+      "videoOffset": 0,
+      "videoPlaybackMode": "loop"
+    }
+  ],
+  "setlistSongIds": [
+    "mon-amour",
+    "test-creation-morceau",
+    "le-pont",
+    "entre-deux-rives",
+    "final",
+    "la-maison-bleue",
+    "et-un-jour-une-femme-florent-pagny",
+    "la-corrida-francis-cabrel",
+    "if-i-ain-t-got-you-alicia-keys",
+    "fix-you-coldplay",
+    "fistful-of-love-antony-and-the-johnsons",
+    "ecris-l-histoire-gregory-lemarchal",
+    "yeux-disent-lomepal",
+    "una-matina"
+  ],
+  "requestedSongIds": [],
+  "updatedAt": 1790715071938
+}

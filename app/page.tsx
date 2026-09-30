@@ -10,6 +10,7 @@ import LyricsSyncEditor from "./components/LyricsSyncEditor";
 import SongEditor from "./components/SongEditor";
 import NewSongEditor from "./components/NewSongEditor";
 import RequestsPanel from "./components/RequestsPanel";
+import CoupParfaitPanel from "./components/CoupParfaitPanel";
 
 function BlindTestAdminPanel({
   onClose,
@@ -342,6 +343,7 @@ export default function Home() {
   const [midiLoading, setMidiLoading] = useState(false);
   const [midiStatus, setMidiStatus] = useState("");
   const [isBlindTestOpen, setIsBlindTestOpen] = useState(false);
+  const [isCoupParfaitOpen, setIsCoupParfaitOpen] = useState(false);
   const lastServerUpdatedAtRef = useRef(0);
   const applyingServerSnapshotRef = useRef(false);
 
@@ -712,10 +714,16 @@ async function sendPublicMode(
     | "home"
     | "song"
     | "message"
-    | "pause"
+        | "pause"
     | "end"
-    | "dj",
-  message = ""
+        | "dj"
+    | "coup-parfait-tuto"
+    | "coup-parfait"
+    | "coup-parfait-ready"
+    | "coup-parfait-success"
+| "coup-parfait-fail",
+    message = "",
+  videoVolume?: number
 ) {
   console.log(
   "PUBLIC MODE ENVOYÉ :",
@@ -730,9 +738,10 @@ async function sendPublicMode(
       },
       cache: "no-store",
       body: JSON.stringify({
-        mode,
-        message,
-      }),
+  mode,
+  message,
+  videoVolume,
+}),
     });
   } catch (error) {
     console.error(
@@ -1092,6 +1101,14 @@ async function importLibrary() {
 
 <button
   type="button"
+  onClick={() => setIsCoupParfaitOpen(true)}
+  className="w-full rounded-2xl border border-orange-700 bg-orange-950/30 px-6 py-5 text-xl font-bold text-orange-300 transition hover:bg-orange-950/50 active:scale-[0.99]"
+>
+  🥁 Le Coup Parfait
+</button>
+
+<button
+  type="button"
   onClick={() => setIsPreparationOpen(true)}
   className="w-full rounded-2xl border border-zinc-700 bg-zinc-900 px-6 py-5 text-xl font-bold text-zinc-100 transition hover:bg-zinc-800 active:scale-[0.99]"
 >
@@ -1261,6 +1278,27 @@ onClose={() => setIsSearchOpen(false)}
       {isBlindTestOpen && (
   <BlindTestAdminPanel
     onClose={() => setIsBlindTestOpen(false)}
+  />
+)}
+
+{isCoupParfaitOpen && (
+  <CoupParfaitPanel
+    onClose={() => {
+  setIsCoupParfaitOpen(false);
+  void sendPublicMode("home");
+}}
+    onShowTuto={(volume) =>
+  void sendPublicMode("coup-parfait-tuto", "", volume)
+}
+    onStartChallenge={(volume) => {
+    void sendPublicMode("coup-parfait", "", volume);
+}}
+    onPlayerReady={(volume) =>
+  void sendPublicMode("coup-parfait-ready", "", volume)
+}
+    onSuccess={() => void sendPublicMode("coup-parfait-success")}
+onFail={() => void sendPublicMode("coup-parfait-fail")}
+onNextPlayer={() => void sendPublicMode("coup-parfait")}
   />
 )}
 
@@ -2486,3 +2524,5 @@ onClose={() => setIsSearchOpen(false)}
     </main>
   );
 }
+
+

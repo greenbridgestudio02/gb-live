@@ -1,0 +1,2499 @@
+﻿"use client";
+
+import { useEffect, useRef, useState } from "react";
+
+import SongList from "./components/SongList";
+import { show } from "../data/show";
+import SongSearch from "./components/SongSearch";
+import LyricsPlayer from "./components/LyricsPlayer";
+import LyricsSyncEditor from "./components/LyricsSyncEditor";
+import SongEditor from "./components/SongEditor";
+import NewSongEditor from "./components/NewSongEditor";
+import RequestsPanel from "./components/RequestsPanel";
+
+function BlindTestAdminPanel({
+  onClose,
+}: {
+  onClose: () => void;
+}) {
+  type BuzzEntry = {
+    playerId: string;
+    playerName: string;
+    buzzedAt: number;
+  };
+
+  type PlayerScore = {
+    playerId: string;
+    playerName: string;
+    points: number;
+  };
+
+  type BlindTestState = {
+    roundId: number;
+    isActive: boolean;
+    isOpen: boolean;
+    winner: BuzzEntry | null;
+    buzzes: BuzzEntry[];
+    scores: PlayerScore[];
+    updatedAt: number;
+  };
+
+  const [blindState, setBlindState] =
+    useState<BlindTestState | null>(null);
+  const [busy, setBusy] = useState(false);
+  useEffect(() => {
+  void fetch("/api/blind-test", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      action: "activate",
+    }),
+  });
+}, []);
+
+  useEffect(() => {
+    let stopped = false;
+
+    async function refreshState() {
+      try {
+        const response = await fetch("/api/blind-test", {
+          cache: "no-store",
+        });
+
+        if (!response.ok) return;
+
+        const state: BlindTestState = await response.json();
+        if (!stopped) setBlindState(state);
+      } catch {
+        // On conserve le dernier Ã©tat connu.
+      }
+    }
+
+    void refreshState();
+    const intervalId = window.setInterval(() => {
+      void refreshState();
+    }, 250);
+
+    return () => {
+      stopped = true;
+      window.clearInterval(intervalId);
+    };
+  }, []);
+
+  async function sendAction(
+    action:
+      | "activate"
+      | "deactivate"
+      | "open"
+      | "close"
+      | "reset"
+      | "correct"
+      | "wrong"
+      | "reset-scores"
+      | "new-game"
+  ) {
+    if (busy) return;
+    setBusy(true);
+
+    try {
+      const response = await fetch("/api/blind-test", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action }),
+      });
+
+      const result = await response.json();
+      if (result.state) setBlindState(result.state);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  const ranking = [...(blindState?.scores ?? [])].sort(
+    (a, b) => b.points - a.points || a.playerName.localeCompare(b.playerName)
+  );
+
+  return (
+    <div className="fixed inset-0 z-[90] flex items-center justify-center bg-black/90 p-6">
+      <div className="flex h-[90vh] w-full max-w-6xl flex-col overflow-hidden rounded-3xl border border-amber-800 bg-zinc-950 text-zinc-100">
+        <div className="flex shrink-0 items-center justify-between border-b border-zinc-800 p-6">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-amber-400">
+              G3 Live
+            </p>
+            <h2 className="mt-1 text-3xl font-black">ðŸ”” Blind Test</h2>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => {
+  void fetch("/api/blind-test", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      action: "deactivate",
+    }),
+  });
+
+  onClose();
+}}
+            className="flex h-12 w-12 items-center justify-center rounded-xl border border-zinc-700 bg-zinc-900 text-2xl font-bold"
+          >
+            Ã—
+          </button>
+        </div>
+
+        <div className="grid min-h-0 flex-1 gap-5 overflow-y-auto p-6 lg:grid-cols-[1.2fr_0.8fr]">
+          <div className="flex min-h-0 flex-col rounded-2xl border border-zinc-800 bg-zinc-900/50 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-zinc-500">Question</p>
+                <p className="mt-1 text-3xl font-bold">{blindState?.roundId ?? "â€”"}</p>
+              </div>
+              <div className="text-right">
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-zinc-500">Ã‰tat</p>
+                <p
+  className={`mt-1 rounded-xl px-4 py-2 text-xl font-black ${
+    blindState?.isOpen
+      ? "bg-emerald-950/50 text-emerald-300"
+      : "bg-red-950/50 text-red-300"
+  }`}
+>
+  {blindState?.isOpen
+    ? "ðŸŸ¢ BUZZERS OUVERTS"
+    : "ðŸ”´ BUZZERS FERMÃ‰S"}
+</p>
+              </div>
+            </div>
+
+            <div className="mt-8 flex min-h-64 flex-1 items-center justify-center rounded-3xl border border-zinc-800 bg-zinc-950/60 p-8 text-center">
+              {blindState?.winner ? (
+                <div>
+                  <p className="text-7xl">ðŸ¥‡</p>
+                  <p className="mt-5 text-sm font-semibold uppercase tracking-[0.3em] text-amber-400">Premier buzz</p>
+                  <p className="mt-3 text-5xl font-black text-white">{blindState.winner.playerName}</p>
+                </div>
+              ) : blindState?.isOpen ? (
+                <div>
+                  <p className="text-7xl">ðŸ”´</p>
+                  <p className="mt-5 text-3xl font-black text-emerald-300">Buzzers ouverts</p>
+                  <p className="mt-3 text-zinc-500">En attente du premier joueurâ€¦</p>
+                </div>
+              ) : (
+                <div>
+                  <p className="text-6xl">ðŸ””</p>
+                  <p className="mt-5 text-3xl font-bold text-zinc-400">Manche prÃªte</p>
+                  <p className="mt-3 text-zinc-600">Ouvre les buzzers quand tu es prÃªt.</p>
+                </div>
+              )}
+            </div>
+
+            {blindState?.winner && (
+              <div className="mt-5 grid grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  onClick={() => void sendAction("correct")}
+                  disabled={busy}
+                  className="rounded-2xl bg-emerald-500 px-6 py-5 text-xl font-black text-zinc-950 disabled:opacity-40"
+                >
+                  âœ… Bonne rÃ©ponse Â· +1
+                </button>
+                <button
+                  type="button"
+                  onClick={() => void sendAction("wrong")}
+                  disabled={busy}
+                  className="rounded-2xl bg-red-600 px-6 py-5 text-xl font-black text-white disabled:opacity-40"
+                >
+                  âŒ Mauvaise rÃ©ponse
+                </button>
+              </div>
+            )}
+
+            <div className="mt-5 grid grid-cols-2 gap-3">
+              <button type="button" onClick={() => void sendAction("open")} disabled={busy} className="rounded-2xl bg-emerald-500 px-6 py-5 text-xl font-black text-zinc-950 disabled:opacity-40">
+                â–¶ Nouvelle question
+              </button>
+              <button type="button" onClick={() => void sendAction("close")} disabled={busy} className="rounded-2xl border border-zinc-700 bg-zinc-900 px-6 py-5 text-xl font-bold disabled:opacity-40">
+                Fermer les buzzers  
+              </button>
+              <button type="button" onClick={() => void sendAction("open")} disabled={busy} className="rounded-2xl border border-amber-700 bg-amber-950/30 px-6 py-5 text-lg font-bold text-amber-300 disabled:opacity-40">
+                â†º RÃ©ouvrir les buzzers
+              </button>
+                          </div>
+          </div>
+
+          <div className="grid min-h-0 gap-5 xl:grid-rows-2">
+            <div className="min-h-0 overflow-y-auto rounded-2xl border border-zinc-800 bg-zinc-900/50 p-5">
+              <p className="text-xs font-semibold uppercase tracking-[0.25em] text-zinc-500">Ordre des buzz</p>
+              <div className="mt-4 space-y-3">
+                {blindState?.buzzes && blindState.buzzes.length > 0 ? (
+                  blindState.buzzes.map((buzz, index) => (
+                    <div key={`${buzz.playerId}-${buzz.buzzedAt}`} className="flex items-center gap-3 rounded-xl border border-zinc-800 bg-zinc-950 px-4 py-3">
+                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-amber-950/50 font-bold text-amber-300">{index + 1}</span>
+                      <p className="min-w-0 flex-1 truncate text-lg font-semibold">{buzz.playerName}</p>
+                    </div>
+                  ))
+                ) : (
+                  <p className="py-8 text-center text-zinc-600">Aucun buzz pour le moment.</p>
+                )}
+              </div>
+            </div>
+
+            <div className="min-h-0 overflow-y-auto rounded-2xl border border-amber-900/60 bg-zinc-900/50 p-5">
+              <div className="flex items-center justify-between gap-3">
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-amber-400">Classement</p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (window.confirm("Remettre tous les scores Ã  zÃ©ro ?")) {
+                      void sendAction("reset-scores");
+                    }
+                  }}
+                  disabled={busy || ranking.length === 0}
+                  className="rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-xs font-semibold text-zinc-400 disabled:opacity-30"
+                >
+                  Remise Ã  zÃ©ro
+                </button>
+              </div>
+
+                  <button
+  type="button"
+  onClick={() => {
+    const confirmed = window.confirm(
+      "Nouvelle partie ? Tous les scores seront remis Ã  zÃ©ro."
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    void sendAction("new-game");
+  }}
+  disabled={busy}
+  className="mt-4 w-full rounded-xl border border-red-800 bg-red-950/30 px-5 py-4 font-semibold text-red-300 disabled:opacity-40"
+>
+  ðŸŽ® Nouvelle partie
+</button>
+
+              <div className="mt-4 space-y-2">
+                {ranking.length > 0 ? (
+                  ranking.map((player, index) => (
+                    <div key={player.playerId} className="flex items-center gap-3 rounded-xl border border-zinc-800 bg-zinc-950 px-4 py-3">
+                      <span className="w-8 text-center text-lg font-black text-amber-300">{index + 1}</span>
+                      <p className="min-w-0 flex-1 truncate font-semibold">{player.playerName}</p>
+                      <p className="text-xl font-black text-white">{player.points} <span className="text-xs font-semibold text-zinc-500">pt{player.points > 1 ? "s" : ""}</span></p>
+                    </div>
+                  ))
+                ) : (
+                  <p className="py-8 text-center text-zinc-600">Le classement apparaÃ®tra dÃ¨s le premier buzz.</p>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function Home() {
+  const [setlistPosition, setSetlistPosition] = useState(0);
+  const [currentSongIndex, setCurrentSongIndex] = useState(0);
+  const [playbackResetKey, setPlaybackResetKey] = useState(0);
+  const [isHomeMode, setIsHomeMode] = useState(true);
+  const [isPublicMessageOpen, setIsPublicMessageOpen] = useState(false);
+  const [publicMessage, setPublicMessage] = useState("");
+
+  const [isPaused, setIsPaused] = useState(false);
+  const [isPublicScreenHidden, setIsPublicScreenHidden] = useState(false);  
+  const [isSetlistOpen, setIsSetlistOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [requestedSongIds, setRequestedSongIds] = useState<string[]>([]);
+  const [requestsLoaded, setRequestsLoaded] = useState(false);
+  const [isSyncEditorOpen, setIsSyncEditorOpen] = useState(false);
+  const [isSongEditorOpen, setIsSongEditorOpen] = useState(false);
+  const [isNewSongEditorOpen, setIsNewSongEditorOpen] = useState(false);
+
+  const [isAboutEditorOpen, setIsAboutEditorOpen] = useState(false);
+  const [aboutMe, setAboutMe] = useState({
+  name: "",
+  headline: "",
+  bio: "",
+  instruments: "",
+  website: "",
+  instagram: "",
+  facebook: "",
+});
+
+  const [songs, setSongs] = useState(show.songs);
+  const [songsLoaded, setSongsLoaded] = useState(false);
+  const [setlistSongIds, setSetlistSongIds] = useState<string[]>(
+  show.songs.map((song) => song.id)
+);
+  const [setlistLoaded, setSetlistLoaded] = useState(false);
+  const [isPreparationOpen, setIsPreparationOpen] = useState(false);
+  const [isRequestsOpen, setIsRequestsOpen] = useState(false);
+  const [midiOutputs, setMidiOutputs] = useState<string[]>([]);
+  const [selectedMidiOutput, setSelectedMidiOutput] = useState("");
+  const [midiLoading, setMidiLoading] = useState(false);
+  const [midiStatus, setMidiStatus] = useState("");
+  const [isBlindTestOpen, setIsBlindTestOpen] = useState(false);
+  const [isCoupParfaitOpen, setIsCoupParfaitOpen] = useState(false);
+  const lastServerUpdatedAtRef = useRef(0);
+  const applyingServerSnapshotRef = useRef(false);
+
+useEffect(() => {
+  let stopped = false;
+
+  async function loadServerLibrary() {
+    try {
+      const response = await fetch("/api/library-sync", {
+        cache: "no-store",
+      });
+
+      if (!response.ok) {
+        throw new Error("Impossible de charger la bibliothÃ¨que serveur.");
+      }
+
+      const snapshot = await response.json();
+
+      if (typeof snapshot.updatedAt === "number") {
+        lastServerUpdatedAtRef.current = snapshot.updatedAt;
+      }
+
+      if (stopped) {
+        return;
+      }
+
+      if (Array.isArray(snapshot.songs) && snapshot.songs.length > 0) {
+        setSongs(snapshot.songs);
+      }
+
+      if (Array.isArray(snapshot.setlistSongIds)) {
+        setSetlistSongIds(snapshot.setlistSongIds);
+      }
+
+      if (Array.isArray(snapshot.requestedSongIds)) {
+        setRequestedSongIds(snapshot.requestedSongIds);
+      }
+    } catch (error) {
+      console.error(
+        "Impossible de charger la bibliothÃ¨que centrale G3 Live.",
+        error
+      );
+    } finally {
+      if (!stopped) {
+        setSongsLoaded(true);
+        setSetlistLoaded(true);
+        setRequestsLoaded(true);
+      }
+    }
+  }
+
+  void loadServerLibrary();
+
+  localStorage.removeItem("g3-live-library-v2");
+  localStorage.removeItem("gb-live-songs");
+  localStorage.removeItem("gb-live-setlist");
+  localStorage.removeItem("g3-live-requests");
+
+  return () => {
+    stopped = true;
+  };
+}, []);
+
+useEffect(() => {
+  let stopped = false;
+
+  async function loadAboutMe() {
+    try {
+      const response = await fetch("/api/about", {
+        cache: "no-store",
+      });
+
+      if (!response.ok) {
+        return;
+      }
+
+      const data = await response.json();
+
+      if (!stopped) {
+        setAboutMe({
+          name:
+            typeof data.name === "string"
+              ? data.name
+              : "",
+          headline:
+            typeof data.headline === "string"
+              ? data.headline
+              : "",
+          bio:
+            typeof data.bio === "string"
+              ? data.bio
+              : "",
+          instruments:
+            typeof data.instruments === "string"
+              ? data.instruments
+              : "",
+          website:
+            typeof data.website === "string"
+              ? data.website
+              : "",
+          instagram:
+            typeof data.instagram === "string"
+              ? data.instagram
+              : "",
+          facebook:
+            typeof data.facebook === "string"
+              ? data.facebook
+              : "",
+        });
+      }
+    } catch (error) {
+      console.error(
+        "Impossible de charger la fiche Ã€ propos de moi.",
+        error
+      );
+    }
+  }
+
+  void loadAboutMe();
+
+  return () => {
+    stopped = true;
+  };
+}, []);
+
+useEffect(() => {
+  if (!songsLoaded || !setlistLoaded || !requestsLoaded) {
+    return;
+  }
+
+  if (applyingServerSnapshotRef.current) {
+    applyingServerSnapshotRef.current = false;
+    return;
+  }
+
+  const timeoutId = window.setTimeout(() => {
+    void fetch("/api/library-sync", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        songs,
+        setlistSongIds,
+        requestedSongIds,
+      }),
+    })
+      .then(async (response) => {
+        if (!response.ok) {
+          throw new Error("Sauvegarde serveur impossible.");
+        }
+
+        const result = await response.json();
+        const updatedAt = result?.snapshot?.updatedAt;
+
+        if (typeof updatedAt === "number") {
+          lastServerUpdatedAtRef.current = updatedAt;
+        }
+      })
+      .catch((error) => {
+        console.error(
+          "Impossible d'enregistrer automatiquement la bibliothÃ¨que sur le serveur.",
+          error
+        );
+      });
+  }, 300);
+
+  return () => {
+    window.clearTimeout(timeoutId);
+  };
+}, [
+  songs,
+  setlistSongIds,
+  requestedSongIds,
+  songsLoaded,
+  setlistLoaded,
+  requestsLoaded,
+]);
+
+useEffect(() => {
+  if (!songsLoaded || !setlistLoaded || !requestsLoaded) {
+    return;
+  }
+
+  let stopped = false;
+
+  async function refreshLibraryFromServer() {
+    try {
+      const response = await fetch("/api/library-sync", {
+        cache: "no-store",
+      });
+
+      if (!response.ok) {
+        return;
+      }
+
+      const snapshot = await response.json();
+
+      if (
+        stopped ||
+        typeof snapshot.updatedAt !== "number" ||
+        snapshot.updatedAt <= lastServerUpdatedAtRef.current
+      ) {
+        return;
+      }
+
+      applyingServerSnapshotRef.current = true;
+      lastServerUpdatedAtRef.current = snapshot.updatedAt;
+
+      if (Array.isArray(snapshot.songs)) {
+        setSongs(snapshot.songs);
+      }
+
+      if (Array.isArray(snapshot.setlistSongIds)) {
+        setSetlistSongIds(snapshot.setlistSongIds);
+      }
+
+      if (Array.isArray(snapshot.requestedSongIds)) {
+        setRequestedSongIds(snapshot.requestedSongIds);
+      }
+    } catch (error) {
+      console.error(
+        "Impossible d'actualiser automatiquement la bibliothÃ¨que.",
+        error
+      );
+    }
+  }
+
+  const intervalId = window.setInterval(() => {
+    void refreshLibraryFromServer();
+  }, 5000);
+
+  return () => {
+    stopped = true;
+    window.clearInterval(intervalId);
+  };
+}, [songsLoaded, setlistLoaded, requestsLoaded]);
+
+const setlistSongs = setlistSongIds
+  .map((songId) =>
+    songs.find((song) => song.id === songId)
+  )
+  .filter(
+    (song): song is (typeof songs)[number] =>
+      song !== undefined
+  );
+
+const currentSong = songs[currentSongIndex];
+
+const nextSetlistSong =
+  setlistPosition < setlistSongs.length - 1
+    ? setlistSongs[setlistPosition + 1]
+    : null;
+
+useEffect(() => {
+  if (!currentSong) {
+    return;
+  }
+
+  localStorage.setItem(
+    "g3-live-current-song-id",
+    currentSong.id
+  );
+}, [currentSong]);
+
+  async function goToPreviousSong() {
+  const previousPosition = Math.max(
+    setlistPosition - 1,
+    0
+  );
+
+  const previousSongId =
+    setlistSongIds[previousPosition];
+
+  const previousSongIndex = songs.findIndex(
+    (song) => song.id === previousSongId
+  );
+
+  if (previousSongIndex === -1) {
+    return;
+  }
+
+  const previousSong = songs[previousSongIndex];
+  void prepareMontageForSong(previousSong);
+
+  setSetlistPosition(previousPosition);
+  setCurrentSongIndex(previousSongIndex);
+
+  await fetch("/api/live-state", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    cache: "no-store",
+    body: JSON.stringify({
+      mode: "song",
+      song: {
+        id: previousSong.id,
+        title: previousSong.title,
+        kind: previousSong.kind ?? "vocal",
+        lyrics: previousSong.lyrics,
+        lyricLines: previousSong.lyricLines ?? [],
+        videoFile: previousSong.videoFile,
+        videoMode: previousSong.videoMode,
+videoOffset: previousSong.videoOffset,
+videoPlaybackMode: previousSong.videoPlaybackMode,
+videoDuration: previousSong.videoDuration,
+        needsLyricsSync:
+          previousSong.needsLyricsSync === true,
+      },
+      elapsedTime: 0,
+      isPlaying: false,
+    }),
+  });
+}
+
+async function goToNextSong() {
+  const nextPosition = Math.min(
+    setlistPosition + 1,
+    setlistSongIds.length - 1
+  );
+
+  const nextSongId = setlistSongIds[nextPosition];
+
+  const nextSongIndex = songs.findIndex(
+    (song) => song.id === nextSongId
+  );
+
+  if (nextSongIndex === -1) {
+    return;
+  }
+
+  const nextSong = songs[nextSongIndex];
+  void prepareMontageForSong(nextSong);
+
+  setSetlistPosition(nextPosition);
+  setCurrentSongIndex(nextSongIndex);
+
+  await fetch("/api/live-state", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    cache: "no-store",
+    body: JSON.stringify({
+      mode: "song",
+      song: {
+        id: nextSong.id,
+        title: nextSong.title,
+        kind: nextSong.kind ?? "vocal",
+        lyrics: nextSong.lyrics,
+        lyricLines: nextSong.lyricLines ?? [],
+        videoFile: nextSong.videoFile,
+        videoMode: nextSong.videoMode,
+        videoOffset: nextSong.videoOffset,
+        videoPlaybackMode: nextSong.videoPlaybackMode,
+videoDuration: nextSong.videoDuration,
+          needsLyricsSync:
+          nextSong.needsLyricsSync === true,
+      },
+      elapsedTime: 0,
+      isPlaying: false,
+    }),
+  });
+}
+async function sendPublicMode(
+  mode:
+    | "home"
+    | "song"
+    | "message"
+    | "pause"
+    | "end"
+    | "dj",
+  message = ""
+) {
+  console.log(
+  "PUBLIC MODE ENVOYÃ‰ :",
+  mode,
+  new Date().toLocaleTimeString()
+);
+  try {
+    await fetch("/api/live-state", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      cache: "no-store",
+      body: JSON.stringify({
+        mode,
+        message,
+      }),
+    });
+  } catch (error) {
+    console.error(
+      "Impossible de modifier l'Ã©cran public.",
+      error
+    );
+  }
+}
+
+function startShow() {
+  setIsHomeMode(false);
+
+  const currentPosition = setlistSongIds.findIndex(
+    (songId) => songId === currentSong?.id
+  );
+
+  if (currentPosition !== -1) {
+    setSetlistPosition(currentPosition);
+  }
+
+  setIsSetlistOpen(true);
+  void sendPublicMode("home");
+}
+
+function returnHome() {
+  setIsHomeMode(true);
+  setIsPublicMessageOpen(false);
+  void sendPublicMode("home");
+}
+
+function showPublicMessage(message: string) {
+  const cleanMessage = message.trim();
+
+  if (!cleanMessage) {
+    return;
+  }
+
+  void fetch("/api/live-state", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    cache: "no-store",
+    body: JSON.stringify({
+      message: cleanMessage,
+    }),
+  });
+}
+
+function clearPublicMessage() {
+  setPublicMessage("");
+  setIsPublicMessageOpen(false);
+
+  if (isHomeMode) {
+    void sendPublicMode("home");
+  } else {
+    void sendPublicMode("song");
+  }
+}
+
+useEffect(() => {
+  function handleBlueTurnNext(event: KeyboardEvent) {
+    if (event.key !== "ArrowRight") {
+      return;
+    }
+
+    const target = event.target as HTMLElement | null;
+
+    if (
+      target instanceof HTMLInputElement ||
+      target instanceof HTMLTextAreaElement ||
+      target?.isContentEditable
+    ) {
+      return;
+    }
+
+    if (event.repeat) {
+      return;
+    }
+
+    event.preventDefault();
+
+    goToNextSong();
+  }
+
+  window.addEventListener(
+    "keydown",
+    handleBlueTurnNext
+  );
+
+  return () => {
+    window.removeEventListener(
+      "keydown",
+      handleBlueTurnNext
+    );
+  };
+});
+
+async function refreshMidiOutputs() {
+  setMidiLoading(true);
+  setMidiStatus("");
+
+  try {
+    const response = await fetch("/api/midi", {
+      cache: "no-store",
+    });
+
+    const result = await response.json();
+
+    if (!result.ok) {
+      throw new Error(
+        result.error ?? "Impossible de lire les sorties MIDI."
+      );
+    }
+
+    const outputs = Array.isArray(result.outputs)
+      ? result.outputs
+      : [];
+
+    setMidiOutputs(outputs);
+
+    if (
+      selectedMidiOutput &&
+      outputs.includes(selectedMidiOutput)
+    ) {
+      // On conserve la sortie dÃ©jÃ  choisie.
+    } else {
+      const montageOutput = outputs.find((name: string) =>
+        name.toLowerCase().includes("montage")
+      );
+
+      setSelectedMidiOutput(
+        montageOutput ?? outputs[0] ?? ""
+      );
+    }
+
+    if (outputs.length === 0) {
+      setMidiStatus("Aucune sortie MIDI dÃ©tectÃ©e.");
+    } else {
+      setMidiStatus(
+        `${outputs.length} sortie(s) MIDI dÃ©tectÃ©e(s).`
+      );
+    }
+  } catch (error) {
+    console.error(error);
+
+    setMidiOutputs([]);
+    setSelectedMidiOutput("");
+    setMidiStatus(
+      error instanceof Error
+        ? error.message
+        : "Erreur MIDI."
+    );
+  } finally {
+    setMidiLoading(false);
+  }
+}
+useEffect(() => {
+  void refreshMidiOutputs();
+}, []);
+
+async function prepareMontageForSong(
+  song: (typeof songs)[number]
+) {
+  if (!song?.montage?.enabled) {
+    return;
+  }
+
+  try {
+    const montageOutput =
+  selectedMidiOutput || "MONTAGE M";
+
+    await fetch("/api/midi", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        outputName: montageOutput,
+        channel: song.montage.channel,
+        msb: song.montage.bankMsb,
+        lsb: song.montage.bankLsb,
+        program: song.montage.program,
+      }),
+    });
+
+    console.log(
+      `MONTAGE prÃ©parÃ© pour ${song.title}`
+    );
+  } catch (error) {
+    console.error(
+      "Impossible de prÃ©parer le MONTAGE.",
+      error
+    );
+  }
+}
+
+async function testMontageMidi() {
+  if (!selectedMidiOutput) {
+    setMidiStatus("SÃ©lectionne une sortie MIDI.");
+    return;
+  }
+
+  if (!currentSong?.montage?.enabled) {
+    setMidiStatus(
+      `Le morceau Â« ${currentSong?.title ?? ""} Â» n'a pas de configuration M8x.`
+    );
+    return;
+  }
+
+  setMidiLoading(true);
+  setMidiStatus("Envoi MIDI en coursâ€¦");
+
+  try {
+    const response = await fetch("/api/midi", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        outputName: selectedMidiOutput,
+        channel: currentSong.montage.channel,
+        msb: currentSong.montage.bankMsb,
+        lsb: currentSong.montage.bankLsb,
+        program: currentSong.montage.program,
+      }),
+    });
+
+    const result = await response.json();
+
+    if (!result.ok) {
+      throw new Error(
+        result.error ?? "Ã‰chec de l'envoi MIDI."
+      );
+    }
+
+    setMidiStatus(
+      `Commande envoyÃ©e : MSB ${result.msb} Â· LSB ${result.lsb} Â· PC ${result.program}`
+    );
+  } catch (error) {
+    console.error(error);
+
+    setMidiStatus(
+      error instanceof Error
+        ? error.message
+        : "Erreur pendant l'envoi MIDI."
+    );
+  } finally {
+    setMidiLoading(false);
+  }
+}
+
+async function publishLibrary() {
+  try {
+    const response = await fetch("/api/library-sync", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        songs,
+        setlistSongIds,
+        requestedSongIds,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Publication impossible");
+    }
+
+    alert("BibliothÃ¨que publiÃ©e sur le serveur G3 Live.");
+  } catch (error) {
+    console.error(error);
+    alert("Impossible de publier la bibliothÃ¨que.");
+  }
+}
+
+async function importLibrary() {
+  try {
+    const response = await fetch("/api/library-sync", {
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      throw new Error("RÃ©cupÃ©ration impossible");
+    }
+
+    const snapshot = await response.json();
+
+    if (
+      !Array.isArray(snapshot.songs) ||
+      snapshot.songs.length === 0
+    ) {
+      alert("Aucune bibliothÃ¨que publiÃ©e sur le serveur.");
+      return;
+    }
+
+    const localSnapshot = {
+      songs: snapshot.songs,
+      setlistSongIds: Array.isArray(snapshot.setlistSongIds)
+        ? snapshot.setlistSongIds
+        : [],
+      requestedSongIds: Array.isArray(snapshot.requestedSongIds)
+        ? snapshot.requestedSongIds
+        : [],
+      savedAt: Date.now(),
+    };
+
+    setSongs(localSnapshot.songs);
+    setSetlistSongIds(localSnapshot.setlistSongIds);
+    setRequestedSongIds(localSnapshot.requestedSongIds);
+
+    setCurrentSongIndex(0);
+    setSetlistPosition(0);
+
+    alert(
+      "BibliothÃ¨que rÃ©cupÃ©rÃ©e et sauvegardÃ©e durablement sur cet appareil."
+    );
+  } catch (error) {
+    console.error(error);
+    alert("Impossible de rÃ©cupÃ©rer la bibliothÃ¨que.");
+  }
+}if (isHomeMode) {
+  return (
+    <main className="flex h-screen flex-col items-center justify-center bg-zinc-950 p-6 text-zinc-100">
+      <div className="w-full max-w-3xl text-center">
+        <img
+          src="/g3-live-logo.png"
+          alt="G3 Live"
+          className="mx-auto h-32 w-auto object-contain"
+        />
+
+        <h1 className="mt-6 text-5xl font-bold">
+          Bienvenue
+        </h1>
+
+        <p className="mt-3 text-lg text-zinc-500">
+          G3 Live est prÃªt.
+        </p>
+
+        <div className="mt-10 grid gap-4">
+          <button
+  type="button"
+  onClick={startShow}
+  className="w-full rounded-2xl border border-emerald-700 bg-emerald-950/30 px-6 py-5 text-xl font-bold text-emerald-300 transition hover:bg-emerald-950/50 active:scale-[0.99]"
+>
+  ðŸŽ¤ Spectacle
+</button>
+
+<button
+  type="button"
+  onClick={() => setIsBlindTestOpen(true)}
+  className="w-full rounded-2xl border border-amber-700 bg-amber-950/30 px-6 py-5 text-xl font-bold text-amber-300 transition hover:bg-amber-950/50 active:scale-[0.99]"
+>
+  ðŸ”” Blind Test
+</button>
+
+<button
+  type="button"
+  onClick={() => setIsCoupParfaitOpen(true)}
+  className="w-full rounded-2xl border border-orange-700 bg-orange-950/30 px-6 py-5 text-xl font-bold text-orange-300 transition hover:bg-orange-950/50 active:scale-[0.99]"
+>
+  Le Coup Parfait
+</button>
+
+<button
+  type="button"
+  onClick={() => setIsPreparationOpen(true)}
+  className="w-full rounded-2xl border border-zinc-700 bg-zinc-900 px-6 py-5 text-xl font-bold text-zinc-100 transition hover:bg-zinc-800 active:scale-[0.99]"
+>
+  âš™ï¸ PrÃ©paration
+</button>
+
+
+
+        </div>
+      </div>
+
+      {isSearchOpen && (
+        <button
+          type="button"
+          onClick={() => {
+            setIsSearchOpen(false);
+            setIsNewSongEditorOpen(true);
+          }}
+          className="fixed right-24 top-6 z-[100] rounded-xl bg-emerald-500 px-5 py-3 font-bold text-zinc-950 shadow-lg"
+        >
+          + Nouveau morceau
+        </button>
+      )}
+
+      {isSearchOpen && (
+        <SongSearch
+          songs={songs}
+          setlistSongIds={setlistSongIds}
+          requestedSongIds={requestedSongIds}
+          onPlayNow={(index) => {
+            setCurrentSongIndex(index);
+
+            const selectedSongId = songs[index]?.id;
+            const setlistIndex = selectedSongId
+              ? setlistSongIds.indexOf(selectedSongId)
+              : -1;
+
+            if (setlistIndex !== -1) {
+              setSetlistPosition(setlistIndex);
+            }
+
+            setIsHomeMode(false);
+            void sendPublicMode("home");
+          }}
+          onPlayNext={(songId) => {
+            setSetlistSongIds((currentSetlist) => {
+              const withoutSong = currentSetlist.filter(
+                (id) => id !== songId
+              );
+
+              const insertPosition = Math.min(
+                setlistPosition + 1,
+                withoutSong.length
+              );
+
+              const newSetlist = [...withoutSong];
+              newSetlist.splice(insertPosition, 0, songId);
+
+              return newSetlist;
+            });
+          }}
+          onAddToSetlist={(songId) => {
+            setSetlistSongIds((currentSetlist) =>
+              currentSetlist.includes(songId)
+                ? currentSetlist
+                : [...currentSetlist, songId]
+            );
+          }}
+          onRequestSong={(songId) => {
+            setRequestedSongIds((currentRequests) =>
+              currentRequests.includes(songId)
+                ? currentRequests
+                : [...currentRequests, songId]
+            );
+          }}
+          onEditSong={(index) => {
+  setCurrentSongIndex(index);
+  setIsSearchOpen(false);
+  setIsSongEditorOpen(true);
+}}
+
+onSyncSong={(index) => {
+  setCurrentSongIndex(index);
+  setIsSearchOpen(false);
+  setIsSyncEditorOpen(true);
+}}
+
+onDeleteSong={(songId) => {
+  setSongs((currentSongs) =>
+    currentSongs.filter((song) => song.id !== songId)
+  );
+
+  setSetlistSongIds((currentIds) =>
+    currentIds.filter((id) => id !== songId)
+  );
+
+  setRequestedSongIds((currentIds) =>
+    currentIds.filter((id) => id !== songId)
+  );
+}}
+
+onClose={() => setIsSearchOpen(false)}
+        />
+      )}
+
+      {isRequestsOpen && (
+        <RequestsPanel
+          songs={songs}
+          requestedSongIds={requestedSongIds}
+          onPlayNow={(songId) => {
+            const libraryIndex = songs.findIndex(
+              (song) => song.id === songId
+            );
+
+            if (libraryIndex !== -1) {
+              setCurrentSongIndex(libraryIndex);
+            }
+
+            setRequestedSongIds((currentRequests) =>
+              currentRequests.filter((id) => id !== songId)
+            );
+
+            setIsRequestsOpen(false);
+            setIsHomeMode(false);
+            void sendPublicMode("song");
+          }}
+          onPlayNext={(songId) => {
+            setSetlistSongIds((currentSetlist) => {
+              const withoutSong = currentSetlist.filter(
+                (id) => id !== songId
+              );
+
+              const insertPosition = Math.min(
+                setlistPosition + 1,
+                withoutSong.length
+              );
+
+              const newSetlist = [...withoutSong];
+              newSetlist.splice(insertPosition, 0, songId);
+
+              return newSetlist;
+            });
+
+            setRequestedSongIds((currentRequests) =>
+              currentRequests.filter((id) => id !== songId)
+            );
+
+            setIsRequestsOpen(false);
+          }}
+          onRemoveRequest={(songId) => {
+            setRequestedSongIds((currentRequests) =>
+              currentRequests.filter((id) => id !== songId)
+            );
+          }}
+          onMoveRequest={(fromIndex, toIndex) => {
+            setRequestedSongIds((currentRequests) => {
+              const newRequests = [...currentRequests];
+              const [movedSongId] = newRequests.splice(fromIndex, 1);
+              newRequests.splice(toIndex, 0, movedSongId);
+              return newRequests;
+            });
+          }}
+          onClose={() => setIsRequestsOpen(false)}
+        />
+       )}
+
+      {isBlindTestOpen && (
+  <BlindTestAdminPanel
+    onClose={() => setIsBlindTestOpen(false)}
+  />
+)}
+
+{isPreparationOpen && (
+  <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/80 p-6">
+    <div className="w-full max-w-xl rounded-3xl border border-zinc-700 bg-zinc-950 p-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-400">
+            G3 Live
+          </p>
+
+          <h2 className="mt-1 text-2xl font-bold">
+            PrÃ©paration
+          </h2>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => setIsPreparationOpen(false)}
+          className="flex h-12 w-12 items-center justify-center rounded-xl border border-zinc-700 bg-zinc-900 text-2xl font-bold"
+        >
+          Ã—
+        </button>
+      </div>
+
+      <div className="mt-6 grid gap-3">
+
+        <div className="mb-3 rounded-2xl border border-emerald-900 bg-emerald-950/20 p-4">
+          <div className="flex items-center justify-between gap-3">
+            <div>
+  <p className="text-xs font-semibold uppercase tracking-[0.25em] text-emerald-400">
+    MIDI
+  </p>
+
+  <h3 className="mt-1 text-lg font-bold">
+    Yamaha MONTAGE M8x
+  </h3>
+
+  <p
+    className={`mt-1 text-sm font-semibold ${
+      selectedMidiOutput
+        ? "text-emerald-400"
+        : "text-amber-400"
+    }`}
+  >
+    {selectedMidiOutput
+      ? `â— ConnectÃ© : ${selectedMidiOutput}`
+      : "â— Sortie MIDI non dÃ©tectÃ©e"}
+  </p>
+</div>
+
+<button
+  type="button"
+  onClick={() => void refreshMidiOutputs()}
+  disabled={midiLoading}
+  className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm font-semibold disabled:opacity-40"
+>
+  {midiLoading
+    ? "DÃ©tection..."
+    : "â†» DÃ©tecter la sortie MIDI"}
+</button>
+          </div>
+
+          <select
+            value={selectedMidiOutput}
+            onChange={(event) =>
+              setSelectedMidiOutput(event.target.value)
+            }
+            className="mt-4 w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3 outline-none focus:border-emerald-500"
+          >
+            <option value="">
+              SÃ©lectionner une sortie MIDI
+            </option>
+
+            {midiOutputs.map((output) => (
+              <option key={output} value={output}>
+                {output}
+              </option>
+            ))}
+          </select>
+
+          <button
+            type="button"
+            onClick={() => void testMontageMidi()}
+            disabled={
+              midiLoading ||
+              !selectedMidiOutput ||
+              !currentSong?.montage?.enabled
+            }
+            className="mt-3 w-full rounded-xl bg-emerald-500 px-5 py-3 font-bold text-zinc-950 disabled:opacity-30"
+          >
+            ðŸŽ¹ Tester le M8x avec le morceau courant
+          </button>
+
+          <div className="mt-3 rounded-xl bg-zinc-950/60 px-4 py-3 text-sm">
+            <p className="text-zinc-500">
+              Morceau courant
+            </p>
+
+            <p className="font-semibold text-zinc-200">
+              {currentSong?.title ?? "Aucun"}
+            </p>
+
+            {currentSong?.montage?.enabled && (
+              <p className="mt-1 text-emerald-400">
+                User {currentSong.montage.liveSetBank} Â· Page{" "}
+                {currentSong.montage.liveSetPage} Â· Slot{" "}
+                {currentSong.montage.liveSetSlot}
+              </p>
+            )}
+          </div>
+
+          {midiStatus && (
+            <p className="mt-3 text-sm text-zinc-400">
+              {midiStatus}
+            </p>
+          )}
+        </div>
+
+        <button
+          type="button"
+          onClick={() => {
+            setIsPreparationOpen(false);
+            setIsSearchOpen(true);
+          }}
+          className="rounded-xl border border-zinc-700 bg-zinc-900 px-6 py-4 text-left text-lg font-semibold"
+        >
+          ðŸ“š BibliothÃ¨que
+        </button>
+
+        <button
+  type="button"
+  onClick={() => {
+    setIsPreparationOpen(false);
+    setIsAboutEditorOpen(true);
+  }}
+  className="rounded-xl border border-zinc-700 bg-zinc-900 px-6 py-4 text-left text-lg font-semibold"
+>
+  ðŸ‘¤ Modifier â€œÃ€ propos de moiâ€
+</button>
+
+
+      </div>
+    </div>
+  </div>
+)}
+
+{isAboutEditorOpen && (
+  <div className="fixed inset-0 z-[90] overflow-y-auto bg-black/90 p-6">
+    <div className="mx-auto w-full max-w-2xl rounded-3xl border border-zinc-700 bg-zinc-950 p-6 text-zinc-100">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-400">
+            G3 Live
+          </p>
+
+          <h2 className="mt-1 text-2xl font-bold">
+            Ã€ propos de moi
+          </h2>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => setIsAboutEditorOpen(false)}
+          className="flex h-12 w-12 items-center justify-center rounded-xl border border-zinc-700 bg-zinc-900 text-2xl font-bold"
+        >
+          Ã—
+        </button>
+      </div>
+
+      <div className="mt-6 grid gap-4">
+        <input
+          type="text"
+          value={aboutMe.name}
+          onChange={(event) =>
+            setAboutMe({
+              ...aboutMe,
+              name: event.target.value,
+            })
+          }
+          placeholder="Nom / nom de scÃ¨ne"
+          className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 outline-none focus:border-emerald-500"
+        />
+
+        <input
+          type="text"
+          value={aboutMe.headline}
+          onChange={(event) =>
+            setAboutMe({
+              ...aboutMe,
+              headline: event.target.value,
+            })
+          }
+          placeholder="Accroche"
+          className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 outline-none focus:border-emerald-500"
+        />
+
+        <textarea
+          value={aboutMe.bio}
+          onChange={(event) =>
+            setAboutMe({
+              ...aboutMe,
+              bio: event.target.value,
+            })
+          }
+          placeholder="PrÃ©sentation"
+          className="min-h-40 rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 outline-none focus:border-emerald-500"
+        />
+
+        <input
+          type="text"
+          value={aboutMe.instruments}
+          onChange={(event) =>
+            setAboutMe({
+              ...aboutMe,
+              instruments: event.target.value,
+            })
+          }
+          placeholder="Instruments"
+          className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 outline-none focus:border-emerald-500"
+        />
+
+        <input
+          type="text"
+          value={aboutMe.website}
+          onChange={(event) =>
+            setAboutMe({
+              ...aboutMe,
+              website: event.target.value,
+            })
+          }
+          placeholder="Site web"
+          className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 outline-none focus:border-emerald-500"
+        />
+
+        <input
+          type="text"
+          value={aboutMe.instagram}
+          onChange={(event) =>
+            setAboutMe({
+              ...aboutMe,
+              instagram: event.target.value,
+            })
+          }
+          placeholder="Instagram"
+          className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 outline-none focus:border-emerald-500"
+        />
+
+        <input
+          type="text"
+          value={aboutMe.facebook}
+          onChange={(event) =>
+            setAboutMe({
+              ...aboutMe,
+              facebook: event.target.value,
+            })
+          }
+          placeholder="Facebook"
+          className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 outline-none focus:border-emerald-500"
+        />
+      </div>
+
+      <button
+  type="button"
+  onClick={async () => {
+    try {
+      const response = await fetch("/api/about", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(aboutMe),
+      });
+
+      if (!response.ok) {
+        throw new Error("Publication impossible");
+      }
+
+      localStorage.setItem(
+        "g3-live-about",
+        JSON.stringify(aboutMe)
+      );
+
+      setIsAboutEditorOpen(false);
+
+      alert(
+        "La fiche Â« Ã€ propos de moi Â» est enregistrÃ©e et publiÃ©e."
+      );
+    } catch (error) {
+      console.error(error);
+
+      alert(
+        "Impossible de publier la fiche Â« Ã€ propos de moi Â»."
+      );
+    }
+  }}
+  className="mt-6 w-full rounded-xl bg-emerald-500 px-6 py-4 text-lg font-bold text-zinc-950"
+>
+  Enregistrer
+</button>
+    </div>
+  </div>
+)}
+
+{isNewSongEditorOpen && (
+  <NewSongEditor
+    onClose={() => setIsNewSongEditorOpen(false)}
+    onSave={(newSong) => {
+      setSongs((currentSongs) => [
+        ...currentSongs,
+        newSong,
+      ]);
+
+      setCurrentSongIndex(songs.length);
+      setIsNewSongEditorOpen(false);
+    }}
+  />
+)}
+{isSongEditorOpen && (
+  <SongEditor
+    song={currentSong}
+    onClose={() => setIsSongEditorOpen(false)}
+    onSave={(updatedSong) => {
+      setSongs((currentSongs) =>
+        currentSongs.map((song, index) =>
+          index === currentSongIndex
+            ? updatedSong
+            : song
+        )
+      );
+
+      setIsSongEditorOpen(false);
+    }}
+  />
+)}
+
+{isSyncEditorOpen && (
+  <div className="fixed inset-0 z-[70] overflow-y-auto bg-black/90 p-6">
+    <div className="mx-auto max-w-4xl">
+      <div className="mb-4 flex justify-end">
+        <button
+          type="button"
+          onClick={() => setIsSyncEditorOpen(false)}
+          className="rounded-xl border border-zinc-700 bg-zinc-900 px-5 py-3 font-semibold"
+        >
+          Fermer
+        </button>
+      </div>
+
+      <LyricsSyncEditor
+        song={currentSong}
+        onValidate={(times) => {
+          setSongs((currentSongs) =>
+            currentSongs.map((song, index) => {
+              if (
+                index !== currentSongIndex ||
+                !song.lyricLines
+              ) {
+                return song;
+              }
+
+              return {
+                ...song,
+                lyricLines: song.lyricLines.map(
+                  (line, lineIndex) => ({
+                    ...line,
+                    time: times[lineIndex],
+                  })
+                ),
+                needsLyricsSync: false,
+              };
+            })
+          );
+
+          setIsSyncEditorOpen(false);
+        }}
+      />
+    </div>
+  </div>
+)}
+    </main>
+  );
+}
+
+  return (
+    <main className="flex h-[100dvh] overflow-hidden flex-col bg-zinc-950 text-zinc-100">
+      <header className="flex items-center justify-between border-b border-zinc-800 px-6 py-2">
+        <div>
+  <img
+    src="/g3-live-logo.png"
+    alt="G3 Live"
+    className="h-20 w-auto object-contain object-left"
+  />
+
+
+</div>
+<div className="flex items-center gap-2">
+  <span className="mr-2 text-xs font-semibold uppercase tracking-wider text-zinc-500">
+    Ã‰cran public
+  </span>
+
+  <button
+    type="button"
+    onClick={() => {
+  setIsPublicScreenHidden(true);
+  void sendPublicMode("home");
+}}
+    className="rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm font-semibold hover:bg-zinc-800"
+  >
+    ðŸ“º Logo
+  </button>
+
+  <button
+    type="button"
+    onClick={() => {
+  setIsPublicScreenHidden(false);
+  void sendPublicMode("song");
+}}
+    className="rounded-lg border border-emerald-700 bg-emerald-950/40 px-4 py-2 text-sm font-semibold text-emerald-300 hover:bg-emerald-900/50"
+  >
+    ðŸŽ¤ Paroles
+  </button>
+  <button
+  type="button"
+  onClick={() => setIsPublicMessageOpen(true)}
+  className="rounded-lg border border-amber-700 bg-amber-950/40 px-4 py-2 text-sm font-semibold text-amber-300 hover:bg-amber-900/50"
+>
+  ðŸ’¬ Message
+</button>
+<button
+  type="button"
+  onClick={() => {
+    setIsPublicScreenHidden(true);
+    void sendPublicMode("dj");
+  }}
+  className="rounded-lg border border-violet-700 bg-violet-950/40 px-4 py-2 text-sm font-semibold text-violet-300 hover:bg-violet-900/50"
+>
+  ðŸŽ§ DJ
+</button>
+</div>
+        <div className="text-right">
+          <p className="text-sm text-zinc-500">
+            Morceau
+          </p>
+
+          <p className="text-lg font-semibold">
+            {currentSongIndex + 1} / {songs.length}
+          </p>
+        </div>
+      </header>
+
+      <section className="flex min-h-0 flex-1 flex-col px-4 py-2">
+        <div className="mb-2 flex items-center justify-between">
+          <div>
+  <p className="text-xs font-semibold uppercase tracking-[0.25em] text-emerald-400">
+    Morceau en cours
+  </p>
+
+  <div className="mt-2 flex flex-wrap items-end gap-x-5 gap-y-1">
+    <h2 className="text-4xl font-bold">
+      {currentSong.title}
+    </h2>
+
+    {(currentSong.bpm || currentSong.key) && (
+      <div className="flex items-center gap-4 pb-1 text-sm font-semibold text-zinc-500">
+        {currentSong.bpm && (
+          <span>â™© {currentSong.bpm} BPM</span>
+        )}
+
+        {currentSong.key && (
+          <span>TonalitÃ© : {currentSong.key}</span>
+        )}
+      </div>
+    )}
+  </div>
+</div>
+
+          <button
+            onClick={() => {
+  setIsPaused(true);
+  void sendPublicMode("pause");
+}}
+            className="rounded-xl bg-red-600 px-6 py-4 text-lg font-bold text-white transition hover:bg-red-500"
+          >
+            STOP
+          </button>
+        </div>
+
+        <div className="min-h-0 flex-1 overflow-hidden">
+  <LyricsPlayer
+  key={`${currentSong.id}-${playbackResetKey}`}
+  song={currentSong}
+  stopped={isPaused}
+  publicScreenHidden={isPublicScreenHidden}
+/>
+          </div>
+      <div className="mb-2 flex items-center justify-between rounded-2xl border border-zinc-800 bg-zinc-900/60 px-6 py-4">
+  <div>
+    <p className="text-xs font-semibold uppercase tracking-[0.25em] text-zinc-500">
+      Prochain morceau
+    </p>
+
+    <p className="mt-1 text-xl font-bold text-zinc-100">
+      {nextSetlistSong ? nextSetlistSong.title : "Fin de la setlist"}
+    </p>
+  </div>
+
+  {nextSetlistSong && (
+    <div className="text-right text-sm text-zinc-500">
+      {nextSetlistSong.duration}
+    </div>
+  )}
+</div>
+
+<div className="mt-2 grid grid-cols-8 gap-3">
+  <button
+    type="button"
+    onClick={goToPreviousSong}
+    disabled={setlistPosition === 0}
+    className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 font-semibold disabled:opacity-30"
+  >
+    â—€ PrÃ©cÃ©dent
+  </button>
+
+  <button
+    type="button"
+    onClick={goToNextSong}
+    disabled={setlistPosition === setlistSongIds.length - 1}
+    className="rounded-xl bg-emerald-500 px-4 py-3 font-bold text-zinc-950 disabled:opacity-30"
+  >
+    Suivant â–¶
+  </button>
+
+  <button
+    type="button"
+    onClick={() => setIsSetlistOpen(true)}
+    className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 font-semibold"
+  >
+    Setlist
+  </button>
+
+  <button
+    type="button"
+    onClick={() => setIsSearchOpen(true)}
+    className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 font-semibold"
+  >
+    BibliothÃ¨que
+  </button>
+
+  <button
+    type="button"
+    onClick={() => setIsRequestsOpen(true)}
+    className={`rounded-xl border px-4 py-3 font-semibold ${
+      requestedSongIds.length > 0
+        ? "border-amber-700 bg-amber-950/30 text-amber-300"
+        : "border-zinc-700 bg-zinc-900"
+    }`}
+  >
+    Demandes ({requestedSongIds.length})
+  </button>
+
+<button
+  type="button"
+  onClick={() => setIsPublicMessageOpen(true)}
+  className="rounded-xl border border-amber-700 bg-amber-950/30 px-4 py-3 font-semibold text-amber-300"
+>
+  Message public
+</button>
+
+<button
+  type="button"
+  onClick={returnHome}
+  className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 font-semibold"
+>
+  Accueil
+</button>
+
+</div>
+</section>
+  {isSetlistOpen && (
+  <SongList
+    songs={setlistSongs}
+    setlistPosition={setlistPosition}
+    currentSongId={currentSong.id}
+    onSelectSong={async (setlistIndex) => {
+  const selectedSong = setlistSongs[setlistIndex];
+
+  if (!selectedSong) {
+    return;
+  }
+
+  const libraryIndex = songs.findIndex(
+    (song) => song.id === selectedSong.id
+  );
+
+  if (libraryIndex === -1) {
+    return;
+  }
+
+  setCurrentSongIndex(libraryIndex);
+  setPlaybackResetKey((key) => key + 1);
+
+  void prepareMontageForSong(selectedSong);
+
+  setSetlistPosition(setlistIndex);
+  setIsSetlistOpen(false);
+  setIsHomeMode(false);
+
+  await fetch("/api/live-state", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    cache: "no-store",
+    body: JSON.stringify({
+      mode: "song",
+
+      song: {
+        id: selectedSong.id,
+        title: selectedSong.title,
+        kind: selectedSong.kind ?? "vocal",
+        lyrics: selectedSong.lyrics,
+        lyricLines: selectedSong.lyricLines ?? [],
+        videoFile: selectedSong.videoFile,
+        videoMode: selectedSong.videoMode,
+        videoOffset: selectedSong.videoOffset,  
+        videoPlaybackMode: selectedSong.videoPlaybackMode,
+videoDuration: selectedSong.videoDuration,
+        needsLyricsSync:
+          selectedSong.needsLyricsSync === true,
+      },
+
+      elapsedTime: 0,
+      isPlaying: false,
+    }),
+  });
+}}
+    onMoveSong={(fromIndex, toIndex) => {
+      setSetlistSongIds((currentSetlist) => {
+        const newSetlist = [...currentSetlist];
+
+        const [movedSongId] = newSetlist.splice(fromIndex, 1);
+        newSetlist.splice(toIndex, 0, movedSongId);
+
+        const referenceSongId = currentSetlist[setlistPosition];
+        const newPosition = newSetlist.indexOf(referenceSongId);
+
+        if (newPosition !== -1) {
+          setSetlistPosition(newPosition);
+        }
+
+        return newSetlist;
+      });
+    }}
+onRemoveSong={(indexToRemove) => {
+  setSetlistSongIds((currentSetlist) => {
+    if (indexToRemove === setlistPosition) {
+      return currentSetlist;
+    }
+
+    const newSetlist = currentSetlist.filter(
+      (_, index) => index !== indexToRemove
+    );
+
+    if (indexToRemove < setlistPosition) {
+      setSetlistPosition((position) =>
+        Math.max(position - 1, 0)
+      );
+    }
+
+    return newSetlist;
+  });
+}}
+
+    onClose={() => setIsSetlistOpen(false)}
+  />
+)}
+
+{isSearchOpen && (
+  <button
+    type="button"
+    onClick={() => {
+setIsSearchOpen(false);
+setIsNewSongEditorOpen(true);
+    }}
+    className="fixed right-24 top-6 z-[100] rounded-xl bg-emerald-500 px-5 py-3 font-bold text-zinc-950 shadow-lg"
+  >
+    + Nouveau morceau
+  </button>
+)}
+
+{isSearchOpen && (
+  <SongSearch
+    songs={songs}
+    setlistSongIds={setlistSongIds}
+    requestedSongIds={requestedSongIds}
+    onPlayNow={(index) => {
+      setCurrentSongIndex(index);
+      setPlaybackResetKey((key) => key + 1);
+      const selectedSong = songs[index];
+
+if (selectedSong) {
+  void prepareMontageForSong(
+    selectedSong
+  );
+}
+
+      const selectedSongId = songs[index]?.id;
+      const setlistIndex = selectedSongId
+        ? setlistSongIds.indexOf(selectedSongId)
+        : -1;
+
+      if (setlistIndex !== -1) {
+        setSetlistPosition(setlistIndex);
+      }
+    }}
+    onPlayNext={(songId) => {
+      setSetlistSongIds((currentSetlist) => {
+        const withoutSong = currentSetlist.filter(
+          (id) => id !== songId
+        );
+
+        const currentSongId =
+          currentSetlist[setlistPosition];
+
+        const currentPosition =
+          withoutSong.indexOf(currentSongId);
+
+        const insertPosition =
+          currentPosition !== -1
+            ? currentPosition + 1
+            : Math.min(
+                setlistPosition + 1,
+                withoutSong.length
+              );
+
+        const newSetlist = [...withoutSong];
+
+        newSetlist.splice(
+          insertPosition,
+          0,
+          songId
+        );
+
+        return newSetlist;
+      });
+    }}
+    onAddToSetlist={(songId) => {
+      setSetlistSongIds((currentSetlist) => {
+        if (currentSetlist.includes(songId)) {
+          return currentSetlist;
+        }
+
+        return [...currentSetlist, songId];
+      });
+    }}
+    onRequestSong={(songId) => {
+  setRequestedSongIds((currentRequests) => {
+    if (currentRequests.includes(songId)) {
+      return currentRequests;
+    }
+
+    return [...currentRequests, songId];
+  });
+}}
+onEditSong={(index) => {
+  setCurrentSongIndex(index);
+  setIsSearchOpen(false);
+  setIsSongEditorOpen(true);
+}}
+
+onSyncSong={(index) => {
+  setCurrentSongIndex(index);
+  setIsSearchOpen(false);
+  setIsSyncEditorOpen(true);
+}}    
+
+onDeleteSong={(songId) => {
+  setSongs((currentSongs) =>
+    currentSongs.filter((song) => song.id !== songId)
+  );
+
+  setSetlistSongIds((currentIds) =>
+    currentIds.filter((id) => id !== songId)
+  );
+
+  setRequestedSongIds((currentIds) =>
+    currentIds.filter((id) => id !== songId)
+  );
+}}
+
+onClose={() => setIsSearchOpen(false)}
+  />
+)}
+
+{isRequestsOpen && (
+  <RequestsPanel
+    songs={songs}
+    requestedSongIds={requestedSongIds}
+    onPlayNow={(songId) => {
+      const libraryIndex = songs.findIndex(
+        (song) => song.id === songId
+      );
+
+      if (libraryIndex === -1) {
+        return;
+      }
+
+      setCurrentSongIndex(libraryIndex);
+
+      const setlistIndex = setlistSongIds.indexOf(songId);
+
+      if (setlistIndex !== -1) {
+        setSetlistPosition(setlistIndex);
+      }
+
+      setRequestedSongIds((currentRequests) =>
+        currentRequests.filter((id) => id !== songId)
+      );
+
+      setIsRequestsOpen(false);
+    }}
+    onPlayNext={(songId) => {
+      setSetlistSongIds((currentSetlist) => {
+        const currentSongId =
+          currentSetlist[setlistPosition];
+
+        const withoutSong = currentSetlist.filter(
+          (id) => id !== songId
+        );
+
+        const currentPosition =
+          withoutSong.indexOf(currentSongId);
+
+        const insertPosition =
+          currentPosition !== -1
+            ? currentPosition + 1
+            : Math.min(
+                setlistPosition + 1,
+                withoutSong.length
+              );
+
+        const newSetlist = [...withoutSong];
+
+        newSetlist.splice(
+          insertPosition,
+          0,
+          songId
+        );
+
+        return newSetlist;
+      });
+
+      setRequestedSongIds((currentRequests) =>
+        currentRequests.filter((id) => id !== songId)
+      );
+
+      setIsRequestsOpen(false);
+    }}
+    onRemoveRequest={(songId) => {
+      setRequestedSongIds((currentRequests) =>
+        currentRequests.filter((id) => id !== songId)
+      );
+    }}
+    
+    onMoveRequest={(fromIndex, toIndex) => {
+  setRequestedSongIds((currentRequests) => {
+    const newRequests = [...currentRequests];
+
+    const [movedSongId] = newRequests.splice(fromIndex, 1);
+    newRequests.splice(toIndex, 0, movedSongId);
+
+    return newRequests;
+  });
+}}
+    
+    onClose={() => setIsRequestsOpen(false)}
+  />
+)}
+
+{isPublicMessageOpen && (
+  <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/85 p-6">
+    <div className="w-full max-w-2xl rounded-3xl border border-amber-800 bg-zinc-950 p-6 text-zinc-100">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-amber-400">
+            G3 Live
+          </p>
+
+          <h2 className="mt-1 text-2xl font-bold">
+            Message public
+          </h2>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => setIsPublicMessageOpen(false)}
+          className="flex h-12 w-12 items-center justify-center rounded-xl border border-zinc-700 bg-zinc-900 text-2xl font-bold"
+        >
+          Ã—
+        </button>
+      </div>
+
+      <textarea
+        value={publicMessage}
+        onChange={(event) => setPublicMessage(event.target.value)}
+        placeholder="Ã‰crivez un message au publicâ€¦"
+        className="mt-6 min-h-36 w-full rounded-2xl border border-zinc-700 bg-zinc-900 p-5 text-2xl outline-none focus:border-amber-500"
+      />
+
+      <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+        {[
+          "Merci ! ðŸ™",
+          "Vous Ãªtes les meilleurs â¤ï¸",
+          "Je vous adore ðŸ˜",
+          "Bravo ðŸ‘",
+          "ðŸ”¥",
+          "ðŸŽ¶",
+          "â¤ï¸",
+          "On revient bientÃ´t ðŸŽ¹",
+        ].map((message) => (
+          <button
+            key={message}
+            type="button"
+            onClick={() => setPublicMessage(message)}
+            className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 text-sm font-semibold"
+          >
+            {message}
+          </button>
+        ))}
+      </div>
+
+      <div className="mt-6 grid grid-cols-2 gap-3">
+        <button
+          type="button"
+          onClick={() => {
+            showPublicMessage(publicMessage);
+            setIsPublicMessageOpen(false);
+          }}
+          disabled={!publicMessage.trim()}
+          className="rounded-xl bg-amber-400 px-6 py-4 text-lg font-bold text-zinc-950 disabled:opacity-30"
+        >
+          Envoyer
+        </button>
+
+        <button
+          type="button"
+          onClick={clearPublicMessage}
+          className="rounded-xl border border-zinc-700 bg-zinc-900 px-6 py-4 text-lg font-semibold"
+        >
+          Effacer lâ€™Ã©cran public
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
+{isAboutEditorOpen && (
+  <div className="fixed inset-0 z-[90] overflow-y-auto bg-black/90 p-6">
+    <div className="mx-auto w-full max-w-2xl rounded-3xl border border-zinc-700 bg-zinc-950 p-6 text-zinc-100">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-400">
+            G3 Live
+          </p>
+
+          <h2 className="mt-1 text-2xl font-bold">
+            Ã€ propos de moi
+          </h2>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => setIsAboutEditorOpen(false)}
+          className="flex h-12 w-12 items-center justify-center rounded-xl border border-zinc-700 bg-zinc-900 text-2xl font-bold"
+        >
+          Ã—
+        </button>
+      </div>
+
+      <div className="mt-6 grid gap-4">
+        <input
+          type="text"
+          value={aboutMe.name}
+          onChange={(event) =>
+            setAboutMe({
+              ...aboutMe,
+              name: event.target.value,
+            })
+          }
+          placeholder="Nom / nom de scÃ¨ne"
+          className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 outline-none focus:border-emerald-500"
+        />
+
+        <input
+          type="text"
+          value={aboutMe.headline}
+          onChange={(event) =>
+            setAboutMe({
+              ...aboutMe,
+              headline: event.target.value,
+            })
+          }
+          placeholder="Accroche"
+          className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 outline-none focus:border-emerald-500"
+        />
+
+        <textarea
+          value={aboutMe.bio}
+          onChange={(event) =>
+            setAboutMe({
+              ...aboutMe,
+              bio: event.target.value,
+            })
+          }
+          placeholder="PrÃ©sentation"
+          className="min-h-40 rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 outline-none focus:border-emerald-500"
+        />
+
+        <input
+          type="text"
+          value={aboutMe.instruments}
+          onChange={(event) =>
+            setAboutMe({
+              ...aboutMe,
+              instruments: event.target.value,
+            })
+          }
+          placeholder="Instruments"
+          className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 outline-none focus:border-emerald-500"
+        />
+
+        <input
+          type="text"
+          value={aboutMe.website}
+          onChange={(event) =>
+            setAboutMe({
+              ...aboutMe,
+              website: event.target.value,
+            })
+          }
+          placeholder="Site web"
+          className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 outline-none focus:border-emerald-500"
+        />
+
+        <input
+          type="text"
+          value={aboutMe.instagram}
+          onChange={(event) =>
+            setAboutMe({
+              ...aboutMe,
+              instagram: event.target.value,
+            })
+          }
+          placeholder="Instagram"
+          className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 outline-none focus:border-emerald-500"
+        />
+
+        <input
+          type="text"
+          value={aboutMe.facebook}
+          onChange={(event) =>
+            setAboutMe({
+              ...aboutMe,
+              facebook: event.target.value,
+            })
+          }
+          placeholder="Facebook"
+          className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 outline-none focus:border-emerald-500"
+        />
+      </div>
+
+      <button
+        type="button"
+        onClick={() => setIsAboutEditorOpen(false)}
+        className="mt-6 w-full rounded-xl bg-emerald-500 px-6 py-4 text-lg font-bold text-zinc-950"
+      >
+        Enregistrer
+      </button>
+    </div>
+  </div>
+)}
+
+
+{isNewSongEditorOpen && (
+  <NewSongEditor
+    onClose={() => setIsNewSongEditorOpen(false)}
+    onSave={(newSong) => {
+      setSongs((currentSongs) => [...currentSongs, newSong]);
+
+      setCurrentSongIndex(songs.length);
+      setIsNewSongEditorOpen(false);
+    }}
+  />
+)}
+
+{isSongEditorOpen && (
+  <SongEditor
+    song={currentSong}
+    onClose={() => setIsSongEditorOpen(false)}
+    onSave={(updatedSong) => {
+      setSongs((currentSongs) =>
+        currentSongs.map((song, index) =>
+          index === currentSongIndex ? updatedSong : song
+        )
+      );
+
+      setIsSongEditorOpen(false);
+    }}
+  />
+)}
+{isSyncEditorOpen && (
+  <div className="fixed inset-0 z-[70] overflow-y-auto bg-black/90 p-6">
+    <div className="mx-auto max-w-4xl">
+      <div className="mb-4 flex justify-end">
+        <button
+          type="button"
+          onClick={() => setIsSyncEditorOpen(false)}
+          className="rounded-xl border border-zinc-700 bg-zinc-900 px-5 py-3 font-semibold"
+        >
+          Fermer
+        </button>
+      </div>
+
+      <LyricsSyncEditor
+        song={currentSong}
+        onValidate={(times) => {
+          setSongs((currentSongs) =>
+            currentSongs.map((song, index) => {
+              if (index !== currentSongIndex || !song.lyricLines) {
+                 return song;
+            }
+
+            return {
+              ...song,
+              lyricLines: song.lyricLines.map((line, lineIndex) => ({
+                ...line,
+                time: times[lineIndex],
+              })),
+              needsLyricsSync: false,
+           };
+         })
+      );
+
+     setIsSyncEditorOpen(false);
+  }}
+/>
+    </div>
+  </div>
+)}
+
+      {isPaused && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-6">
+    <div className="w-full max-w-2xl rounded-3xl border border-zinc-700 bg-zinc-900 p-8">
+      <div className="text-center">
+        <p className="text-sm font-semibold uppercase tracking-[0.3em] text-red-400">
+          Spectacle interrompu
+        </p>
+
+        <h2 className="mt-4 text-4xl font-bold">
+          {currentSong.title}
+        </h2>
+
+        <p className="mt-4 text-zinc-400">
+          GreenBridge Live a conservÃ© le morceau courant et la position du spectacle.
+        </p>
+      </div>
+
+      <div className="mt-8 grid grid-cols-2 gap-4">
+        <button
+          type="button"
+          onClick={() => {
+  setIsPaused(false);
+  void sendPublicMode("song");
+}}
+          className="rounded-xl bg-emerald-500 px-6 py-5 text-lg font-bold text-zinc-950"
+        >
+          â–¶ Reprendre
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+  setPlaybackResetKey((value) => value + 1);
+  setIsPaused(false);
+}}
+          className="rounded-xl border border-zinc-700 bg-zinc-950 px-6 py-5 text-lg font-semibold"
+        >
+          â†º Recommencer
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            setIsPaused(false);
+            setIsSetlistOpen(true);
+          }}
+          className="rounded-xl border border-zinc-700 bg-zinc-950 px-6 py-5 text-lg font-semibold"
+        >
+          Choisir un autre titre
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            setIsPaused(false);
+            void sendPublicMode("end");
+          }}
+          className="rounded-xl border border-red-700 bg-red-950/40 px-6 py-5 text-lg font-semibold text-red-300"
+        >
+          ðŸ Terminer le spectacle
+        </button>
+      </div>
+
+      <p className="mt-6 text-center text-sm text-zinc-500">
+        Aucune dÃ©cision nâ€™est imposÃ©e. Vous pouvez reprendre quand vous le souhaitez.
+      </p>
+    </div>
+  </div>
+)}
+
+    </main>
+  );
+}
+
+

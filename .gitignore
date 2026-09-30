@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Vidéo trop volumineuse pour GitHub
+public/etunjourunefemme.mp4

@@ -50,6 +50,7 @@ const [audioFile, setAudioFile] = useState(
 const [audioVolume, setAudioVolume] = useState(
   song.audioVolume ?? 1
 );
+
 const [videoFile, setVideoFile] = useState(
   song.videoFile ?? ""
 );
@@ -149,7 +150,7 @@ useEffect(() => {
         : false,
       audioFile: audioFile.trim() || undefined,
       audioVolume,
-      videoFile: videoFile.trim() || undefined,
+            videoFile: videoFile.trim() || undefined,
 videoMode: videoFile.trim()
   ? videoMode || "video"
   : undefined,
@@ -439,6 +440,7 @@ videoDuration:
   className="mt-3 w-full"
 />
 </div>
+
 
   {audioFile.trim() && (
     <audio

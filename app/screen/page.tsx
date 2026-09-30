@@ -27,6 +27,7 @@ type LiveState = {
   elapsedTime: number;
   isPlaying: boolean;
   playbackEnded?: boolean;
+  videoVolume: number;
   message: string;
   messageUpdatedAt: number;
   updatedAt: number;
@@ -47,6 +48,7 @@ export default function ScreenPage() {
     song: null,
     elapsedTime: 0,
     isPlaying: false,
+    videoVolume: 0.25,
     message: "",
     messageUpdatedAt: 0,
     updatedAt: 0,
@@ -56,11 +58,51 @@ export default function ScreenPage() {
 const [isMessageVisible, setIsMessageVisible] = useState(false);
 const [lyricsFinished, setLyricsFinished] = useState(false);
 const [djVideoIndex, setDjVideoIndex] = useState(0);
+const [coupParfaitCountdown, setCoupParfaitCountdown] = useState<
+  number | "go"
+>(3);
+const [coupParfaitVideoEnded, setCoupParfaitVideoEnded] = useState(false);
   const clockStartRef = useRef<number | null>(null);
   const clockBaseRef = useRef(0);
 const lastMessageUpdatedAtRef = useRef(0);
 const songHasPlayedRef = useRef(false);
 const videoRef = useRef<HTMLVideoElement | null>(null);
+const coupParfaitVideoRef = useRef<HTMLVideoElement | null>(null);
+const coupParfaitSongVideoRef = useRef<HTMLVideoElement | null>(null);
+useEffect(() => {
+  if (coupParfaitVideoRef.current) {
+    coupParfaitVideoRef.current.volume = liveState.videoVolume ?? 0.25;
+  }
+  if (coupParfaitSongVideoRef.current) {
+    coupParfaitSongVideoRef.current.volume = liveState.videoVolume ?? 0.25;
+  }
+}, [liveState.videoVolume, liveState.mode]);
+useEffect(() => {
+  if (liveState.mode !== "coup-parfait-ready") {
+    setCoupParfaitCountdown(3);
+    return;
+  }
+setCoupParfaitVideoEnded(false);
+  setCoupParfaitCountdown(3);
+
+  const timer2 = window.setTimeout(() => {
+    setCoupParfaitCountdown(2);
+  }, 1000);
+
+  const timer1 = window.setTimeout(() => {
+    setCoupParfaitCountdown(1);
+  }, 2000);
+
+  const timerGo = window.setTimeout(() => {
+    setCoupParfaitCountdown("go");
+  }, 3000);
+
+  return () => {
+    window.clearTimeout(timer2);
+    window.clearTimeout(timer1);
+    window.clearTimeout(timerGo);
+  };
+}, [liveState.mode]);
 useEffect(() => {
   if (liveState.mode !== "dj") {
     return;
@@ -165,10 +207,16 @@ useEffect(() => {
     let eventSource: EventSource | null = null;
 
     async function loadInitialState() {
-      try {
-        const response = await fetch("/api/live-state", {
-          cache: "no-store",
-        });
+  try {
+    const response = await fetch("/api/live-state", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        mode: "home",
+      }),
+    });
 
         if (!response.ok) return;
 
@@ -392,7 +440,114 @@ const hideLyricDuringLongGap =
 
   return (
     <main className="h-screen w-screen overflow-hidden bg-black text-white">
-      {showWelcome ? (
+      {liveState.mode === "coup-parfait-success" ? (
+  <div className="flex h-full w-full flex-col items-center justify-center bg-black px-12 text-center">
+    <p className="animate-bounce text-[12rem] leading-none">
+  🎉
+</p>
+
+    <h1 className="mt-8 animate-pulse text-8xl font-black text-emerald-400">
+      COUP PARFAIT !
+    </h1>
+
+    <p className="mt-8 text-4xl font-bold text-white">
+      🥁 INCROYABLE !
+    </p>
+  </div>
+) : liveState.mode === "coup-parfait-fail" ? (
+  <div className="flex h-full w-full flex-col items-center justify-center bg-black px-12 text-center">
+    <p className="animate-bounce text-[12rem] leading-none">
+  😬
+</p>
+
+    <h1 className="mt-8 animate-pulse text-8xl font-black text-red-500">
+      RATÉ !
+    </h1>
+
+    <p className="mt-8 text-4xl font-bold text-white">
+      Presque... mais pas cette fois !
+    </p>
+  </div>
+) : liveState.mode === "coup-parfait-ready" ? (
+  <div className="flex h-full w-full flex-col items-center justify-center bg-black text-center">
+    {coupParfaitCountdown === "go" ? (
+      coupParfaitVideoEnded ? (
+        <div className="flex h-full w-full flex-col items-center justify-center text-center">
+          <p className="text-8xl font-black text-orange-400">
+            🥁 ALORS ?
+          </p>
+
+          <p className="mt-10 text-5xl font-bold text-white">
+            COUP PARFAIT OU RATÉ ?
+          </p>
+        </div>
+      ) : (
+        <video
+          ref={coupParfaitSongVideoRef}
+          src="/Le-Coup-Parfait-Morceau-V1.mp4"
+          autoPlay
+          playsInline
+          onPlay={(event) => {
+            event.currentTarget.volume = liveState.videoVolume ?? 0.25;
+          }}
+          onEnded={() => {
+            setCoupParfaitVideoEnded(true);
+          }}
+          className="h-full w-full object-contain"
+        />
+      )
+    ) : (
+      <>
+        <p className="text-3xl font-bold uppercase tracking-[0.3em] text-orange-400">
+          LE COUP PARFAIT
+        </p>
+
+        <p className="mt-8 text-[14rem] font-black leading-none text-white">
+          {coupParfaitCountdown}
+        </p>
+      </>
+    )}
+  </div>
+  ) : liveState.mode === "coup-parfait" ? (
+  <div className="flex h-full w-full flex-col items-center justify-center bg-black px-12 text-center">
+    <p className="text-3xl font-bold uppercase tracking-[0.35em] text-orange-400">
+      G3 LIVE PRÉSENTE
+    </p>
+
+    <h1 className="mt-8 text-8xl font-black text-white">
+      🥁 LE COUP PARFAIT
+    </h1>
+
+    <p className="mt-10 text-5xl font-bold text-orange-400">
+      UNE BAGUETTE. UN TOM. UN SEUL COUP.
+    </p>
+
+    <p className="mt-14 text-3xl text-zinc-300">
+      Qui réussira le coup parfait ?
+    </p>
+  </div>
+) : liveState.mode === "coup-parfait-tuto" ? (
+  <div className="h-full w-full overflow-hidden bg-black">
+    <video
+      ref={coupParfaitVideoRef}
+  src="/Le-Coup-Parfait-Tuto-V1.mp4"
+  autoPlay
+    playsInline
+    onEnded={() => {
+    void fetch("/api/live-state", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        mode: "home",
+      }),
+    });
+  }}
+  className="h-full w-full object-contain"
+/>
+  </div>
+) : showWelcome ? (
   <div className="flex h-full w-full items-center justify-center bg-black p-8">
     <img
       src="/g3-live-logo.png"

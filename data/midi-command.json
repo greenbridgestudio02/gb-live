@@ -1,0 +1,9 @@
+{
+  "type": "program-change",
+  "outputName": "Microsoft GS Wavetable Synth",
+  "channel": 1,
+  "msb": 62,
+  "lsb": 0,
+  "program": 3,
+  "timestamp": 1790796253838
+}

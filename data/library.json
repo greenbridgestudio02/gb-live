@@ -5,289 +5,289 @@
       "title": "Mistral Gagnant - Renaud",
       "duration": "00:00",
       "description": "Morceau chanté",
-      "stageNotes": "",
+      "stageNotes": "1 - commencer intro au piano seul\n2 - lancer les paroles (début direct sur couplet)",
       "nextAction": "Préparer la transition vers « Entre deux rives ».",
       "lyrics": "A m’asseoir sur un banc\n\nCinq minutes avec toi\n\nEt regarder les gens\n\nTant qu'y en a\n\nTe parler du bon temps\n\nQu'est mort ou qui r'viendra\n\nEn serrant dans ma main\n\nTes p'tits doigts\n\nPis donner à bouffer\n\nA des pigeons idiots\n\nLeur filer des coups d'pied\n\nPour de faux\n\nEt entendre ton rire\n\nQui lézarde les murs\n\nQui sait surtout guérir\n\nMes blessures\n\nTe raconter un peu\n\nComment j'étais mino\n\nLes bombecs fabuleux\n\nQu'on piquait chez l'marchand\n\nCar-en-sac et minthos\n\nCaramels à un franc\n\nEt les mistral gagnants\n\nAh marcher sous la pluie\n\nCinq minutes avec toi\n\nEt regarder la vie\n\nTant qu'y en a\n\nTe raconter la Terre\n\nEn te bouffant des yeux\n\nTe parler de ta mère\n\nUn p'tit peu\n\nEt sauter dans les flaques\n\nPour la faire râler\n\nBousiller nos godasses\n\nEt s'marrer\n\nEt entendre ton rire\n\nComme on entend la mer\n\nS'arrêter repartir\n\nEn arrière\n\nTe raconter surtout\n\nLes carambars d'antan\n\nEt et les coco-boërs\n\nEt les vrais roudoudous\n\nQui nous coupaient les lèvres\n\nEt nous niquaient les dents\n\nEt les mistral gagnants\n\nA m’asseoir sur un banc\n\nCinq minutes avec toi\n\nRegarder le soleil\n\nQui s'en va\n\nTe parler du bon temps\n\nQu'est mort et je m'en fous\n\nTe dire que les méchants\n\nC'est pas nous\n\nQue si moi je suis barge\n\nCe n'est que de tes yeux\n\nCar ils ont l'avantage\n\nD'être deux\n\nEt entendre ton rire\n\nS'envoler aussi haut\n\nQue s'envolent les cris\n\nDes oiseaux\n\nTe raconter enfin\n\nQu'il faut aimer la vie\n\nEt l'aimer même si\n\nLe temps est assassin\n\nEt emporte avec lui\n\nLes rires des enfants\n\nEt les mistral gagnants\n\nEt les mistral gagnants",
       "lyricLines": [
         {
           "text": "A m’asseoir sur un banc",
-          "time": 0.802
+          "time": 0.871
         },
         {
           "text": "Cinq minutes avec toi",
-          "time": 2.411
+          "time": 2.5047999999821187
         },
         {
           "text": "Et regarder les gens",
-          "time": 3.909
+          "time": 3.8752999999821185
         },
         {
           "text": "Tant qu'y en a",
-          "time": 4.902
+          "time": 4.890899999976158
         },
         {
           "text": "Te parler du bon temps",
-          "time": 7.143
+          "time": 7.016699999988079
         },
         {
           "text": "Qu'est mort ou qui r'viendra",
-          "time": 8.59
+          "time": 8.324799999982119
         },
         {
           "text": "En serrant dans ma main",
-          "time": 10.34100000000003
+          "time": 9.878299999982119
         },
         {
           "text": "Tes p'tits doigts",
-          "time": 11.391
+          "time": 10.8585
         },
         {
           "text": "Pis donner à bouffer",
-          "time": 13.462
+          "time": 13.048399999976159
         },
         {
           "text": "A des pigeons idiots",
-          "time": 15.058
+          "time": 14.41669999998808
         },
         {
           "text": "Leur filer des coups d'pied",
-          "time": 16.717
+          "time": 15.890799999982118
         },
         {
           "text": "Pour de faux",
-          "time": 17.894
+          "time": 16.81909999999404
         },
         {
           "text": "Et entendre ton rire",
-          "time": 19.969
+          "time": 19.00089999997616
         },
         {
           "text": "Qui lézarde les murs",
-          "time": 21.493
+          "time": 20.300199999988077
         },
         {
           "text": "Qui sait surtout guérir",
-          "time": 22.669
+          "time": 21.671
         },
         {
           "text": "Mes blessures",
-          "time": 24.035
+          "time": 22.79719999998808
         },
         {
           "text": "Te raconter un peu",
-          "time": 26.444
+          "time": 25.097
         },
         {
           "text": "Comment j'étais mino",
-          "time": 27.605
+          "time": 26.30829999998212
         },
         {
           "text": "Les bombecs fabuleux",
-          "time": 29.19200000000003
+          "time": 27.710199999988077
         },
         {
           "text": "Qu'on piquait chez l'marchand",
-          "time": 31.846
+          "time": 30.63489999997616
         },
         {
           "text": "Car-en-sac et minthos",
-          "time": 33.376
+          "time": 31.8065
         },
         {
           "text": "Caramels à un franc",
-          "time": 34.763
+          "time": 33.16059999999404
         },
         {
           "text": "Et les mistral gagnants",
-          "time": 37.375
+          "time": 35.92209999999404
         },
         {
           "text": "Ah marcher sous la pluie",
-          "time": 42.194
+          "time": 40.37459999999404
         },
         {
           "text": "Cinq minutes avec toi",
-          "time": 43.846
+          "time": 41.59279999998212
         },
         {
           "text": "Et regarder la vie",
-          "time": 45.213
+          "time": 42.91019999998808
         },
         {
           "text": "Tant qu'y en a",
-          "time": 46.28700000000003
+          "time": 43.97679999998212
         },
         {
           "text": "Te raconter la Terre",
-          "time": 48.599
+          "time": 46.07139999997616
         },
         {
           "text": "En te bouffant des yeux",
-          "time": 49.99600000000003
+          "time": 47.34279999998212
         },
         {
           "text": "Te parler de ta mère",
-          "time": 51.36500000000003
+          "time": 48.676799999982116
         },
         {
           "text": "Un p'tit peu",
-          "time": 52.445
+          "time": 49.86509999999404
         },
         {
           "text": "Et sauter dans les flaques",
-          "time": 54.776
+          "time": 51.95629999998212
         },
         {
           "text": "Pour la faire râler",
-          "time": 56.261
+          "time": 53.26279999998212
         },
         {
           "text": "Bousiller nos godasses",
-          "time": 57.742
+          "time": 54.82
         },
         {
           "text": "Et s'marrer",
-          "time": 58.95400000000003
+          "time": 55.91489999997616
         },
         {
           "text": "Et entendre ton rire",
-          "time": 61.161
+          "time": 58.007299999982116
         },
         {
           "text": "Comme on entend la mer",
-          "time": 62.59700000000003
+          "time": 59.31059999999404
         },
         {
           "text": "S'arrêter repartir",
-          "time": 63.97800000000003
+          "time": 60.65239999997616
         },
         {
           "text": "En arrière",
-          "time": 65.36
+          "time": 61.939
         },
         {
           "text": "Te raconter surtout",
-          "time": 67.57
+          "time": 64.00259999999403
         },
         {
           "text": "Les carambars d'antan",
-          "time": 68.981
+          "time": 65.453
         },
         {
           "text": "Et et les coco-boërs",
-          "time": 70.463
+          "time": 66.79269999998807
         },
         {
           "text": "Et les vrais roudoudous",
-          "time": 73.153
+          "time": 69.41859999999404
         },
         {
           "text": "Qui nous coupaient les lèvres",
-          "time": 74.577
+          "time": 70.7835
         },
         {
           "text": "Et nous niquaient les dents",
-          "time": 75.971
+          "time": 72.02679999998212
         },
         {
           "text": "Et les mistral gagnants",
-          "time": 78.8
+          "time": 74.68519999998809
         },
         {
           "text": "A m’asseoir sur un banc",
-          "time": 95.971
+          "time": 90.42679999998212
         },
         {
           "text": "Cinq minutes avec toi",
-          "time": 97.164
+          "time": 92.03089999997616
         },
         {
           "text": "Regarder le soleil",
-          "time": 98.642
+          "time": 93.50059999999404
         },
         {
           "text": "Qui s'en va",
-          "time": 99.799
+          "time": 94.53439999997616
         },
         {
           "text": "Te parler du bon temps",
-          "time": 101.965
+          "time": 96.629
         },
         {
           "text": "Qu'est mort et je m'en fous",
-          "time": 103.202
+          "time": 97.86489999997616
         },
         {
           "text": "Te dire que les méchants",
-          "time": 104.883
+          "time": 99.26869999998807
         },
         {
           "text": "C'est pas nous",
-          "time": 106.093
+          "time": 100.49259999999404
         },
         {
           "text": "Que si moi je suis barge",
-          "time": 108.269
+          "time": 102.61229999998211
         },
         {
           "text": "Ce n'est que de tes yeux",
-          "time": 109.736
+          "time": 103.94429999998212
         },
         {
           "text": "Car ils ont l'avantage",
-          "time": 111.26
+          "time": 105.35489999997615
         },
         {
           "text": "D'être deux",
-          "time": 112.421
+          "time": 106.53239999997616
         },
         {
           "text": "Et entendre ton rire",
-          "time": 114.667
+          "time": 108.62619999998807
         },
         {
           "text": "S'envoler aussi haut",
-          "time": 116.151
+          "time": 109.91819999998808
         },
         {
           "text": "Que s'envolent les cris",
-          "time": 117.586
+          "time": 111.32279999998212
         },
         {
           "text": "Des oiseaux",
-          "time": 118.801
+          "time": 112.427
         },
         {
           "text": "Te raconter enfin",
-          "time": 120.926
+          "time": 114.59059999999404
         },
         {
           "text": "Qu'il faut aimer la vie",
-          "time": 122.408
+          "time": 115.7665
         },
         {
           "text": "Et l'aimer même si",
-          "time": 123.868
+          "time": 117.2045
         },
         {
           "text": "Le temps est assassin",
-          "time": 126.507
+          "time": 119.81619999998807
         },
         {
           "text": "Et emporte avec lui",
-          "time": 128.02
+          "time": 121.10829999998212
         },
         {
           "text": "Les rires des enfants",
-          "time": 129.387
+          "time": 122.55869999998808
         },
         {
           "text": "Et les mistral gagnants",
-          "time": 132.286
+          "time": 125.25869999998808
         },
         {
           "text": "Et les mistral gagnants",
-          "time": 135.337
+          "time": 127.99659999999405
         }
       ],
       "needsLyricsSync": false,
@@ -303,7 +303,11 @@
         "liveSetBank": 1,
         "liveSetPage": 1,
         "liveSetSlot": 7
-      }
+      },
+      "videoFile": "/mistralgagnant.mp4",
+      "videoMode": "video-lyrics",
+      "videoOffset": -16.4,
+      "videoPlaybackMode": "sync"
     },
     {
       "id": "entre-deux-rives",
@@ -499,6 +503,9 @@
       ],
       "needsLyricsSync": false,
       "audioFile": "/audio/Piano-monamour.wav",
+      "videoFile": "/monamour.mp4",
+      "videoMode": "video-lyrics",
+      "videoOffset": 0,
       "audioVolume": 0.25,
       "montage": {
         "enabled": true,
@@ -670,7 +677,11 @@
         "liveSetSlot": 16
       },
       "audioFile": "/audio/piano-mman.wav",
-      "audioVolume": 0.15
+      "audioVolume": 0.15,
+      "videoFile": "/mman.mp4",
+      "videoMode": "video-lyrics",
+      "videoOffset": 0,
+      "videoPlaybackMode": "sync"
     },
     {
       "id": "final",
@@ -679,88 +690,236 @@
       "description": "Morceau chanté",
       "stageNotes": "",
       "nextAction": "Fin du spectacle.",
-      "lyrics": "J'avais dessiné sur le sable\n\nSon doux visage qui me souriait\n\nPuis il a plu sur cette plage\n\nDans cet orage, elle a disparu\n\nEt j'ai crié, crié, Aline, pour qu'elle revienne\n\nEt j'ai pleuré, pleuré, oh! j'avais trop de peine\n\nJe me suis assis aurès de son âme\n\nMais la belle dame s'était enfuie\n\nJe l'ai cherchée sans plus y croire\n\nEt sans un espoir, pour me guider\n\nEt j'ai crié, crié, Aline, pour qu'elle revienne\n\nEt j'ai pleuré, pleuré, oh! j'avais trop de peine\n\nJe n'ai gardé que ce doux visage\n\nComme une épave sur le sable mouillé\n\nEt j'ai crié, crié, Aline, pour qu'elle revienne\n\nEt j'ai pleuré, pleuré, oh! j'avais trop de peine\n\nEt j'ai crié, crié, Aline, pour qu'elle revienne\n\nEt j'ai pleuré, pleuré, oh! j'avais trop de peine\n\nEt j’ai crié, crié, Aline, pour qu’elle revienne\n\nAline",
+      "lyrics": "J'avais dessiné\n\nSur le sable\n\nSon doux visage\n\nQui me souriait\n\nPuis il a plu\n\nSur cette plage\n\nDans cet orage\n\nElle a disparu\n\nEt j'ai crié\n\nCrié\n\nAline\n\nPour qu'elle revienne\n\nEt j'ai pleuré\n\nPleuré\n\nOh! j'avais\n\nTrop de peine\n\nJe me suis assis\n\nAuprès de son âme\n\nMais la belle dame\n\nS'était enfuie\n\nJe l'ai cherchée\n\nSans plus y croire\n\nEt sans un espoir\n\nPour me guider\n\nEt j'ai crié\n\nCrié\n\nAline\n\nPour qu'elle revienne\n\nEt j'ai pleuré\n\nPleuré\n\nOh! j'avais\n\nTrop de peine\n\nJe n'ai gardé\n\nQue ce doux visage\n\nComme une épave\n\nSur le sable mouillé\n\nEt j'ai crié\n\nCrié\n\nAline\n\nPour qu'elle revienne\n\nEt j'ai pleuré\n\nPleuré\n\nOh! j'avais\n\nTrop de peine\n\nEt j'ai crié\n\nCrié\n\nAline\n\nPour qu'elle revienne\n\nEt j'ai pleuré\n\nPleuré\n\nOh! j'avais\n\nTrop de peine\n\nEt j’ai crié\n\nCrié\n\nAline\n\nPour qu’elle revienne\n\nAline",
       "kind": "vocal",
       "lyricLines": [
         {
-          "text": "J'avais dessiné sur le sable",
-          "time": 14.930999999999884
+          "text": "J'avais dessiné",
+          "time": 14.7935
         },
         {
-          "text": "Son doux visage qui me souriait",
-          "time": 23.219999999999885
+          "text": "Sur le sable",
+          "time": 19.54920000001788
         },
         {
-          "text": "Puis il a plu sur cette plage",
-          "time": 31.291999999999884
+          "text": "Son doux visage",
+          "time": 23.089
         },
         {
-          "text": "Dans cet orage, elle a disparu",
-          "time": 39.41099999999988
+          "text": "Qui me souriait",
+          "time": 26.8435
         },
         {
-          "text": "Et j'ai crié, crié, Aline, pour qu'elle revienne",
-          "time": 47.59999999999988
+          "text": "Puis il a plu",
+          "time": 31.08120000001788
         },
         {
-          "text": "Et j'ai pleuré, pleuré, oh! j'avais trop de peine",
-          "time": 55.878999999999884
+          "text": "Sur cette plage",
+          "time": 34.99690000000596
         },
         {
-          "text": "Je me suis assis aurès de son âme",
-          "time": 63.661999999999885
+          "text": "Dans cet orage",
+          "time": 39.19360000002384
         },
         {
-          "text": "Mais la belle dame s'était enfuie",
-          "time": 71.91599999999988
+          "text": "Elle a disparu",
+          "time": 43.35360000002384
         },
         {
-          "text": "Je l'ai cherchée sans plus y croire",
-          "time": 80.029
+          "text": "Et j'ai crié",
+          "time": 47.773100000023845
         },
         {
-          "text": "Et sans un espoir, pour me guider",
-          "time": 87.97999999999989
-        },
-        {
-          "text": "Et j'ai crié, crié, Aline, pour qu'elle revienne",
-          "time": 96.32199999999989
-        },
-        {
-          "text": "Et j'ai pleuré, pleuré, oh! j'avais trop de peine",
-          "time": 104.58599999999988
-        },
-        {
-          "text": "Je n'ai gardé que ce doux visage",
-          "time": 112.64199999999988
-        },
-        {
-          "text": "Comme une épave sur le sable mouillé",
-          "time": 120.755
-        },
-        {
-          "text": "Et j'ai crié, crié, Aline, pour qu'elle revienne",
-          "time": 128.9109999999999
-        },
-        {
-          "text": "Et j'ai pleuré, pleuré, oh! j'avais trop de peine",
-          "time": 137.226
-        },
-        {
-          "text": "Et j'ai crié, crié, Aline, pour qu'elle revienne",
-          "time": 145.34899999999988
-        },
-        {
-          "text": "Et j'ai pleuré, pleuré, oh! j'avais trop de peine",
-          "time": 153.49099999999987
-        },
-        {
-          "text": "Et j’ai crié, crié, Aline, pour qu’elle revienne",
-          "time": 161.46399999999988
+          "text": "Crié",
+          "time": 50.40310000002384
         },
         {
           "text": "Aline",
-          "time": 169.49199999999988
+          "time": 52.4995
+        },
+        {
+          "text": "Pour qu'elle revienne",
+          "time": 53.549600000023844
+        },
+        {
+          "text": "Et j'ai pleuré",
+          "time": 55.79740000000596
+        },
+        {
+          "text": "Pleuré",
+          "time": 58.3895
+        },
+        {
+          "text": "Oh! j'avais",
+          "time": 60.37980000001192
+        },
+        {
+          "text": "Trop de peine",
+          "time": 62.26
+        },
+        {
+          "text": "Je me suis assis",
+          "time": 63.55960000002384
+        },
+        {
+          "text": "Auprès de son âme",
+          "time": 67.707
+        },
+        {
+          "text": "Mais la belle dame",
+          "time": 71.72340000000597
+        },
+        {
+          "text": "S'était enfuie",
+          "time": 75.8495
+        },
+        {
+          "text": "Je l'ai cherchée",
+          "time": 79.88510000002384
+        },
+        {
+          "text": "Sans plus y croire",
+          "time": 83.8655
+        },
+        {
+          "text": "Et sans un espoir",
+          "time": 87.93110000002385
+        },
+        {
+          "text": "Pour me guider",
+          "time": 92.05540000000596
+        },
+        {
+          "text": "Et j'ai crié",
+          "time": 96.16730000001192
+        },
+        {
+          "text": "Crié",
+          "time": 98.9255
+        },
+        {
+          "text": "Aline",
+          "time": 100.94690000000595
+        },
+        {
+          "text": "Pour qu'elle revienne",
+          "time": 102.14730000001192
+        },
+        {
+          "text": "Et j'ai pleuré",
+          "time": 104.62380000001193
+        },
+        {
+          "text": "Pleuré",
+          "time": 107.25120000001787
+        },
+        {
+          "text": "Oh! j'avais",
+          "time": 109.20540000000597
+        },
+        {
+          "text": "Trop de peine",
+          "time": 111.05920000001788
+        },
+        {
+          "text": "Je n'ai gardé",
+          "time": 112.54740000000596
+        },
+        {
+          "text": "Que ce doux visage",
+          "time": 116.51510000002384
+        },
+        {
+          "text": "Comme une épave",
+          "time": 120.722
+        },
+        {
+          "text": "Sur le sable mouillé",
+          "time": 124.58680000001192
+        },
+        {
+          "text": "Et j'ai crié",
+          "time": 128.909
+        },
+        {
+          "text": "Crié",
+          "time": 131.731
+        },
+        {
+          "text": "Aline",
+          "time": 133.6798000000119
+        },
+        {
+          "text": "Pour qu'elle revienne",
+          "time": 135.0235
+        },
+        {
+          "text": "Et j'ai pleuré",
+          "time": 137.28340000000597
+        },
+        {
+          "text": "Pleuré",
+          "time": 139.78110000002386
+        },
+        {
+          "text": "Oh! j'avais",
+          "time": 141.67360000002384
+        },
+        {
+          "text": "Trop de peine",
+          "time": 143.57790000000597
+        },
+        {
+          "text": "Et j'ai crié",
+          "time": 145.16970000001788
+        },
+        {
+          "text": "Crié",
+          "time": 147.83920000001788
+        },
+        {
+          "text": "Aline",
+          "time": 149.67620000001787
+        },
+        {
+          "text": "Pour qu'elle revienne",
+          "time": 151.0915
+        },
+        {
+          "text": "Et j'ai pleuré",
+          "time": 153.4753000000119
+        },
+        {
+          "text": "Pleuré",
+          "time": 156.0115
+        },
+        {
+          "text": "Oh! j'avais",
+          "time": 158.037
+        },
+        {
+          "text": "Trop de peine",
+          "time": 159.88310000002383
+        },
+        {
+          "text": "Et j’ai crié",
+          "time": 161.54760000002383
+        },
+        {
+          "text": "Crié",
+          "time": 164.10490000000596
+        },
+        {
+          "text": "Aline",
+          "time": 166.1177000000179
+        },
+        {
+          "text": "Pour qu’elle revienne",
+          "time": 167.55720000001787
+        },
+        {
+          "text": "Aline",
+          "time": 169.543
         }
       ],
       "needsLyricsSync": false,
@@ -775,7 +934,11 @@
         "liveSetBank": 1,
         "liveSetPage": 2,
         "liveSetSlot": 15
-      }
+      },
+      "videoFile": "/aline.mp4",
+      "videoMode": "video-lyrics",
+      "videoOffset": 0,
+      "videoPlaybackMode": "sync"
     },
     {
       "id": "test-creation-morceau",
@@ -975,12 +1138,15 @@
         "enabled": true,
         "channel": 1,
         "bankMsb": 62,
-        "bankLsb": 2,
+        "bankLsb": 0,
         "program": 3,
         "liveSetBank": 1,
-        "liveSetPage": 3,
+        "liveSetPage": 1,
         "liveSetSlot": 4
-      }
+      },
+      "videoFile": "/labas.mp4",
+      "videoMode": "video-lyrics",
+      "videoOffset": -6.3
     },
     {
       "id": "la-maison-bleue",
@@ -1410,7 +1576,12 @@
         "liveSetBank": 1,
         "liveSetPage": 1,
         "liveSetSlot": 3
-      }
+      },
+      "videoFile": "/etunjourunefemme.mp4",
+      "videoMode": "video",
+      "videoOffset": 0,
+      "videoPlaybackMode": "sync",
+      "audioStartOffset": 28.657
     },
     {
       "id": "la-corrida-francis-cabrel",
@@ -2537,6 +2708,35 @@
         "liveSetPage": 2,
         "liveSetSlot": 3
       }
+    },
+    {
+      "id": "essai-de-nouveau-morceau",
+      "title": "essai de nouveau morceau",
+      "duration": "--:--",
+      "description": "Morceau instrumental",
+      "stageNotes": "",
+      "nextAction": "",
+      "kind": "instrumental",
+      "lyrics": "",
+      "lyricLines": [],
+      "needsLyricsSync": false
+    },
+    {
+      "id": "una-matina",
+      "title": "Una Matina",
+      "duration": "--:--",
+      "description": "Morceau instrumental",
+      "stageNotes": "",
+      "nextAction": "",
+      "kind": "instrumental",
+      "lyrics": "",
+      "lyricLines": [],
+      "needsLyricsSync": false,
+      "audioVolume": 1,
+      "videoFile": "/unamatina.mp4",
+      "videoMode": "video",
+      "videoOffset": 0,
+      "videoPlaybackMode": "loop"
     }
   ],
   "setlistSongIds": [
@@ -2552,8 +2752,9 @@
     "fix-you-coldplay",
     "fistful-of-love-antony-and-the-johnsons",
     "ecris-l-histoire-gregory-lemarchal",
-    "yeux-disent-lomepal"
+    "yeux-disent-lomepal",
+    "una-matina"
   ],
   "requestedSongIds": [],
-  "updatedAt": 1787591003597
+  "updatedAt": 1790795000962
 }

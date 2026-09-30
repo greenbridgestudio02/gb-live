@@ -1,197 +1,202 @@
 {
-  "mode": "home",
+  "mode": "coup-parfait-fail",
   "song": {
-    "id": "entre-deux-rives",
-    "title": "Mon Amour - Slimane",
+    "id": "test-creation-morceau",
+    "title": "Là-bas - J.J Goldman",
     "kind": "vocal",
-    "lyrics": "Mon amour\n\nDis-moi à quoi tu penses\n\nSi tout ça a un sens\n\nDésolé si j'te dérange\n\nMon amour\n\nTe souviens-tu de nous ?\n\nDu premier rendez-vous ?\n\nC'était beau, c'était fou\n\nJe t'aime, j'sais pas pourquoi\n\nJ'rejoue la scène\n\nMais c'est toujours la même fin qui recommence\n\nTu n'entends pas\n\nMa peine, on en fait quoi ?\n\nEst-ce que tu m'aimes, ou pas ?\n\nMon amour\n\nJe ferai tout c'que je peux\n\nUn océan dans le feu\n\nL'impossible si tu le veux\n\nOh, mon amour\n\nAllez, rеviens à Paris\n\nFais-le pour nous, j't'en suppliе\n\nJe le promets, j'ai compris\n\nJe t’aime\n\nJ’sais pas pourquoi\n\nJe rejoue la scène\n\nEt c’est toujours la même fin qui recommence\n\nTu n’entends pas ma peine\n\nOn en fait quoi ?\n\nEst-ce que tu m’aimes ?\n\nOu pas ?\n\nDis-moi l'endroit, je t'attendrai\n\nEt si tu n'viens pas, je t'attendrai\n\nC'est bête je sais, je le ferai\n\nRempli d'espoir, je t'attendrai\n\nJe t’aime\n\nJ’sais pas pourquoi\n\nJe rejoue la scène\n\nEt c’est toujours la même fin qui recommence\n\nTu n’entends pas ma peine\n\nOn en fait quoi ?\n\nEst-ce que tu m’aimes ?\n\nEst-ce que tu m’aimes ?\n\nEst-ce que tu m’aimes ?\n\nEst-ce que tu m’aimes ?\n\nOu pas ?",
+    "lyrics": "Là-bas\n\nTout est neuf et tout est sauvage\n\nLibre continent sans grillage\n\nIci, nos rêves sont étroits\n\nC’est pour ça que j’irai là-bas\n\nLà-bas\n\nFaut du cœur et faut du courage\n\nMais tout est possible à mon âge\n\nSi tu as la force et la foi\n\nL’ or est à portée de tes doigts\n\nC’est pour ça que j’irai là-bas\n\nN’y va pas\n\nY’a des tempêtes et des naufrages\n\nLe feu, les diables et les mirages\n\nJe te sais si fragile parfois\n\nReste au creux de moi\n\nOn a tant d’amour à faire\n\nTant de bonheur à venir\n\nJe te veux mari et père\n\nEt toi, tu rêves de partir\n\nIci, tout est joué d’avance\n\nEt l’on n’y peut rien changer\n\nTout dépend de ta naissance\n\nEt moi je ne suis pas bien né\n\nLà-bas\n\nLoin de nos vies, de nos villages\n\nJ’oublierai ta voix, ton visage\n\nJ’ai beau te serrer dans mes bras\n\nTu m’échappes déjà, là-bas\n\nJ’aurai ma chance, j’aurai mes droits\n\nEt la fierté qu’ici je n’ai pas\n\nTout ce que tu mérites est à toi\n\nIci, les autres imposent leur loi\n\nJe te perdrai peut-être là-bas\n\nMais je me perds si je reste là\n\nLa vie ne m’a pas laissé le choix\n\nToi et moi, ce sera là-bas ou pas\n\nTout est neuf et tout est sauvage\n\nLibre continent sans grillage\n\nBeau comme on n’imagine pas\n\nIci, même nos rêves sont étroits\n\nC’est pour ça que j’irai là-bas\n\nOn ne m’a pas laissé le choix\n\nJe me perds si je reste là\n\nC’est pour ça que j’irai là-bas",
     "lyricLines": [
       {
-        "time": 0.6080000000004656,
-        "text": "Mon amour"
+        "time": 22.695,
+        "text": "Là-bas"
       },
       {
-        "time": 3.169,
-        "text": "Dis-moi à quoi tu penses"
+        "time": 27.14,
+        "text": "Tout est neuf et tout est sauvage"
       },
       {
-        "time": 6.586,
-        "text": "Si tout ça a un sens"
+        "time": 33.485,
+        "text": "Libre continent sans grillage"
       },
       {
-        "time": 9.818,
-        "text": "Désolé si j'te dérange"
+        "time": 40.023,
+        "text": "Ici, nos rêves sont étroits"
       },
       {
-        "time": 14.085,
-        "text": "Mon amour"
+        "time": 46.519,
+        "text": "C’est pour ça que j’irai là-bas"
       },
       {
-        "time": 16.644,
-        "text": "Te souviens-tu de nous ?"
+        "time": 55.008,
+        "text": "Là-bas"
       },
       {
-        "time": 20.01,
-        "text": "Du premier rendez-vous ?"
+        "time": 59.44,
+        "text": "Faut du cœur et faut du courage"
       },
       {
-        "time": 23.508,
-        "text": "C'était beau, c'était fou"
+        "time": 65.937,
+        "text": "Mais tout est possible à mon âge"
       },
       {
-        "time": 27.965000000000465,
-        "text": "Je t'aime, j'sais pas pourquoi"
+        "time": 72.404,
+        "text": "Si tu as la force et la foi"
       },
       {
-        "time": 33.848,
-        "text": "J'rejoue la scène"
+        "time": 78.822,
+        "text": "L’ or est à portée de tes doigts"
       },
       {
-        "time": 37.643,
-        "text": "Mais c'est toujours la même fin qui recommence"
+        "time": 85.364,
+        "text": "C’est pour ça que j’irai là-bas"
       },
       {
-        "time": 40.112,
-        "text": "Tu n'entends pas"
+        "time": 93.604,
+        "text": "N’y va pas"
       },
       {
-        "time": 41.312,
-        "text": "Ma peine, on en fait quoi ?"
+        "time": 98.332,
+        "text": "Y’a des tempêtes et des naufrages"
       },
       {
-        "time": 47.431,
-        "text": "Est-ce que tu m'aimes, ou pas ?"
+        "time": 104.721,
+        "text": "Le feu, les diables et les mirages"
       },
       {
-        "time": 54.747,
-        "text": "Mon amour"
+        "time": 111.244,
+        "text": "Je te sais si fragile parfois"
       },
       {
-        "time": 57.148,
-        "text": "Je ferai tout c'que je peux"
+        "time": 117.762,
+        "text": "Reste au creux de moi"
       },
       {
-        "time": 60.447,
-        "text": "Un océan dans le feu"
+        "time": 119.413,
+        "text": "On a tant d’amour à faire"
       },
       {
-        "time": 63.776,
-        "text": "L'impossible si tu le veux"
+        "time": 122.606,
+        "text": "Tant de bonheur à venir"
       },
       {
-        "time": 67.331,
-        "text": "Oh, mon amour"
+        "time": 125.82,
+        "text": "Je te veux mari et père"
       },
       {
-        "time": 70.565,
-        "text": "Allez, rеviens à Paris"
+        "time": 128.898,
+        "text": "Et toi, tu rêves de partir"
       },
       {
-        "time": 73.962,
-        "text": "Fais-le pour nous, j't'en suppliе"
+        "time": 132.33600000000013,
+        "text": "Ici, tout est joué d’avance"
       },
       {
-        "time": 77.335,
-        "text": "Je le promets, j'ai compris"
+        "time": 135.56800000000013,
+        "text": "Et l’on n’y peut rien changer"
       },
       {
-        "time": 81.868,
-        "text": "Je t’aime"
+        "time": 138.814,
+        "text": "Tout dépend de ta naissance"
       },
       {
-        "time": 84.50300000000047,
-        "text": "J’sais pas pourquoi"
+        "time": 141.762,
+        "text": "Et moi je ne suis pas bien né"
       },
       {
-        "time": 87.852,
-        "text": "Je rejoue la scène"
+        "time": 150.76900000000012,
+        "text": "Là-bas"
       },
       {
-        "time": 91.714,
-        "text": "Et c’est toujours la même fin qui recommence"
+        "time": 155.2120000000001,
+        "text": "Loin de nos vies, de nos villages"
       },
       {
-        "time": 94.24400000000047,
-        "text": "Tu n’entends pas ma peine"
+        "time": 161.402,
+        "text": "J’oublierai ta voix, ton visage"
       },
       {
-        "time": 98.068,
-        "text": "On en fait quoi ?"
+        "time": 167.973,
+        "text": "J’ai beau te serrer dans mes bras"
       },
       {
-        "time": 101.414,
-        "text": "Est-ce que tu m’aimes ?"
+        "time": 174.481,
+        "text": "Tu m’échappes déjà, là-bas"
       },
       {
-        "time": 105.653,
-        "text": "Ou pas ?"
+        "time": 176.70100000000022,
+        "text": "J’aurai ma chance, j’aurai mes droits"
       },
       {
-        "time": 109.203,
-        "text": "Dis-moi l'endroit, je t'attendrai"
+        "time": 179.843,
+        "text": "Et la fierté qu’ici je n’ai pas"
       },
       {
-        "time": 115.901,
-        "text": "Et si tu n'viens pas, je t'attendrai"
+        "time": 183.279,
+        "text": "Tout ce que tu mérites est à toi"
       },
       {
-        "time": 122.609,
-        "text": "C'est bête je sais, je le ferai"
+        "time": 186.39,
+        "text": "Ici, les autres imposent leur loi"
       },
       {
-        "time": 129.449,
-        "text": "Rempli d'espoir, je t'attendrai"
+        "time": 189.66200000000023,
+        "text": "Je te perdrai peut-être là-bas"
       },
       {
-        "time": 136.023,
-        "text": "Je t’aime"
+        "time": 192.91200000000023,
+        "text": "Mais je me perds si je reste là"
       },
       {
-        "time": 138.61700000000047,
-        "text": "J’sais pas pourquoi"
+        "time": 196.12400000000022,
+        "text": "La vie ne m’a pas laissé le choix"
       },
       {
-        "time": 141.959,
-        "text": "Je rejoue la scène"
+        "time": 199.324,
+        "text": "Toi et moi, ce sera là-bas ou pas"
       },
       {
-        "time": 145.759,
-        "text": "Et c’est toujours la même fin qui recommence"
+        "time": 202.771,
+        "text": "Tout est neuf et tout est sauvage"
       },
       {
-        "time": 148.252,
-        "text": "Tu n’entends pas ma peine"
+        "time": 205.817,
+        "text": "Libre continent sans grillage"
       },
       {
-        "time": 151.932,
-        "text": "On en fait quoi ?"
+        "time": 209.253,
+        "text": "Beau comme on n’imagine pas"
       },
       {
-        "time": 155.582,
-        "text": "Est-ce que tu m’aimes ?"
+        "time": 212.168,
+        "text": "Ici, même nos rêves sont étroits"
       },
       {
-        "time": 162.451,
-        "text": "Est-ce que tu m’aimes ?"
+        "time": 215.752,
+        "text": "C’est pour ça que j’irai là-bas"
       },
       {
-        "time": 165.447,
-        "text": "Est-ce que tu m’aimes ?"
+        "time": 218.755,
+        "text": "On ne m’a pas laissé le choix"
       },
       {
-        "time": 168.995,
-        "text": "Est-ce que tu m’aimes ?"
+        "time": 222.128,
+        "text": "Je me perds si je reste là"
       },
       {
-        "time": 173.24,
-        "text": "Ou pas ?"
+        "time": 225.454,
+        "text": "C’est pour ça que j’irai là-bas"
       }
     ],
+    "videoFile": "/labas.mp4",
+    "videoMode": "video-lyrics",
+    "videoOffset": -6.3,
     "needsLyricsSync": false
   },
-  "elapsedTime": 18.633001,
+  "elapsedTime": 0,
   "isPlaying": false,
+  "playbackEnded": false,
+  "videoVolume": 0.25,
   "message": "",
-  "messageUpdatedAt": 0,
-  "updatedAt": 1787591404711
+  "messageUpdatedAt": 1790799922395,
+  "updatedAt": 1790799922395
 }

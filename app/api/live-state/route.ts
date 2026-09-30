@@ -34,7 +34,12 @@ type PublicMode =
   | "message"
   | "pause"
   | "end"
-  | "dj";
+  | "dj"
+  | "coup-parfait-tuto"
+  | "coup-parfait"
+| "coup-parfait-ready"
+| "coup-parfait-success"
+| "coup-parfait-fail";
 
 type LiveState = {
   mode: PublicMode;
@@ -45,6 +50,7 @@ type LiveState = {
   isPlaying: boolean;
   playbackEnded: boolean;
 
+  videoVolume: number;
   message: string;
   messageUpdatedAt: number;
 
@@ -81,7 +87,7 @@ const defaultState: LiveState = {
   elapsedTime: 0,
   isPlaying: false,
   playbackEnded: false,
-
+videoVolume: 0.25,
   message: "",
   messageUpdatedAt: 0,
 
@@ -107,10 +113,15 @@ async function readLiveState(): Promise<LiveState> {
         parsed.mode === "song" ||
         parsed.mode === "message" ||
         parsed.mode === "pause" ||
-        parsed.mode === "end" ||
-        parsed.mode === "dj"
-          ? parsed.mode
-          : "home",
+parsed.mode === "end" ||
+parsed.mode === "dj" ||
+parsed.mode === "coup-parfait-tuto" ||
+parsed.mode === "coup-parfait" ||
+parsed.mode === "coup-parfait-ready" ||
+parsed.mode === "coup-parfait-success" ||
+parsed.mode === "coup-parfait-fail"
+  ? parsed.mode
+  : "home",
 
       song:
         parsed.song === null ||
@@ -131,7 +142,10 @@ async function readLiveState(): Promise<LiveState> {
           typeof parsed.playbackEnded === "boolean"
             ? parsed.playbackEnded
             : false,
-
+videoVolume:
+  typeof parsed.videoVolume === "number"
+    ? parsed.videoVolume
+    : 0.25,
       message:
         typeof parsed.message === "string"
           ? parsed.message
@@ -404,9 +418,14 @@ export async function POST(
     body.mode === "home" ||
     body.mode === "song" ||
     body.mode === "message" ||
-    body.mode === "pause" ||
+        body.mode === "pause" ||
     body.mode === "end" ||
-    body.mode === "dj"
+    body.mode === "dj" ||
+body.mode === "coup-parfait-tuto" ||
+body.mode === "coup-parfait" ||
+body.mode === "coup-parfait-ready" ||
+body.mode === "coup-parfait-success" ||
+body.mode === "coup-parfait-fail"
   ) {
     mode = body.mode;
   }
@@ -435,7 +454,10 @@ export async function POST(
   typeof body.playbackEnded === "boolean"
     ? body.playbackEnded
     : currentState.playbackEnded;
-
+const videoVolume =
+  typeof body.videoVolume === "number"
+    ? body.videoVolume
+    : currentState.videoVolume;
   const message =
     typeof body.message === "string"
       ? body.message
@@ -457,7 +479,12 @@ if (typeof body.message === "string") {
 
     isPlaying,
     playbackEnded,
+isPlaying,
+playbackEnded,
 
+videoVolume,
+message,
+messageUpdatedAt,
     message,
     messageUpdatedAt,
 
