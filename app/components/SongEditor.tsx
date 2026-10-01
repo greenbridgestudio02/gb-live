@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Song, SongKind } from "../../types/show";
@@ -615,8 +615,8 @@ videoDuration:
         </div>
 
         <p className="mt-3 text-sm text-zinc-500">
-          Valeur positive : la vidéo démarre plus tard. Valeur négative :
-          elle démarre plus loin dans le clip.
+          Vidéo en avance sur le WAV → valeur positive (+)<br />
+          Vidéo en retard sur le WAV → valeur négative (−)
         </p>
       </div>
     </>
@@ -753,3 +753,4 @@ videoDuration:
     </div>
   );
 }
+

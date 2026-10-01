@@ -1,4 +1,4 @@
-import {
+﻿import {
   mkdir,
   readFile,
   writeFile,
@@ -479,12 +479,8 @@ if (typeof body.message === "string") {
 
     isPlaying,
     playbackEnded,
-isPlaying,
-playbackEnded,
 
-videoVolume,
-message,
-messageUpdatedAt,
+    videoVolume,
     message,
     messageUpdatedAt,
 

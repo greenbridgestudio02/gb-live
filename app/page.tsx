@@ -639,7 +639,7 @@ useEffect(() => {
     },
     cache: "no-store",
     body: JSON.stringify({
-      mode: "song",
+      mode: "home",
       song: {
         id: previousSong.id,
         title: previousSong.title,
@@ -689,7 +689,7 @@ async function goToNextSong() {
     },
     cache: "no-store",
     body: JSON.stringify({
-      mode: "song",
+      mode: "home",
       song: {
         id: nextSong.id,
         title: nextSong.title,
@@ -1915,7 +1915,7 @@ onNextPlayer={() => void sendPublicMode("coup-parfait")}
     },
     cache: "no-store",
     body: JSON.stringify({
-      mode: "song",
+      mode: "home",
 
       song: {
         id: selectedSong.id,
