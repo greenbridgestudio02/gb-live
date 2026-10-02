@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Song } from "../../types/show";
@@ -618,89 +618,108 @@ if (
   return (
     <div className="flex h-full min-h-0 flex-col">
       {song.audioFile && (
-  <audio
-    ref={audioRef}
-    src={song.audioFile}
-    preload="auto"
-    
+        <div className="mb-2 flex h-10 shrink-0 items-center">
+          <audio
+            ref={audioRef}
+            src={song.audioFile}
+            preload="auto"
+            controls
+            className="h-10 w-full max-w-md"
+            onEnded={() => {
+              const finalTime =
+                audioRef.current?.currentTime ?? elapsedTime;
 
+              setElapsedTime(finalTime);
+              pausedElapsedRef.current = finalTime;
+              startTimeRef.current = null;
+              isPlayingRef.current = false;
+              setIsPlaying(false);
 
-  controls
-  onEnded={() => {
-          const finalTime =
-        audioRef.current?.currentTime ?? elapsedTime;
+              void sendLiveState(
+                finalTime,
+                false,
+                true
+              );
+            }}
+          />
+        </div>
+      )}
 
-      setElapsedTime(finalTime);
-      pausedElapsedRef.current = finalTime;
-      startTimeRef.current = null;
-      isPlayingRef.current = false;
-      setIsPlaying(false);
+      <div className="grid min-h-0 flex-1 grid-cols-[2fr_3fr] gap-3">
+        <div className="min-h-0 overflow-y-auto rounded-2xl border border-zinc-600 bg-zinc-900/40 p-4">
+          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-emerald-400">
+            Notes de scène
+          </p>
 
-      void sendLiveState(
-  finalTime,
-  false,
-  true
-);
-    }}
-  />
-)}
-      <div className="flex min-h-0 flex-1 items-center justify-center rounded-2xl border border-zinc-800 bg-zinc-900/40 p-6">
-        <div className="w-full max-w-5xl text-center">
-          <div className="min-h-16">
-            {previousLine && (
-              <p className="text-2xl font-medium leading-relaxed text-zinc-600">
-                {previousLine.text}
-              </p>
-            )}
-          </div>
+          {song.stageNotes?.trim() ? (
+            <div className="mt-3 whitespace-pre-line text-lg font-medium leading-relaxed text-zinc-200">
+              {song.stageNotes}
+            </div>
+          ) : (
+            <p className="mt-3 text-sm text-zinc-600">
+              Aucune note de scène pour ce morceau.
+            </p>
+          )}
+        </div>
 
-          <div className="my-6 flex min-h-32 items-center justify-center">
-            {currentLine && (
-              <p className="text-5xl font-bold leading-tight text-emerald-300 transition-all duration-300">
-                {currentLine.text}
-              </p>
-            )}
-          </div>
+        <div className="flex min-h-0 items-center justify-center rounded-2xl border border-zinc-600 bg-zinc-900/40 p-4">
+          <div className="w-full text-center">
+            <div className="min-h-14">
+              {previousLine && (
+                <p className="text-lg font-medium leading-relaxed text-zinc-600">
+                  {previousLine.text}
+                </p>
+              )}
+            </div>
 
-          <div className="min-h-16">
-            {nextLine ? (
-              <p className="text-3xl font-medium leading-relaxed text-zinc-400">
-                {nextLine.text}
-              </p>
-            ) : (
-              <p className="text-xl font-medium text-zinc-600">
-                Fin des paroles
-              </p>
-            )}
+            <div className="my-4 flex min-h-28 items-center justify-center">
+              {currentLine && (
+                <p className="text-4xl font-bold leading-tight text-emerald-300 transition-all duration-300">
+                  {currentLine.text}
+                </p>
+              )}
+            </div>
+
+            <div className="min-h-14">
+              {nextLine ? (
+                <p className="text-xl font-medium leading-relaxed text-zinc-400">
+                  {nextLine.text}
+                </p>
+              ) : (
+                <p className="text-lg font-medium text-zinc-600">
+                  Fin des paroles
+                </p>
+              )}
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="mt-3 flex items-center justify-center gap-3">
-
+      <div className="mt-2 flex h-10 shrink-0 items-center justify-center gap-2">
         <button
           type="button"
           onClick={togglePlayback}
-          className="min-w-48 rounded-xl bg-emerald-500 px-6 py-3 text-lg font-bold text-zinc-950"
+          className="rounded-lg bg-emerald-500 px-4 py-2 text-sm font-bold text-zinc-950"
         >
-          {isPlaying
-            ? "⏸ Paroles"
-            : "▶ Paroles"}
+          {isPlaying ? "⏸ Paroles" : "▶ Paroles"}
         </button>
 
         <button
           type="button"
           onClick={resetLyrics}
           disabled={elapsedTime === 0}
-          className="rounded-xl border border-zinc-700 bg-zinc-900 px-5 py-3 font-semibold disabled:opacity-30"
+          className="rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm font-semibold disabled:opacity-30"
         >
-          ↺ Remettre au début
+          ↺ Début
         </button>
 
-        <div className="min-w-20 text-center text-sm tabular-nums text-zinc-500">
+        <div className="min-w-16 text-center text-xs tabular-nums text-zinc-500">
           {elapsedTime.toFixed(1)} s
         </div>
       </div>
     </div>
   );
 }
+
+
+

@@ -301,6 +301,16 @@ function BlindTestAdminPanel({
   );
 }
 
+const DJ_LIBRARY = [
+  { name: "Club Original", file: "/01-club-original.mp4", thumbnail: "/01-club-original.jpg" },
+  { name: "Laser Festival", file: "/02-laser-festival.mp4", thumbnail: "/02-laser-festival.jpg" },
+  { name: "Disco Chic", file: "/03-disco-chic-test.mp4", thumbnail: "/03-disco-chic-test.jpg" },
+  { name: "Cyber City", file: "/04-cyber-city.mp4", thumbnail: "/04-cyber-city.jpg" },
+  { name: "Sunset Beach", file: "/05-sunset-beach-test.mp4", thumbnail: "/05-sunset-beach-test.jpg" },
+  { name: "Pilou & Skaye DJ", file: "/DJ-pilou-et-skayev1.mp4", thumbnail: "/DJ-pilou-et-skayev1.jpg" },
+  { name: "Pilou & Skaye DJ V2", file: "/DJ-pilou-et-skayeV2.mp4", thumbnail: "/DJ-pilou-et-skayeV2.jpg" },
+  { name: "Pilou & Skaye DJ V3", file: "/DJ-pilou-et-skayeV3.mp4", thumbnail: "/DJ-pilou-et-skayeV3.jpg" },
+];
 export default function Home() {
   const [setlistPosition, setSetlistPosition] = useState(0);
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
@@ -344,6 +354,7 @@ export default function Home() {
   const [midiStatus, setMidiStatus] = useState("");
   const [isBlindTestOpen, setIsBlindTestOpen] = useState(false);
   const [isCoupParfaitOpen, setIsCoupParfaitOpen] = useState(false);
+  const [isDjLibraryOpen, setIsDjLibraryOpen] = useState(false);
   const lastServerUpdatedAtRef = useRef(0);
   const applyingServerSnapshotRef = useRef(false);
 
@@ -723,7 +734,9 @@ async function sendPublicMode(
     | "coup-parfait-success"
 | "coup-parfait-fail",
     message = "",
-  videoVolume?: number
+  videoVolume?: number,
+  djVideoFile?: string,
+  djLoop?: boolean
 ) {
   console.log(
   "PUBLIC MODE ENVOYÉ :",
@@ -741,6 +754,8 @@ async function sendPublicMode(
   mode,
   message,
   videoVolume,
+  djVideoFile,
+  djLoop,
 }),
     });
   } catch (error) {
@@ -1302,6 +1317,54 @@ onNextPlayer={() => void sendPublicMode("coup-parfait")}
   />
 )}
 
+{isDjLibraryOpen && (
+  <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/85 p-6">
+    <div className="w-full max-w-4xl rounded-3xl border border-violet-700 bg-zinc-950 p-6">
+      <div className="mb-6 flex items-center justify-between">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-violet-400">
+            GB Live
+          </p>
+          <h2 className="mt-1 text-3xl font-bold">
+            🎧 Bibliothèque DJ
+          </h2>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => setIsDjLibraryOpen(false)}
+          className="rounded-xl border border-zinc-700 px-4 py-2 font-semibold text-zinc-300 hover:bg-zinc-800"
+        >
+          Fermer
+        </button>
+      </div>
+
+      <div className="grid max-h-[60vh] grid-cols-1 gap-3 overflow-y-auto pr-2 md:grid-cols-2 xl:grid-cols-3">
+        {DJ_LIBRARY.map((video) => (
+          <div
+            key={video.file}
+            className="flex items-center justify-between gap-2 rounded-xl border border-zinc-800 bg-zinc-900 px-3 py-2"
+          >
+            <span className="text-lg font-semibold">
+              {video.name}
+            </span>
+
+            <button
+              type="button"
+              onClick={() => {
+                setIsPublicScreenHidden(true);
+                void sendPublicMode("dj", "", undefined, video.file, false);
+              }}
+              className="rounded-xl bg-violet-700 px-5 py-3 font-bold text-white hover:bg-violet-600"
+            >
+              ▶ LANCER
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+)}
 {isPreparationOpen && (
   <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/80 p-6">
     <div className="w-full max-w-xl rounded-3xl border border-zinc-700 bg-zinc-950 p-6">
@@ -1686,6 +1749,30 @@ onNextPlayer={() => void sendPublicMode("coup-parfait")}
 
   return (
     <main className="flex h-[100dvh] overflow-hidden flex-col bg-zinc-950 text-zinc-100">
+{isDjLibraryOpen && (
+  <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/85 p-6">
+    <div className="w-full max-w-4xl rounded-3xl border border-violet-700 bg-zinc-950 p-6">
+      <div className="mb-6 flex items-center justify-between">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-violet-400">GB Live</p>
+          <h2 className="mt-1 text-3xl font-bold">🎧 Bibliothèque DJ</h2>
+        </div>
+        <button type="button" onClick={() => setIsDjLibraryOpen(false)} className="rounded-xl border border-zinc-700 px-4 py-2 font-semibold text-zinc-300 hover:bg-zinc-800">Fermer</button>
+      </div>
+      <div className="grid max-h-[60vh] grid-cols-1 gap-3 overflow-y-auto pr-2 md:grid-cols-2 xl:grid-cols-3">
+        {DJ_LIBRARY.map((video) => (
+          <div key={video.file} className="overflow-hidden rounded-xl border border-zinc-700 bg-zinc-900">
+            {video.thumbnail && <img src={video.thumbnail} alt="" className="aspect-video w-full object-cover" />}
+            <div className="flex items-center justify-between gap-3 p-3">
+              <span className="min-w-0 truncate text-sm font-semibold">{video.name}</span>
+              <div className="flex shrink-0 gap-2"><button type="button" onClick={() => { setIsPublicScreenHidden(true); void sendPublicMode("dj", "", undefined, video.file, false); }} className="rounded-lg bg-violet-700 px-3 py-2 text-sm font-bold text-white hover:bg-violet-600">▶ 1×</button><button type="button" onClick={() => { setIsPublicScreenHidden(true); void sendPublicMode("dj", "", undefined, video.file, true); }} className="rounded-lg bg-violet-700 px-3 py-2 text-sm font-bold text-white hover:bg-violet-600">🔁</button></div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+)}
       <header className="flex items-center justify-between border-b border-zinc-800 px-6 py-2">
         <div>
   <img
@@ -1732,8 +1819,7 @@ onNextPlayer={() => void sendPublicMode("coup-parfait")}
 <button
   type="button"
   onClick={() => {
-    setIsPublicScreenHidden(true);
-    void sendPublicMode("dj");
+    setIsDjLibraryOpen(true);
   }}
   className="rounded-lg border border-violet-700 bg-violet-950/40 px-4 py-2 text-sm font-semibold text-violet-300 hover:bg-violet-900/50"
 >
@@ -2524,6 +2610,34 @@ onClose={() => setIsSearchOpen(false)}
     </main>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

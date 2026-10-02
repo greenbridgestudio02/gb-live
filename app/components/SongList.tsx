@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import type { Song } from "../../types/show";
@@ -58,17 +58,17 @@ export default function SongList({
   return (
     <div className="fixed inset-0 z-[60] bg-zinc-950">
   <div className="flex h-full w-full flex-col bg-zinc-950">
-        <div className="flex items-center justify-between border-b border-zinc-800 p-5">
+        <div className="flex items-center justify-between border-b border-zinc-800 px-4 py-2">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-400">
               GreenBridge Live
             </p>
 
-            <h2 className="mt-1 text-2xl font-bold">
+            <h2 className="text-xl font-bold">
               Setlist
             </h2>
 
-            <p className="mt-1 text-sm text-zinc-500">
+            <p className="text-xs text-zinc-500">
               Glissez un morceau ou utilisez ▲ / ▼ pour modifier l’ordre.
             </p>
           </div>
@@ -84,7 +84,7 @@ export default function SongList({
         </div>
 
         <div className="flex-1 overflow-y-auto p-4">
-          <div className="space-y-2">
+          <div className="space-y-1">
             {songs.map((song, index) => {
               const positionPrevue = index === setlistPosition;
               const morceauJoue = song.id === currentSongId;
@@ -98,7 +98,7 @@ export default function SongList({
                   onDragEnd={() => setDraggedIndex(null)}
                   onDragOver={(event) => event.preventDefault()}
                   onDrop={() => handleDrop(index)}
-                  className={`flex items-center gap-2 rounded-xl border p-2 transition ${
+                  className={`flex items-center gap-2 rounded-xl border p-1 transition ${
                     positionPrevue
                       ? "border-emerald-500 bg-emerald-500/10"
                       : draggedIndex === index
@@ -116,7 +116,7 @@ export default function SongList({
                   <button
                     type="button"
                     onClick={() => selectSong(index)}
-                    className="flex min-w-0 flex-1 items-center gap-3 p-2 text-left"
+                    className="flex min-w-0 flex-1 items-center gap-2 p-1 text-left"
                   >
                     <span
                       className={`w-7 text-center text-lg font-bold ${
@@ -151,12 +151,12 @@ export default function SongList({
                     </span>
                   </button>
 
-                  <div className="flex flex-col gap-1">
+                  <div className="flex items-center gap-1">
                     <button
                       type="button"
                       onClick={() => moveUp(index)}
                       disabled={index === 0}
-                      className="flex h-8 w-9 items-center justify-center rounded-lg border border-zinc-700 bg-zinc-950 text-sm disabled:opacity-20"
+                      className="flex h-7 w-9 items-center justify-center rounded-lg border border-zinc-700 bg-zinc-950 text-sm disabled:opacity-20"
                       aria-label="Monter le morceau"
                     >
                       ▲
@@ -166,7 +166,7 @@ export default function SongList({
                       type="button"
                       onClick={() => moveDown(index)}
                       disabled={index === songs.length - 1}
-                      className="flex h-8 w-9 items-center justify-center rounded-lg border border-zinc-700 bg-zinc-950 text-sm disabled:opacity-20"
+                      className="flex h-7 w-9 items-center justify-center rounded-lg border border-zinc-700 bg-zinc-950 text-sm disabled:opacity-20"
                       aria-label="Descendre le morceau"
                     >
                       ▼
@@ -176,7 +176,7 @@ export default function SongList({
                       type="button"
                       onClick={() => onRemoveSong(index)}
                       disabled={index === setlistPosition}
-                      className="mt-1 flex h-8 w-9 items-center justify-center rounded-lg border border-red-900 bg-red-950/30 text-sm text-red-400 disabled:cursor-not-allowed disabled:opacity-20"
+                      className="flex h-7 w-9 items-center justify-center rounded-lg border border-red-900 bg-red-950/30 text-sm text-red-400 disabled:cursor-not-allowed disabled:opacity-20"
                       aria-label="Retirer de la setlist"
                       title={
                       index === setlistPosition
@@ -193,17 +193,12 @@ export default function SongList({
             })}
           </div>
         </div>
-
-        <div className="border-t border-zinc-800 p-4">
-          <button
-            type="button"
-            onClick={onClose}
-            className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-5 py-4 text-lg font-semibold transition hover:bg-zinc-800"
-          >
-            Fermer
-          </button>
-        </div>
             </div>
     </div>
   );
 }
+
+
+
+
+

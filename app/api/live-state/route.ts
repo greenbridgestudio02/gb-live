@@ -51,6 +51,8 @@ type LiveState = {
   playbackEnded: boolean;
 
   videoVolume: number;
+  djVideoFile: string;
+  djLoop: boolean;
   message: string;
   messageUpdatedAt: number;
 
@@ -88,6 +90,8 @@ const defaultState: LiveState = {
   isPlaying: false,
   playbackEnded: false,
 videoVolume: 0.25,
+  djVideoFile: "/01-club-original.mp4",
+  djLoop: false,
   message: "",
   messageUpdatedAt: 0,
 
@@ -146,6 +150,16 @@ videoVolume:
   typeof parsed.videoVolume === "number"
     ? parsed.videoVolume
     : 0.25,
+      djVideoFile:
+        typeof parsed.djVideoFile === "string"
+          ? parsed.djVideoFile
+          : "/01-club-original.mp4",
+
+      djLoop:
+        typeof parsed.djLoop === "boolean"
+          ? parsed.djLoop
+          : false,
+
       message:
         typeof parsed.message === "string"
           ? parsed.message
@@ -458,6 +472,14 @@ const videoVolume =
   typeof body.videoVolume === "number"
     ? body.videoVolume
     : currentState.videoVolume;
+const djVideoFile =
+  typeof body.djVideoFile === "string"
+    ? body.djVideoFile
+    : currentState.djVideoFile;
+const djLoop =
+  typeof body.djLoop === "boolean"
+    ? body.djLoop
+    : currentState.djLoop;
   const message =
     typeof body.message === "string"
       ? body.message
@@ -481,6 +503,8 @@ if (typeof body.message === "string") {
     playbackEnded,
 
     videoVolume,
+    djVideoFile,
+    djLoop,
     message,
     messageUpdatedAt,
 
@@ -496,3 +520,16 @@ if (typeof body.message === "string") {
     state: newState,
   });
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
