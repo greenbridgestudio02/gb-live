@@ -119,8 +119,11 @@ useEffect(() => {
       title: trimmedTitle,
       duration: duration.trim() || "--:--",
       description:
-        description.trim() ||
-        (isVocal ? "Morceau chanté" : "Morceau instrumental"),
+  !description.trim() ||
+  description.trim() === "Morceau chanté" ||
+  description.trim() === "Morceau instrumental"
+    ? (isVocal ? "Morceau chanté" : "Morceau instrumental")
+    : description.trim(),
       stageNotes: stageNotes.trim(),
       kind,
 
@@ -159,7 +162,7 @@ videoOffset: videoFile.trim()
   : undefined,
 
   videoPlaybackMode: videoFile.trim()
-  ? videoPlaybackMode
+  ? (audioFile.trim() ? "sync" : videoPlaybackMode)
   : undefined,
 
 videoDuration:
