@@ -6,7 +6,7 @@ type AirGuitarPanelProps = {
   onClose: () => void;
   onShowTuto: () => void;
   onStartChallenge: () => void;
-  onPlayerReady: () => void;
+  onPlayerReady: (audioFile: string) => void;
   onChallenge: (challenge: string) => void;
   onFinale: () => void;
   onApplause: () => void;
@@ -26,10 +26,44 @@ export default function AirGuitarPanel({
   onNextPlayer,
 }: AirGuitarPanelProps) {
   const [started, setStarted] = useState(false);
+  const airGuitarSongs = [
+  {
+    id: "back-in-black",
+    title: "Back In Black",
+    artist: "AC/DC",
+    file: "/audio/air-guitar/air-guitar-ACDC-Back-In-Black.mp3",
+  },
+  {
+    id: "highway-to-hell",
+    title: "Highway to Hell",
+    artist: "AC/DC",
+    file: "/audio/air-guitar/air-guitar-ACDC-Highway-to-Hell.mp3",
+  },
+  {
+    id: "thunderstruck",
+    title: "Thunderstruck",
+    artist: "AC/DC",
+    file: "/audio/air-guitar/air-guitar-ACDC-Thunderstruck.mp3",
+  },
+  {
+    id: "smells-like-teen-spirit",
+    title: "Smells Like Teen Spirit",
+    artist: "Nirvana",
+    file: "/audio/air-guitar/air-guitar-Nirvana-Smells-Like-Teen-Spirit.mp3",
+  },
+  {
+    id: "black-betty",
+    title: "Black Betty",
+    artist: "Ram Jam",
+    file: "/audio/air-guitar/air-guitar-RamJam-Black-Betty.mp3",
+  },
+];
+
+const [selectedSong, setSelectedSong] = useState(airGuitarSongs[0].id);
 
   return (
     <div className="fixed inset-0 z-[90] flex items-center justify-center bg-black/90 p-6">
-      <div className="w-full max-w-4xl rounded-3xl border border-red-800 bg-zinc-950 p-6 text-zinc-100">
+      <div className="w-full max-w-4xl scale-[0.75] rounded-3xl border border-red-800 bg-zinc-950 p-4 text-zinc-100">
 
         <div className="flex items-center justify-between">
           <div>
@@ -80,9 +114,43 @@ export default function AirGuitarPanel({
 
         {started && (
           <>
+          <div className="mb-4">
+  <p className="mb-3 text-sm font-bold uppercase tracking-[0.25em] text-zinc-400">
+    🎵 Morceau Air Guitar
+  </p>
+
+  <div className="grid grid-cols-2 gap-2">
+    {airGuitarSongs.map((song) => (
+      <button
+        key={song.id}
+        type="button"
+        onClick={() => setSelectedSong(song.id)}
+        className={`rounded-xl border px-3 py-2 text-left transition ${
+          selectedSong === song.id
+            ? "border-red-500 bg-red-950/60 text-white"
+            : "border-zinc-700 bg-zinc-900 text-zinc-300 hover:bg-zinc-800"
+        }`}
+      >
+        <span className="block text-lg font-black">
+          {song.title}
+        </span>
+
+        <span className="text-sm font-bold text-zinc-400">
+          {song.artist}
+        </span>
+      </button>
+    ))}
+  </div>
+</div>
             <button
               type="button"
-              onClick={onPlayerReady}
+              onClick={() => {
+  const song = airGuitarSongs.find((item) => item.id === selectedSong);
+
+  if (song) {
+    onPlayerReady(song.file);
+  }
+}}
               className="mt-4 w-full rounded-2xl bg-amber-500 px-6 py-5 text-2xl font-black text-zinc-950 hover:bg-amber-400"
             >
               🤘 JOUEUR PRÊT — 3 · 2 · 1 · ROCK !
@@ -151,7 +219,7 @@ export default function AirGuitarPanel({
               <button
                 type="button"
                 onClick={() => onScore("rocker")}
-                className="rounded-2xl border border-zinc-600 bg-zinc-900 px-4 py-5 text-lg font-black"
+                className="rounded-2xl border border-zinc-600 bg-zinc-900 px-4 py-5 text-base font-black"
               >
                 🎸 ROCKER
               </button>
@@ -159,7 +227,7 @@ export default function AirGuitarPanel({
               <button
                 type="button"
                 onClick={() => onScore("guitar-hero")}
-                className="rounded-2xl border border-orange-600 bg-orange-950/40 px-4 py-5 text-lg font-black text-orange-300"
+                className="rounded-2xl border border-orange-600 bg-orange-950/40 px-4 py-5 text-base font-black text-orange-300"
               >
                 🔥 GUITAR HERO
               </button>
@@ -167,7 +235,7 @@ export default function AirGuitarPanel({
               <button
                 type="button"
                 onClick={() => onScore("legende")}
-                className="rounded-2xl border border-yellow-500 bg-yellow-950/40 px-4 py-5 text-lg font-black text-yellow-300"
+                className="rounded-2xl border border-yellow-500 bg-yellow-950/40 px-4 py-5 text-base font-black text-yellow-300"
               >
                 👑 LÉGENDE DU ROCK
               </button>

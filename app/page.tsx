@@ -1346,9 +1346,9 @@ onNextPlayer={() => void sendPublicMode("coup-parfait")}
     onStartChallenge={() => {
       sendPublicMode("air-guitar");
     }}
-    onPlayerReady={() => {
-      sendPublicMode("air-guitar-ready");
-    }}
+    onPlayerReady={(audioFile) => {
+  sendPublicMode("air-guitar-ready", audioFile);
+}}
     onChallenge={(challenge) => {
       sendPublicMode("air-guitar-challenge", challenge);
     }}

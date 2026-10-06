@@ -65,6 +65,8 @@ const [airGuitarChallenge, setAirGuitarChallenge] = useState<string | null>(
   null
 );
 const [airGuitarTutoStep, setAirGuitarTutoStep] = useState(1);
+const [airGuitarSong, setAirGuitarSong] = useState<string | null>(null);
+const airGuitarSongRef = useRef<HTMLAudioElement | null>(null);
 const [audioUnlocked, setAudioUnlocked] = useState(false);
 const airGuitarAudioRef = useRef<HTMLAudioElement | null>(null);
   const clockStartRef = useRef<number | null>(null);
@@ -112,11 +114,18 @@ setCoupParfaitVideoEnded(false);
 useEffect(() => {
   if (liveState.mode !== "air-guitar-ready") {
     setAirGuitarCountdown(3);
+    
     return;
   }
 
   setAirGuitarCountdown(3);
 
+  if (
+  liveState.message &&
+  liveState.message.startsWith("/audio/air-guitar/")
+) {
+  setAirGuitarSong(liveState.message);
+}
   const timer2 = window.setTimeout(() => {
     setAirGuitarCountdown(2);
   }, 1000);
@@ -134,7 +143,7 @@ useEffect(() => {
     window.clearTimeout(timer1);
     window.clearTimeout(timerRock);
   };
-}, [liveState.mode]);
+}, [liveState.mode, liveState.message]);
 
 useEffect(() => {
   if (liveState.mode !== "air-guitar-challenge") {
@@ -555,6 +564,7 @@ const hideLyricDuringLongGap =
       playsInline
       className="absolute inset-0 h-full w-full object-cover opacity-40"
     />
+    
 
     <div className="relative z-10 w-full max-w-6xl">
       <p className="text-3xl font-black uppercase tracking-[0.35em] text-red-500">
@@ -674,7 +684,16 @@ liveState.mode === "air-guitar-score" ? (
       playsInline
       className="h-full w-full object-cover"
     />
-
+{airGuitarSong &&
+  (liveState.mode === "air-guitar-ready" ||
+    liveState.mode === "air-guitar-challenge" ||
+    liveState.mode === "air-guitar-finale") && (
+    <audio
+  ref={airGuitarSongRef}
+  src={airGuitarSong ?? liveState.message}
+  autoPlay
+/>
+  )}
     {airGuitarChallenge && (
       <div className="absolute inset-0 flex items-center justify-center bg-black/20 px-12">
         <div className="rounded-3xl border-4 border-white bg-black/75 px-16 py-10 text-center shadow-2xl">
