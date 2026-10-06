@@ -37,9 +37,16 @@ type PublicMode =
   | "dj"
   | "coup-parfait-tuto"
   | "coup-parfait"
-| "coup-parfait-ready"
-| "coup-parfait-success"
-| "coup-parfait-fail";
+  | "coup-parfait-ready"
+  | "coup-parfait-success"
+  | "coup-parfait-fail"
+  | "air-guitar-tuto"
+  | "air-guitar"
+  | "air-guitar-ready"
+  | "air-guitar-challenge"
+  | "air-guitar-finale"
+  | "air-guitar-applause"
+  | "air-guitar-score";
 
 type LiveState = {
   mode: PublicMode;
@@ -123,7 +130,14 @@ parsed.mode === "coup-parfait-tuto" ||
 parsed.mode === "coup-parfait" ||
 parsed.mode === "coup-parfait-ready" ||
 parsed.mode === "coup-parfait-success" ||
-parsed.mode === "coup-parfait-fail"
+parsed.mode === "coup-parfait-fail" ||
+parsed.mode === "air-guitar-tuto" ||
+parsed.mode === "air-guitar" ||
+parsed.mode === "air-guitar-ready" ||
+parsed.mode === "air-guitar-challenge" ||
+parsed.mode === "air-guitar-finale" ||
+parsed.mode === "air-guitar-applause" ||
+parsed.mode === "air-guitar-score"
   ? parsed.mode
   : "home",
 
@@ -439,7 +453,14 @@ body.mode === "coup-parfait-tuto" ||
 body.mode === "coup-parfait" ||
 body.mode === "coup-parfait-ready" ||
 body.mode === "coup-parfait-success" ||
-body.mode === "coup-parfait-fail"
+body.mode === "coup-parfait-fail" ||
+body.mode === "air-guitar-tuto" ||
+body.mode === "air-guitar" ||
+body.mode === "air-guitar-ready" ||
+body.mode === "air-guitar-challenge" ||
+body.mode === "air-guitar-finale" ||
+body.mode === "air-guitar-applause" ||
+body.mode === "air-guitar-score"
   ) {
     mode = body.mode;
   }

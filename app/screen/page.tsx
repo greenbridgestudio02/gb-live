@@ -58,6 +58,15 @@ const [coupParfaitCountdown, setCoupParfaitCountdown] = useState<
   number | "go"
 >(3);
 const [coupParfaitVideoEnded, setCoupParfaitVideoEnded] = useState(false);
+const [airGuitarCountdown, setAirGuitarCountdown] = useState<
+  number | "rock"
+>(3);
+const [airGuitarChallenge, setAirGuitarChallenge] = useState<string | null>(
+  null
+);
+const [airGuitarTutoStep, setAirGuitarTutoStep] = useState(1);
+const [audioUnlocked, setAudioUnlocked] = useState(false);
+const airGuitarAudioRef = useRef<HTMLAudioElement | null>(null);
   const clockStartRef = useRef<number | null>(null);
   const clockBaseRef = useRef(0);
 const lastMessageUpdatedAtRef = useRef(0);
@@ -100,7 +109,98 @@ setCoupParfaitVideoEnded(false);
   };
 }, [liveState.mode]);
 
+useEffect(() => {
+  if (liveState.mode !== "air-guitar-ready") {
+    setAirGuitarCountdown(3);
+    return;
+  }
 
+  setAirGuitarCountdown(3);
+
+  const timer2 = window.setTimeout(() => {
+    setAirGuitarCountdown(2);
+  }, 1000);
+
+  const timer1 = window.setTimeout(() => {
+    setAirGuitarCountdown(1);
+  }, 2000);
+
+  const timerRock = window.setTimeout(() => {
+    setAirGuitarCountdown("rock");
+  }, 3000);
+
+  return () => {
+    window.clearTimeout(timer2);
+    window.clearTimeout(timer1);
+    window.clearTimeout(timerRock);
+  };
+}, [liveState.mode]);
+
+useEffect(() => {
+  if (liveState.mode !== "air-guitar-challenge") {
+    return;
+  }
+
+  const challengeLabels: Record<string, string> = {
+    knees: "🔥 SOLO À GENOUX !",
+    "behind-head": "🤘 DERRIÈRE LA TÊTE !",
+    crowd: "📣 FAIS CRIER LE PUBLIC !",
+    "crazy-solo": "⚡ SOLO DE FOLIE !",
+  };
+
+  const challenge =
+    challengeLabels[liveState.message] ?? liveState.message;
+
+  setAirGuitarChallenge(challenge);
+
+  const timer = window.setTimeout(() => {
+    setAirGuitarChallenge(null);
+  }, 3000);
+
+  return () => {
+    window.clearTimeout(timer);
+  };
+}, [liveState.mode, liveState.message, liveState.messageUpdatedAt]);
+
+useEffect(() => {
+  if (liveState.mode !== "air-guitar-tuto") {
+    setAirGuitarTutoStep(1);
+    return;
+  }
+
+  setAirGuitarTutoStep(1);
+
+  const step2 = window.setTimeout(() => {
+    setAirGuitarTutoStep(2);
+  }, 2500);
+
+  const step3 = window.setTimeout(() => {
+    setAirGuitarTutoStep(3);
+  }, 5000);
+
+  const finalStep = window.setTimeout(() => {
+    setAirGuitarTutoStep(4);
+  }, 7500);
+
+  const finish = window.setTimeout(() => {
+    void fetch("/api/live-state", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        mode: "air-guitar",
+      }),
+    });
+  }, 11000);
+
+  return () => {
+    window.clearTimeout(step2);
+    window.clearTimeout(step3);
+    window.clearTimeout(finalStep);
+    window.clearTimeout(finish);
+  };
+}, [liveState.mode]);
 
 useEffect(() => {
   setLyricsFinished(false);
@@ -416,7 +516,296 @@ const hideLyricDuringLongGap =
 
   return (
     <main className="relative h-screen w-screen overflow-hidden bg-black text-white">
-      {liveState.mode === "coup-parfait-success" ? (
+      {!audioUnlocked && (
+  <div className="absolute inset-0 z-[9999] flex items-center justify-center bg-black">
+    <button
+      type="button"
+      onClick={async () => {
+        const audio = airGuitarAudioRef.current;
+
+        if (audio) {
+          audio.volume = 0;
+          try {
+            await audio.play();
+            audio.pause();
+            audio.currentTime = 0;
+          } catch {
+            // Le clic utilisateur sert à autoriser l'audio.
+          }
+          audio.volume = 1;
+        }
+
+        setAudioUnlocked(true);
+      }}
+      className="rounded-3xl border-2 border-emerald-400 bg-emerald-950/40 px-12 py-8 text-5xl font-black text-white"
+    >
+      ▶ DÉMARRER GB LIVE
+    </button>
+  </div>
+)}
+
+{liveState.mode === "air-guitar-tuto" ? (
+  <div className="relative flex h-full w-full items-center justify-center overflow-hidden bg-black px-12 text-center">
+
+    <video
+      src="/Air-Guitar-Stage-V1.mp4"
+      autoPlay
+      loop
+      muted
+      playsInline
+      className="absolute inset-0 h-full w-full object-cover opacity-40"
+    />
+
+    <div className="relative z-10 w-full max-w-6xl">
+      <p className="text-3xl font-black uppercase tracking-[0.35em] text-red-500">
+        🎸 AIR GUITAR
+      </p>
+
+      <h1 className="mt-5 text-7xl font-black uppercase text-white">
+        COMMENT JOUER ?
+      </h1>
+
+      <div className="mt-14 grid grid-cols-3 gap-8">
+
+        <div
+  className={`rounded-3xl border-2 border-white/30 bg-black/70 p-8 transition-all duration-700 ${
+    airGuitarTutoStep >= 1
+      ? "scale-100 opacity-100"
+      : "scale-75 opacity-0"
+  }`}
+>
+          <p className="text-7xl">🎸</p>
+          <p className="mt-5 text-5xl font-black text-red-500">1</p>
+          <p className="mt-4 text-3xl font-black uppercase text-white">
+            Prends ta guitare...
+          </p>
+          <p className="mt-2 text-2xl font-bold text-zinc-300">
+            invisible !
+          </p>
+        </div>
+
+        <div
+  className={`rounded-3xl border-2 border-white/30 bg-black/70 p-8 transition-all duration-700 ${
+    airGuitarTutoStep >= 2
+      ? "scale-100 opacity-100"
+      : "scale-75 opacity-0"
+  }`}
+>
+          <p className="text-7xl">🤘</p>
+          <p className="mt-5 text-5xl font-black text-red-500">2</p>
+          <p className="mt-4 text-3xl font-black uppercase text-white">
+            Suis les défis
+          </p>
+          <p className="mt-2 text-2xl font-bold text-zinc-300">
+            à l'écran !
+          </p>
+        </div>
+
+        <div
+  className={`rounded-3xl border-2 border-white/30 bg-black/70 p-8 transition-all duration-700 ${
+    airGuitarTutoStep >= 3
+      ? "scale-100 opacity-100"
+      : "scale-75 opacity-0"
+  }`}
+>
+          <p className="text-7xl">🔥</p>
+          <p className="mt-5 text-5xl font-black text-red-500">3</p>
+          <p className="mt-4 text-3xl font-black uppercase text-white">
+            Donne tout
+          </p>
+          <p className="mt-2 text-2xl font-bold text-zinc-300">
+            pour le public !
+          </p>
+        </div>
+
+      </div>
+
+      <p className="mt-14 animate-pulse text-4xl font-black uppercase tracking-[0.15em] text-white">
+        PRÊT À DEVENIR UNE ROCK STAR ?
+      </p>
+    </div>
+  </div>
+
+) : liveState.mode === "air-guitar" ? (
+
+  <div className="relative h-full w-full overflow-hidden bg-black">
+    <video
+      src="/Air-Guitar-Intro-Loop-V1.mp4"
+      autoPlay
+      loop
+      muted
+      playsInline
+      className="h-full w-full object-cover"
+    />
+
+    <audio
+    ref={airGuitarAudioRef}
+  src="/Air-Guitar-Waiting-Loop.mp3"
+  autoPlay
+  loop
+/>
+
+    <div className="pointer-events-none absolute inset-x-0 bottom-12 text-center">
+      <p className="text-2xl font-black uppercase tracking-[0.35em] text-white drop-shadow-2xl">
+        QUI SERA LA PROCHAINE ROCK STAR ?
+      </p>
+    </div>
+  </div>
+
+) : (
+  liveState.mode === "air-guitar-ready" ||
+  liveState.mode === "air-guitar-challenge" ||
+  liveState.mode === "air-guitar-finale" ||
+liveState.mode === "air-guitar-applause" ||
+liveState.mode === "air-guitar-score"
+) ? (
+  <div className="flex h-full w-full flex-col items-center justify-center bg-black text-center">
+        {airGuitarCountdown === "rock" ||
+liveState.mode === "air-guitar-challenge" ||
+liveState.mode === "air-guitar-finale" ||
+liveState.mode === "air-guitar-applause" ||
+liveState.mode === "air-guitar-score" ? (
+  <div className="relative h-full w-full overflow-hidden bg-black">
+    <video
+      src="/Air-Guitar-Stage-V1.mp4"
+      autoPlay
+      loop
+      muted
+      playsInline
+      className="h-full w-full object-cover"
+    />
+
+    {airGuitarChallenge && (
+      <div className="absolute inset-0 flex items-center justify-center bg-black/20 px-12">
+        <div className="rounded-3xl border-4 border-white bg-black/75 px-16 py-10 text-center shadow-2xl">
+          <p className="animate-pulse text-7xl font-black uppercase text-white drop-shadow-2xl">
+            {airGuitarChallenge}
+          </p>
+        </div>
+      </div>
+    )}
+
+{liveState.mode === "air-guitar-finale" && (
+  <div className="absolute inset-0 flex items-center justify-center bg-black/25 px-12">
+    <div className="text-center">
+      <p className="animate-pulse text-[8rem] leading-none">
+        🤘🔥🎸
+      </p>
+
+      <h1 className="mt-8 text-[7rem] font-black uppercase leading-none text-white drop-shadow-2xl">
+        FINALE
+      </h1>
+
+      <p className="mt-5 text-6xl font-black uppercase text-red-500 drop-shadow-2xl">
+        DE ROCK STAR !
+      </p>
+
+      <p className="mt-10 text-3xl font-bold uppercase tracking-[0.25em] text-white">
+        DONNE TOUT !
+      </p>
+    </div>
+  </div>
+)}
+
+{liveState.mode === "air-guitar-applause" && (
+  <div className="absolute inset-0 flex items-center justify-center bg-black/60 px-12">
+    <div className="text-center">
+      <p className="text-[9rem] leading-none animate-pulse">
+        👏
+      </p>
+
+      <p className="mt-6 text-4xl font-black uppercase tracking-[0.35em] text-red-500">
+        APPLAUDIMÈTRE
+      </p>
+
+      <h1 className="mt-8 text-[7rem] font-black uppercase leading-none text-white drop-shadow-2xl">
+        FAITES DU BRUIT !
+      </h1>
+
+      <p className="mt-10 text-3xl font-bold uppercase tracking-[0.2em] text-white">
+        Quel niveau pour notre guitariste ?
+      </p>
+    </div>
+  </div>
+)}
+
+{liveState.mode === "air-guitar-score" && (
+  <div className="absolute inset-0 flex items-center justify-center bg-black/60 px-12">
+    <div className="text-center">
+
+      {liveState.message === "rocker" && (
+        <>
+          <p className="text-[10rem] leading-none">🎸</p>
+
+          <h1 className="mt-6 text-[8rem] font-black uppercase leading-none text-white drop-shadow-2xl">
+            ROCKER
+          </h1>
+
+          <p className="mt-8 text-4xl font-black uppercase tracking-[0.25em] text-red-500">
+            ÇA ENVOIE !
+          </p>
+        </>
+      )}
+
+      {liveState.message === "guitar-hero" && (
+        <>
+          <p className="animate-pulse text-[10rem] leading-none">
+            🔥🎸🔥
+          </p>
+
+          <h1 className="mt-6 text-[7rem] font-black uppercase leading-none text-white drop-shadow-2xl">
+            GUITAR HERO
+          </h1>
+
+          <p className="mt-8 text-4xl font-black uppercase tracking-[0.25em] text-red-500">
+            LE PUBLIC EST EN FEU !
+          </p>
+        </>
+      )}
+
+      {liveState.message === "legende" && (
+        <>
+          <p className="animate-bounce text-[10rem] leading-none">
+            👑
+          </p>
+
+          <h1 className="mt-4 text-[7rem] font-black uppercase leading-none text-white drop-shadow-2xl">
+            LÉGENDE
+          </h1>
+
+          <p className="mt-3 text-[5rem] font-black uppercase leading-none text-red-500 drop-shadow-2xl">
+            DU ROCK
+          </p>
+
+          <p className="mt-10 animate-pulse text-4xl font-black uppercase tracking-[0.2em] text-white">
+            ENTRÉE DANS LA LÉGENDE !
+          </p>
+
+          <div className="mt-8 text-6xl">
+            🔥 🤘 🎸 🤘 🔥
+          </div>
+        </>
+      )}
+
+    </div>
+  </div>
+)}
+
+  </div>
+) : (
+      <>
+        <p className="text-3xl font-bold uppercase tracking-[0.35em] text-red-500">
+          AIR GUITAR
+        </p>
+
+        <p className="mt-8 text-[14rem] font-black leading-none text-white">
+          {airGuitarCountdown}
+        </p>
+      </>
+    )}
+  </div>
+
+) : liveState.mode === "coup-parfait-success" ? (
   <div className="flex h-full w-full flex-col items-center justify-center bg-black px-12 text-center">
     <p className="animate-bounce text-[12rem] leading-none">
   🎉
@@ -680,10 +1069,12 @@ const hideLyricDuringLongGap =
           </section>
 
           
-        </div>
-            )}
+                                </div>
+      )}
 
-      {isMessageVisible && liveState.message && (
+      {isMessageVisible &&
+  liveState.message &&
+  !liveState.mode.startsWith("air-guitar") && (
         <div className="pointer-events-none absolute inset-x-0 bottom-12 z-50 flex justify-center px-12">
           <div className="max-w-5xl rounded-3xl border-2 border-amber-300 bg-black/90 px-12 py-7 text-center shadow-2xl">
             <p className="text-5xl font-black leading-tight text-amber-300">

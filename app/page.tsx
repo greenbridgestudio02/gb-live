@@ -11,6 +11,7 @@ import SongEditor from "./components/SongEditor";
 import NewSongEditor from "./components/NewSongEditor";
 import RequestsPanel from "./components/RequestsPanel";
 import CoupParfaitPanel from "./components/CoupParfaitPanel";
+import AirGuitarPanel from "./components/AirGuitarPanel";
 
 function BlindTestAdminPanel({
   onClose,
@@ -354,6 +355,7 @@ export default function Home() {
   const [midiStatus, setMidiStatus] = useState("");
   const [isBlindTestOpen, setIsBlindTestOpen] = useState(false);
   const [isCoupParfaitOpen, setIsCoupParfaitOpen] = useState(false);
+  const [isAirGuitarOpen, setIsAirGuitarOpen] = useState(false);
   const [isDjLibraryOpen, setIsDjLibraryOpen] = useState(false);
   const lastServerUpdatedAtRef = useRef(0);
   const applyingServerSnapshotRef = useRef(false);
@@ -730,9 +732,16 @@ async function sendPublicMode(
         | "dj"
     | "coup-parfait-tuto"
     | "coup-parfait"
-    | "coup-parfait-ready"
+        | "coup-parfait-ready"
     | "coup-parfait-success"
-| "coup-parfait-fail",
+    | "coup-parfait-fail"
+    | "air-guitar-tuto"
+    | "air-guitar"
+    | "air-guitar-ready"
+    | "air-guitar-challenge"
+    | "air-guitar-finale"
+    | "air-guitar-applause"
+    | "air-guitar-score",
     message = "",
   videoVolume?: number,
   djVideoFile?: string,
@@ -1124,6 +1133,14 @@ async function importLibrary() {
 
 <button
   type="button"
+  onClick={() => setIsAirGuitarOpen(true)}
+  className="w-full rounded-2xl border border-red-700 bg-red-950/30 px-6 py-5 text-xl font-bold text-red-300 transition hover:bg-red-950/50 active:scale-[0.99]"
+>
+  🎸 Air Guitar
+</button>
+
+<button
+  type="button"
   onClick={() => setIsPreparationOpen(true)}
   className="w-full rounded-2xl border border-zinc-700 bg-zinc-900 px-6 py-5 text-xl font-bold text-zinc-100 transition hover:bg-zinc-800 active:scale-[0.99]"
 >
@@ -1314,6 +1331,39 @@ onClose={() => setIsSearchOpen(false)}
     onSuccess={() => void sendPublicMode("coup-parfait-success")}
 onFail={() => void sendPublicMode("coup-parfait-fail")}
 onNextPlayer={() => void sendPublicMode("coup-parfait")}
+  />
+)}
+
+{isAirGuitarOpen && (
+  <AirGuitarPanel
+    onClose={() => {
+      setIsAirGuitarOpen(false);
+      sendPublicMode("home");
+    }}
+    onShowTuto={() => {
+      sendPublicMode("air-guitar-tuto");
+    }}
+    onStartChallenge={() => {
+      sendPublicMode("air-guitar");
+    }}
+    onPlayerReady={() => {
+      sendPublicMode("air-guitar-ready");
+    }}
+    onChallenge={(challenge) => {
+      sendPublicMode("air-guitar-challenge", challenge);
+    }}
+    onFinale={() => {
+      sendPublicMode("air-guitar-finale");
+    }}
+    onApplause={() => {
+      sendPublicMode("air-guitar-applause");
+    }}
+    onScore={(score) => {
+      sendPublicMode("air-guitar-score", score);
+    }}
+    onNextPlayer={() => {
+      sendPublicMode("air-guitar");
+    }}
   />
 )}
 
