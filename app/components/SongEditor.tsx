@@ -583,6 +583,26 @@ videoDuration:
           </span>
         </div>
 
+<div className="mt-3">
+  <label className="mb-2 block text-sm text-zinc-400">
+    Saisir directement le décalage (en secondes)
+  </label>
+
+  <input
+    type="number"
+    step="0.01"
+    value={videoOffset}
+    onChange={(e) => {
+      const value = Number(e.target.value);
+      if (Number.isFinite(value)) {
+        setVideoOffset(value);
+      }
+    }}
+    className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 text-lg font-bold text-white outline-none focus:border-sky-500"
+    placeholder="Exemple : -137"
+  />
+</div>
+
         <div className="mt-3 flex items-center gap-3">
           <button
             type="button"
