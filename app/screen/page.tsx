@@ -1020,6 +1020,13 @@ liveState.mode === "air-guitar-score" ? (
       muted
       playsInline
       preload="auto"
+      onCanPlay={(event) => {
+        if (liveState.isPlaying) {
+          event.currentTarget.play().catch((error) => {
+            console.warn("GB Live : démarrage vidéo impossible", error);
+          });
+        }
+      }}
       className="h-full w-full object-contain"
     />
   </div>
@@ -1031,6 +1038,13 @@ liveState.mode === "air-guitar-score" ? (
       muted
       playsInline
       preload="auto"
+      onCanPlay={(event) => {
+        if (liveState.isPlaying) {
+          event.currentTarget.play().catch((error) => {
+            console.warn("GB Live : démarrage vidéo impossible", error);
+          });
+        }
+      }}
       className="h-full w-full object-contain"
     />
 
@@ -1155,6 +1169,7 @@ liveState.mode === "air-guitar-score" ? (
     </main>
   );
 }
+
 
 
 
