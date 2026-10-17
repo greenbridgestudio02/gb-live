@@ -48,8 +48,17 @@ type PublicMode =
   | "air-guitar-applause"
   | "air-guitar-score";
 
+type AdvertisingState = {
+  file: string;
+  type: "image" | "video";
+  display: "fullscreen" | "overlay";
+  duration: number;
+  startedAt: number;
+} | null;
+
 type LiveState = {
   mode: PublicMode;
+  advertising: AdvertisingState;
 
   song: PublicSong | null;
 
@@ -90,6 +99,7 @@ const liveStateFile = path.join(
 
 const defaultState: LiveState = {
   mode: "home",
+  advertising: null,
 
   song: null,
 
@@ -119,6 +129,18 @@ async function readLiveState(): Promise<LiveState> {
     ) as Partial<LiveState>;
 
     return {
+      advertising:
+        parsed.advertising &&
+        typeof parsed.advertising.file === "string" &&
+        (parsed.advertising.type === "image" ||
+          parsed.advertising.type === "video") &&
+        (parsed.advertising.display === "fullscreen" ||
+          parsed.advertising.display === "overlay") &&
+        typeof parsed.advertising.duration === "number" &&
+        typeof parsed.advertising.startedAt === "number"
+          ? parsed.advertising
+          : null,
+
       mode:
         parsed.mode === "home" ||
         parsed.mode === "song" ||
@@ -514,6 +536,20 @@ if (typeof body.message === "string") {
 }
 
   const newState: LiveState = {
+    advertising:
+      body.advertising === null
+        ? null
+        : body.advertising &&
+          typeof body.advertising.file === "string" &&
+          (body.advertising.type === "image" ||
+            body.advertising.type === "video") &&
+          (body.advertising.display === "fullscreen" ||
+            body.advertising.display === "overlay") &&
+          typeof body.advertising.duration === "number" &&
+          typeof body.advertising.startedAt === "number"
+          ? body.advertising
+          : currentState.advertising,
+
     mode,
 
     song,
@@ -541,6 +577,12 @@ if (typeof body.message === "string") {
     state: newState,
   });
 }
+
+
+
+
+
+
 
 
 

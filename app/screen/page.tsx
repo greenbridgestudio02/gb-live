@@ -21,8 +21,16 @@ type LiveSong = {
 videoDuration?: number;
 };
 
+type AdvertisingState = {
+  file: string;
+  type: "image" | "video";
+  display: "fullscreen" | "overlay";
+  duration: number;
+  startedAt: number;
+} | null;
 type LiveState = {
   mode: string;
+  advertising?: AdvertisingState;
   song: LiveSong | null;
   elapsedTime: number;
   isPlaying: boolean;
@@ -51,6 +59,15 @@ export default function ScreenPage() {
     updatedAt: 0,
   });
 
+  const [advertisingNow, setAdvertisingNow] = useState(0);
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setAdvertisingNow(Date.now());
+    }, 250);
+
+    return () => window.clearInterval(timer);
+  }, []);
   const [displayElapsedTime, setDisplayElapsedTime] = useState(0);
 const [isMessageVisible, setIsMessageVisible] = useState(false);
 const [lyricsFinished, setLyricsFinished] = useState(false);
@@ -522,9 +539,42 @@ const hideLyricDuringLongGap =
   liveState.mode === "pause" ||
   liveState.mode === "home" ||
   lyricsFinished;
+  const activeAdvertising =
+    liveState.advertising &&
+    advertisingNow >= liveState.advertising.startedAt &&
+    advertisingNow <
+      liveState.advertising.startedAt +
+        liveState.advertising.duration * 1000
+      ? liveState.advertising
+      : null;
 
   return (
     <main className="relative h-screen w-screen overflow-hidden bg-black text-white">
+      {activeAdvertising && (
+        <div
+          className={
+            activeAdvertising.display === "fullscreen"
+              ? "fixed inset-0 z-[9000] flex items-center justify-center bg-black"
+              : "fixed bottom-8 right-8 z-[9000] flex h-[55vh] w-[32vw] items-center justify-center overflow-hidden rounded-2xl border-2 border-amber-400 bg-black shadow-2xl"
+          }
+        >
+          {activeAdvertising.type === "image" ? (
+            <img
+              src={activeAdvertising.file}
+              alt="Publicité GB Live"
+              className="h-full w-full object-contain"
+            />
+          ) : (
+            <video
+              src={activeAdvertising.file}
+              autoPlay
+              muted
+              playsInline
+              className="h-full w-full object-contain"
+            />
+          )}
+        </div>
+      )}
       {!audioUnlocked && (
   <div className="absolute inset-0 z-[9999] flex items-center justify-center bg-black">
     <button
@@ -1105,6 +1155,10 @@ liveState.mode === "air-guitar-score" ? (
     </main>
   );
 }
+
+
+
+
 
 
 

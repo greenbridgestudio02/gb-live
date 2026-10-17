@@ -1,0 +1,17 @@
+﻿export type AdvertisingMedia = {
+  id: string;
+  name: string;
+  file: string;
+  type: "image" | "video";
+  duration: number;
+};
+
+export const ADVERTISING_LIBRARY: AdvertisingMedia[] = [
+  {
+    id: "dj-arno",
+    name: "DJ Arno Animation",
+    file: "/publicites/dj-arno.png",
+    type: "image",
+    duration: 15,
+  },
+];

@@ -1,4 +1,5 @@
 ﻿"use client";
+import { ADVERTISING_LIBRARY } from "./advertising-library";
 
 import { useEffect, useRef, useState } from "react";
 
@@ -357,6 +358,7 @@ export default function Home() {
   const [isCoupParfaitOpen, setIsCoupParfaitOpen] = useState(false);
   const [isAirGuitarOpen, setIsAirGuitarOpen] = useState(false);
   const [isDjLibraryOpen, setIsDjLibraryOpen] = useState(false);
+  const [isAdvertisingOpen, setIsAdvertisingOpen] = useState(false);
   const lastServerUpdatedAtRef = useRef(0);
   const applyingServerSnapshotRef = useRef(false);
 
@@ -1823,6 +1825,122 @@ onNextPlayer={() => void sendPublicMode("coup-parfait")}
     </div>
   </div>
 )}
+      {isAdvertisingOpen && (
+        <div className="fixed inset-0 z-[90] flex items-center justify-center bg-black/85 p-6">
+          <div className="w-full max-w-3xl rounded-3xl border border-amber-500/50 bg-zinc-950 p-8 text-white shadow-2xl">
+            <div className="mb-8 flex items-center justify-between">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-amber-400">
+                  GB LIVE • PARTENAIRES
+                </p>
+                <h2 className="mt-2 text-3xl font-bold">
+                  📢 Publicités & Partenaires
+                </h2>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsAdvertisingOpen(false)}
+                className="rounded-xl border border-zinc-700 px-4 py-2 text-zinc-300 hover:bg-zinc-800"
+              >
+                Fermer
+              </button>
+            </div>
+
+            <p className="mb-5 text-zinc-400">
+              Sélectionne un média publicitaire et son mode de diffusion.
+            </p>
+
+            <button
+              type="button"
+              onClick={() => {
+                void fetch("/api/live-state", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    advertising: null,
+                  }),
+                });
+              }}
+              className="mt-5 rounded-lg border border-red-500 bg-red-950/40 px-5 py-3 font-bold text-red-300 hover:bg-red-900/60"
+            >
+              ⏹ Arrêter la publicité
+            </button>
+            <h3 className="mt-8 mb-4 text-xl font-bold text-amber-300">
+              Bibliothèque publicitaire
+            </h3>
+
+            <div className="max-h-[40vh] space-y-4 overflow-y-auto">
+              {ADVERTISING_LIBRARY.map((ad) => (
+                <div
+                  key={ad.id}
+                  className="flex items-center gap-5 rounded-2xl border border-zinc-700 bg-zinc-900 p-4"
+                >
+                  <img
+                    src={ad.file}
+                    alt={ad.name}
+                    className="h-36 w-24 rounded-lg bg-black object-contain"
+                  />
+
+                  <div className="flex-1">
+                    <h4 className="text-xl font-bold text-white">
+                      {ad.name}
+                    </h4>
+                    <p className="mt-1 text-sm text-zinc-400">
+                      {ad.type === "image" ? "Image" : "Vidéo"} • {ad.duration} secondes
+                    </p>
+
+                    <div className="mt-4 flex flex-wrap gap-3">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          void fetch("/api/live-state", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                              advertising: {
+                                file: ad.file,
+                                type: ad.type,
+                                display: "fullscreen",
+                                duration: ad.duration,
+                                startedAt: Date.now(),
+                              },
+                            }),
+                          });
+                        }}
+                        className="rounded-lg bg-amber-600 px-4 py-2 font-bold text-black"
+                      >
+                        🖥️ Plein écran
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          void fetch("/api/live-state", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                              advertising: {
+                                file: ad.file,
+                                type: ad.type,
+                                display: "overlay",
+                                duration: ad.duration,
+                                startedAt: Date.now(),
+                              },
+                            }),
+                          });
+                        }}
+                        className="rounded-lg border border-amber-500 px-4 py-2 font-bold text-amber-300"
+                      >
+                        ✨ Superposition
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
       <header className="flex items-center justify-between border-b border-zinc-800 px-6 py-2">
         <div>
   <img
@@ -1874,6 +1992,13 @@ onNextPlayer={() => void sendPublicMode("coup-parfait")}
   className="rounded-lg border border-violet-700 bg-violet-950/40 px-4 py-2 text-sm font-semibold text-violet-300 hover:bg-violet-900/50"
 >
   🎧 DJ
+</button>
+<button
+  type="button"
+  onClick={() => setIsAdvertisingOpen(true)}
+  className="rounded-lg border border-yellow-600 bg-yellow-950/40 px-4 py-2 text-sm font-semibold text-yellow-300 hover:bg-yellow-900/50"
+>
+  📢 Publicité
 </button>
 </div>
         <div className="text-right">
@@ -2660,6 +2785,15 @@ onClose={() => setIsSearchOpen(false)}
     </main>
   );
 }
+
+
+
+
+
+
+
+
+
 
 
 
