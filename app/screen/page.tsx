@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useRef, useState } from "react";
 
@@ -267,7 +267,7 @@ const targetTime = Math.max(
   liveState.isPlaying &&
   (liveState.elapsedTime ?? 0) >= videoOffset
 ) {
-  video.play().catch(() => {});
+  if (video.paused) { video.play().catch((error) => console.warn("GB Live : erreur lecture video", error)); }
 } else {
   video.pause();
 }
@@ -300,7 +300,7 @@ useEffect(() => {
   video.loop = true;
 
   if (liveState.isPlaying) {
-    video.play().catch(() => {});
+    if (video.paused) { video.play().catch((error) => console.warn("GB Live : erreur lecture video", error)); }
   } else {
     video.pause();
   }

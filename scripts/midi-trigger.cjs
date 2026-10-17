@@ -1,4 +1,4 @@
-const easymidi = require("easymidi");
+﻿const easymidi = require("easymidi");
 const fs = require("node:fs");
 const path = require("node:path");
 
@@ -16,7 +16,19 @@ const commandFile = path.join(
   "midi-command.json"
 );
 
-const inputs = easymidi.getInputs();
+async function waitForMontage() {
+  while (true) {
+    const inputs = easymidi.getInputs();
+    const outputs = easymidi.getOutputs();
+    if (inputs.includes(inputName) && outputs.includes(outputName)) return;
+    console.log("En attente du Montage M8x...");
+    await new Promise(resolve => setTimeout(resolve, 2000));
+  }
+}
+
+async function startMidi() {
+  await waitForMontage();
+  const inputs = easymidi.getInputs();
 
 console.log("Entrées MIDI détectées :", inputs);
 
@@ -152,3 +164,6 @@ process.on("SIGINT", () => {
   output.close();
   process.exit(0);
 });
+}
+startMidi().catch(console.error);
+
