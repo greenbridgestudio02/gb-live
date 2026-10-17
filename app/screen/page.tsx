@@ -346,7 +346,7 @@ setLiveState(state);
 
     const timer = window.setTimeout(() => {
       setIsMessageVisible(false);
-    }, 8000);
+    }, 12000);
 
     return () => {
       window.clearTimeout(timer);
@@ -1094,9 +1094,9 @@ liveState.mode === "air-guitar-score" ? (
       {isMessageVisible &&
   liveState.message &&
   !liveState.mode.startsWith("air-guitar") && (
-        <div className="pointer-events-none absolute inset-x-0 bottom-12 z-50 flex justify-center px-12">
-          <div className="max-w-5xl rounded-3xl border-2 border-amber-300 bg-black/90 px-12 py-7 text-center shadow-2xl">
-            <p className="text-5xl font-black leading-tight text-amber-300">
+        <div className="pointer-events-none absolute inset-x-0 top-8 z-50 flex justify-center px-8">
+          <div className="max-w-[75vw] animate-[gbMessageSequence_12s_linear_both] rounded-2xl border border-amber-400/50 bg-black/80 px-10 py-5 text-center shadow-[0_0_35px_rgba(212,175,55,0.15)] backdrop-blur-xl">
+            <p className="text-3xl font-semibold leading-snug tracking-wide text-amber-100">
               {liveState.message}
             </p>
           </div>
@@ -1105,6 +1105,9 @@ liveState.mode === "air-guitar-score" ? (
     </main>
   );
 }
+
+
+
 
 
 
