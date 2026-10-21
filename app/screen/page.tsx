@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useRef, useState } from "react";
 
@@ -46,6 +46,30 @@ type LiveState = {
 const LYRICS_LEAD = 0.15;
 
 export default function ScreenPage() {
+  const isPreview =
+    typeof window !== "undefined" &&
+    new URLSearchParams(window.location.search).get("preview") === "1";
+  useEffect(() => {
+    if (!isPreview) return;
+
+    const muteMedia = () => {
+      document.querySelectorAll<HTMLMediaElement>("audio, video").forEach((media) => {
+        media.muted = true;
+        media.volume = 0;
+      });
+    };
+
+    muteMedia();
+
+    const observer = new MutationObserver(muteMedia);
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+    });
+
+    return () => observer.disconnect();
+  }, [isPreview]);
+
   const [liveState, setLiveState] = useState<LiveState>({
     mode: "home",
     song: null,
@@ -95,10 +119,10 @@ const coupParfaitVideoRef = useRef<HTMLVideoElement | null>(null);
 const coupParfaitSongVideoRef = useRef<HTMLVideoElement | null>(null);
 useEffect(() => {
   if (coupParfaitVideoRef.current) {
-    coupParfaitVideoRef.current.volume = liveState.videoVolume ?? 0.25;
+    coupParfaitVideoRef.current.volume = (isPreview ? 0 : (liveState.videoVolume ?? 0.25));
   }
   if (coupParfaitSongVideoRef.current) {
-    coupParfaitSongVideoRef.current.volume = liveState.videoVolume ?? 0.25;
+    coupParfaitSongVideoRef.current.volume = (isPreview ? 0 : (liveState.videoVolume ?? 0.25));
   }
 }, [liveState.videoVolume, liveState.mode]);
 useEffect(() => {
@@ -209,6 +233,7 @@ useEffect(() => {
   }, 7500);
 
   const finish = window.setTimeout(() => {
+    if (isPreview) return;
     void fetch("/api/live-state", {
       method: "POST",
       headers: {
@@ -575,7 +600,7 @@ const hideLyricDuringLongGap =
           )}
         </div>
       )}
-      {!audioUnlocked && (
+      {!isPreview && !audioUnlocked && (
   <div className="absolute inset-0 z-[9999] flex items-center justify-center bg-black">
     <button
       type="button"
@@ -591,7 +616,7 @@ const hideLyricDuringLongGap =
           } catch {
             // Le clic utilisateur sert à autoriser l'audio.
           }
-          audio.volume = 1;
+          audio.volume = isPreview ? 0 : 1;
         }
 
         setAudioUnlocked(true);
@@ -922,7 +947,7 @@ liveState.mode === "air-guitar-score" ? (
           autoPlay
           playsInline
           onPlay={(event) => {
-            event.currentTarget.volume = liveState.videoVolume ?? 0.25;
+            event.currentTarget.volume = (isPreview ? 0 : (liveState.videoVolume ?? 0.25));
           }}
           onEnded={() => {
             setCoupParfaitVideoEnded(true);
@@ -968,6 +993,7 @@ liveState.mode === "air-guitar-score" ? (
   autoPlay
     playsInline
     onEnded={() => {
+    if (isPreview) return;
     void fetch("/api/live-state", {
       method: "POST",
       headers: {
@@ -1169,6 +1195,14 @@ liveState.mode === "air-guitar-score" ? (
     </main>
   );
 }
+
+
+
+
+
+
+
+
 
 
 

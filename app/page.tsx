@@ -2049,14 +2049,23 @@ onNextPlayer={() => void sendPublicMode("coup-parfait")}
           </button>
         </div>
 
-        <div className="min-h-0 flex-1 overflow-hidden">
-  <LyricsPlayer
+        <div className="grid min-h-0 flex-1 grid-cols-[minmax(0,3fr)_minmax(0,2fr)] gap-3">
+  <div className="min-h-0 overflow-hidden">
+    <LyricsPlayer
   key={`${currentSong.id}-${playbackResetKey}`}
   song={currentSong}
   stopped={isPaused}
   publicScreenHidden={isPublicScreenHidden}
 />
           </div>
+  <div className="min-h-0 flex flex-col overflow-hidden rounded-2xl border border-zinc-600 bg-zinc-900/40 p-2">
+    <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-emerald-400">
+      Retour écran public
+    </p>
+    <div className="relative aspect-video w-full shrink-0 overflow-hidden bg-black"><iframe src="/screen?preview=1" title="Retour écran public" className="pointer-events-none absolute left-0 top-0 origin-top-left border-0" style={{ width: "250%", height: "250%", transform: "scale(0.4)" }} tabIndex={-1} /></div>
+  </div>
+</div>
+
       <div className="mb-2 flex items-center justify-between rounded-2xl border border-zinc-800 bg-zinc-900/60 px-6 py-4">
   <div>
     <p className="text-xs font-semibold uppercase tracking-[0.25em] text-zinc-500">
@@ -2785,6 +2794,14 @@ onClose={() => setIsSearchOpen(false)}
     </main>
   );
 }
+
+
+
+
+
+
+
+
 
 
 
