@@ -1901,6 +1901,27 @@ onNextPlayer={() => void sendPublicMode("coup-parfait")}
                                 file: ad.file,
                                 type: ad.type,
                                 display: "fullscreen",
+                                duration: 0,
+                                startedAt: Date.now(),
+                              },
+                            }),
+                          });
+                        }}
+                        className="rounded-lg border border-emerald-500 bg-emerald-950/50 px-4 py-2 font-bold text-emerald-300 hover:bg-emerald-900/60"
+                      >
+                        ♾️ Plein écran permanent
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          void fetch("/api/live-state", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                              advertising: {
+                                file: ad.file,
+                                type: ad.type,
+                                display: "fullscreen",
                                 duration: ad.duration,
                                 startedAt: Date.now(),
                               },
@@ -2794,6 +2815,7 @@ onClose={() => setIsSearchOpen(false)}
     </main>
   );
 }
+
 
 
 

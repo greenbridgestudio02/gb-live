@@ -567,9 +567,10 @@ const hideLyricDuringLongGap =
   const activeAdvertising =
     liveState.advertising &&
     advertisingNow >= liveState.advertising.startedAt &&
-    advertisingNow <
-      liveState.advertising.startedAt +
-        liveState.advertising.duration * 1000
+    (liveState.advertising.duration === 0 ||
+      advertisingNow <
+        liveState.advertising.startedAt +
+          liveState.advertising.duration * 1000)
       ? liveState.advertising
       : null;
 
@@ -1195,6 +1196,7 @@ liveState.mode === "air-guitar-score" ? (
     </main>
   );
 }
+
 
 
 

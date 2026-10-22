@@ -14,4 +14,11 @@ export const ADVERTISING_LIBRARY: AdvertisingMedia[] = [
     type: "image",
     duration: 15,
   },
+  {
+    id: "watacha",
+    name: "Le WATACHA - Bar associatif",
+    file: "/publicites/Watacha.jpg",
+    type: "image",
+    duration: 15,
+  },
 ];
