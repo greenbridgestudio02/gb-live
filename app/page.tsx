@@ -358,6 +358,7 @@ export default function Home() {
   const [isCoupParfaitOpen, setIsCoupParfaitOpen] = useState(false);
   const [isAirGuitarOpen, setIsAirGuitarOpen] = useState(false);
   const [isDjLibraryOpen, setIsDjLibraryOpen] = useState(false);
+  const [isAmbianceOpen, setIsAmbianceOpen] = useState(false);
   const [isAdvertisingOpen, setIsAdvertisingOpen] = useState(false);
   const lastServerUpdatedAtRef = useRef(0);
   const applyingServerSnapshotRef = useRef(false);
@@ -732,6 +733,7 @@ async function sendPublicMode(
         | "pause"
     | "end"
         | "dj"
+    | "ambiance"
     | "coup-parfait-tuto"
     | "coup-parfait"
         | "coup-parfait-ready"
@@ -1825,6 +1827,62 @@ onNextPlayer={() => void sendPublicMode("coup-parfait")}
     </div>
   </div>
 )}
+      {isAmbianceOpen && (
+        <div className="fixed inset-0 z-[90] flex items-center justify-center bg-black/85 p-6">
+          <div className="w-full max-w-4xl rounded-3xl border border-cyan-500/50 bg-zinc-950 p-8 text-white shadow-2xl">
+            <div className="mb-6 flex items-center justify-between">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-cyan-400">
+                  GB LIVE • AMBIANCE
+                </p>
+                <h2 className="mt-2 text-3xl font-bold">
+                  🎬 Bibliothèque AMBIANCE
+                </h2>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsAmbianceOpen(false)}
+                className="rounded-xl border border-zinc-700 px-4 py-2 text-zinc-300 hover:bg-zinc-800"
+              >
+                Fermer
+              </button>
+            </div>
+
+            <p className="mb-5 text-zinc-400">
+              Vidéos musicales pour les repas, cocktails et moments de détente.
+            </p>
+
+            <div className="rounded-xl border border-zinc-700 bg-zinc-900 p-4">
+              <p className="mb-3 font-semibold">Ambiance Test</p>
+              <button
+                type="button"
+                onClick={async () => {
+                  setIsPublicScreenHidden(true);
+                  await fetch("/api/live-state", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      mode: "ambiance",
+                      ambianceVideoFile: "/ambiances/ambiance-test.mp4",
+                      ambianceLoop: false,
+                      ambianceVolume: 0.7
+                    })
+                  });
+                }}
+                className="mb-4 rounded-lg bg-cyan-700 px-5 py-3 font-bold text-white hover:bg-cyan-600"
+              >
+                ▶ Diffuser sur la TV
+              </button>
+              <video
+                src="/ambiances/ambiance-test.mp4"
+                controls
+                preload="none"
+                className="aspect-video w-full rounded-lg bg-black object-contain"
+              />
+            </div>
+          </div>
+        </div>
+      )}
       {isAdvertisingOpen && (
         <div className="fixed inset-0 z-[90] flex items-center justify-center bg-black/85 p-6">
           <div className="w-full max-w-3xl rounded-3xl border border-amber-500/50 bg-zinc-950 p-8 text-white shadow-2xl">
@@ -2013,6 +2071,13 @@ onNextPlayer={() => void sendPublicMode("coup-parfait")}
   className="rounded-lg border border-violet-700 bg-violet-950/40 px-4 py-2 text-sm font-semibold text-violet-300 hover:bg-violet-900/50"
 >
   🎧 DJ
+</button>
+<button
+  type="button"
+  onClick={() => setIsAmbianceOpen(true)}
+  className="rounded-lg border border-cyan-700 bg-cyan-950/40 px-4 py-2 text-sm font-semibold text-cyan-300 hover:bg-cyan-900/50"
+>
+  🎬 AMBIANCE
 </button>
 <button
   type="button"
@@ -2815,6 +2880,12 @@ onClose={() => setIsSearchOpen(false)}
     </main>
   );
 }
+
+
+
+
+
+
 
 
 

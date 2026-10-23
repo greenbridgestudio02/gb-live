@@ -38,6 +38,9 @@ type LiveState = {
   videoVolume: number;
   djVideoFile: string;
   djLoop: boolean;
+  ambianceVideoFile?: string;
+  ambianceLoop?: boolean;
+  ambianceVolume?: number;
   message: string;
   messageUpdatedAt: number;
   updatedAt: number;
@@ -1028,6 +1031,22 @@ liveState.mode === "air-guitar-score" ? (
       {liveState.message}
     </p>
   </div>
+) : liveState.mode === "ambiance" ? (
+  <div className="h-full w-full overflow-hidden bg-black">
+    <video
+      src={liveState.ambianceVideoFile || "/ambiances/ambiance-test.mp4"}
+      autoPlay
+      loop={liveState.ambianceLoop ?? false}
+      muted={isPreview}
+      playsInline
+      onLoadedMetadata={(event) => {
+        event.currentTarget.volume = isPreview
+          ? 0
+          : (liveState.ambianceVolume ?? 0.7);
+      }}
+      className="h-full w-full object-contain"
+    />
+  </div>
 ) : liveState.mode === "dj" ? (
   <div className="h-full w-full overflow-hidden bg-black">
     <video
@@ -1196,6 +1215,8 @@ liveState.mode === "air-guitar-score" ? (
     </main>
   );
 }
+
+
 
 
 

@@ -35,6 +35,7 @@ type PublicMode =
   | "pause"
   | "end"
   | "dj"
+  | "ambiance"
   | "coup-parfait-tuto"
   | "coup-parfait"
   | "coup-parfait-ready"
@@ -69,6 +70,9 @@ type LiveState = {
   videoVolume: number;
   djVideoFile: string;
   djLoop: boolean;
+  ambianceVideoFile: string;
+  ambianceLoop: boolean;
+  ambianceVolume: number;
   message: string;
   messageUpdatedAt: number;
 
@@ -109,6 +113,9 @@ const defaultState: LiveState = {
 videoVolume: 0.25,
   djVideoFile: "/01-club-original.mp4",
   djLoop: false,
+  ambianceVideoFile: "/ambiances/ambiance-test.mp4",
+  ambianceLoop: false,
+  ambianceVolume: 0.7,
   message: "",
   messageUpdatedAt: 0,
 
@@ -148,6 +155,7 @@ async function readLiveState(): Promise<LiveState> {
         parsed.mode === "pause" ||
 parsed.mode === "end" ||
 parsed.mode === "dj" ||
+        parsed.mode === "ambiance" ||
 parsed.mode === "coup-parfait-tuto" ||
 parsed.mode === "coup-parfait" ||
 parsed.mode === "coup-parfait-ready" ||
@@ -195,6 +203,21 @@ videoVolume:
         typeof parsed.djLoop === "boolean"
           ? parsed.djLoop
           : false,
+
+      ambianceVideoFile:
+        typeof parsed.ambianceVideoFile === "string"
+          ? parsed.ambianceVideoFile
+          : "/ambiances/ambiance-test.mp4",
+
+      ambianceLoop:
+        typeof parsed.ambianceLoop === "boolean"
+          ? parsed.ambianceLoop
+          : false,
+
+      ambianceVolume:
+        typeof parsed.ambianceVolume === "number"
+          ? Math.max(0, Math.min(1, parsed.ambianceVolume))
+          : 0.7,
 
       message:
         typeof parsed.message === "string"
@@ -471,6 +494,7 @@ export async function POST(
         body.mode === "pause" ||
     body.mode === "end" ||
     body.mode === "dj" ||
+    body.mode === "ambiance" ||
 body.mode === "coup-parfait-tuto" ||
 body.mode === "coup-parfait" ||
 body.mode === "coup-parfait-ready" ||
@@ -523,6 +547,20 @@ const djLoop =
   typeof body.djLoop === "boolean"
     ? body.djLoop
     : currentState.djLoop;
+const ambianceVideoFile =
+  typeof body.ambianceVideoFile === "string"
+    ? body.ambianceVideoFile
+    : currentState.ambianceVideoFile;
+
+const ambianceLoop =
+  typeof body.ambianceLoop === "boolean"
+    ? body.ambianceLoop
+    : currentState.ambianceLoop;
+
+const ambianceVolume =
+  typeof body.ambianceVolume === "number"
+    ? Math.max(0, Math.min(1, body.ambianceVolume))
+    : currentState.ambianceVolume;
   const message =
     typeof body.message === "string"
       ? body.message
@@ -562,6 +600,9 @@ if (typeof body.message === "string") {
     videoVolume,
     djVideoFile,
     djLoop,
+    ambianceVideoFile,
+    ambianceLoop,
+    ambianceVolume,
     message,
     messageUpdatedAt,
 
@@ -577,6 +618,10 @@ if (typeof body.message === "string") {
     state: newState,
   });
 }
+
+
+
+
 
 
 
