@@ -1891,6 +1891,28 @@ onNextPlayer={() => void sendPublicMode("coup-parfait")}
               Vidéos musicales pour les repas, cocktails et moments de détente.
             </p>
 
+            <div className="mb-5">
+<button
+                  type="button"
+                  onClick={() => {
+                    void fetch("/api/live-state", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({
+                        mode: "home",
+                        ambianceVideoFile: null,
+                        ambianceLoop: false,
+                        ambiancePlaylist: [],
+                        ambiancePlaylistIndex: 0,
+                        ambiancePlaylistLoop: false,
+                      }),
+                    }).catch(console.error);
+                  }}
+                  className="rounded-lg bg-red-700 px-5 py-3 font-bold hover:bg-red-600"
+                >
+                  ⏹ ARRÊTER L'AMBIANCE
+                </button>
+            </div>
             {ambianceSelection.length > 0 && (
               <div className="mb-4 flex flex-wrap items-center gap-4 rounded-xl border border-cyan-700 bg-zinc-900 p-4">
                 <label className="flex cursor-pointer items-center gap-2">
@@ -1982,6 +2004,7 @@ onNextPlayer={() => void sendPublicMode("coup-parfait")}
                 </button>
               </div>
             )}
+            
             {ambianceSelection.length > 0 && (
               <div className="mb-6 rounded-2xl border border-emerald-600/50 bg-zinc-900 p-5">
                 <h3 className="mb-4 text-xl font-bold text-emerald-400">
@@ -2060,7 +2083,15 @@ onNextPlayer={() => void sendPublicMode("coup-parfait")}
                     className="rounded-xl border border-zinc-700 bg-zinc-900 p-4"
                   >
                     <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
-                      <p className="font-semibold">{video.name}</p>
+                      <div className="flex flex-wrap items-center gap-3">
+  <p className="font-semibold">{video.name}</p>
+  <span
+    className="text-sm text-cyan-300"
+    id={`ambiance-duration-${encodeURIComponent(video.file)}`}
+  >
+    Durée : …
+  </span>
+</div>
                       <div className="flex gap-2">
                         <button
                           type="button"
@@ -2125,11 +2156,24 @@ onNextPlayer={() => void sendPublicMode("coup-parfait")}
                       </div>
                     </div>
                     <video
-                      src={video.file}
-                      controls
+                      src={`${video.file}#t=5`}
                       muted
-                      preload="none"
-                      className="aspect-video w-full rounded-lg bg-black object-contain"
+                      playsInline
+                      preload="metadata"
+                      onLoadedMetadata={(event) => {
+                        const duration = event.currentTarget.duration;
+                        if (!Number.isFinite(duration)) return;
+                        const minutes = Math.floor(duration / 60);
+                        const seconds = Math.floor(duration % 60);
+                        const label = document.getElementById(
+                          `ambiance-duration-${encodeURIComponent(video.file)}`
+                        );
+                        if (label) {
+                          label.textContent =
+                            `Durée : ${minutes}:${String(seconds).padStart(2, "0")}`;
+                        }
+                      }}
+                      className="aspect-video w-40 rounded-lg bg-black object-cover"
                     />
                   </div>
                 ))
@@ -3135,6 +3179,11 @@ onClose={() => setIsSearchOpen(false)}
     </main>
   );
 }
+
+
+
+
+
 
 
 
