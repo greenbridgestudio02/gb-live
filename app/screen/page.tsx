@@ -41,6 +41,9 @@ type LiveState = {
   ambianceVideoFile?: string;
   ambianceLoop?: boolean;
   ambianceVolume?: number;
+  ambiancePlaylist?: string[];
+  ambiancePlaylistIndex?: number;
+  ambiancePlaylistLoop?: boolean;
   message: string;
   messageUpdatedAt: number;
   updatedAt: number;
@@ -1038,6 +1041,33 @@ liveState.mode === "air-guitar-score" ? (
       autoPlay
       loop={liveState.ambianceLoop ?? false}
       muted={isPreview}
+      onEnded={() => {
+        if (isPreview) return;
+
+        const playlist = liveState.ambiancePlaylist ?? [];
+        if (playlist.length === 0) return;
+
+        const currentIndex = liveState.ambiancePlaylistIndex ?? 0;
+        const nextIndex = currentIndex + 1;
+
+        if (nextIndex >= playlist.length && !liveState.ambiancePlaylistLoop) {
+          return;
+        }
+
+        const targetIndex =
+          nextIndex >= playlist.length ? 0 : nextIndex;
+
+        void fetch("/api/live-state", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            mode: "ambiance",
+            ambianceVideoFile: playlist[targetIndex],
+            ambiancePlaylistIndex: targetIndex,
+            ambianceLoop: false,
+          }),
+        }).catch(console.error);
+      }}
       playsInline
       onLoadedMetadata={(event) => {
         event.currentTarget.volume = isPreview
@@ -1215,6 +1245,8 @@ liveState.mode === "air-guitar-score" ? (
     </main>
   );
 }
+
+
 
 
 

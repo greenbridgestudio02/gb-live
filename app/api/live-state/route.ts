@@ -73,6 +73,9 @@ type LiveState = {
   ambianceVideoFile: string;
   ambianceLoop: boolean;
   ambianceVolume: number;
+  ambiancePlaylist: string[];
+  ambiancePlaylistIndex: number;
+  ambiancePlaylistLoop: boolean;
   message: string;
   messageUpdatedAt: number;
 
@@ -116,6 +119,9 @@ videoVolume: 0.25,
   ambianceVideoFile: "/ambiances/ambiance-test.mp4",
   ambianceLoop: false,
   ambianceVolume: 0.7,
+  ambiancePlaylist: [],
+  ambiancePlaylistIndex: 0,
+  ambiancePlaylistLoop: false,
   message: "",
   messageUpdatedAt: 0,
 
@@ -219,6 +225,26 @@ videoVolume:
           ? Math.max(0, Math.min(1, parsed.ambianceVolume))
           : 0.7,
 
+      ambiancePlaylist:
+        Array.isArray(parsed.ambiancePlaylist)
+          ? parsed.ambiancePlaylist.filter(
+              (file): file is string =>
+                typeof file === "string" &&
+                file.startsWith("/ambiances/")
+            )
+          : [],
+
+      ambiancePlaylistIndex:
+        typeof parsed.ambiancePlaylistIndex === "number" &&
+        Number.isInteger(parsed.ambiancePlaylistIndex) &&
+        parsed.ambiancePlaylistIndex >= 0
+          ? parsed.ambiancePlaylistIndex
+          : 0,
+
+      ambiancePlaylistLoop:
+        typeof parsed.ambiancePlaylistLoop === "boolean"
+          ? parsed.ambiancePlaylistLoop
+          : false,
       message:
         typeof parsed.message === "string"
           ? parsed.message
@@ -561,7 +587,30 @@ const ambianceVolume =
   typeof body.ambianceVolume === "number"
     ? Math.max(0, Math.min(1, body.ambianceVolume))
     : currentState.ambianceVolume;
-  const message =
+
+const ambiancePlaylist =
+  Array.isArray(body.ambiancePlaylist)
+    ? body.ambiancePlaylist.filter(
+        (file: unknown): file is string =>
+          typeof file === "string" &&
+          file.startsWith("/ambiances/") &&
+          !file.includes("..")
+      )
+    : currentState.ambiancePlaylist;
+
+const ambiancePlaylistIndex =
+  typeof body.ambiancePlaylistIndex === "number" &&
+  Number.isInteger(body.ambiancePlaylistIndex) &&
+  body.ambiancePlaylistIndex >= 0
+    ? body.ambiancePlaylistIndex
+    : currentState.ambiancePlaylistIndex;
+
+const ambiancePlaylistLoop =
+  typeof body.ambiancePlaylistLoop === "boolean"
+    ? body.ambiancePlaylistLoop
+    : currentState.ambiancePlaylistLoop;
+
+const message =
     typeof body.message === "string"
       ? body.message
       : currentState.message;
@@ -603,6 +652,9 @@ if (typeof body.message === "string") {
     ambianceVideoFile,
     ambianceLoop,
     ambianceVolume,
+    ambiancePlaylist,
+    ambiancePlaylistIndex,
+    ambiancePlaylistLoop,
     message,
     messageUpdatedAt,
 
@@ -618,6 +670,9 @@ if (typeof body.message === "string") {
     state: newState,
   });
 }
+
+
+
 
 
 

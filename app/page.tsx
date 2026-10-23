@@ -359,7 +359,46 @@ export default function Home() {
   const [isAirGuitarOpen, setIsAirGuitarOpen] = useState(false);
   const [isDjLibraryOpen, setIsDjLibraryOpen] = useState(false);
   const [isAmbianceOpen, setIsAmbianceOpen] = useState(false);
+  const [ambianceVideos, setAmbianceVideos] = useState<
+    { name: string; file: string }[]
+  >([]);
+  const [ambianceSelection, setAmbianceSelection] = useState<string[]>([]);
+  const [ambianceRepeat, setAmbianceRepeat] = useState(false);
   const [isAdvertisingOpen, setIsAdvertisingOpen] = useState(false);
+
+  useEffect(() => {
+    if (!isAmbianceOpen) return;
+
+    let cancelled = false;
+
+    async function loadAmbianceVideos() {
+      try {
+        const response = await fetch("/api/ambiances", {
+          cache: "no-store"
+        });
+
+        if (!response.ok) {
+          throw new Error("Erreur de chargement AMBIANCE");
+        }
+
+        const data = await response.json();
+
+        if (!cancelled) {
+          setAmbianceVideos(
+            Array.isArray(data.videos) ? data.videos : []
+          );
+        }
+      } catch (error) {
+        console.error("Bibliotheque AMBIANCE :", error);
+      }
+    }
+
+    void loadAmbianceVideos();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [isAmbianceOpen]);
   const lastServerUpdatedAtRef = useRef(0);
   const applyingServerSnapshotRef = useRef(false);
 
@@ -1852,33 +1891,249 @@ onNextPlayer={() => void sendPublicMode("coup-parfait")}
               Vidéos musicales pour les repas, cocktails et moments de détente.
             </p>
 
-            <div className="rounded-xl border border-zinc-700 bg-zinc-900 p-4">
-              <p className="mb-3 font-semibold">Ambiance Test</p>
-              <button
-                type="button"
-                onClick={async () => {
-                  setIsPublicScreenHidden(true);
-                  await fetch("/api/live-state", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                      mode: "ambiance",
-                      ambianceVideoFile: "/ambiances/ambiance-test.mp4",
-                      ambianceLoop: false,
-                      ambianceVolume: 0.7
-                    })
-                  });
-                }}
-                className="mb-4 rounded-lg bg-cyan-700 px-5 py-3 font-bold text-white hover:bg-cyan-600"
-              >
-                ▶ Diffuser sur la TV
-              </button>
-              <video
-                src="/ambiances/ambiance-test.mp4"
-                controls
-                preload="none"
-                className="aspect-video w-full rounded-lg bg-black object-contain"
-              />
+            {ambianceSelection.length > 0 && (
+              <div className="mb-4 flex flex-wrap items-center gap-4 rounded-xl border border-cyan-700 bg-zinc-900 p-4">
+                <label className="flex cursor-pointer items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={ambianceRepeat}
+                    onChange={(event) => setAmbianceRepeat(event.target.checked)}
+                    className="h-5 w-5 accent-cyan-500"
+                  />
+                  Répéter toute la playlist
+                </label>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsPublicScreenHidden(true);
+                    void fetch("/api/live-state", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({
+                        mode: "ambiance",
+                        ambianceVideoFile: ambianceSelection[0],
+                        ambianceLoop: false,
+                        ambianceVolume: 0.7,
+                        ambiancePlaylist: ambianceSelection,
+                        ambiancePlaylistIndex: 0,
+                        ambiancePlaylistLoop: ambianceRepeat,
+                      }),
+                    }).catch(console.error);
+                  }}
+                  className="rounded-lg bg-emerald-700 px-5 py-3 font-bold hover:bg-emerald-600"
+                >
+                  ▶ LANCER LA PLAYLIST
+                </button>
+                <button
+                  type="button"
+                  onClick={async () => {
+                    try {
+                      const response = await fetch("/api/live-state", {
+                        cache: "no-store",
+                      });
+                      if (!response.ok) throw new Error("Lecture impossible");
+
+                      const state = await response.json();
+                      const playlist: string[] =
+                        Array.isArray(state.ambiancePlaylist)
+                          ? state.ambiancePlaylist
+                          : [];
+
+                      if (state.mode !== "ambiance" || playlist.length === 0) {
+                        alert("Aucune playlist AMBIANCE en cours.");
+                        return;
+                      }
+
+                      const nextIndex =
+                        (state.ambiancePlaylistIndex ?? 0) + 1;
+
+                      if (
+                        nextIndex >= playlist.length &&
+                        !state.ambiancePlaylistLoop
+                      ) {
+                        alert("Derniere video de la playlist.");
+                        return;
+                      }
+
+                      const index =
+                        nextIndex >= playlist.length ? 0 : nextIndex;
+
+                      const update = await fetch("/api/live-state", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                          mode: "ambiance",
+                          ambianceVideoFile: playlist[index],
+                          ambiancePlaylistIndex: index,
+                          ambianceLoop: false,
+                        }),
+                      });
+
+                      if (!update.ok) throw new Error("Mise a jour impossible");
+                    } catch (error) {
+                      console.error(error);
+                      alert("Impossible de passer a la video suivante.");
+                    }
+                  }}
+                  className="rounded-lg bg-cyan-700 px-5 py-3 font-bold hover:bg-cyan-600"
+                >
+                  ⏭ VIDÉO SUIVANTE
+                </button>
+              </div>
+            )}
+            {ambianceSelection.length > 0 && (
+              <div className="mb-6 rounded-2xl border border-emerald-600/50 bg-zinc-900 p-5">
+                <h3 className="mb-4 text-xl font-bold text-emerald-400">
+                  🎬 Ma playlist ({ambianceSelection.length} vidéos)
+                </h3>
+
+                <div className="space-y-2">
+                  {ambianceSelection.map((file, index) => (
+                    <div
+                      key={file}
+                      className="flex flex-wrap items-center justify-between gap-3 rounded-lg bg-zinc-800 p-3"
+                    >
+                      <span className="font-medium">
+                        {index + 1}. {ambianceVideos.find((v) => v.file === file)?.name ?? file}
+                      </span>
+
+                      <div className="flex gap-2">
+                        <button
+                          type="button"
+                          disabled={index === 0}
+                          onClick={() =>
+                            setAmbianceSelection((current) => {
+                              const next = [...current];
+                              [next[index - 1], next[index]] =
+                                [next[index], next[index - 1]];
+                              return next;
+                            })
+                          }
+                          className="rounded bg-zinc-700 px-3 py-2 disabled:opacity-30"
+                        >
+                          ↑
+                        </button>
+
+                        <button
+                          type="button"
+                          disabled={index === ambianceSelection.length - 1}
+                          onClick={() =>
+                            setAmbianceSelection((current) => {
+                              const next = [...current];
+                              [next[index], next[index + 1]] =
+                                [next[index + 1], next[index]];
+                              return next;
+                            })
+                          }
+                          className="rounded bg-zinc-700 px-3 py-2 disabled:opacity-30"
+                        >
+                          ↓
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setAmbianceSelection((current) =>
+                              current.filter((item) => item !== file)
+                            )
+                          }
+                          className="rounded bg-red-800 px-3 py-2"
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            <div className="max-h-[65vh] space-y-4 overflow-y-auto pr-2">
+              {ambianceVideos.length === 0 ? (
+                <p className="text-zinc-400">
+                  Aucune vidéo AMBIANCE détectée.
+                </p>
+              ) : (
+                ambianceVideos.map((video) => (
+                  <div
+                    key={video.file}
+                    className="rounded-xl border border-zinc-700 bg-zinc-900 p-4"
+                  >
+                    <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
+                      <p className="font-semibold">{video.name}</p>
+                      <div className="flex gap-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setIsPublicScreenHidden(true);
+                            void fetch("/api/live-state", {
+                              method: "POST",
+                              headers: { "Content-Type": "application/json" },
+                              body: JSON.stringify({
+                                mode: "ambiance",
+                                ambianceVideoFile: video.file,
+                                ambianceLoop: false,
+                                ambianceVolume: 0.7,
+                                ambiancePlaylist: [],
+                                ambiancePlaylistIndex: 0,
+                                ambiancePlaylistLoop: false
+                              })
+                            });
+                          }}
+                          className="rounded-lg bg-cyan-700 px-4 py-2 font-bold hover:bg-cyan-600"
+                        >
+                          ▶ 1×
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setIsPublicScreenHidden(true);
+                            void fetch("/api/live-state", {
+                              method: "POST",
+                              headers: { "Content-Type": "application/json" },
+                              body: JSON.stringify({
+                                mode: "ambiance",
+                                ambianceVideoFile: video.file,
+                                ambianceLoop: true,
+                                ambianceVolume: 0.7,
+                                ambiancePlaylist: [],
+                                ambiancePlaylistIndex: 0,
+                                ambiancePlaylistLoop: false
+                              })
+                            });
+                          }}
+                          className="rounded-lg bg-cyan-700 px-4 py-2 font-bold hover:bg-cyan-600"
+                        >
+                          🔁 Boucle
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setAmbianceSelection((current) =>
+                              current.includes(video.file)
+                                ? current
+                                : [...current, video.file]
+                            );
+                          }}
+                          disabled={ambianceSelection.includes(video.file)}
+                          className="rounded-lg bg-emerald-700 px-4 py-2 font-bold hover:bg-emerald-600 disabled:cursor-not-allowed disabled:opacity-40"
+                        >
+                          {ambianceSelection.includes(video.file)
+                            ? "✓ Ajoutée"
+                            : "➕ Playlist"}
+                        </button>
+                      </div>
+                    </div>
+                    <video
+                      src={video.file}
+                      controls
+                      muted
+                      preload="none"
+                      className="aspect-video w-full rounded-lg bg-black object-contain"
+                    />
+                  </div>
+                ))
+              )}
             </div>
           </div>
         </div>
@@ -2880,6 +3135,16 @@ onClose={() => setIsSearchOpen(false)}
     </main>
   );
 }
+
+
+
+
+
+
+
+
+
+
 
 
 
