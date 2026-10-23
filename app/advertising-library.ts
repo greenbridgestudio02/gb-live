@@ -8,6 +8,13 @@
 
 export const ADVERTISING_LIBRARY: AdvertisingMedia[] = [
   {
+    id: "kevin-poelees",
+    name: "Poêlées Géantes & Rôtisseries - Kévin",
+    file: "/publicites/kevin-poelees.png",
+    type: "image",
+    duration: 15,
+  },
+  {
     id: "dj-arno",
     name: "DJ Arno Animation",
     file: "/publicites/dj-arno.png",
@@ -22,3 +29,4 @@ export const ADVERTISING_LIBRARY: AdvertisingMedia[] = [
     duration: 15,
   },
 ];
+
