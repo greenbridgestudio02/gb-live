@@ -1085,6 +1085,15 @@ liveState.mode === "air-guitar-score" ? (
       loop={liveState.djLoop}
       muted
       playsInline
+      preload="auto"
+      onCanPlay={(event) => {
+        const video = event.currentTarget;
+        if (video.paused) {
+          video.play().catch((error) => {
+            console.warn("GB Live : démarrage vidéo DJ impossible", error);
+          });
+        }
+      }}
       className="h-full w-full object-cover"
     />
   </div>
@@ -1245,6 +1254,7 @@ liveState.mode === "air-guitar-score" ? (
     </main>
   );
 }
+
 
 
 
