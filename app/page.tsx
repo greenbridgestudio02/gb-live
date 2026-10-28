@@ -303,15 +303,100 @@ function BlindTestAdminPanel({
   );
 }
 
+function DjProgressDisplay({ file }: { file: string }) {
+  const [progress, setProgress] = useState({
+    file: "",
+    currentTime: 0,
+    duration: 0,
+    paused: true,
+    updatedAt: 0,
+  });
+
+  useEffect(() => {
+    let active = true;
+
+    const refresh = async () => {
+      try {
+        const response = await fetch("/api/dj-progress", {
+          cache: "no-store",
+        });
+        if (!response.ok) return;
+        const data = await response.json();
+        if (active) setProgress(data);
+      } catch {
+        // La lecture DJ reste independante du compteur.
+      }
+    };
+
+    void refresh();
+    const interval = window.setInterval(refresh, 1000);
+
+    return () => {
+      active = false;
+      window.clearInterval(interval);
+    };
+  }, []);
+
+  const isCurrent = progress.file === file;
+  const elapsed = isCurrent ? progress.currentTime : 0;
+  const duration = isCurrent ? progress.duration : 0;
+  const remaining = Math.max(0, duration - elapsed);
+  const percent = duration > 0
+    ? Math.min(100, (elapsed / duration) * 100)
+    : 0;
+
+  const formatTime = (seconds: number) => {
+    const total = Math.floor(Math.max(0, seconds));
+    return `${Math.floor(total / 60).toString().padStart(2, "0")}:${(total % 60).toString().padStart(2, "0")}`;
+  };
+
+  return (
+    <div className="mt-3 rounded-lg bg-black/50 p-3">
+      <div className="flex justify-between gap-3">
+        <div>
+          <div className="text-xs text-zinc-400">Temps ecoule</div>
+          <div className="text-xl font-bold tabular-nums text-white">
+            {formatTime(elapsed)}
+          </div>
+        </div>
+        <div className="text-right">
+          <div className="text-xs text-zinc-400">Temps restant</div>
+          <div className="text-xl font-bold tabular-nums text-emerald-400">
+            -{formatTime(remaining)}
+          </div>
+        </div>
+      </div>
+      <div className="mt-3 h-2 overflow-hidden rounded-full bg-zinc-700">
+        <div
+          className="h-full bg-emerald-500 transition-all duration-500"
+          style={{ width: `${percent}%` }}
+        />
+      </div>
+      <div className="mt-2 text-right text-xs text-zinc-400">
+        {isCurrent && duration > 0
+          ? `${Math.round(percent)} % - ${formatTime(duration)} au total`
+          : "En attente de lecture"}
+      </div>
+    </div>
+  );
+}
+const DJ_TITLES = [
+  {
+    name: "Disco / Funk / R&B - Annees 70",
+    file: "/dj-titres/disco-funk-70s.mp4",
+    category: "title",
+  },
+];
+
 const DJ_LIBRARY = [
-  { name: "Club Original", file: "/01-club-original.mp4", thumbnail: "/01-club-original.jpg" },
-  { name: "Laser Festival", file: "/02-laser-festival.mp4", thumbnail: "/02-laser-festival.jpg" },
-  { name: "Disco Chic", file: "/03-disco-chic-test.mp4", thumbnail: "/03-disco-chic-test.jpg" },
-  { name: "Cyber City", file: "/04-cyber-city.mp4", thumbnail: "/04-cyber-city.jpg" },
-  { name: "Sunset Beach", file: "/05-sunset-beach-test.mp4", thumbnail: "/05-sunset-beach-test.jpg" },
-  { name: "Pilou & Skaye DJ", file: "/DJ-pilou-et-skayev1.mp4", thumbnail: "/DJ-pilou-et-skayev1.jpg" },
-  { name: "Pilou & Skaye DJ V2", file: "/DJ-pilou-et-skayeV2.mp4", thumbnail: "/DJ-pilou-et-skayeV2.jpg" },
-  { name: "Pilou & Skaye DJ V3", file: "/DJ-pilou-et-skayeV3.mp4", thumbnail: "/DJ-pilou-et-skayeV3.jpg" },
+  { name: "Club Original", file: "/01-club-original.mp4", thumbnail: "/01-club-original.jpg", category: "visual" },
+  { name: "Laser Festival", file: "/02-laser-festival.mp4", thumbnail: "/02-laser-festival.jpg", category: "visual" },
+  { name: "Disco Chic", file: "/03-disco-chic-test.mp4", thumbnail: "/03-disco-chic-test.jpg", category: "visual" },
+  { name: "Cyber City", file: "/04-cyber-city.mp4", thumbnail: "/04-cyber-city.jpg", category: "visual" },
+  { name: "Sunset Beach", file: "/05-sunset-beach-test.mp4", thumbnail: "/05-sunset-beach-test.jpg", category: "visual" },
+  { name: "Pilou & Skaye DJ", file: "/DJ-pilou-et-skayev1.mp4", thumbnail: "/DJ-pilou-et-skayev1.jpg", category: "visual" },
+  { name: "Pilou & Skaye DJ V2", file: "/DJ-pilou-et-skayeV2.mp4", thumbnail: "/DJ-pilou-et-skayeV2.jpg", category: "visual" },
+  { name: "Pilou & Skaye DJ V3", file: "/DJ-pilou-et-skayeV3.mp4", thumbnail: "/DJ-pilou-et-skayeV3.jpg", category: "visual" },
 ];
 export default function Home() {
   const [setlistPosition, setSetlistPosition] = useState(0);
@@ -788,7 +873,7 @@ async function sendPublicMode(
     message = "",
   videoVolume?: number,
   djVideoFile?: string,
-  djLoop?: boolean
+  djLoop?: boolean, djMuted: boolean = true
 ) {
   console.log(
   "PUBLIC MODE ENVOYÉ :",
@@ -808,7 +893,7 @@ async function sendPublicMode(
   videoVolume,
   djVideoFile,
   djLoop,
-}),
+  djMuted,}),
     });
   } catch (error) {
     console.error(
@@ -1852,16 +1937,67 @@ onNextPlayer={() => void sendPublicMode("coup-parfait")}
         </div>
         <button type="button" onClick={() => setIsDjLibraryOpen(false)} className="rounded-xl border border-zinc-700 px-4 py-2 font-semibold text-zinc-300 hover:bg-zinc-800">Fermer</button>
       </div>
-      <div className="grid max-h-[60vh] grid-cols-1 gap-3 overflow-y-auto pr-2 md:grid-cols-2 xl:grid-cols-3">
-        {DJ_LIBRARY.map((video) => (
-          <div key={video.file} className="overflow-hidden rounded-xl border border-zinc-700 bg-zinc-900">
-            {video.thumbnail && <img src={video.thumbnail} alt="" className="aspect-video w-full object-cover" />}
-            <div className="flex items-center justify-between gap-3 p-3">
-              <span className="min-w-0 truncate text-sm font-semibold">{video.name}</span>
-              <div className="flex shrink-0 gap-2"><button type="button" onClick={() => { setIsPublicScreenHidden(true); void sendPublicMode("dj", "", undefined, video.file, false); }} className="rounded-lg bg-violet-700 px-3 py-2 text-sm font-bold text-white hover:bg-violet-600">▶ 1×</button><button type="button" onClick={() => { setIsPublicScreenHidden(true); void sendPublicMode("dj", "", undefined, video.file, true); }} className="rounded-lg bg-violet-700 px-3 py-2 text-sm font-bold text-white hover:bg-violet-600">🔁</button></div>
-            </div>
+      <div className="max-h-[65vh] space-y-6 overflow-y-auto pr-2">
+        <section>
+          <h3 className="mb-3 text-xl font-bold text-violet-300">🎬 Visuels d'accompagnement — Sans son</h3>
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
+            {DJ_LIBRARY.filter((video) => video.category === "visual").map((video) => (
+              <div key={video.file} className="overflow-hidden rounded-xl border border-zinc-700 bg-zinc-900">
+                {video.thumbnail && <img src={video.thumbnail} alt="" className="aspect-video w-full object-cover" />}
+                <div className="flex items-center justify-between gap-3 p-3">
+                  <span className="min-w-0 truncate text-sm font-semibold">{video.name}</span>
+                  <div className="flex shrink-0 gap-2">
+                    <button type="button" onClick={() => { setIsPublicScreenHidden(true); void sendPublicMode("dj", "", undefined, video.file, false); }} className="rounded-lg bg-violet-700 px-3 py-2 text-sm font-bold text-white hover:bg-violet-600">▶ 1×</button>
+                    <button type="button" onClick={() => { setIsPublicScreenHidden(true); void sendPublicMode("dj", "", undefined, video.file, true); }} className="rounded-lg bg-violet-700 px-3 py-2 text-sm font-bold text-white hover:bg-violet-600">🔁</button>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
+        </section>
+
+        <section>
+          <h3 className="mb-3 text-xl font-bold text-emerald-300">🎵 Titres vidéo DJ — Avec son</h3>
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
+            {DJ_TITLES.map((video) => (
+              <div key={video.file} className="rounded-xl border border-emerald-700 bg-zinc-900 p-4">
+                <div className="mb-2 text-lg font-bold text-white">{video.name}</div>
+                <div className="text-sm text-zinc-400">🎬 Video musicale - 33 min 08 s</div>
+                <div className="mt-2 text-xs font-semibold text-emerald-400">Avec son</div>
+                <DjProgressDisplay file={video.file} />
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsPublicScreenHidden(true);
+                    void sendPublicMode("dj", "", undefined, video.file, false, false);
+                  }}
+                  className="mt-4 w-full rounded-lg bg-emerald-700 px-4 py-3 text-sm font-bold text-white hover:bg-emerald-600"
+                >
+                  ▶ Lancer avec son
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    void sendPublicMode("home");
+                    void fetch("/api/dj-progress", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({
+                        file: "",
+                        currentTime: 0,
+                        duration: 0,
+                        paused: true,
+                      }),
+                    });
+                  }}
+                  className="mt-2 w-full rounded-lg border border-red-700 bg-red-950 px-4 py-3 text-sm font-bold text-red-200 hover:bg-red-900"
+                >
+                  ⏹ ARRÊTER
+                </button>
+              </div>
+            ))}
+          </div>
+        </section>
       </div>
     </div>
   </div>
@@ -3179,6 +3315,16 @@ onClose={() => setIsSearchOpen(false)}
     </main>
   );
 }
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -38,6 +38,7 @@ type LiveState = {
   videoVolume: number;
   djVideoFile: string;
   djLoop: boolean;
+  djMuted?: boolean;
   ambianceVideoFile?: string;
   ambianceLoop?: boolean;
   ambianceVolume?: number;
@@ -1083,8 +1084,28 @@ liveState.mode === "air-guitar-score" ? (
       src={liveState.djVideoFile}
       autoPlay
       loop={liveState.djLoop}
-      muted
+      muted={liveState.djMuted ?? true}
       playsInline
+      onTimeUpdate={(event) => {
+        const video = event.currentTarget;
+        const now = Date.now();
+
+        if (now - Number(video.dataset.lastProgress ?? 0) < 1000) return;
+        video.dataset.lastProgress = String(now);
+
+        void fetch("/api/dj-progress", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            file: liveState.djVideoFile,
+            currentTime: video.currentTime,
+            duration: Number.isFinite(video.duration) ? video.duration : 0,
+            paused: video.paused,
+          }),
+        }).catch((error) => {
+          console.warn("GB Live : progression DJ indisponible", error);
+        });
+      }}
       preload="auto"
       onCanPlay={(event) => {
         const video = event.currentTarget;
@@ -1254,6 +1275,8 @@ liveState.mode === "air-guitar-score" ? (
     </main>
   );
 }
+
+
 
 
 
