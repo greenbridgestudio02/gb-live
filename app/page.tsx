@@ -481,8 +481,18 @@ function DjProgressDisplay({ file }: { file: string }) {
 }
 const DJ_TITLES = [
   {
-    name: "Disco / Funk / R&B - Annees 70",
+    name: "Disco / Funk / R&B - Annees 70", duration: "33 min 08 s",
     file: "/dj-titres/disco-funk-70s.mp4",
+    category: "title",
+  },
+  {
+    name: "Energy - 31 min", duration: "31 min 16 s",
+    file: "/dj-titres/ambiance-energy-31min.mp4",
+    category: "title",
+  },
+  {
+    name: "FUNKY HOUSE BEST OH 2026", duration: "29 min 14 s",
+    file: "/dj-titres/nouveau-titre-dj.mp4",
     category: "title",
   },
 ];
@@ -1596,7 +1606,7 @@ onNextPlayer={() => void sendPublicMode("coup-parfait")}
 
 {isDjLibraryOpen && (
   <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/85 p-6">
-    <div className="w-full max-w-4xl rounded-3xl border border-violet-700 bg-zinc-950 p-6">
+    <div className="max-h-[92vh] w-full max-w-6xl overflow-y-auto rounded-3xl border border-violet-700 bg-zinc-950 p-6">
       <div className="mb-6 flex items-center justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-violet-400">
@@ -2028,7 +2038,7 @@ onNextPlayer={() => void sendPublicMode("coup-parfait")}
     <main className="flex h-[100dvh] overflow-hidden flex-col bg-zinc-950 text-zinc-100">
 {isDjLibraryOpen && (
   <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/85 p-6">
-    <div className="w-full max-w-4xl rounded-3xl border border-violet-700 bg-zinc-950 p-6">
+    <div className="max-h-[92vh] w-full max-w-6xl overflow-y-auto rounded-3xl border border-violet-700 bg-zinc-950 p-6">
       <div className="mb-6 flex items-center justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-violet-400">GB Live</p>
@@ -2057,11 +2067,11 @@ onNextPlayer={() => void sendPublicMode("coup-parfait")}
 
         <section>
           <h3 className="mb-3 text-xl font-bold text-emerald-300">🎵 Titres vidéo DJ — Avec son</h3>
-          <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {DJ_TITLES.map((video) => (
               <div key={video.file} className="rounded-xl border border-emerald-700 bg-zinc-900 p-4">
                 <div className="mb-2 text-lg font-bold text-white">{video.name}</div>
-                <div className="text-sm text-zinc-400">🎬 Video musicale - 33 min 08 s</div>
+                <div className="text-sm text-zinc-400">🎬 Vidéo musicale - {video.duration}</div>
                 <div className="mt-2 text-xs font-semibold text-emerald-400">Avec son</div>
                 <DjProgressDisplay file={video.file} />
                 <button
@@ -3418,6 +3428,12 @@ onClose={() => setIsSearchOpen(false)}
     </main>
   );
 }
+
+
+
+
+
+
 
 
 
