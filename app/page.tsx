@@ -303,6 +303,105 @@ function BlindTestAdminPanel({
   );
 }
 
+function AmbianceProgressDisplay() {
+  const [progress, setProgress] = useState({
+    file: "",
+    currentTime: 0,
+    duration: 0,
+    paused: true,
+    updatedAt: 0,
+  });
+
+  useEffect(() => {
+    let stopped = false;
+
+    async function refresh() {
+      try {
+        const [progressResponse, stateResponse] = await Promise.all([
+          fetch("/api/ambiance-progress", { cache: "no-store" }),
+          fetch("/api/live-state", { cache: "no-store" }),
+        ]);
+
+        if (!progressResponse.ok || !stateResponse.ok) return;
+
+        const data = await progressResponse.json();
+        const state = await stateResponse.json();
+
+        if (stopped) return;
+
+        if (
+          state.mode !== "ambiance" ||
+          data.file !== state.ambianceVideoFile
+        ) {
+          setProgress({
+            file: "",
+            currentTime: 0,
+            duration: 0,
+            paused: true,
+            updatedAt: 0,
+          });
+          return;
+        }
+
+        setProgress(data);
+      } catch (error) {
+        console.error("Compteur Ambiance :", error);
+      }
+    }
+
+    void refresh();
+    const interval = setInterval(refresh, 1000);
+
+    return () => {
+      stopped = true;
+      clearInterval(interval);
+    };
+  }, []);
+
+  const formatTime = (seconds: number) => {
+    const total = Math.floor(Math.max(0, seconds));
+    return `${Math.floor(total / 60)}:${String(total % 60).padStart(2, "0")}`;
+  };
+
+  const remaining = Math.max(0, progress.duration - progress.currentTime);
+  const percent = progress.duration > 0
+    ? Math.min(100, (progress.currentTime / progress.duration) * 100)
+    : 0;
+
+  const name = progress.file
+    ? decodeURIComponent(progress.file.split("/").pop() ?? "")
+        .replace(/\.[^.]+$/, "")
+        .replace(/[-_]/g, " ")
+    : "Aucune vidéo en cours";
+
+  return (
+    <div className="mb-5 rounded-2xl border border-cyan-500/50 bg-zinc-900 p-5">
+      <p className="mb-2 text-xs font-bold uppercase tracking-widest text-cyan-400">
+        Lecture en cours
+      </p>
+
+      <p className="mb-4 text-lg font-semibold text-white">{name}</p>
+
+      <div className="mb-2 flex justify-between font-mono text-sm">
+        <span>{formatTime(progress.currentTime)}</span>
+        <span className="text-zinc-400">
+          -{formatTime(remaining)}
+        </span>
+      </div>
+
+      <div className="h-3 overflow-hidden rounded-full bg-zinc-700">
+        <div
+          className="h-full rounded-full bg-cyan-400 transition-all duration-500"
+          style={{ width: `${percent}%` }}
+        />
+      </div>
+
+      <p className="mt-2 text-right text-xs text-zinc-400">
+        Durée totale : {formatTime(progress.duration)}
+      </p>
+    </div>
+  );
+}
 function DjProgressDisplay({ file }: { file: string }) {
   const [progress, setProgress] = useState({
     file: "",
@@ -2004,7 +2103,7 @@ onNextPlayer={() => void sendPublicMode("coup-parfait")}
 )}
       {isAmbianceOpen && (
         <div className="fixed inset-0 z-[90] flex items-center justify-center bg-black/85 p-6">
-          <div className="w-full max-w-4xl rounded-3xl border border-cyan-500/50 bg-zinc-950 p-8 text-white shadow-2xl">
+          <div className="max-h-[92vh] w-full max-w-5xl overflow-y-auto rounded-3xl border border-cyan-500/50 bg-zinc-950 p-8 text-white shadow-2xl">
             <div className="mb-6 flex items-center justify-between">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.3em] text-cyan-400">
@@ -2027,7 +2126,12 @@ onNextPlayer={() => void sendPublicMode("coup-parfait")}
               Vidéos musicales pour les repas, cocktails et moments de détente.
             </p>
 
-            <div className="mb-5">
+            <AmbianceProgressDisplay />
+
+            <div className="mb-5 rounded-2xl border border-zinc-700 bg-zinc-900 p-5">
+              <h3 className="mb-4 text-lg font-bold text-cyan-400">
+                🎛️ COMMANDES AMBIANCE
+              </h3>
 <button
                   type="button"
                   onClick={() => {
@@ -2048,9 +2152,8 @@ onNextPlayer={() => void sendPublicMode("coup-parfait")}
                 >
                   ⏹ ARRÊTER L'AMBIANCE
                 </button>
-            </div>
             {ambianceSelection.length > 0 && (
-              <div className="mb-4 flex flex-wrap items-center gap-4 rounded-xl border border-cyan-700 bg-zinc-900 p-4">
+              <div className="flex flex-wrap items-center gap-3">
                 <label className="flex cursor-pointer items-center gap-2">
                   <input
                     type="checkbox"
@@ -2140,7 +2243,7 @@ onNextPlayer={() => void sendPublicMode("coup-parfait")}
                 </button>
               </div>
             )}
-            
+            </div>
             {ambianceSelection.length > 0 && (
               <div className="mb-6 rounded-2xl border border-emerald-600/50 bg-zinc-900 p-5">
                 <h3 className="mb-4 text-xl font-bold text-emerald-400">
@@ -2207,7 +2310,7 @@ onNextPlayer={() => void sendPublicMode("coup-parfait")}
                 </div>
               </div>
             )}
-            <div className="max-h-[65vh] space-y-4 overflow-y-auto pr-2">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               {ambianceVideos.length === 0 ? (
                 <p className="text-zinc-400">
                   Aucune vidéo AMBIANCE détectée.
@@ -2216,9 +2319,9 @@ onNextPlayer={() => void sendPublicMode("coup-parfait")}
                 ambianceVideos.map((video) => (
                   <div
                     key={video.file}
-                    className="rounded-xl border border-zinc-700 bg-zinc-900 p-4"
+                    className="flex flex-col rounded-xl border border-zinc-700 bg-zinc-900 p-4"
                   >
-                    <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
+                    <div className="mb-3 flex flex-1 flex-col justify-between gap-3">
                       <div className="flex flex-wrap items-center gap-3">
   <p className="font-semibold">{video.name}</p>
   <span
@@ -2228,7 +2331,7 @@ onNextPlayer={() => void sendPublicMode("coup-parfait")}
     Durée : …
   </span>
 </div>
-                      <div className="flex gap-2">
+                      <div className="flex flex-wrap gap-2">
                         <button
                           type="button"
                           onClick={() => {
@@ -2309,7 +2412,7 @@ onNextPlayer={() => void sendPublicMode("coup-parfait")}
                             `Durée : ${minutes}:${String(seconds).padStart(2, "0")}`;
                         }
                       }}
-                      className="aspect-video w-40 rounded-lg bg-black object-cover"
+                      className="mt-3 aspect-video w-full max-h-36 rounded-lg bg-black object-cover"
                     />
                   </div>
                 ))
@@ -3315,6 +3418,12 @@ onClose={() => setIsSearchOpen(false)}
     </main>
   );
 }
+
+
+
+
+
+
 
 
 

@@ -1040,6 +1040,29 @@ liveState.mode === "air-guitar-score" ? (
     <video
       src={liveState.ambianceVideoFile || "/ambiances/ambiance-test.mp4"}
       autoPlay
+      onTimeUpdate={(event) => {
+        if (isPreview) return;
+
+        const video = event.currentTarget;
+        const now = Date.now();
+
+        if (now - Number(video.dataset.lastAmbianceProgress ?? 0) < 1000) {
+          return;
+        }
+
+        video.dataset.lastAmbianceProgress = String(now);
+
+        void fetch("/api/ambiance-progress", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            file: liveState.ambianceVideoFile ?? "",
+            currentTime: video.currentTime,
+            duration: Number.isFinite(video.duration) ? video.duration : 0,
+            paused: video.paused,
+          }),
+        }).catch(console.error);
+      }}
       loop={liveState.ambianceLoop ?? false}
       muted={isPreview}
       onEnded={() => {
@@ -1275,6 +1298,7 @@ liveState.mode === "air-guitar-score" ? (
     </main>
   );
 }
+
 
 
 
