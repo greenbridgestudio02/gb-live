@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useRef, useState } from "react";
 
@@ -1138,7 +1138,7 @@ liveState.mode === "air-guitar-score" ? (
           });
         }
       }}
-      className="h-full w-full object-cover"
+      className={liveState.djVideoFile === "/DJ-phiphi.mp4" ? "h-full w-full object-contain" : "h-full w-full object-cover"}
     />
   </div>
 ) : currentSong.videoFile && currentSong.videoMode === "video" ? (

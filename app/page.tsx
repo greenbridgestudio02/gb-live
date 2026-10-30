@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import { ADVERTISING_LIBRARY } from "./advertising-library";
 
 import { useEffect, useRef, useState } from "react";
@@ -506,6 +506,7 @@ const DJ_LIBRARY = [
   { name: "Pilou & Skaye DJ", file: "/DJ-pilou-et-skayev1.mp4", thumbnail: "/DJ-pilou-et-skayev1.jpg", category: "visual" },
   { name: "Pilou & Skaye DJ V2", file: "/DJ-pilou-et-skayeV2.mp4", thumbnail: "/DJ-pilou-et-skayeV2.jpg", category: "visual" },
   { name: "Pilou & Skaye DJ V3", file: "/DJ-pilou-et-skayeV3.mp4", thumbnail: "/DJ-pilou-et-skayeV3.jpg", category: "visual" },
+  { name: "DJ Phiphi", file: "/DJ-phiphi.mp4", thumbnail: "/DJ-phiphi.jpg", category: "visual" },
 ];
 export default function Home() {
   const [setlistPosition, setSetlistPosition] = useState(0);
