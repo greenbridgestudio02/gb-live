@@ -199,10 +199,10 @@ useEffect(() => {
   }
 
   const challengeLabels: Record<string, string> = {
-    knees: "🔥 SOLO À GENOUX !",
-    "behind-head": "🤘 DERRIÈRE LA TÊTE !",
-    crowd: "📣 FAIS CRIER LE PUBLIC !",
-    "crazy-solo": "⚡ SOLO DE FOLIE !",
+    knees: "ðŸ”¥ SOLO Ã€ GENOUX !",
+    "behind-head": "ðŸ¤˜ DERRIÃˆRE LA TÃŠTE !",
+    crowd: "ðŸ“£ FAIS CRIER LE PUBLIC !",
+    "crazy-solo": "âš¡ SOLO DE FOLIE !",
   };
 
   const challenge =
@@ -309,8 +309,48 @@ const targetTime = Math.max(
   liveState.song?.videoOffset,
   liveState.elapsedTime,
   liveState.isPlaying,
+  liveState.mode,
 ]);
 
+useEffect(() => {
+  if (liveState.mode !== "song") return;
+
+  const song = liveState.song;
+  if (!song?.videoFile || (song.videoPlaybackMode ?? "sync") !== "sync") {
+    return;
+  }
+
+  const video = videoRef.current;
+  if (!video) return;
+
+  const elapsed = Math.max(0, displayElapsedTime - LYRICS_LEAD);
+  const offset = song.videoOffset ?? 0;
+
+  if (!liveState.isPlaying || elapsed < offset) {
+    if (!video.paused) video.pause();
+    if (elapsed < offset && video.currentTime > 0.5) {
+      video.currentTime = 0;
+    }
+    return;
+  }
+
+  const targetTime = Math.max(0, elapsed - offset);
+
+  if (Math.abs(video.currentTime - targetTime) > 0.75) {
+    video.currentTime = targetTime;
+  }
+
+  if (video.paused) {
+    video.play().catch((error) => {
+      console.warn("GB Live : synchronisation video impossible", error);
+    });
+  }
+}, [
+  displayElapsedTime,
+  liveState.mode,
+  liveState.isPlaying,
+  liveState.song,
+]);
 useEffect(() => {
   const video = videoRef.current;
   const song = liveState.song;
@@ -341,6 +381,7 @@ useEffect(() => {
   liveState.song?.videoFile,
   liveState.song?.videoPlaybackMode,
   liveState.isPlaying,
+  liveState.mode,
 ]);
 
   useEffect(() => {
@@ -359,7 +400,7 @@ useEffect(() => {
 lastMessageUpdatedAtRef.current = state.messageUpdatedAt;
 setLiveState(state);
       } catch {
-        // On conserve le dernier état connu.
+        // On conserve le dernier Ã©tat connu.
       }
     }
 
@@ -381,7 +422,7 @@ setLiveState(state);
   setIsMessageVisible(true);
 }
   } catch {
-    // On conserve le dernier état valide.
+    // On conserve le dernier Ã©tat valide.
   }
 };
 
@@ -594,7 +635,7 @@ const hideLyricDuringLongGap =
           {activeAdvertising.type === "image" ? (
             <img
               src={activeAdvertising.file}
-              alt="Publicité GB Live"
+              alt="PublicitÃ© GB Live"
               className="h-full w-full object-contain"
             />
           ) : (
@@ -622,7 +663,7 @@ const hideLyricDuringLongGap =
             audio.pause();
             audio.currentTime = 0;
           } catch {
-            // Le clic utilisateur sert à autoriser l'audio.
+            // Le clic utilisateur sert Ã  autoriser l'audio.
           }
           audio.volume = isPreview ? 0 : 1;
         }
@@ -631,7 +672,7 @@ const hideLyricDuringLongGap =
       }}
       className="rounded-3xl border-2 border-emerald-400 bg-emerald-950/40 px-12 py-8 text-5xl font-black text-white"
     >
-      ▶ DÉMARRER GB LIVE
+      â–¶ DÃ‰MARRER GB LIVE
     </button>
   </div>
 )}
@@ -651,7 +692,7 @@ const hideLyricDuringLongGap =
 
     <div className="relative z-10 w-full max-w-6xl">
       <p className="text-3xl font-black uppercase tracking-[0.35em] text-red-500">
-        🎸 AIR GUITAR
+        ðŸŽ¸ AIR GUITAR
       </p>
 
       <h1 className="mt-5 text-7xl font-black uppercase text-white">
@@ -667,7 +708,7 @@ const hideLyricDuringLongGap =
       : "scale-75 opacity-0"
   }`}
 >
-          <p className="text-7xl">🎸</p>
+          <p className="text-7xl">ðŸŽ¸</p>
           <p className="mt-5 text-5xl font-black text-red-500">1</p>
           <p className="mt-4 text-3xl font-black uppercase text-white">
             Prends ta guitare...
@@ -684,13 +725,13 @@ const hideLyricDuringLongGap =
       : "scale-75 opacity-0"
   }`}
 >
-          <p className="text-7xl">🤘</p>
+          <p className="text-7xl">ðŸ¤˜</p>
           <p className="mt-5 text-5xl font-black text-red-500">2</p>
           <p className="mt-4 text-3xl font-black uppercase text-white">
-            Suis les défis
+            Suis les dÃ©fis
           </p>
           <p className="mt-2 text-2xl font-bold text-zinc-300">
-            à l'écran !
+            Ã  l'Ã©cran !
           </p>
         </div>
 
@@ -701,7 +742,7 @@ const hideLyricDuringLongGap =
       : "scale-75 opacity-0"
   }`}
 >
-          <p className="text-7xl">🔥</p>
+          <p className="text-7xl">ðŸ”¥</p>
           <p className="mt-5 text-5xl font-black text-red-500">3</p>
           <p className="mt-4 text-3xl font-black uppercase text-white">
             Donne tout
@@ -714,7 +755,7 @@ const hideLyricDuringLongGap =
       </div>
 
       <p className="mt-14 animate-pulse text-4xl font-black uppercase tracking-[0.15em] text-white">
-        PRÊT À DEVENIR UNE ROCK STAR ?
+        PRÃŠT Ã€ DEVENIR UNE ROCK STAR ?
       </p>
     </div>
   </div>
@@ -791,7 +832,7 @@ liveState.mode === "air-guitar-score" ? (
   <div className="absolute inset-0 flex items-center justify-center bg-black/25 px-12">
     <div className="text-center">
       <p className="animate-pulse text-[8rem] leading-none">
-        🤘🔥🎸
+        ðŸ¤˜ðŸ”¥ðŸŽ¸
       </p>
 
       <h1 className="mt-8 text-[7rem] font-black uppercase leading-none text-white drop-shadow-2xl">
@@ -813,11 +854,11 @@ liveState.mode === "air-guitar-score" ? (
   <div className="absolute inset-0 flex items-center justify-center bg-black/60 px-12">
     <div className="text-center">
       <p className="text-[9rem] leading-none animate-pulse">
-        👏
+        ðŸ‘
       </p>
 
       <p className="mt-6 text-4xl font-black uppercase tracking-[0.35em] text-red-500">
-        APPLAUDIMÈTRE
+        APPLAUDIMÃˆTRE
       </p>
 
       <h1 className="mt-8 text-[7rem] font-black uppercase leading-none text-white drop-shadow-2xl">
@@ -837,14 +878,14 @@ liveState.mode === "air-guitar-score" ? (
 
       {liveState.message === "rocker" && (
         <>
-          <p className="text-[10rem] leading-none">🎸</p>
+          <p className="text-[10rem] leading-none">ðŸŽ¸</p>
 
           <h1 className="mt-6 text-[8rem] font-black uppercase leading-none text-white drop-shadow-2xl">
             ROCKER
           </h1>
 
           <p className="mt-8 text-4xl font-black uppercase tracking-[0.25em] text-red-500">
-            ÇA ENVOIE !
+            Ã‡A ENVOIE !
           </p>
         </>
       )}
@@ -852,7 +893,7 @@ liveState.mode === "air-guitar-score" ? (
       {liveState.message === "guitar-hero" && (
         <>
           <p className="animate-pulse text-[10rem] leading-none">
-            🔥🎸🔥
+            ðŸ”¥ðŸŽ¸ðŸ”¥
           </p>
 
           <h1 className="mt-6 text-[7rem] font-black uppercase leading-none text-white drop-shadow-2xl">
@@ -868,11 +909,11 @@ liveState.mode === "air-guitar-score" ? (
       {liveState.message === "legende" && (
         <>
           <p className="animate-bounce text-[10rem] leading-none">
-            👑
+            ðŸ‘‘
           </p>
 
           <h1 className="mt-4 text-[7rem] font-black uppercase leading-none text-white drop-shadow-2xl">
-            LÉGENDE
+            LÃ‰GENDE
           </h1>
 
           <p className="mt-3 text-[5rem] font-black uppercase leading-none text-red-500 drop-shadow-2xl">
@@ -880,11 +921,11 @@ liveState.mode === "air-guitar-score" ? (
           </p>
 
           <p className="mt-10 animate-pulse text-4xl font-black uppercase tracking-[0.2em] text-white">
-            ENTRÉE DANS LA LÉGENDE !
+            ENTRÃ‰E DANS LA LÃ‰GENDE !
           </p>
 
           <div className="mt-8 text-6xl">
-            🔥 🤘 🎸 🤘 🔥
+            ðŸ”¥ ðŸ¤˜ ðŸŽ¸ ðŸ¤˜ ðŸ”¥
           </div>
         </>
       )}
@@ -910,7 +951,7 @@ liveState.mode === "air-guitar-score" ? (
 ) : liveState.mode === "coup-parfait-success" ? (
   <div className="flex h-full w-full flex-col items-center justify-center bg-black px-12 text-center">
     <p className="animate-bounce text-[12rem] leading-none">
-  🎉
+  ðŸŽ‰
 </p>
 
     <h1 className="mt-8 animate-pulse text-8xl font-black text-emerald-400">
@@ -918,17 +959,17 @@ liveState.mode === "air-guitar-score" ? (
     </h1>
 
     <p className="mt-8 text-4xl font-bold text-white">
-      🥁 INCROYABLE !
+      ðŸ¥ INCROYABLE !
     </p>
   </div>
 ) : liveState.mode === "coup-parfait-fail" ? (
   <div className="flex h-full w-full flex-col items-center justify-center bg-black px-12 text-center">
     <p className="animate-bounce text-[12rem] leading-none">
-  😬
+  ðŸ˜¬
 </p>
 
     <h1 className="mt-8 animate-pulse text-8xl font-black text-red-500">
-      RATÉ !
+      RATÃ‰ !
     </h1>
 
     <p className="mt-8 text-4xl font-bold text-white">
@@ -941,11 +982,11 @@ liveState.mode === "air-guitar-score" ? (
       coupParfaitVideoEnded ? (
         <div className="flex h-full w-full flex-col items-center justify-center text-center">
           <p className="text-8xl font-black text-orange-400">
-            🥁 ALORS ?
+            ðŸ¥ ALORS ?
           </p>
 
           <p className="mt-10 text-5xl font-bold text-white">
-            COUP PARFAIT OU RATÉ ?
+            COUP PARFAIT OU RATÃ‰ ?
           </p>
         </div>
       ) : (
@@ -978,11 +1019,11 @@ liveState.mode === "air-guitar-score" ? (
   ) : liveState.mode === "coup-parfait" ? (
   <div className="flex h-full w-full flex-col items-center justify-center bg-black px-12 text-center">
     <p className="text-3xl font-bold uppercase tracking-[0.35em] text-orange-400">
-      G3 LIVE PRÉSENTE
+      G3 LIVE PRÃ‰SENTE
     </p>
 
     <h1 className="mt-8 text-8xl font-black text-white">
-      🥁 LE COUP PARFAIT
+      ðŸ¥ LE COUP PARFAIT
     </h1>
 
     <p className="mt-10 text-5xl font-bold text-orange-400">
@@ -990,7 +1031,7 @@ liveState.mode === "air-guitar-score" ? (
     </p>
 
     <p className="mt-14 text-3xl text-zinc-300">
-      Qui réussira le coup parfait ?
+      Qui rÃ©ussira le coup parfait ?
     </p>
   </div>
 ) : liveState.mode === "coup-parfait-tuto" ? (
@@ -1134,7 +1175,7 @@ liveState.mode === "air-guitar-score" ? (
         const video = event.currentTarget;
         if (video.paused) {
           video.play().catch((error) => {
-            console.warn("GB Live : démarrage vidéo DJ impossible", error);
+            console.warn("GB Live : dÃ©marrage vidÃ©o DJ impossible", error);
           });
         }
       }}
@@ -1152,7 +1193,7 @@ liveState.mode === "air-guitar-score" ? (
       onCanPlay={(event) => {
         if (liveState.isPlaying) {
           event.currentTarget.play().catch((error) => {
-            console.warn("GB Live : démarrage vidéo impossible", error);
+            console.warn("GB Live : demarrage video impossible", error);
           });
         }
       }}
@@ -1170,7 +1211,7 @@ liveState.mode === "air-guitar-score" ? (
       onCanPlay={(event) => {
         if (liveState.isPlaying) {
           event.currentTarget.play().catch((error) => {
-            console.warn("GB Live : démarrage vidéo impossible", error);
+            console.warn("GB Live : demarrage video impossible", error);
           });
         }
       }}
@@ -1241,7 +1282,7 @@ liveState.mode === "air-guitar-score" ? (
           <section className="flex min-h-0 flex-1 items-center justify-center px-16 -translate-y-20">
             {lyricLines.length === 0 ? (
               <p className="text-3xl text-zinc-600">
-                ♪
+                â™ª
               </p>
             ) : (
               <div className="w-full max-w-6xl text-center">
