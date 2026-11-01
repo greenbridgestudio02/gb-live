@@ -118,7 +118,7 @@ const [selectedSong, setSelectedSong] = useState(airGuitarSongs[0].id);
         <div className="mt-5 rounded-xl border border-zinc-700 bg-zinc-900 p-4">
   <div className="mb-3 flex items-center justify-between">
     <span className="font-bold text-zinc-200">
-      Volume musique d'attente
+      Volume de la musique d'attente
     </span>
     <span className="font-black text-red-400">
       {waitingVolume} %

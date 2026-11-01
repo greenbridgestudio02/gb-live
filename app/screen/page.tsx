@@ -921,7 +921,7 @@ liveState.mode === "air-guitar-score" ? (
       {liveState.message === "legende" && (
         <>
           <p className="animate-bounce text-[10rem] leading-none">
-            👑‘
+        👑
           </p>
 
           <h1 className="mt-4 text-[7rem] font-black uppercase leading-none text-white drop-shadow-2xl">
@@ -933,7 +933,7 @@ liveState.mode === "air-guitar-score" ? (
           </p>
 
           <p className="mt-10 animate-pulse text-4xl font-black uppercase tracking-[0.2em] text-white">
-            ENTRÉE DANS LA LÉGENDE !
+        TU ENTRES DANS LA LÉGENDE !
           </p>
 
           <div className="mt-8 text-6xl">

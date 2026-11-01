@@ -423,7 +423,7 @@ function DjProgressDisplay({ file }: { file: string }) {
         const data = await response.json();
         if (active) setProgress(data);
       } catch {
-        // La lecture DJ reste independante du compteur.
+        // La lecture DJ reste indépendante du compteur.
       }
     };
 
@@ -2074,7 +2074,7 @@ onNextPlayer={() => void sendPublicMode("coup-parfait")}
         </section>
 
         <section>
-          <h3 className="mb-3 text-xl font-bold text-emerald-300">🎵 Titres vidéo DJ — Avec son</h3>
+          <h3 className="mb-3 text-xl font-bold text-emerald-300">🎵 Titres vidéo DJ — avec son</h3>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {DJ_TITLES.map((video) => (
               <div key={video.file} className="rounded-xl border border-emerald-700 bg-zinc-900 p-4">
