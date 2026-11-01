@@ -1,4 +1,4 @@
-﻿import {
+import {
   mkdir,
   readFile,
   writeFile,
@@ -74,6 +74,7 @@ type LiveState = {
   ambianceVideoFile: string;
   ambianceLoop: boolean;
   ambianceVolume: number;
+  airGuitarWaitingVolume: number;
   ambiancePlaylist: string[];
   ambiancePlaylistIndex: number;
   ambiancePlaylistLoop: boolean;
@@ -121,6 +122,7 @@ videoVolume: 0.25,
   ambianceVideoFile: "/ambiances/ambiance-test.mp4",
   ambianceLoop: false,
   ambianceVolume: 0.7,
+  airGuitarWaitingVolume: 0.5,
   ambiancePlaylist: [],
   ambiancePlaylistIndex: 0,
   ambiancePlaylistLoop: false,
@@ -227,6 +229,11 @@ videoVolume:
         typeof parsed.ambianceVolume === "number"
           ? Math.max(0, Math.min(1, parsed.ambianceVolume))
           : 0.7,
+
+      airGuitarWaitingVolume:
+        typeof parsed.airGuitarWaitingVolume === "number"
+          ? Math.max(0, Math.min(1, parsed.airGuitarWaitingVolume))
+          : 0.5,
 
       ambiancePlaylist:
         Array.isArray(parsed.ambiancePlaylist)
@@ -592,6 +599,11 @@ const ambianceVolume =
     ? Math.max(0, Math.min(1, body.ambianceVolume))
     : currentState.ambianceVolume;
 
+const airGuitarWaitingVolume =
+  typeof body.airGuitarWaitingVolume === "number"
+    ? Math.max(0, Math.min(1, body.airGuitarWaitingVolume))
+    : currentState.airGuitarWaitingVolume;
+
 const ambiancePlaylist =
   Array.isArray(body.ambiancePlaylist)
     ? body.ambiancePlaylist.filter(
@@ -657,6 +669,7 @@ if (typeof body.message === "string") {
     ambianceVideoFile,
     ambianceLoop,
     ambianceVolume,
+    airGuitarWaitingVolume,
     ambiancePlaylist,
     ambiancePlaylistIndex,
     ambiancePlaylistLoop,

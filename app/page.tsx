@@ -1581,6 +1581,13 @@ onNextPlayer={() => void sendPublicMode("coup-parfait")}
     onShowTuto={() => {
       sendPublicMode("air-guitar-tuto");
     }}
+    onWaitingVolumeChange={(volume) => {
+      void fetch("/api/live-state", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ airGuitarWaitingVolume: volume }),
+      });
+    }}
     onStartChallenge={() => {
       sendPublicMode("air-guitar");
     }}

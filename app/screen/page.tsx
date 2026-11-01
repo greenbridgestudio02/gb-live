@@ -36,6 +36,7 @@ type LiveState = {
   isPlaying: boolean;
   playbackEnded?: boolean;
   videoVolume: number;
+  airGuitarWaitingVolume?: number;
   djVideoFile: string;
   djLoop: boolean;
   djMuted?: boolean;
@@ -83,6 +84,7 @@ export default function ScreenPage() {
     elapsedTime: 0,
     isPlaying: false,
     videoVolume: 0.25,
+    airGuitarWaitingVolume: 0.5,
     djVideoFile: "/01-club-original.mp4",
     djLoop: false,
     message: "",
@@ -117,6 +119,15 @@ const [airGuitarSong, setAirGuitarSong] = useState<string | null>(null);
 const airGuitarSongRef = useRef<HTMLAudioElement | null>(null);
 const [audioUnlocked, setAudioUnlocked] = useState(false);
 const airGuitarAudioRef = useRef<HTMLAudioElement | null>(null);
+useEffect(() => {
+  const audio = airGuitarAudioRef.current;
+  if (!audio) return;
+
+  audio.volume = Math.max(
+    0,
+    Math.min(1, liveState.airGuitarWaitingVolume ?? 0.5)
+  );
+}, [liveState.airGuitarWaitingVolume, liveState.mode]);
   const clockStartRef = useRef<number | null>(null);
   const clockBaseRef = useRef(0);
 const lastMessageUpdatedAtRef = useRef(0);
@@ -775,6 +786,7 @@ const hideLyricDuringLongGap =
     <audio
     ref={airGuitarAudioRef}
   src="/Air-Guitar-Waiting-Loop.mp3"
+
   autoPlay
   loop
 />

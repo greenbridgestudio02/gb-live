@@ -6,6 +6,7 @@ type AirGuitarPanelProps = {
   onClose: () => void;
   onShowTuto: () => void;
   onStartChallenge: () => void;
+  onWaitingVolumeChange: (volume: number) => void;
   onPlayerReady: (audioFile: string) => void;
   onChallenge: (challenge: string) => void;
   onFinale: () => void;
@@ -18,6 +19,7 @@ export default function AirGuitarPanel({
   onClose,
   onShowTuto,
   onStartChallenge,
+  onWaitingVolumeChange,
   onPlayerReady,
   onChallenge,
   onFinale,
@@ -26,6 +28,7 @@ export default function AirGuitarPanel({
   onNextPlayer,
 }: AirGuitarPanelProps) {
   const [started, setStarted] = useState(false);
+  const [waitingVolume, setWaitingVolume] = useState(50);
   const airGuitarSongs = [
   {
     id: "back-in-black",
@@ -111,6 +114,30 @@ const [selectedSong, setSelectedSong] = useState(airGuitarSongs[0].id);
           </button>
 
         </div>
+
+        <div className="mt-5 rounded-xl border border-zinc-700 bg-zinc-900 p-4">
+  <div className="mb-3 flex items-center justify-between">
+    <span className="font-bold text-zinc-200">
+      Volume musique d'attente
+    </span>
+    <span className="font-black text-red-400">
+      {waitingVolume} %
+    </span>
+  </div>
+  <input
+    type="range"
+    min="0"
+    max="100"
+    step="1"
+    value={waitingVolume}
+    onChange={(event) => {
+      const volume = Number(event.target.value);
+      setWaitingVolume(volume);
+      onWaitingVolumeChange(volume / 100);
+    }}
+    className="w-full accent-red-500"
+  />
+</div>
 
         {started && (
           <>
