@@ -29,6 +29,8 @@ type AdvertisingState = {
   startedAt: number;
 } | null;
 type LiveState = {
+  lyricsPosition?: "classic" | "top";
+  showNextLyric?: boolean;
   mode: string;
   advertising?: AdvertisingState;
   song: LiveSong | null;
@@ -79,6 +81,8 @@ export default function ScreenPage() {
   }, [isPreview]);
 
   const [liveState, setLiveState] = useState<LiveState>({
+      lyricsPosition: "classic",
+      showNextLyric: true,
     mode: "home",
     song: null,
     elapsedTime: 0,
@@ -1230,7 +1234,13 @@ liveState.mode === "air-guitar-score" ? (
       className="h-full w-full object-contain"
     />
 
-    <div className="absolute inset-x-0 bottom-0 px-16 pb-14 pt-32 text-center">
+    <div
+  className={
+    liveState.lyricsPosition === "top"
+      ? "absolute inset-x-0 top-0 z-20 px-10 py-5 text-center"
+      : "absolute inset-x-0 bottom-0 px-16 pb-14 pt-32 text-center"
+  }
+>
       {lyricLines.map((line, index) => {
         const distance = index - currentLineIndex;
 
@@ -1244,7 +1254,7 @@ liveState.mode === "air-guitar-score" ? (
   return null;
 }
 
-        if (distance < 0 || distance > 1) {
+        if (distance < 0 || distance > (liveState.showNextLyric === false ? 0 : 1)) {
   return null;
 }
 
@@ -1273,7 +1283,7 @@ liveState.mode === "air-guitar-score" ? (
   </div>
 ) : (
         <div className="flex h-full flex-col">
-          <header className="shrink-0 px-12 pt-5 pb-2 text-center">
+          <header className={liveState.lyricsPosition === "top" ? "hidden" : "shrink-0 px-12 pt-5 pb-2 text-center"}>
   <img
     src="/g3-live-logo.png"
     alt="G3 Live"
@@ -1291,7 +1301,13 @@ liveState.mode === "air-guitar-score" ? (
   )}
 </header>
 
-          <section className="flex min-h-0 flex-1 items-center justify-center px-16 -translate-y-20">
+          <section
+  className={
+    liveState.lyricsPosition === "top"
+      ? "flex min-h-0 flex-1 items-start justify-center px-10 pt-6"
+      : "flex min-h-0 flex-1 items-center justify-center px-16 -translate-y-20"
+  }
+>
             {lyricLines.length === 0 ? (
               <p className="text-3xl text-zinc-600">
                 ♪

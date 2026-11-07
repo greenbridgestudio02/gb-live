@@ -509,6 +509,46 @@ const DJ_LIBRARY = [
   { name: "DJ Phiphi", file: "/DJ-phiphi.mp4", thumbnail: "/DJ-phiphi.jpg", category: "visual" },
 ];
 export default function Home() {
+  // GB-LYRICS-SETTINGS-LOAD
+  useEffect(() => {
+    let active = true;
+
+    async function loadLyricsSettings() {
+      try {
+        const response = await fetch("/api/live-state", {
+          cache: "no-store",
+        });
+
+        if (!response.ok) {
+          throw new Error("Lecture des reglages impossible");
+        }
+
+        const state = await response.json();
+
+        if (!active) return;
+
+        setLyricsPositionSetting(
+          state.lyricsPosition === "top" ? "top" : "classic"
+        );
+
+        setShowNextLyricSetting(state.showNextLyric !== false);
+      } catch (error) {
+        console.error("Chargement des reglages paroles :", error);
+      }
+    }
+
+    void loadLyricsSettings();
+
+    return () => {
+      active = false;
+    };
+  }, []);
+  // GB-LYRICS-SETTINGS-STATE
+  const [lyricsPositionSetting, setLyricsPositionSetting] =
+    useState<"classic" | "top" | null>(null);
+
+  const [showNextLyricSetting, setShowNextLyricSetting] =
+    useState<boolean | null>(null);
   const [setlistPosition, setSetlistPosition] = useState(0);
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
   const [playbackResetKey, setPlaybackResetKey] = useState(0);
@@ -2612,6 +2652,83 @@ onNextPlayer={() => void sendPublicMode("coup-parfait")}
   >
     🎤 Paroles
   </button>
+  {/* GB-LYRICS-POSITION-BUTTON */}
+<button
+  type="button"
+  onClick={async (event) => {
+    const button = event.currentTarget;
+    button.disabled = true;
+    try {
+      const response = await fetch("/api/live-state", {
+        cache: "no-store",
+      });
+      if (!response.ok) throw new Error("Lecture impossible");
+
+      const state = await response.json();
+      const nextPosition =
+        state.lyricsPosition === "top" ? "classic" : "top";
+
+      const result = await fetch("/api/live-state", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ lyricsPosition: nextPosition }),
+      });
+      if (!result.ok) throw new Error("Enregistrement impossible");
+
+      setLyricsPositionSetting(nextPosition);
+    } catch (error) {
+      console.error("Position des paroles :", error);
+      alert("Impossible de modifier la position des paroles.");
+    } finally {
+      button.disabled = false;
+    }
+  }}
+  className="rounded-lg border border-sky-700 bg-sky-950/40 px-4 py-2 text-sm font-semibold text-sky-300 hover:bg-sky-900/50"
+>
+  {lyricsPositionSetting === null
+    ? "↕ Position paroles"
+    : lyricsPositionSetting === "top"
+      ? "⬆ Paroles : En haut"
+      : "↕ Paroles : Classiques"}
+</button>
+  {/* GB-NEXT-LYRIC-BUTTON */}
+<button
+  type="button"
+  onClick={async (event) => {
+    const button = event.currentTarget;
+    button.disabled = true;
+    try {
+      const response = await fetch("/api/live-state", {
+        cache: "no-store",
+      });
+      if (!response.ok) throw new Error("Lecture impossible");
+
+      const state = await response.json();
+      const nextValue = state.showNextLyric === false;
+
+      const result = await fetch("/api/live-state", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ showNextLyric: nextValue }),
+      });
+      if (!result.ok) throw new Error("Enregistrement impossible");
+
+      setShowNextLyricSetting(nextValue);
+    } catch (error) {
+      console.error("Affichage ligne suivante :", error);
+      alert("Impossible de modifier l'affichage de la ligne suivante.");
+    } finally {
+      button.disabled = false;
+    }
+  }}
+  className="rounded-lg border border-indigo-700 bg-indigo-950/40 px-4 py-2 text-sm font-semibold text-indigo-300 hover:bg-indigo-900/50"
+>
+  {showNextLyricSetting === null
+    ? "👁 Ligne suivante"
+    : showNextLyricSetting
+      ? "👁 Ligne suivante : Visible"
+      : "🚫 Ligne suivante : Masquée"}
+</button>
   <button
   type="button"
   onClick={() => setIsPublicMessageOpen(true)}

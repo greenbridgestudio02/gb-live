@@ -58,6 +58,8 @@ type AdvertisingState = {
 } | null;
 
 type LiveState = {
+  lyricsPosition: "classic" | "top";
+  showNextLyric: boolean;
   mode: PublicMode;
   advertising: AdvertisingState;
 
@@ -107,6 +109,8 @@ const liveStateFile = path.join(
 );
 
 const defaultState: LiveState = {
+  lyricsPosition: "classic",
+  showNextLyric: true,
   mode: "home",
   advertising: null,
 
@@ -146,7 +150,9 @@ async function readLiveState(): Promise<LiveState> {
     ) as Partial<LiveState>;
 
     return {
-      advertising:
+      lyricsPosition: parsed.lyricsPosition === "top" ? "top" : "classic",
+      showNextLyric: parsed.showNextLyric !== false,
+        advertising:
         parsed.advertising &&
         typeof parsed.advertising.file === "string" &&
         (parsed.advertising.type === "image" ||
@@ -639,7 +645,13 @@ if (typeof body.message === "string") {
 }
 
   const newState: LiveState = {
-    advertising:
+    lyricsPosition: body.lyricsPosition === "top" || body.lyricsPosition === "classic"
+        ? body.lyricsPosition
+        : currentState.lyricsPosition,
+      showNextLyric: typeof body.showNextLyric === "boolean"
+        ? body.showNextLyric
+        : currentState.showNextLyric,
+      advertising:
       body.advertising === null
         ? null
         : body.advertising &&
