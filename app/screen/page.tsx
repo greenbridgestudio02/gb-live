@@ -626,6 +626,7 @@ const hideLyricDuringLongGap =
   !currentSong ||
   liveState.mode === "pause" ||
   liveState.mode === "home" ||
+  liveState.mode === "end" ||
   lyricsFinished;
   const activeAdvertising =
     liveState.advertising &&

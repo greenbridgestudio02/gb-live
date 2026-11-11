@@ -1056,12 +1056,15 @@ async function sendPublicMode(
 function startShow() {
   setIsHomeMode(false);
 
-  const currentPosition = setlistSongIds.findIndex(
-    (songId) => songId === currentSong?.id
+  const firstSongId = setlistSongIds[0];
+  const firstSongIndex = songs.findIndex(
+    (song) => song.id === firstSongId
   );
 
-  if (currentPosition !== -1) {
-    setSetlistPosition(currentPosition);
+  setSetlistPosition(0);
+
+  if (firstSongIndex !== -1) {
+    setCurrentSongIndex(firstSongIndex);
   }
 
   setIsSetlistOpen(true);
@@ -3535,6 +3538,17 @@ onClose={() => setIsSearchOpen(false)}
           type="button"
           onClick={() => {
             setIsPaused(false);
+            setSetlistPosition(0);
+
+            const firstSongId = setlistSongIds[0];
+            const firstSongIndex = songs.findIndex(
+              (song) => song.id === firstSongId
+            );
+
+            setCurrentSongIndex(firstSongIndex >= 0 ? firstSongIndex : 0);
+            setPlaybackResetKey((value) => value + 1);
+            setIsHomeMode(true);
+
             void sendPublicMode("end");
           }}
           className="rounded-xl border border-red-700 bg-red-950/40 px-6 py-5 text-lg font-semibold text-red-300"
