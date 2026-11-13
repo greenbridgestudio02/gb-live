@@ -498,6 +498,7 @@ const DJ_TITLES = [
 ];
 
 const DJ_LIBRARY = [
+  { name: "Disco Classique", file: "/06-disco-classique-30s.mp4", thumbnail: "/06-disco-classique.jpg", category: "visual" },
   { name: "Club Original", file: "/01-club-original.mp4", thumbnail: "/01-club-original.jpg", category: "visual" },
   { name: "Laser Festival", file: "/02-laser-festival.mp4", thumbnail: "/02-laser-festival.jpg", category: "visual" },
   { name: "Disco Chic", file: "/03-disco-chic-test.mp4", thumbnail: "/03-disco-chic-test.jpg", category: "visual" },
@@ -2121,7 +2122,16 @@ onNextPlayer={() => void sendPublicMode("coup-parfait")}
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {DJ_TITLES.map((video) => (
               <div key={video.file} className="rounded-xl border border-emerald-700 bg-zinc-900 p-4">
-                <div className="mb-2 text-lg font-bold text-white">{video.name}</div>
+                <div className="mb-3 flex items-center gap-4">
+                  <video
+                    src={`${video.file}#t=5`}
+                    preload="metadata"
+                    muted
+                    playsInline
+                    className="h-24 w-36 shrink-0 rounded-lg bg-black object-cover"
+                  />
+                  <div className="text-lg font-bold text-white">{video.name}</div>
+                </div>
                 <div className="text-sm text-zinc-400">🎬 Vidéo musicale - {video.duration}</div>
                 <div className="mt-2 text-xs font-semibold text-emerald-400">Avec son</div>
                 <DjProgressDisplay file={video.file} />
