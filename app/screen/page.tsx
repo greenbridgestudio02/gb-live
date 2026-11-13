@@ -1086,10 +1086,10 @@ liveState.mode === "air-guitar-score" ? (
     <img
       src="/g3-live-logo.png"
       alt="G3 Live"
-      className="h-48 w-auto object-contain"
+      className="h-56 w-auto max-w-[80vw] object-contain"
     />
 
-    <p className="mt-8 max-w-5xl text-6xl font-black leading-tight text-amber-300">
+    <p className="mt-12 max-w-[90vw] text-[clamp(4rem,7vw,8rem)] font-black leading-tight text-amber-300">
       {liveState.message}
     </p>
   </div>
@@ -1358,8 +1358,8 @@ liveState.mode === "air-guitar-score" ? (
   liveState.message &&
   !liveState.mode.startsWith("air-guitar") && (
         <div className="pointer-events-none absolute inset-x-0 top-8 z-50 flex justify-center px-8">
-          <div className="max-w-[75vw] animate-[gbMessageSequence_12s_linear_both] rounded-2xl border border-amber-400/50 bg-black/80 px-10 py-5 text-center shadow-[0_0_35px_rgba(212,175,55,0.15)] backdrop-blur-xl">
-            <p className="text-3xl font-semibold leading-snug tracking-wide text-amber-100">
+          <div className="max-w-[90vw] animate-[gbMessageSequence_12s_linear_both] rounded-2xl border border-amber-400/50 bg-black/85 px-14 py-8 text-center shadow-[0_0_35px_rgba(212,175,55,0.15)] backdrop-blur-xl">
+            <p className="text-[clamp(2.5rem,4vw,5rem)] font-bold leading-snug tracking-wide text-amber-100">
               {liveState.message}
             </p>
           </div>

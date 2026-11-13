@@ -499,6 +499,8 @@ const DJ_TITLES = [
 
 const DJ_LIBRARY = [
   { name: "Disco Classique", file: "/06-disco-classique-30s.mp4", thumbnail: "/06-disco-classique.jpg", category: "visual" },
+  { name: "Piste de danse disco", file: "/gb-live-piste-disco-boucle.mp4", thumbnail: "/gb-live-piste-disco-boucle.jpg", category: "visual" },
+  { name: "Pluie d'or", file: "/gb-live-pluie-or-boucle.mp4", thumbnail: "/gb-live-pluie-or-boucle.jpg", category: "visual" },
   { name: "Club Original", file: "/01-club-original.mp4", thumbnail: "/01-club-original.jpg", category: "visual" },
   { name: "Laser Festival", file: "/02-laser-festival.mp4", thumbnail: "/02-laser-festival.jpg", category: "visual" },
   { name: "Disco Chic", file: "/03-disco-chic-test.mp4", thumbnail: "/03-disco-chic-test.jpg", category: "visual" },
