@@ -623,11 +623,14 @@ const hideLyricDuringLongGap =
   displayElapsedTime - currentLyric.time >= LYRIC_VISIBLE_DURATION;
 
   const showWelcome =
-  !currentSong ||
-  liveState.mode === "pause" ||
-  liveState.mode === "home" ||
-  liveState.mode === "end" ||
-  lyricsFinished;
+    liveState.mode !== "dj" &&
+    (
+      !currentSong ||
+      liveState.mode === "pause" ||
+      liveState.mode === "home" ||
+      liveState.mode === "end" ||
+      lyricsFinished
+    );
   const activeAdvertising =
     liveState.advertising &&
     advertisingNow >= liveState.advertising.startedAt &&
@@ -1161,6 +1164,13 @@ liveState.mode === "air-guitar-score" ? (
   </div>
 ) : liveState.mode === "dj" ? (
   <div className="h-full w-full overflow-hidden bg-black">
+    {liveState.djVideoFile?.endsWith(".png") ? (
+      <img
+        src={liveState.djVideoFile}
+        alt="Règles du Blind Test"
+        className="h-full w-full object-contain"
+      />
+    ) : (
     <video
       src={liveState.djVideoFile}
       autoPlay
@@ -1198,8 +1208,9 @@ liveState.mode === "air-guitar-score" ? (
       }}
       className={liveState.djVideoFile === "/DJ-phiphi.mp4" ? "h-full w-full object-contain" : "h-full w-full object-cover"}
     />
+    )}
   </div>
-) : currentSong.videoFile && currentSong.videoMode === "video" ? (
+) : currentSong?.videoFile && currentSong.videoMode === "video" ? (
   <div className="h-full w-full overflow-hidden bg-black">
     <video
       ref={videoRef}
@@ -1217,7 +1228,7 @@ liveState.mode === "air-guitar-score" ? (
       className="h-full w-full object-contain"
     />
   </div>
-) : currentSong.videoFile && currentSong.videoMode === "video-lyrics" ? (
+) : currentSong?.videoFile && currentSong.videoMode === "video-lyrics" ? (
   <div className="relative h-full w-full overflow-hidden bg-black">
     <video
       ref={videoRef}
@@ -1292,12 +1303,12 @@ liveState.mode === "air-guitar-score" ? (
   />
 
   <h1 className="mt-1 text-4xl font-black text-white">
-    {currentSong.title}
+    {currentSong!.title}
   </h1>
 
-  {currentSong.artist && (
+  {currentSong!.artist && (
     <p className="mt-1 text-2xl font-semibold text-zinc-400">
-      {currentSong.artist}
+      {currentSong!.artist}
     </p>
   )}
 </header>

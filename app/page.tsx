@@ -497,6 +497,13 @@ const DJ_TITLES = [
   },
 ];
 
+const DJ_SLOWS = [
+  { name: "Purple Rain", duration: "4 min 53 s", file: "/dj-slows/slow-01.mp4" },
+  { name: "Stand by Me", duration: "4 min 28 s", file: "/dj-slows/slow-02.mp4" },
+  { name: "My Way", duration: "5 min 09 s", file: "/dj-slows/slow-03.mp4" },
+  { name: "Careless Whisper", duration: "4 min 47 s", file: "/dj-slows/slow-04.mp4" },
+  { name: "Infinite Love", duration: "5 min 33 s", file: "/dj-slows/slow-05.mp4" },
+];
 const DJ_LIBRARY = [
   { name: "Disco Classique", file: "/06-disco-classique-30s.mp4", thumbnail: "/06-disco-classique.jpg", category: "visual" },
   { name: "Piste de danse disco", file: "/gb-live-piste-disco-boucle.mp4", thumbnail: "/gb-live-piste-disco-boucle.jpg", category: "visual" },
@@ -593,6 +600,8 @@ export default function Home() {
   const [midiLoading, setMidiLoading] = useState(false);
   const [midiStatus, setMidiStatus] = useState("");
   const [isBlindTestOpen, setIsBlindTestOpen] = useState(false);
+  const [isBlindTestVideoOpen, setIsBlindTestVideoOpen] = useState(false);
+  const [selectedBlindTestVideo, setSelectedBlindTestVideo] = useState("01");
   const [isCoupParfaitOpen, setIsCoupParfaitOpen] = useState(false);
   const [isAirGuitarOpen, setIsAirGuitarOpen] = useState(false);
   const [isDjLibraryOpen, setIsDjLibraryOpen] = useState(false);
@@ -1406,6 +1415,13 @@ async function importLibrary() {
 >
   🔔 Blind Test
 </button>
+<button
+  type="button"
+  onClick={() => setIsBlindTestVideoOpen(true)}
+  className="w-full rounded-2xl border border-violet-700 bg-violet-950/30 px-6 py-5 text-xl font-bold text-violet-300 transition hover:bg-violet-950/50 active:scale-[0.99]"
+>
+  🎵 Blind Test Vidéo
+</button>
 
 <button
   type="button"
@@ -1591,7 +1607,88 @@ onClose={() => setIsSearchOpen(false)}
         />
        )}
 
-      {isBlindTestOpen && (
+      {/* BLIND TEST VIDEO - FENETRE */}
+{isBlindTestVideoOpen && (
+  <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 p-6">
+    <div className="w-full max-w-3xl rounded-3xl border border-violet-700 bg-zinc-950 p-8 text-white shadow-2xl">
+      <div className="mb-6 flex items-center justify-between">
+        <h2 className="text-3xl font-black text-violet-300">
+          🎵 Blind Test Vidéo
+        </h2>
+        <button
+          type="button"
+          onClick={() => setIsBlindTestVideoOpen(false)}
+          className="rounded-xl border border-zinc-600 px-5 py-3 font-bold hover:bg-zinc-800"
+        >
+          Fermer
+        </button>
+      </div>
+
+      <div className="mb-6 rounded-xl border border-zinc-700 bg-zinc-900 p-5">
+        <label htmlFor="blind-test-video-select" className="mb-3 block text-xl font-bold">
+          Choisir le Blind Test
+        </label>
+        <select
+          id="blind-test-video-select"
+          value={selectedBlindTestVideo}
+          onChange={(e) => setSelectedBlindTestVideo(e.target.value)}
+          className="w-full rounded-xl border border-violet-600 bg-zinc-800 p-4 text-lg font-bold text-white"
+        >
+          <option value="01">Blind Test 01 - 16 min 45 s</option>
+          <option value="02">Blind Test 02 - 16 min 39 s</option>
+        </select>
+        <p className="mt-3 text-sm text-zinc-400">
+          {selectedBlindTestVideo === "01"
+            ? "50 extraits de 10 secondes - Des années 80 à aujourd'hui"
+            : "Blind Test 02 - 16 min 39 s"}
+        </p>
+      </div>
+
+      <div className="grid gap-4">
+        <button
+          type="button"
+          onClick={() => {
+            setIsPublicScreenHidden(true);
+            void sendPublicMode(
+              "dj", "", undefined,
+              "/blind-tests/regles-blind-test.png",
+              false, true
+            );
+          }}
+          className="rounded-xl bg-amber-600 px-6 py-4 text-lg font-bold text-white hover:bg-amber-500"
+        >
+          📋 Afficher les règles
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            setIsPublicScreenHidden(true);
+            void sendPublicMode(
+              "dj", "", undefined,
+              `/blind-tests/blind-test-${selectedBlindTestVideo}.mp4`,
+              false, false
+            );
+          }}
+          className="rounded-xl bg-emerald-700 px-6 py-4 text-lg font-bold text-white hover:bg-emerald-600"
+        >
+          ▶ Lancer le Blind Test
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            void sendPublicMode("home");
+          }}
+          className="rounded-xl bg-red-900 px-6 py-4 text-lg font-bold text-white hover:bg-red-800"
+        >
+          ⏹ Arrêter
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+{isBlindTestOpen && (
   <BlindTestAdminPanel
     onClose={() => setIsBlindTestOpen(false)}
   />
@@ -2123,6 +2220,57 @@ onNextPlayer={() => void sendPublicMode("coup-parfait")}
           <h3 className="mb-3 text-xl font-bold text-emerald-300">🎵 Titres vidéo DJ — avec son</h3>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {DJ_TITLES.map((video) => (
+              <div key={video.file} className="rounded-xl border border-emerald-700 bg-zinc-900 p-4">
+                <div className="mb-3 flex items-center gap-4">
+                  <video
+                    src={`${video.file}#t=5`}
+                    preload="metadata"
+                    muted
+                    playsInline
+                    className="h-24 w-36 shrink-0 rounded-lg bg-black object-cover"
+                  />
+                  <div className="text-lg font-bold text-white">{video.name}</div>
+                </div>
+                <div className="text-sm text-zinc-400">🎬 Vidéo musicale - {video.duration}</div>
+                <div className="mt-2 text-xs font-semibold text-emerald-400">Avec son</div>
+                <DjProgressDisplay file={video.file} />
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsPublicScreenHidden(true);
+                    void sendPublicMode("dj", "", undefined, video.file, false, false);
+                  }}
+                  className="mt-4 w-full rounded-lg bg-emerald-700 px-4 py-3 text-sm font-bold text-white hover:bg-emerald-600"
+                >
+                  ▶ Lancer avec son
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    void sendPublicMode("home");
+                    void fetch("/api/dj-progress", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({
+                        file: "",
+                        currentTime: 0,
+                        duration: 0,
+                        paused: true,
+                      }),
+                    });
+                  }}
+                  className="mt-2 w-full rounded-lg border border-red-700 bg-red-950 px-4 py-3 text-sm font-bold text-red-200 hover:bg-red-900"
+                >
+                  ⏹ ARRÊTER
+                </button>
+              </div>
+            ))}
+          </div>
+        </section>
+<section>
+          <h3 className="mb-3 text-xl font-bold text-emerald-300">Slows - Avec son</h3>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            {DJ_SLOWS.map((video) => (
               <div key={video.file} className="rounded-xl border border-emerald-700 bg-zinc-900 p-4">
                 <div className="mb-3 flex items-center gap-4">
                   <video
