@@ -1055,7 +1055,9 @@ async function sendPublicMode(
   videoVolume,
   djVideoFile,
   djLoop,
-  djMuted,}),
+  djMuted,
+  ...(mode === "dj" && djVideoFile ? { djVisualFile: "" } : {}),
+}),
     });
   } catch (error) {
     console.error(
@@ -1791,7 +1793,14 @@ onNextPlayer={() => void sendPublicMode("coup-parfait")}
               type="button"
               onClick={() => {
                 setIsPublicScreenHidden(true);
-                void sendPublicMode("dj", "", undefined, video.file, false);
+                void fetch("/api/live-state", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    mode: "dj",
+                    djVisualFile: video.file,
+                  }),
+                });
               }}
               className="rounded-xl bg-violet-700 px-5 py-3 font-bold text-white hover:bg-violet-600"
             >
@@ -2200,6 +2209,22 @@ onNextPlayer={() => void sendPublicMode("coup-parfait")}
       <div className="max-h-[65vh] space-y-6 overflow-y-auto pr-2">
         <section>
           <h3 className="mb-3 text-xl font-bold text-violet-300">🎬 Visuels d'accompagnement — Sans son</h3>
+          <button
+            type="button"
+            onClick={() => {
+              void fetch("/api/live-state", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  mode: "dj",
+                  djVisualFile: "",
+                }),
+              });
+            }}
+            className="mb-4 rounded-xl border border-sky-500 px-4 py-2 font-bold text-sky-300 hover:bg-sky-950"
+          >
+            ↩ Revenir à la vidéo musicale
+          </button>
           <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
             {DJ_LIBRARY.filter((video) => video.category === "visual").map((video) => (
               <div key={video.file} className="overflow-hidden rounded-xl border border-zinc-700 bg-zinc-900">
@@ -2209,6 +2234,23 @@ onNextPlayer={() => void sendPublicMode("coup-parfait")}
                   <div className="flex shrink-0 gap-2">
                     <button type="button" onClick={() => { setIsPublicScreenHidden(true); void sendPublicMode("dj", "", undefined, video.file, false); }} className="rounded-lg bg-violet-700 px-3 py-2 text-sm font-bold text-white hover:bg-violet-600">▶ 1×</button>
                     <button type="button" onClick={() => { setIsPublicScreenHidden(true); void sendPublicMode("dj", "", undefined, video.file, true); }} className="rounded-lg bg-violet-700 px-3 py-2 text-sm font-bold text-white hover:bg-violet-600">🔁</button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsPublicScreenHidden(true);
+                        void fetch("/api/live-state", {
+                          method: "POST",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify({
+                            mode: "dj",
+                            djVisualFile: video.file,
+                          }),
+                        });
+                      }}
+                      className="rounded-lg bg-sky-700 px-3 py-2 text-sm font-bold text-white hover:bg-sky-600"
+                    >
+                      🎬 SUR MUSIQUE
+                    </button>
                   </div>
                 </div>
               </div>
@@ -2233,6 +2275,65 @@ onNextPlayer={() => void sendPublicMode("coup-parfait")}
                 </div>
                 <div className="text-sm text-zinc-400">🎬 Vidéo musicale - {video.duration}</div>
                 <div className="mt-2 text-xs font-semibold text-emerald-400">Avec son</div>
+                <DjProgressDisplay file={video.file} />
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsPublicScreenHidden(true);
+                    void sendPublicMode("dj", "", undefined, video.file, false, false);
+                  }}
+                  className="mt-4 w-full rounded-lg bg-emerald-700 px-4 py-3 text-sm font-bold text-white hover:bg-emerald-600"
+                >
+                  ▶ Lancer avec son
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    void sendPublicMode("home");
+                    void fetch("/api/dj-progress", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({
+                        file: "",
+                        currentTime: 0,
+                        duration: 0,
+                        paused: true,
+                      }),
+                    });
+                  }}
+                  className="mt-2 w-full rounded-lg border border-red-700 bg-red-950 px-4 py-3 text-sm font-bold text-red-200 hover:bg-red-900"
+                >
+                  ⏹ ARRÊTER
+                </button>
+              </div>
+            ))}
+          </div>
+        </section>
+        <section>
+          <h3 className="mb-3 text-xl font-bold text-amber-300">
+            ☀️ Hits du soleil - Festif
+          </h3>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            {[
+              {
+                name: "Hits du soleil 01",
+                file: "/dj-titres/hits-du-soleil-01.mp4",
+              },
+            ].map((video) => (
+              <div key={video.file} className="rounded-xl border border-amber-700 bg-zinc-900 p-4">
+                <div className="mb-3 flex items-center gap-4">
+                  <video
+                    src={`${video.file}#t=5`}
+                    preload="metadata"
+                    muted
+                    playsInline
+                    className="h-24 w-36 shrink-0 rounded-lg bg-black object-cover"
+                  />
+                  <div className="text-lg font-bold text-white">{video.name}</div>
+                </div>
+                <div className="mt-2 text-xs font-semibold text-emerald-400">
+                  🎬 Vidéo musicale - Avec son
+                </div>
                 <DjProgressDisplay file={video.file} />
                 <button
                   type="button"

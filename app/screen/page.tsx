@@ -41,6 +41,7 @@ type LiveState = {
   airGuitarWaitingVolume?: number;
   djVideoFile: string;
   djLoop: boolean;
+  djVisualFile?: string;
   djMuted?: boolean;
   ambianceVideoFile?: string;
   ambianceLoop?: boolean;
@@ -1163,7 +1164,7 @@ liveState.mode === "air-guitar-score" ? (
     />
   </div>
 ) : liveState.mode === "dj" ? (
-  <div className="h-full w-full overflow-hidden bg-black">
+  <div className="relative h-full w-full overflow-hidden bg-black">
     {liveState.djVideoFile?.endsWith(".png") ? (
       <img
         src={liveState.djVideoFile}
@@ -1208,6 +1209,27 @@ liveState.mode === "air-guitar-score" ? (
       }}
       className={liveState.djVideoFile === "/DJ-phiphi.mp4" ? "h-full w-full object-contain" : "h-full w-full object-cover"}
     />
+    )}
+    {liveState.djVisualFile && (
+      <div className="absolute inset-0 z-10 bg-black">
+        {/\.(png|jpg|jpeg)$/i.test(liveState.djVisualFile) ? (
+          <img
+            src={liveState.djVisualFile}
+            alt="Visuel DJ"
+            className="h-full w-full object-cover"
+          />
+        ) : (
+          <video
+            src={liveState.djVisualFile}
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="auto"
+            className="h-full w-full object-cover"
+          />
+        )}
+      </div>
     )}
   </div>
 ) : currentSong?.videoFile && currentSong.videoMode === "video" ? (

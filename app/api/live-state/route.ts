@@ -73,6 +73,7 @@ type LiveState = {
   djVideoFile: string;
   djLoop: boolean;
   djMuted: boolean;
+  djVisualFile: string;
   ambianceVideoFile: string;
   ambianceLoop: boolean;
   ambianceVolume: number;
@@ -123,6 +124,7 @@ videoVolume: 0.25,
   djVideoFile: "/01-club-original.mp4",
   djLoop: false,
   djMuted: true,
+  djVisualFile: "",
   ambianceVideoFile: "/ambiances/ambiance-test.mp4",
   ambianceLoop: false,
   ambianceVolume: 0.7,
@@ -220,6 +222,10 @@ videoVolume:
           ? parsed.djLoop
           : false,
       djMuted: typeof parsed.djMuted === "boolean" ? parsed.djMuted : true,
+      djVisualFile:
+        typeof parsed.djVisualFile === "string"
+          ? parsed.djVisualFile
+          : "",
 
       ambianceVideoFile:
         typeof parsed.ambianceVideoFile === "string"
@@ -590,6 +596,13 @@ const djLoop =
     ? body.djLoop
     : currentState.djLoop;
 const djMuted = typeof body.djMuted === "boolean" ? body.djMuted : currentState.djMuted;
+const djVisualFile =
+  typeof body.djVisualFile === "string" &&
+  (body.djVisualFile === "" ||
+    (body.djVisualFile.startsWith("/") &&
+      !body.djVisualFile.includes("..")))
+    ? body.djVisualFile
+    : currentState.djVisualFile;
 const ambianceVideoFile =
   typeof body.ambianceVideoFile === "string"
     ? body.ambianceVideoFile
@@ -678,6 +691,7 @@ if (typeof body.message === "string") {
     djVideoFile,
     djLoop,
     djMuted,
+    djVisualFile,
     ambianceVideoFile,
     ambianceLoop,
     ambianceVolume,
