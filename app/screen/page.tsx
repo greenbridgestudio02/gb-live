@@ -649,14 +649,14 @@ const hideLyricDuringLongGap =
           className={
             activeAdvertising.display === "fullscreen"
               ? "fixed inset-0 z-[9000] flex items-center justify-center bg-black"
-              : "fixed bottom-8 right-8 z-[9000] flex h-[55vh] w-[32vw] items-center justify-center overflow-hidden rounded-2xl border-2 border-amber-400 bg-black shadow-2xl"
+              : "fixed bottom-8 right-8 z-[9000] flex w-fit max-w-[32vw] max-h-[55vh] items-center justify-center overflow-hidden rounded-2xl border-2 border-amber-400 shadow-2xl"
           }
         >
           {activeAdvertising.type === "image" ? (
             <img
               src={activeAdvertising.file}
               alt="Publicité GB Live"
-              className="h-full w-full object-contain"
+              className={activeAdvertising.display === "fullscreen" ? "h-full w-full object-contain" : "block h-auto w-auto max-h-[55vh] max-w-[32vw] object-contain"}
             />
           ) : (
             <video
@@ -664,7 +664,7 @@ const hideLyricDuringLongGap =
               autoPlay
               muted
               playsInline
-              className="h-full w-full object-contain"
+              className={activeAdvertising.display === "fullscreen" ? "h-full w-full object-contain" : "block h-auto w-auto max-h-[55vh] max-w-[32vw] object-contain"}
             />
           )}
         </div>
@@ -1179,6 +1179,7 @@ liveState.mode === "air-guitar-score" ? (
       muted={liveState.djMuted ?? true}
       playsInline
       onTimeUpdate={(event) => {
+        if (isPreview) return;
         const video = event.currentTarget;
         const now = Date.now();
 

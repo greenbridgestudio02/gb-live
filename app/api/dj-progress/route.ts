@@ -1,4 +1,4 @@
-﻿import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -18,14 +18,27 @@ type DjProgressStore = typeof globalThis & {
 const store = globalThis as DjProgressStore;
 
 export async function GET() {
+  const progress = store.__gbDjProgress ?? {
+    file: "",
+    currentTime: 0,
+    duration: 0,
+    paused: true,
+    updatedAt: 0,
+  };
+
+  let currentTime = progress.currentTime;
+
+  if (!progress.paused && progress.updatedAt > 0) {
+    const elapsed = Math.max(0, (Date.now() - progress.updatedAt) / 1000);
+    currentTime += elapsed;
+
+    if (progress.duration > 0) {
+      currentTime = currentTime % progress.duration;
+    }
+  }
+
   return NextResponse.json(
-    store.__gbDjProgress ?? {
-      file: "",
-      currentTime: 0,
-      duration: 0,
-      paused: true,
-      updatedAt: 0,
-    },
+    { ...progress, currentTime },
     { headers: { "Cache-Control": "no-store" } }
   );
 }

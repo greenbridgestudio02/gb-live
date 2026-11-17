@@ -413,17 +413,33 @@ function DjProgressDisplay({ file }: { file: string }) {
 
   useEffect(() => {
     let active = true;
+    let requestInProgress = false;
+    let lastUpdatedAt = 0;
 
     const refresh = async () => {
+      if (requestInProgress) return;
+      requestInProgress = true;
+
       try {
         const response = await fetch("/api/dj-progress", {
           cache: "no-store",
         });
         if (!response.ok) return;
+
         const data = await response.json();
-        if (active) setProgress(data);
+
+        if (
+          active &&
+          typeof data.updatedAt === "number" &&
+          data.updatedAt >= lastUpdatedAt
+        ) {
+          lastUpdatedAt = data.updatedAt;
+          setProgress(data);
+        }
       } catch {
         // La lecture DJ reste indépendante du compteur.
+      } finally {
+        requestInProgress = false;
       }
     };
 
@@ -517,6 +533,16 @@ const DJ_LIBRARY = [
   { name: "Pilou & Skaye DJ V2", file: "/DJ-pilou-et-skayeV2.mp4", thumbnail: "/DJ-pilou-et-skayeV2.jpg", category: "visual" },
   { name: "Pilou & Skaye DJ V3", file: "/DJ-pilou-et-skayeV3.mp4", thumbnail: "/DJ-pilou-et-skayeV3.jpg", category: "visual" },
   { name: "DJ Phiphi", file: "/DJ-phiphi.mp4", thumbnail: "/DJ-phiphi.jpg", category: "visual" },
+  { name: "DJ Singe", file: "/dj-singe.mp4", thumbnail: "/dj-singe.jpg", category: "visual" },
+  { name: "DJ Astronaute", file: "/dj-astronaute.mp4", thumbnail: "/dj-astronaute.jpg", category: "visual" },
+  { name: "DJ T-Rex", file: "/dj-trex.mp4", thumbnail: "/dj-trex.jpg", category: "visual" },
+  { name: "DJ Robot", file: "/dj-robot.mp4", thumbnail: "/dj-robot.jpg", category: "visual" },
+  { name: "DJ Mamie", file: "/dj-mamie.mp4", thumbnail: "/dj-mamie.jpg", category: "visual" },
+  { name: "DJ Alien", file: "/dj-alien.mp4", thumbnail: "/dj-alien.jpg", category: "visual" },
+  { name: "DJ Flamant", file: "/dj-flamant.mp4", thumbnail: "/dj-flamant.jpg", category: "visual" },
+  { name: "DJ Chevalier", file: "/dj-chevalier.mp4", thumbnail: "/dj-chevalier.jpg", category: "visual" },
+  { name: "DJ Lapin", file: "/dj-lapin.mp4", thumbnail: "/dj-lapin.jpg", category: "visual" },
+  { name: "DJ Bebe", file: "/dj-bebe.mp4", thumbnail: "/dj-bebe.jpg", category: "visual" },
 ];
 export default function Home() {
   // GB-LYRICS-SETTINGS-LOAD
