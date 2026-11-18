@@ -539,6 +539,7 @@ const DJ_LIBRARY = [
   { name: "DJ Robot", file: "/dj-robot.mp4", thumbnail: "/dj-robot.jpg", category: "visual" },
   { name: "DJ Mamie", file: "/dj-mamie.mp4", thumbnail: "/dj-mamie.jpg", category: "visual" },
   { name: "DJ Guetta Style", file: "/dj-guetta-style.mp4", thumbnail: "/dj-guetta-style.jpg", category: "visual" },
+  { name: "DJ Trio GB Live", file: "/dj-trio-gb-live.mp4", thumbnail: "/dj-trio-gb-live.jpg", category: "visual" },
   { name: "DJ Alien", file: "/dj-alien.mp4", thumbnail: "/dj-alien.jpg", category: "visual" },
   { name: "DJ Flamant", file: "/dj-flamant.mp4", thumbnail: "/dj-flamant.jpg", category: "visual" },
   { name: "DJ Chevalier", file: "/dj-chevalier.mp4", thumbnail: "/dj-chevalier.jpg", category: "visual" },
