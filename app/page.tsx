@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import { ADVERTISING_LIBRARY } from "./advertising-library";
 
 import { useEffect, useRef, useState } from "react";
@@ -547,6 +547,10 @@ const DJ_LIBRARY = [
   { name: "DJ Bebe", file: "/dj-bebe.mp4", thumbnail: "/dj-bebe.jpg", category: "visual" },
 ];
 export default function Home() {
+  const [isAnniversaireOpen, setIsAnniversaireOpen] = useState(false);
+  const [anniversairePrenom, setAnniversairePrenom] = useState("");
+  const [anniversaireAge, setAnniversaireAge] = useState("");
+
   // GB-LYRICS-SETTINGS-LOAD
   useEffect(() => {
     let active = true;
@@ -2451,7 +2455,80 @@ onNextPlayer={() => void sendPublicMode("coup-parfait")}
     </div>
   </div>
 )}
-      {isAmbianceOpen && (
+      {isAnniversaireOpen && (
+  <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 p-6">
+    <div className="w-full max-w-lg rounded-2xl border border-pink-700 bg-zinc-950 p-8 shadow-2xl">
+      <div className="mb-6 flex items-center justify-between">
+        <h2 className="text-3xl font-bold text-pink-300">
+          🎂 Joyeux anniversaire !
+        </h2>
+        <button
+          type="button"
+          onClick={() => setIsAnniversaireOpen(false)}
+          className="rounded-lg border border-zinc-600 px-3 py-2 text-zinc-300 hover:bg-zinc-800"
+        >
+          ✕
+        </button>
+      </div>
+
+      <label className="mb-2 block text-sm font-semibold text-zinc-300">
+        Prénom
+      </label>
+      <input
+        type="text"
+        maxLength={60}
+        value={anniversairePrenom}
+        onChange={(event) => setAnniversairePrenom(event.target.value)}
+        placeholder="Exemple : Sophie"
+        className="mb-5 w-full rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 text-xl text-white"
+      />
+
+      <label className="mb-2 block text-sm font-semibold text-zinc-300">
+        Âge (facultatif)
+      </label>
+      <input
+        type="number"
+        min={1}
+        max={999}
+        value={anniversaireAge}
+        onChange={(event) => setAnniversaireAge(event.target.value)}
+        placeholder="Exemple : 40"
+        className="mb-7 w-full rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 text-xl text-white"
+      />
+
+      <button
+        type="button"
+        disabled={!anniversairePrenom.trim()}
+        onClick={async () => {
+          try {
+            const response = await fetch("/api/live-state", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                mode: "anniversaire",
+                anniversairePrenom: anniversairePrenom.trim(),
+                anniversaireAge: anniversaireAge.trim(),
+              }),
+            });
+
+            if (!response.ok) {
+              throw new Error("Impossible de lancer l'anniversaire");
+            }
+
+            setIsAnniversaireOpen(false);
+          } catch (error) {
+            console.error("Anniversaire :", error);
+            alert("Erreur lors du lancement de l'anniversaire.");
+          }
+        }}
+        className="w-full rounded-xl bg-pink-600 px-6 py-4 text-xl font-bold text-white hover:bg-pink-500 disabled:cursor-not-allowed disabled:opacity-40"
+      >
+        🎉 LANCER L'ANNIVERSAIRE
+      </button>
+    </div>
+  </div>
+)}
+{isAmbianceOpen && (
         <div className="fixed inset-0 z-[90] flex items-center justify-center bg-black/85 p-6">
           <div className="max-h-[92vh] w-full max-w-5xl overflow-y-auto rounded-3xl border border-cyan-500/50 bg-zinc-950 p-8 text-white shadow-2xl">
             <div className="mb-6 flex items-center justify-between">
@@ -3043,6 +3120,13 @@ onNextPlayer={() => void sendPublicMode("coup-parfait")}
   className="rounded-lg border border-cyan-700 bg-cyan-950/40 px-4 py-2 text-sm font-semibold text-cyan-300 hover:bg-cyan-900/50"
 >
   🎬 AMBIANCE
+</button>
+<button
+  type="button"
+  onClick={() => setIsAnniversaireOpen(true)}
+  className="rounded-lg border border-pink-700 bg-pink-950/40 px-4 py-2 text-sm font-semibold text-pink-300 hover:bg-pink-900/50"
+>
+  🎂 ANNIVERSAIRE
 </button>
 <button
   type="button"

@@ -36,6 +36,7 @@ type PublicMode =
   | "end"
   | "dj"
   | "ambiance"
+  | "anniversaire"
   | "coup-parfait-tuto"
   | "coup-parfait"
   | "coup-parfait-ready"
@@ -82,6 +83,9 @@ type LiveState = {
   ambiancePlaylistIndex: number;
   ambiancePlaylistLoop: boolean;
   message: string;
+  anniversairePrenom: string;
+  anniversaireAge: string;
+  anniversaireRetourMode: PublicMode;
   messageUpdatedAt: number;
 
   updatedAt: number;
@@ -133,6 +137,9 @@ videoVolume: 0.25,
   ambiancePlaylistIndex: 0,
   ambiancePlaylistLoop: false,
   message: "",
+  anniversairePrenom: "",
+  anniversaireAge: "",
+  anniversaireRetourMode: "home",
   messageUpdatedAt: 0,
 
   updatedAt: Date.now(),
@@ -174,6 +181,7 @@ async function readLiveState(): Promise<LiveState> {
 parsed.mode === "end" ||
 parsed.mode === "dj" ||
         parsed.mode === "ambiance" ||
+        parsed.mode === "anniversaire" ||
 parsed.mode === "coup-parfait-tuto" ||
 parsed.mode === "coup-parfait" ||
 parsed.mode === "coup-parfait-ready" ||
@@ -272,6 +280,20 @@ videoVolume:
           ? parsed.message
           : "",
 
+      anniversairePrenom:
+        typeof parsed.anniversairePrenom === "string"
+          ? parsed.anniversairePrenom.slice(0, 60)
+          : "",
+      anniversaireRetourMode:
+        parsed.anniversaireRetourMode &&
+        parsed.anniversaireRetourMode !== "anniversaire" &&
+        parsed.anniversaireRetourMode !== "home"
+          ? parsed.anniversaireRetourMode
+          : "home",
+      anniversaireAge:
+        typeof parsed.anniversaireAge === "string"
+          ? parsed.anniversaireAge.replace(/\D/g, "").slice(0, 3)
+          : "",
       messageUpdatedAt:
         typeof parsed.messageUpdatedAt === "number"
           ? parsed.messageUpdatedAt
@@ -306,7 +328,8 @@ async function saveLiveState(
 }
 
 function broadcast(state: LiveState) {
-  const message = encoder.encode(
+  
+const message = encoder.encode(
     `data: ${JSON.stringify(state)}\n\n`
   );
 
@@ -543,6 +566,7 @@ export async function POST(
     body.mode === "end" ||
     body.mode === "dj" ||
     body.mode === "ambiance" ||
+    body.mode === "anniversaire" ||
 body.mode === "coup-parfait-tuto" ||
 body.mode === "coup-parfait" ||
 body.mode === "coup-parfait-ready" ||
@@ -559,6 +583,10 @@ body.mode === "air-guitar-score"
     mode = body.mode;
   }
 
+  const anniversaireRetourMode: PublicMode =
+    mode === "anniversaire" && currentState.mode !== "anniversaire"
+      ? currentState.mode
+      : currentState.anniversaireRetourMode;
   const parsedSong =
     parseSong(body.song);
 
@@ -645,6 +673,15 @@ const ambiancePlaylistLoop =
     ? body.ambiancePlaylistLoop
     : currentState.ambiancePlaylistLoop;
 
+const anniversairePrenom =
+  typeof body.anniversairePrenom === "string"
+    ? body.anniversairePrenom.trim().slice(0, 60)
+    : currentState.anniversairePrenom;
+
+const anniversaireAge =
+  typeof body.anniversaireAge === "string"
+    ? body.anniversaireAge.replace(/\D/g, "").slice(0, 3)
+    : currentState.anniversaireAge;
 const message =
     typeof body.message === "string"
       ? body.message
@@ -700,6 +737,9 @@ if (typeof body.message === "string") {
     ambiancePlaylistIndex,
     ambiancePlaylistLoop,
     message,
+    anniversairePrenom,
+    anniversaireAge,
+    anniversaireRetourMode,
     messageUpdatedAt,
 
     updatedAt: Date.now(),
@@ -714,6 +754,7 @@ if (typeof body.message === "string") {
     state: newState,
   });
 }
+
 
 
 

@@ -50,6 +50,9 @@ type LiveState = {
   ambiancePlaylistIndex?: number;
   ambiancePlaylistLoop?: boolean;
   message: string;
+  anniversairePrenom?: string;
+  anniversaireAge?: string;
+  anniversaireRetourMode?: string;
   messageUpdatedAt: number;
   updatedAt: number;
 };
@@ -135,6 +138,16 @@ useEffect(() => {
 }, [liveState.airGuitarWaitingVolume, liveState.mode]);
   const clockStartRef = useRef<number | null>(null);
   const clockBaseRef = useRef(0);
+const anniversaireRetourModeRef = useRef("home");
+const anniversaireModePrecedentRef = useRef("home");
+
+useEffect(() => {
+  if (liveState.mode === "anniversaire") {
+    return;
+  }
+
+  anniversaireModePrecedentRef.current = liveState.mode;
+}, [liveState.mode]);
 const lastMessageUpdatedAtRef = useRef(0);
 const songHasPlayedRef = useRef(false);
 const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -1077,7 +1090,40 @@ liveState.mode === "air-guitar-score" ? (
   className="h-full w-full object-contain"
 />
   </div>
-) : showWelcome ? (
+) : liveState.mode === "anniversaire" ? (
+  <div className="relative h-full w-full overflow-hidden bg-black">
+    <video
+      src="/anniversaire/joyeux-anniversaire.mp4"
+      autoPlay
+      playsInline
+      onEnded={() => {
+        if (isPreview || liveState.mode !== "anniversaire") return;
+
+        void fetch("/api/live-state", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            mode: liveState.anniversaireRetourMode || "home",
+          }),
+        });
+      }}
+      className="h-full w-full object-contain"
+    />
+
+    <div className="pointer-events-none absolute bottom-0 left-1/2 w-[85%] max-w-5xl -translate-x-1/2 rounded-t-2xl border border-amber-300/60 bg-black px-8 py-2 text-center shadow-2xl">
+      <p className="text-[clamp(0.8rem,1.3vw,1.3rem)] font-semibold uppercase tracking-widest text-amber-300">
+        🎉 Joyeux anniversaire 🎉
+      </p>
+      <h1
+        className="mt-0 break-words text-[clamp(1.8rem,3vw,3.5rem)] font-black text-white"
+        style={{ textShadow: "0 3px 12px #000" }}
+      >
+        {liveState.anniversairePrenom}
+        {liveState.anniversaireAge ? ` • ${liveState.anniversaireAge} ans` : ""}
+      </h1>
+    </div>
+  </div>
+  ) : showWelcome ? (
   <div className="flex h-full w-full items-center justify-center bg-black p-8">
     <img
       src="/g3-live-logo.png"
